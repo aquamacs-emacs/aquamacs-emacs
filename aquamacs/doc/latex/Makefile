@@ -48,10 +48,11 @@ html: aquamacs.tex *.pdf
 	echo "Removing extra files." ; \
 	cd $(newdir) ; \
 	rm $(newdir)/WARNINGS $(newdir)/images.* $(newdir)/*.bak 2>/dev/null ; \
+	../convert/tidy_dir.sh ; \
 	echo "Making new Aquamacs Help directory, copying new help files."	     ; \
 	mv $(newdir)/* $(destdir)/ ; \
 	cp $(srcdir)/*.png $(destdir)/			     ; \
 	find $(destdir) -name *.helpindex -delete ; \
 	echo "Help files copied. Indexing..." ; \
-	hiutil -C -s en -a -f $(destdir)"/Aquamacs Help.helpindex" $(destdir)  ; \
+	hiutil -C -a -s en -f $(destdir)"/Aquamacs Help.helpindex" $(destdir)  ; \
 	echo "Done."
