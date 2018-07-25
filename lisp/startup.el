@@ -1085,7 +1085,7 @@ please check its value")
 
   (run-hooks 'before-init-hook)
 
-  (let ((initial-frame-alist (append '((visibility . nil))
+  (let ((initial-frame-alist (append (unless init-file-debug '((visibility . nil)))
 				      initial-frame-alist)))
 
   ;; Under X, create the X frame and delete the terminal frame.
