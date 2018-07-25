@@ -9,8 +9,6 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.84 2009/02/10 21:31:49 davidswelt Exp $
-
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -107,7 +105,7 @@ from earlier versions of the distribution."
 			   (let ((message-log-max nil))
 			     (with-current-buffer (get-buffer-create "*Messages*")
                                (setq buffer-read-only nil)
-                               (insert (propertize ;; unclear why propertize does not work.
+                               (insert (propertize
                                 (concat "\n\n"
 				       (format "An error has occurred while loading `%s.el (or .elc)':\n\n"
 					       user-init-file)
@@ -119,7 +117,8 @@ from earlier versions of the distribution."
 				       "To ensure normal operation, you should investigate and remove the\n"
 				       "cause of the error in your initialization file.  Start Emacs with\n"
 				       "the `--debug-init' option to view a complete error backtrace.\n\n \n")
-                                'face 'font-lock-warning-face)))
+                                'face 'font-lock-warning-face))
+                               (insert (propertize "\n" 'face 'default)))
 			     (message "Error in init file: %s%s%s"
 				      (get (car error) 'error-message)
 				      (if (cdr error) ": " "")
