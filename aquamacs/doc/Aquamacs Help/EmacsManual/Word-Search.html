@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,134 +20,190 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Word Search</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Word Search">
-<meta name="keywords" content="GNU Emacs Manual: Word Search">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Search.html#Search" rel="up" title="Search">
-<link href="Symbol-Search.html#Symbol-Search" rel="next" title="Symbol Search">
-<link href="Nonincremental-Search.html#Nonincremental-Search" rel="prev" title="Nonincremental Search">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Word Search</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Word Search" />
+  <meta name="keywords" content="GNU Emacs Manual: Word Search" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Search.html#Search" rel="up" title="Search" />
+  <link href="Symbol-Search.html#Symbol-Search" rel="next" title=
+  "Symbol Search" />
+  <link href="Nonincremental-Search.html#Nonincremental-Search"
+  rel="prev" title="Nonincremental Search" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Word-Search" id="Word-Search"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Symbol-Search.html#Symbol-Search" accesskey=
+    "n" rel="next">Symbol Search</a>, Previous: <a href=
+    "Nonincremental-Search.html#Nonincremental-Search" accesskey=
+    "p" rel="prev">Nonincremental Search</a>, Up: <a href=
+    "Search.html#Search" accesskey="u" rel="up">Search</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Word-Search-1" id="Word-Search-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Word-Search"></a>
-<div class="header">
-<p>
-Next: <a href="Symbol-Search.html#Symbol-Search" accesskey="n" rel="next">Symbol Search</a>, Previous: <a href="Nonincremental-Search.html#Nonincremental-Search" accesskey="p" rel="prev">Nonincremental Search</a>, Up: <a href="Search.html#Search" accesskey="u" rel="up">Search</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Word-Search-1"></a>
-<h3 class="section">15.3 Word Search</h3>
-<a name="index-word-search"></a>
+  <h3 class="section">15.3 Word Search</h3><a name=
+  "index-word-search" id="index-word-search"></a>
 
-<p>A <em>word search</em> finds a sequence of words without regard to the
-type of punctuation between them.  For instance, if you enter a search
-string that consists of two words separated by a single space, the
-search matches any sequence of those two words separated by one or
-more spaces, newlines, or other punctuation characters.  This is
-particularly useful for searching text documents, because you don&rsquo;t
-have to worry whether the words you are looking for are separated by
-newlines or spaces.  Note that major modes for programming languages
-or other specialized modes can modify the definition of a word to suit
-their syntactic needs.
-</p>
-<dl compact="compact">
-<dt><kbd>M-s w</kbd></dt>
-<dd><p>If incremental search is active, toggle word search mode
-(<code>isearch-toggle-word</code>); otherwise, begin an incremental forward
-word search (<code>isearch-forward-word</code>).
-</p></dd>
-<dt><kbd>M-s w <span class="key">RET</span> <var>words</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Search for <var>words</var>, using a forward nonincremental word search.
-</p></dd>
-<dt><kbd>M-s w C-r <span class="key">RET</span> <var>words</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Search backward for <var>words</var>, using a nonincremental word search.
-</p></dd>
-</dl>
+  <p>A <em>word search</em> finds a sequence of words without
+  regard to the type of punctuation between them. For instance, if
+  you enter a search string that consists of two words separated by
+  a single space, the search matches any sequence of those two
+  words separated by one or more spaces, newlines, or other
+  punctuation characters. This is particularly useful for searching
+  text documents, because you don&rsquo;t have to worry whether the
+  words you are looking for are separated by newlines or spaces.
+  Note that major modes for programming languages or other
+  specialized modes can modify the definition of a word to suit
+  their syntactic needs.</p>
 
-<a name="index-M_002ds-w"></a>
-<a name="index-isearch_002dforward_002dword"></a>
-<p>To begin a forward incremental word search, type <kbd>M-s w</kbd>.  If
-incremental search is not already active, this runs the command
-<code>isearch-forward-word</code>.  If incremental search is already active
-(whether a forward or backward search), <kbd>M-s w</kbd> switches to a word
-search while keeping the direction of the search and the current
-search string unchanged.  You can toggle word search back off by
-typing <kbd>M-s w</kbd> again.
-</p>
-<a name="index-word_002dsearch_002dforward"></a>
-<a name="index-word_002dsearch_002dbackward"></a>
-<p>To begin a nonincremental word search, type <kbd>M-s w <span class="key">RET</span></kbd>
-for a forward search, or <kbd>M-s w C-r <span class="key">RET</span></kbd> for a backward search.
-These run the commands <code>word-search-forward</code> and
-<code>word-search-backward</code> respectively.
-</p>
-<p>Incremental and nonincremental word searches differ slightly in the
-way they find a match.  In a nonincremental word search, each word in
-the search string must exactly match a whole word.  In an incremental
-word search, the matching is more lax: while you are typing the search
-string, its first and last words need not match whole words.  This is
-so that the matching can proceed incrementally as you type.  This
-additional laxity does not apply to the lazy highlight
-(see <a href="Incremental-Search.html#Incremental-Search">Incremental Search</a>), which always matches whole words.
-</p>
-<p>The word search commands don&rsquo;t perform character folding, and
-toggling lax whitespace matching (see <a href="Lax-Search.html#Lax-Search">lax space
-matching</a>) has no effect on them.
-</p>
-<a name="index-M_002ds-M_002dw"></a>
-<a name="index-eww_002dsearch_002dword"></a>
-<a name="index-eww_002dsearch_002dprefix"></a>
-<p>Search the Web for the text in region.  This command performs an
-Internet search for the words in region using the search engine whose
-<acronym>URL</acronym> is specified by the variable <code>eww-search-prefix</code>.
-See <a href="../eww/Basics.html#Basics">EWW</a> in <cite>The Emacs Web Wowser Manual</cite>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Symbol-Search.html#Symbol-Search" accesskey="n" rel="next">Symbol Search</a>, Previous: <a href="Nonincremental-Search.html#Nonincremental-Search" accesskey="p" rel="prev">Nonincremental Search</a>, Up: <a href="Search.html#Search" accesskey="u" rel="up">Search</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt><kbd>M-s w</kbd></dt>
 
+    <dd>
+      <p>If incremental search is active, toggle word search mode
+      (<code>isearch-toggle-word</code>); otherwise, begin an
+      incremental forward word search
+      (<code>isearch-forward-word</code>).</p>
+    </dd>
 
+    <dt><kbd>M-s w <span class="key">RET</span> <var>words</var>
+    <span class="key">RET</span></kbd></dt>
 
+    <dd>
+      <p>Search for <var>words</var>, using a forward
+      nonincremental word search.</p>
+    </dd>
+
+    <dt><kbd>M-s w C-r <span class="key">RET</span>
+    <var>words</var> <span class="key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Search backward for <var>words</var>, using a
+      nonincremental word search.</p>
+    </dd>
+  </dl><a name="index-M_002ds-w" id="index-M_002ds-w"></a> <a name=
+  "index-isearch_002dforward_002dword" id=
+  "index-isearch_002dforward_002dword"></a>
+
+  <p>To begin a forward incremental word search, type <kbd>M-s
+  w</kbd>. If incremental search is not already active, this runs
+  the command <code>isearch-forward-word</code>. If incremental
+  search is already active (whether a forward or backward search),
+  <kbd>M-s w</kbd> switches to a word search while keeping the
+  direction of the search and the current search string unchanged.
+  You can toggle word search back off by typing <kbd>M-s w</kbd>
+  again.</p><a name="index-word_002dsearch_002dforward" id=
+  "index-word_002dsearch_002dforward"></a> <a name=
+  "index-word_002dsearch_002dbackward" id=
+  "index-word_002dsearch_002dbackward"></a>
+
+  <p>To begin a nonincremental word search, type <kbd>M-s w
+  <span class="key">RET</span></kbd> for a forward search, or
+  <kbd>M-s w C-r <span class="key">RET</span></kbd> for a backward
+  search. These run the commands <code>word-search-forward</code>
+  and <code>word-search-backward</code> respectively.</p>
+
+  <p>Incremental and nonincremental word searches differ slightly
+  in the way they find a match. In a nonincremental word search,
+  each word in the search string must exactly match a whole word.
+  In an incremental word search, the matching is more lax: while
+  you are typing the search string, its first and last words need
+  not match whole words. This is so that the matching can proceed
+  incrementally as you type. This additional laxity does not apply
+  to the lazy highlight (see <a href=
+  "Incremental-Search.html#Incremental-Search">Incremental
+  Search</a>), which always matches whole words.</p>
+
+  <p>The word search commands don&rsquo;t perform character
+  folding, and toggling lax whitespace matching (see <a href=
+  "Lax-Search.html#Lax-Search">lax space matching</a>) has no
+  effect on them.</p><a name="index-M_002ds-M_002dw" id=
+  "index-M_002ds-M_002dw"></a> <a name=
+  "index-eww_002dsearch_002dword" id=
+  "index-eww_002dsearch_002dword"></a> <a name=
+  "index-eww_002dsearch_002dprefix" id=
+  "index-eww_002dsearch_002dprefix"></a>
+
+  <p>Search the Web for the text in region. This command performs
+  an Internet search for the words in region using the search
+  engine whose <acronym>URL</acronym> is specified by the variable
+  <code>eww-search-prefix</code>. See <a href=
+  "../eww/Basics.html#Basics">EWW</a> in <cite>The Emacs Web Wowser
+  Manual</cite>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Symbol-Search.html#Symbol-Search" accesskey=
+    "n" rel="next">Symbol Search</a>, Previous: <a href=
+    "Nonincremental-Search.html#Nonincremental-Search" accesskey=
+    "p" rel="prev">Nonincremental Search</a>, Up: <a href=
+    "Search.html#Search" accesskey="u" rel="up">Search</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

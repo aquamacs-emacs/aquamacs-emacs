@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the Emacs MIME interface functionality.
 
 Copyright © 1998-2016 Free Software Foundation, Inc.
@@ -14,99 +16,215 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Emacs MIME Manual: Basic Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Emacs MIME Manual: Basic Functions">
-<meta name="keywords" content="Emacs MIME Manual: Basic Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="rfc2045.html#rfc2045" rel="next" title="rfc2045">
-<link href="Interface-Functions.html#Interface-Functions" rel="prev" title="Interface Functions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Emacs MIME Manual: Basic Functions</title>
+  <meta name="description" content=
+  "Emacs MIME Manual: Basic Functions" />
+  <meta name="keywords" content=
+  "Emacs MIME Manual: Basic Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="rfc2045.html#rfc2045" rel="next" title="rfc2045" />
+  <link href="Interface-Functions.html#Interface-Functions" rel=
+  "prev" title="Interface Functions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Basic-Functions"></a>
-<div class="header">
-<p>
-Next: <a href="Standards.html#Standards" accesskey="n" rel="next">Standards</a>, Previous: <a href="Interface-Functions.html#Interface-Functions" accesskey="p" rel="prev">Interface Functions</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Basic-Functions-1"></a>
-<h2 class="chapter">4 Basic Functions</h2>
+<body lang="en" xml:lang="en">
+  <a name="Basic-Functions" id="Basic-Functions"></a>
 
-<p>This chapter describes the basic, ground-level functions for parsing and
-handling.  Covered here is parsing <code>From</code> lines, removing comments
-from header lines, decoding encoded words, parsing date headers and so
-on.  High-level functionality is dealt with in the first chapter
-(see <a href="Decoding-and-Viewing.html#Decoding-and-Viewing">Decoding and Viewing</a>).
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="rfc2045.html#rfc2045" accesskey="1">rfc2045</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Encoding <code>Content-Type</code> headers.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="rfc2231.html#rfc2231" accesskey="2">rfc2231</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Parsing <code>Content-Type</code> headers.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="ietf_002ddrums.html#ietf_002ddrums" accesskey="3">ietf-drums</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Handling mail headers defined by RFC822bis.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="rfc2047.html#rfc2047" accesskey="4">rfc2047</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">En/decoding encoded words in headers.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="time_002ddate.html#time_002ddate" accesskey="5">time-date</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Functions for parsing dates and manipulating time.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="qp.html#qp" accesskey="6">qp</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Quoted-Printable en/decoding.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="base64.html#base64" accesskey="7">base64</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Base64 en/decoding.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="binhex.html#binhex" accesskey="8">binhex</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Binhex decoding.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="uudecode.html#uudecode" accesskey="9">uudecode</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Uuencode decoding.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="yenc.html#yenc">yenc</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Yenc decoding.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="rfc1843.html#rfc1843">rfc1843</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Decoding HZ-encoded text.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="mailcap.html#mailcap">mailcap</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How parts are displayed is specified by the <samp>.mailcap</samp> file
-</td></tr>
-</table>
+  <div class="header">
+    <p>Next: <a href="Standards.html#Standards" accesskey="n" rel=
+    "next">Standards</a>, Previous: <a href=
+    "Interface-Functions.html#Interface-Functions" accesskey="p"
+    rel="prev">Interface Functions</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Basic-Functions-1" id="Basic-Functions-1"></a>
 
+  <h2 class="chapter">4 Basic Functions</h2>
 
+  <p>This chapter describes the basic, ground-level functions for
+  parsing and handling. Covered here is parsing <code>From</code>
+  lines, removing comments from header lines, decoding encoded
+  words, parsing date headers and so on. High-level functionality
+  is dealt with in the first chapter (see <a href=
+  "Decoding-and-Viewing.html#Decoding-and-Viewing">Decoding and
+  Viewing</a>).</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "rfc2045.html#rfc2045" accesskey="1">rfc2045</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top">Encoding
+      <code>Content-Type</code> headers.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "rfc2231.html#rfc2231" accesskey="2">rfc2231</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Parsing
+      <code>Content-Type</code> headers.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "ietf_002ddrums.html#ietf_002ddrums" accesskey=
+      "3">ietf-drums</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Handling mail headers defined
+      by RFC822bis.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "rfc2047.html#rfc2047" accesskey="4">rfc2047</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">En/decoding encoded words in
+      headers.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "time_002ddate.html#time_002ddate" accesskey=
+      "5">time-date</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Functions for parsing dates and
+      manipulating time.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href="qp.html#qp"
+      accesskey="6">qp</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Quoted-Printable
+      en/decoding.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "base64.html#base64" accesskey="7">base64</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Base64 en/decoding.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "binhex.html#binhex" accesskey="8">binhex</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Binhex decoding.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "uudecode.html#uudecode" accesskey="9">uudecode</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Uuencode decoding.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "yenc.html#yenc">yenc</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Yenc decoding.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "rfc1843.html#rfc1843">rfc1843</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Decoding HZ-encoded text.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "mailcap.html#mailcap">mailcap</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How parts are displayed is
+      specified by the <samp>.mailcap</samp> file</td>
+    </tr>
+  </table>
 </body>
 </html>

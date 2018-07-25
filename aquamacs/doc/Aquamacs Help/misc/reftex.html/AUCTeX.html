@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents RefTeX (version 25.1), a package
 to do labels, references, citations and indices for LaTeX documents
 with Emacs.
@@ -16,89 +18,148 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>RefTeX User Manual: AUCTeX</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="RefTeX User Manual: AUCTeX">
-<meta name="keywords" content="RefTeX User Manual: AUCTeX">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="AUCTeX_002dRefTeX-Interface.html#AUCTeX_002dRefTeX-Interface" rel="next" title="AUCTeX-RefTeX Interface">
-<link href="Optimizations.html#Optimizations" rel="prev" title="Optimizations">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>RefTeX User Manual: AUCTeX</title>
+  <meta name="description" content="RefTeX User Manual: AUCTeX" />
+  <meta name="keywords" content="RefTeX User Manual: AUCTeX" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href=
+  "AUCTeX_002dRefTeX-Interface.html#AUCTeX_002dRefTeX-Interface"
+  rel="next" title="AUCTeX-RefTeX Interface" />
+  <link href="Optimizations.html#Optimizations" rel="prev" title=
+  "Optimizations" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="AUCTeX"></a>
-<div class="header">
-<p>
-Next: <a href="Problems-and-Work_002dArounds.html#Problems-and-Work_002dArounds" accesskey="n" rel="next">Problems and Work-Arounds</a>, Previous: <a href="Optimizations.html#Optimizations" accesskey="p" rel="prev">Optimizations</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="AUCTeX-1"></a>
-<h2 class="chapter">14 AUCTeX</h2>
-<a name="index-AUCTeX_002c-Emacs-package"></a>
-<a name="index-Emacs-packages_002c-AUCTeX"></a>
+<body lang="en" xml:lang="en">
+  <a name="AUCTeX" id="AUCTeX"></a>
 
-<p>AUCTeX is without doubt the best major mode for editing TeX and LaTeX
-files with Emacs (see <a href="http://www.gnu.org/software/auctex/manual/auctex/index.html#Top">AUCTeX</a> in <cite>The AUCTeX User Manual</cite>).
-If AUCTeX is not part of your Emacs distribution, you can get
-it<a name="DOCF9" href="#FOOT9"><sup>9</sup></a> by FTP from the <a href="http://www.gnu.org/software/auctex/">AUCTeX web site</a>.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="AUCTeX_002dRefTeX-Interface.html#AUCTeX_002dRefTeX-Interface" accesskey="1">AUCTeX-RefTeX Interface</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How both packages work together
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Style-Files.html#Style-Files" accesskey="2">Style Files</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">AUCTeX&rsquo;s style files can support RefTeX
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Bib_002dCite.html#Bib_002dCite" accesskey="3">Bib-Cite</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Hypertext reading of a document
-</td></tr>
-</table>
+  <div class="header">
+    <p>Next: <a href=
+    "Problems-and-Work_002dArounds.html#Problems-and-Work_002dArounds"
+    accesskey="n" rel="next">Problems and Work-Arounds</a>,
+    Previous: <a href="Optimizations.html#Optimizations" accesskey=
+    "p" rel="prev">Optimizations</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="AUCTeX-1" id="AUCTeX-1"></a>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <h2 class="chapter">14 AUCTeX</h2><a name=
+  "index-AUCTeX_002c-Emacs-package" id=
+  "index-AUCTeX_002c-Emacs-package"></a> <a name=
+  "index-Emacs-packages_002c-AUCTeX" id=
+  "index-Emacs-packages_002c-AUCTeX"></a>
 
-<h3><a name="FOOT9" href="#DOCF9">(9)</a></h3>
-<p>XEmacs 21.x users may want to install the corresponding
-XEmacs package.</p>
-</div>
+  <p>AUCTeX is without doubt the best major mode for editing TeX
+  and LaTeX files with Emacs (see <a href=
+  "http://www.gnu.org/software/auctex/manual/auctex/index.html#Top">
+  AUCTeX</a> in <cite>The AUCTeX User Manual</cite>). If AUCTeX is
+  not part of your Emacs distribution, you can get it<a name=
+  "DOCF9" href="#FOOT9" id="DOCF9"><sup>9</sup></a> by FTP from the
+  <a href="http://www.gnu.org/software/auctex/">AUCTeX web
+  site</a>.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "AUCTeX_002dRefTeX-Interface.html#AUCTeX_002dRefTeX-Interface"
+      accesskey="1">AUCTeX-RefTeX Interface</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top">How both packages work
+      together</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Style-Files.html#Style-Files" accesskey="2">Style
+      Files</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">AUCTeX&rsquo;s style files can
+      support RefTeX</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Bib_002dCite.html#Bib_002dCite" accesskey=
+      "3">Bib-Cite</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Hypertext reading of a
+      document</td>
+    </tr>
+  </table>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT9" href="#DOCF9" id="FOOT9">(9)</a></h3>
+
+    <p>XEmacs 21.x users may want to install the corresponding
+    XEmacs package.</p>
+  </div>
 </body>
 </html>

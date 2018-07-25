@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,128 +20,190 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Moving by Parens</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Moving by Parens">
-<meta name="keywords" content="GNU Emacs Manual: Moving by Parens">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Parentheses.html#Parentheses" rel="up" title="Parentheses">
-<link href="Matching.html#Matching" rel="next" title="Matching">
-<link href="Expressions.html#Expressions" rel="prev" title="Expressions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Moving by Parens</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Moving by Parens" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Moving by Parens" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Parentheses.html#Parentheses" rel="up" title=
+  "Parentheses" />
+  <link href="Matching.html#Matching" rel="next" title=
+  "Matching" />
+  <link href="Expressions.html#Expressions" rel="prev" title=
+  "Expressions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Moving-by-Parens" id="Moving-by-Parens"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Matching.html#Matching" accesskey="n" rel=
+    "next">Matching</a>, Previous: <a href=
+    "Expressions.html#Expressions" accesskey="p" rel=
+    "prev">Expressions</a>, Up: <a href=
+    "Parentheses.html#Parentheses" accesskey="u" rel=
+    "up">Parentheses</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Moving-in-the-Parenthesis-Structure" id=
+  "Moving-in-the-Parenthesis-Structure"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Moving-by-Parens"></a>
-<div class="header">
-<p>
-Next: <a href="Matching.html#Matching" accesskey="n" rel="next">Matching</a>, Previous: <a href="Expressions.html#Expressions" accesskey="p" rel="prev">Expressions</a>, Up: <a href="Parentheses.html#Parentheses" accesskey="u" rel="up">Parentheses</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Moving-in-the-Parenthesis-Structure"></a>
-<h4 class="subsection">26.4.2 Moving in the Parenthesis Structure</h4>
+  <h4 class="subsection">26.4.2 Moving in the Parenthesis
+  Structure</h4><a name="index-parenthetical-groupings" id=
+  "index-parenthetical-groupings"></a> <a name=
+  "index-parentheses_002c-moving-across" id=
+  "index-parentheses_002c-moving-across"></a> <a name=
+  "index-matching-parenthesis-and-braces_002c-moving-to" id=
+  "index-matching-parenthesis-and-braces_002c-moving-to"></a>
+  <a name="index-braces_002c-moving-across" id=
+  "index-braces_002c-moving-across"></a> <a name=
+  "index-list-commands" id="index-list-commands"></a>
 
-<a name="index-parenthetical-groupings"></a>
-<a name="index-parentheses_002c-moving-across"></a>
-<a name="index-matching-parenthesis-and-braces_002c-moving-to"></a>
-<a name="index-braces_002c-moving-across"></a>
-<a name="index-list-commands"></a>
+  <p>The following commands move over groupings delimited by
+  parentheses (or whatever else serves as delimiters in the
+  language you are working with). They ignore strings and comments,
+  including any parentheses within them, and also ignore
+  parentheses that are quoted with an escape character. These
+  commands are mainly intended for editing programs, but can be
+  useful for editing any text containing parentheses. They are
+  referred to internally as &ldquo;list commands&rdquo; because in
+  Lisp these groupings are lists.</p>
 
-<p>The following commands move over groupings delimited by parentheses
-(or whatever else serves as delimiters in the language you are working
-with).  They ignore strings and comments, including any parentheses
-within them, and also ignore parentheses that are quoted with an
-escape character.  These commands are mainly intended for editing
-programs, but can be useful for editing any text containing
-parentheses.  They are referred to internally as &ldquo;list commands&rdquo;
-because in Lisp these groupings are lists.
-</p>
-<p>These commands assume that the starting point is not inside a string
-or a comment.  If you invoke them from inside a string or comment, the
-results are unreliable.
-</p>
-<dl compact="compact">
-<dt><kbd>C-M-n</kbd></dt>
-<dd><p>Move forward over a parenthetical group (<code>forward-list</code>).
-</p></dd>
-<dt><kbd>C-M-p</kbd></dt>
-<dd><p>Move backward over a parenthetical group (<code>backward-list</code>).
-</p></dd>
-<dt><kbd>C-M-u</kbd></dt>
-<dd><p>Move up in parenthesis structure (<code>backward-up-list</code>).
-</p></dd>
-<dt><kbd>C-M-d</kbd></dt>
-<dd><p>Move down in parenthesis structure (<code>down-list</code>).
-</p></dd>
-</dl>
+  <p>These commands assume that the starting point is not inside a
+  string or a comment. If you invoke them from inside a string or
+  comment, the results are unreliable.</p>
 
-<a name="index-C_002dM_002dn"></a>
-<a name="index-C_002dM_002dp"></a>
-<a name="index-forward_002dlist"></a>
-<a name="index-backward_002dlist"></a>
-<p>The list commands <kbd>C-M-n</kbd> (<code>forward-list</code>) and
-<kbd>C-M-p</kbd> (<code>backward-list</code>) move forward or backward over one
-(or <var>n</var>) parenthetical groupings.
-</p>
-<a name="index-C_002dM_002du"></a>
-<a name="index-backward_002dup_002dlist"></a>
-<p><kbd>C-M-n</kbd> and <kbd>C-M-p</kbd> try to stay at the same level in the
-parenthesis structure.  To move <em>up</em> one (or <var>n</var>) levels, use
-<kbd>C-M-u</kbd> (<code>backward-up-list</code>).  <kbd>C-M-u</kbd> moves backward up
-past one unmatched opening delimiter.  A positive argument serves as a
-repeat count; a negative argument reverses the direction of motion, so
-that the command moves forward and up one or more levels.
-</p>
-<a name="index-C_002dM_002dd"></a>
-<a name="index-down_002dlist"></a>
-<p>To move <em>down</em> in the parenthesis structure, use <kbd>C-M-d</kbd>
-(<code>down-list</code>).  In Lisp mode, where &lsquo;<samp>(</samp>&rsquo; is the only opening
-delimiter, this is nearly the same as searching for a &lsquo;<samp>(</samp>&rsquo;.  An
-argument specifies the number of levels to go down.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Matching.html#Matching" accesskey="n" rel="next">Matching</a>, Previous: <a href="Expressions.html#Expressions" accesskey="p" rel="prev">Expressions</a>, Up: <a href="Parentheses.html#Parentheses" accesskey="u" rel="up">Parentheses</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt><kbd>C-M-n</kbd></dt>
 
+    <dd>
+      <p>Move forward over a parenthetical group
+      (<code>forward-list</code>).</p>
+    </dd>
 
+    <dt><kbd>C-M-p</kbd></dt>
 
+    <dd>
+      <p>Move backward over a parenthetical group
+      (<code>backward-list</code>).</p>
+    </dd>
+
+    <dt><kbd>C-M-u</kbd></dt>
+
+    <dd>
+      <p>Move up in parenthesis structure
+      (<code>backward-up-list</code>).</p>
+    </dd>
+
+    <dt><kbd>C-M-d</kbd></dt>
+
+    <dd>
+      <p>Move down in parenthesis structure
+      (<code>down-list</code>).</p>
+    </dd>
+  </dl><a name="index-C_002dM_002dn" id="index-C_002dM_002dn"></a>
+  <a name="index-C_002dM_002dp" id="index-C_002dM_002dp"></a>
+  <a name="index-forward_002dlist" id="index-forward_002dlist"></a>
+  <a name="index-backward_002dlist" id=
+  "index-backward_002dlist"></a>
+
+  <p>The list commands <kbd>C-M-n</kbd> (<code>forward-list</code>)
+  and <kbd>C-M-p</kbd> (<code>backward-list</code>) move forward or
+  backward over one (or <var>n</var>) parenthetical
+  groupings.</p><a name="index-C_002dM_002du" id=
+  "index-C_002dM_002du"></a> <a name=
+  "index-backward_002dup_002dlist" id=
+  "index-backward_002dup_002dlist"></a>
+
+  <p><kbd>C-M-n</kbd> and <kbd>C-M-p</kbd> try to stay at the same
+  level in the parenthesis structure. To move <em>up</em> one (or
+  <var>n</var>) levels, use <kbd>C-M-u</kbd>
+  (<code>backward-up-list</code>). <kbd>C-M-u</kbd> moves backward
+  up past one unmatched opening delimiter. A positive argument
+  serves as a repeat count; a negative argument reverses the
+  direction of motion, so that the command moves forward and up one
+  or more levels.</p><a name="index-C_002dM_002dd" id=
+  "index-C_002dM_002dd"></a> <a name="index-down_002dlist" id=
+  "index-down_002dlist"></a>
+
+  <p>To move <em>down</em> in the parenthesis structure, use
+  <kbd>C-M-d</kbd> (<code>down-list</code>). In Lisp mode, where
+  &lsquo;<samp>(</samp>&rsquo; is the only opening delimiter, this
+  is nearly the same as searching for a
+  &lsquo;<samp>(</samp>&rsquo;. An argument specifies the number of
+  levels to go down.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Matching.html#Matching" accesskey="n" rel=
+    "next">Matching</a>, Previous: <a href=
+    "Expressions.html#Expressions" accesskey="p" rel=
+    "prev">Expressions</a>, Up: <a href=
+    "Parentheses.html#Parentheses" accesskey="u" rel=
+    "up">Parentheses</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-1997, 2001-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,119 +14,180 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Viper Is a Package for Emacs Rebels: Yanking</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Viper Is a Package for Emacs Rebels: Yanking">
-<meta name="keywords" content="Viper Is a Package for Emacs Rebels: Yanking">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Text-Handling.html#Text-Handling" rel="up" title="Text Handling">
-<link href="Undoing.html#Undoing" rel="next" title="Undoing">
-<link href="Search-and-Replace.html#Search-and-Replace" rel="prev" title="Search and Replace">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Viper Is a Package for Emacs Rebels: Yanking</title>
+  <meta name="description" content=
+  "Viper Is a Package for Emacs Rebels: Yanking" />
+  <meta name="keywords" content=
+  "Viper Is a Package for Emacs Rebels: Yanking" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Text-Handling.html#Text-Handling" rel="up" title=
+  "Text Handling" />
+  <link href="Undoing.html#Undoing" rel="next" title="Undoing" />
+  <link href="Search-and-Replace.html#Search-and-Replace" rel=
+  "prev" title="Search and Replace" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Yanking"></a>
-<div class="header">
-<p>
-Next: <a href="Undoing.html#Undoing" accesskey="n" rel="next">Undoing</a>, Previous: <a href="Search-and-Replace.html#Search-and-Replace" accesskey="p" rel="prev">Search and Replace</a>, Up: <a href="Text-Handling.html#Text-Handling" accesskey="u" rel="up">Text Handling</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Yanking-1"></a>
-<h4 class="subsection">4.2.8 Yanking</h4>
+<body lang="en" xml:lang="en">
+  <a name="Yanking" id="Yanking"></a>
 
-<a name="index-cut-and-paste"></a>
-<a name="index-paste-1"></a>
+  <div class="header">
+    <p>Next: <a href="Undoing.html#Undoing" accesskey="n" rel=
+    "next">Undoing</a>, Previous: <a href=
+    "Search-and-Replace.html#Search-and-Replace" accesskey="p" rel=
+    "prev">Search and Replace</a>, Up: <a href=
+    "Text-Handling.html#Text-Handling" accesskey="u" rel="up">Text
+    Handling</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Yanking-1" id="Yanking-1"></a>
 
-<dl compact="compact">
-<dt><kbd>&lt;count&gt;  y&lt;move&gt;</kbd></dt>
-<dd><p>Yank from begin to endpoint of &lt;count&gt;&lt;move&gt;.
-</p></dd>
-<dt><kbd>&lt;count&gt;  &quot;&lt;a-z&gt;y&lt;move&gt;</kbd></dt>
-<dd><p>Yank from begin to endpoint of &lt;count&gt;&lt;move&gt; to register.
-</p></dd>
-<dt><kbd>&lt;count&gt;  &quot;&lt;A-Z&gt;y&lt;move&gt;</kbd></dt>
-<dd><p>Yank from begin to endpoint of &lt;count&gt;&lt;move&gt; and append
-to register.
-</p></dd>
-<dt><kbd>&lt;count&gt;  yy</kbd></dt>
-<dd><p>&lt;count&gt; lines.
-</p></dd>
-<dt><kbd>&lt;count&gt;  Y</kbd></dt>
-<dd><p>Idem (should be equivalent to <kbd>y$</kbd> though).
-</p></dd>
-<dt><kbd>m&lt;a-z&gt;</kbd></dt>
-<dd><p>Mark the cursor position with a letter.
-</p></dd>
-<dt><kbd>[&lt;a-z&gt;</kbd></dt>
-<dd><p>Show contents of textmarker.
-</p></dd>
-<dt><kbd>]&lt;a-z&gt;</kbd></dt>
-<dd><p>Show contents of register.
-</p></dd>
-<dt><kbd>&lt;count&gt;  [&quot;&lt;a-z1-9&gt;]p</kbd></dt>
-<dd><p>Put the contents of the (default undo) buffer
-&lt;count&gt; times after the cursor.  The register will
-be automatically down-cased.
-</p></dd>
-<dt><kbd>&lt;count&gt;  [&quot;&lt;a-z1-9&gt;]P</kbd></dt>
-<dd><p>Put the contents of the (default undo) buffer
-&lt;count&gt; times before the cursor.  The register will
-</p></dd>
-</dl>
-<a name="index-P-1"></a>
-<a name="index-p-1"></a>
-<a name="index-_0022_003ca_002dz1_002d9_003ep-1"></a>
-<a name="index-_0022_003ca_002dz1_002d9_003eP-1"></a>
-<a name="index-_005d_003ca_002dz_003e-3"></a>
-<a name="index-_005b_003ca_002dz_003e-3"></a>
-<a name="index-m_003ca_002dz_003e-2"></a>
-<a name="index-Y"></a>
-<a name="index-yy"></a>
-<a name="index-_0022_003cA_002dZ_003ey_003cmove_003e"></a>
-<a name="index-_0022_003ca_002dz_003ey_003cmove_003e"></a>
-<a name="index-y_003cmove_003e"></a>
-<a name="index-yank"></a>
-<a name="index-Ex-yank"></a>
+  <h4 class="subsection">4.2.8 Yanking</h4><a name=
+  "index-cut-and-paste" id="index-cut-and-paste"></a> <a name=
+  "index-paste-1" id="index-paste-1"></a>
 
+  <dl compact="compact">
+    <dt><kbd>&lt;count&gt; y&lt;move&gt;</kbd></dt>
 
+    <dd>
+      <p>Yank from begin to endpoint of
+      &lt;count&gt;&lt;move&gt;.</p>
+    </dd>
 
+    <dt><kbd>&lt;count&gt; "&lt;a-z&gt;y&lt;move&gt;</kbd></dt>
 
+    <dd>
+      <p>Yank from begin to endpoint of &lt;count&gt;&lt;move&gt;
+      to register.</p>
+    </dd>
+
+    <dt><kbd>&lt;count&gt; "&lt;A-Z&gt;y&lt;move&gt;</kbd></dt>
+
+    <dd>
+      <p>Yank from begin to endpoint of &lt;count&gt;&lt;move&gt;
+      and append to register.</p>
+    </dd>
+
+    <dt><kbd>&lt;count&gt; yy</kbd></dt>
+
+    <dd>
+      <p>&lt;count&gt; lines.</p>
+    </dd>
+
+    <dt><kbd>&lt;count&gt; Y</kbd></dt>
+
+    <dd>
+      <p>Idem (should be equivalent to <kbd>y$</kbd> though).</p>
+    </dd>
+
+    <dt><kbd>m&lt;a-z&gt;</kbd></dt>
+
+    <dd>
+      <p>Mark the cursor position with a letter.</p>
+    </dd>
+
+    <dt><kbd>[&lt;a-z&gt;</kbd></dt>
+
+    <dd>
+      <p>Show contents of textmarker.</p>
+    </dd>
+
+    <dt><kbd>]&lt;a-z&gt;</kbd></dt>
+
+    <dd>
+      <p>Show contents of register.</p>
+    </dd>
+
+    <dt><kbd>&lt;count&gt; ["&lt;a-z1-9&gt;]p</kbd></dt>
+
+    <dd>
+      <p>Put the contents of the (default undo) buffer
+      &lt;count&gt; times after the cursor. The register will be
+      automatically down-cased.</p>
+    </dd>
+
+    <dt><kbd>&lt;count&gt; ["&lt;a-z1-9&gt;]P</kbd></dt>
+
+    <dd>
+      <p>Put the contents of the (default undo) buffer
+      &lt;count&gt; times before the cursor. The register will</p>
+    </dd>
+  </dl><a name="index-P-1" id="index-P-1"></a> <a name="index-p-1"
+  id="index-p-1"></a> <a name=
+  "index-_0022_003ca_002dz1_002d9_003ep-1" id=
+  "index-_0022_003ca_002dz1_002d9_003ep-1"></a> <a name=
+  "index-_0022_003ca_002dz1_002d9_003eP-1" id=
+  "index-_0022_003ca_002dz1_002d9_003eP-1"></a> <a name=
+  "index-_005d_003ca_002dz_003e-3" id=
+  "index-_005d_003ca_002dz_003e-3"></a> <a name=
+  "index-_005b_003ca_002dz_003e-3" id=
+  "index-_005b_003ca_002dz_003e-3"></a> <a name=
+  "index-m_003ca_002dz_003e-2" id="index-m_003ca_002dz_003e-2"></a>
+  <a name="index-Y" id="index-Y"></a> <a name="index-yy" id=
+  "index-yy"></a> <a name=
+  "index-_0022_003cA_002dZ_003ey_003cmove_003e" id=
+  "index-_0022_003cA_002dZ_003ey_003cmove_003e"></a> <a name=
+  "index-_0022_003ca_002dz_003ey_003cmove_003e" id=
+  "index-_0022_003ca_002dz_003ey_003cmove_003e"></a> <a name=
+  "index-y_003cmove_003e" id="index-y_003cmove_003e"></a> <a name=
+  "index-yank" id="index-yank"></a> <a name="index-Ex-yank" id=
+  "index-Ex-yank"></a>
 </body>
 </html>

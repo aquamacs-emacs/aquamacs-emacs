@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,157 +19,236 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: File Locks</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: File Locks">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: File Locks">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Files.html#Files" rel="up" title="Files">
-<link href="Information-about-Files.html#Information-about-Files" rel="next" title="Information about Files">
-<link href="Writing-to-Files.html#Writing-to-Files" rel="prev" title="Writing to Files">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: File Locks</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: File Locks" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: File Locks" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Files.html#Files" rel="up" title="Files" />
+  <link href="Information-about-Files.html#Information-about-Files"
+  rel="next" title="Information about Files" />
+  <link href="Writing-to-Files.html#Writing-to-Files" rel="prev"
+  title="Writing to Files" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="File-Locks" id="File-Locks"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Information-about-Files.html#Information-about-Files"
+    accesskey="n" rel="next">Information about Files</a>, Previous:
+    <a href="Writing-to-Files.html#Writing-to-Files" accesskey="p"
+    rel="prev">Writing to Files</a>, Up: <a href="Files.html#Files"
+    accesskey="u" rel="up">Files</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="File-Locks-1" id="File-Locks-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="File-Locks"></a>
-<div class="header">
-<p>
-Next: <a href="Information-about-Files.html#Information-about-Files" accesskey="n" rel="next">Information about Files</a>, Previous: <a href="Writing-to-Files.html#Writing-to-Files" accesskey="p" rel="prev">Writing to Files</a>, Up: <a href="Files.html#Files" accesskey="u" rel="up">Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="File-Locks-1"></a>
-<h3 class="section">24.5 File Locks</h3>
-<a name="index-file-locks"></a>
-<a name="index-lock-file"></a>
+  <h3 class="section">24.5 File Locks</h3><a name=
+  "index-file-locks" id="index-file-locks"></a> <a name=
+  "index-lock-file" id="index-lock-file"></a>
 
-<p>When two users edit the same file at the same time, they are likely
-to interfere with each other.  Emacs tries to prevent this situation
-from arising by recording a <em>file lock</em> when a file is being
-modified.
-Emacs can then detect the first attempt to modify a buffer visiting a
-file that is locked by another Emacs job, and ask the user what to do.
-The file lock is really a file, a symbolic link with a special name,
-stored in the same directory as the file you are editing.  (On file
-systems that do not support symbolic links, a regular file is used.)
-</p>
-<p>When you access files using NFS, there may be a small probability that
-you and another user will both lock the same file simultaneously.
-If this happens, it is possible for the two users to make changes
-simultaneously, but Emacs will still warn the user who saves second.
-Also, the detection of modification of a buffer visiting a file changed
-on disk catches some cases of simultaneous editing; see
-<a href="Modification-Time.html#Modification-Time">Modification Time</a>.
-</p>
-<dl>
-<dt><a name="index-file_002dlocked_002dp"></a>Function: <strong>file-locked-p</strong> <em>filename</em></dt>
-<dd><p>This function returns <code>nil</code> if the file <var>filename</var> is not
-locked.  It returns <code>t</code> if it is locked by this Emacs process, and
-it returns the name of the user who has locked it if it is locked by
-some other job.
-</p>
-<div class="example">
-<pre class="example">(file-locked-p &quot;foo&quot;)
+  <p>When two users edit the same file at the same time, they are
+  likely to interfere with each other. Emacs tries to prevent this
+  situation from arising by recording a <em>file lock</em> when a
+  file is being modified. Emacs can then detect the first attempt
+  to modify a buffer visiting a file that is locked by another
+  Emacs job, and ask the user what to do. The file lock is really a
+  file, a symbolic link with a special name, stored in the same
+  directory as the file you are editing. (On file systems that do
+  not support symbolic links, a regular file is used.)</p>
+
+  <p>When you access files using NFS, there may be a small
+  probability that you and another user will both lock the same
+  file simultaneously. If this happens, it is possible for the two
+  users to make changes simultaneously, but Emacs will still warn
+  the user who saves second. Also, the detection of modification of
+  a buffer visiting a file changed on disk catches some cases of
+  simultaneous editing; see <a href=
+  "Modification-Time.html#Modification-Time">Modification
+  Time</a>.</p>
+
+  <dl>
+    <dt><a name="index-file_002dlocked_002dp" id=
+    "index-file_002dlocked_002dp"></a>Function:
+    <strong>file-locked-p</strong> <em>filename</em></dt>
+
+    <dd>
+      <p>This function returns <code>nil</code> if the file
+      <var>filename</var> is not locked. It returns <code>t</code>
+      if it is locked by this Emacs process, and it returns the
+      name of the user who has locked it if it is locked by some
+      other job.</p>
+
+      <div class="example">
+        <pre class="example">
+(file-locked-p "foo")
      &rArr; nil
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-lock_002dbuffer"></a>Function: <strong>lock-buffer</strong> <em>&amp;optional filename</em></dt>
-<dd><p>This function locks the file <var>filename</var>, if the current buffer is
-modified.  The argument <var>filename</var> defaults to the current buffer&rsquo;s
-visited file.  Nothing is done if the current buffer is not visiting a
-file, or is not modified, or if the option <code>create-lockfiles</code> is
-<code>nil</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-lock_002dbuffer" id=
+    "index-lock_002dbuffer"></a>Function:
+    <strong>lock-buffer</strong> <em>&amp;optional
+    filename</em></dt>
 
-<dl>
-<dt><a name="index-unlock_002dbuffer"></a>Function: <strong>unlock-buffer</strong></dt>
-<dd><p>This function unlocks the file being visited in the current buffer,
-if the buffer is modified.  If the buffer is not modified, then
-the file should not be locked, so this function does nothing.  It also
-does nothing if the current buffer is not visiting a file, or is not locked.
-</p></dd></dl>
+    <dd>
+      <p>This function locks the file <var>filename</var>, if the
+      current buffer is modified. The argument <var>filename</var>
+      defaults to the current buffer&rsquo;s visited file. Nothing
+      is done if the current buffer is not visiting a file, or is
+      not modified, or if the option <code>create-lockfiles</code>
+      is <code>nil</code>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-create_002dlockfiles"></a>User Option: <strong>create-lockfiles</strong></dt>
-<dd><p>If this variable is <code>nil</code>, Emacs does not lock files.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-unlock_002dbuffer" id=
+    "index-unlock_002dbuffer"></a>Function:
+    <strong>unlock-buffer</strong></dt>
 
-<dl>
-<dt><a name="index-ask_002duser_002dabout_002dlock"></a>Function: <strong>ask-user-about-lock</strong> <em>file other-user</em></dt>
-<dd><p>This function is called when the user tries to modify <var>file</var>, but it
-is locked by another user named <var>other-user</var>.  The default
-definition of this function asks the user to say what to do.  The value
-this function returns determines what Emacs does next:
-</p>
-<ul>
-<li> A value of <code>t</code> says to grab the lock on the file.  Then
-this user may edit the file and <var>other-user</var> loses the lock.
+    <dd>
+      <p>This function unlocks the file being visited in the
+      current buffer, if the buffer is modified. If the buffer is
+      not modified, then the file should not be locked, so this
+      function does nothing. It also does nothing if the current
+      buffer is not visiting a file, or is not locked.</p>
+    </dd>
+  </dl>
 
-</li><li> A value of <code>nil</code> says to ignore the lock and let this
-user edit the file anyway.
+  <dl>
+    <dt><a name="index-create_002dlockfiles" id=
+    "index-create_002dlockfiles"></a>User Option:
+    <strong>create-lockfiles</strong></dt>
 
-</li><li> <a name="index-file_002dlocked"></a>
-This function may instead signal a <code>file-locked</code> error, in which
-case the change that the user was about to make does not take place.
+    <dd>
+      <p>If this variable is <code>nil</code>, Emacs does not lock
+      files.</p>
+    </dd>
+  </dl>
 
-<p>The error message for this error looks like this:
-</p>
-<div class="example">
-<pre class="example">error&rarr; File is locked: <var>file</var> <var>other-user</var>
-</pre></div>
+  <dl>
+    <dt><a name="index-ask_002duser_002dabout_002dlock" id=
+    "index-ask_002duser_002dabout_002dlock"></a>Function:
+    <strong>ask-user-about-lock</strong> <em>file
+    other-user</em></dt>
 
-<p>where <code>file</code> is the name of the file and <var>other-user</var> is the
-name of the user who has locked the file.
-</p></li></ul>
+    <dd>
+      <p>This function is called when the user tries to modify
+      <var>file</var>, but it is locked by another user named
+      <var>other-user</var>. The default definition of this
+      function asks the user to say what to do. The value this
+      function returns determines what Emacs does next:</p>
 
-<p>If you wish, you can replace the <code>ask-user-about-lock</code> function
-with your own version that makes the decision in another way.
-</p></dd></dl>
+      <ul>
+        <li>A value of <code>t</code> says to grab the lock on the
+        file. Then this user may edit the file and
+        <var>other-user</var> loses the lock.</li>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Information-about-Files.html#Information-about-Files" accesskey="n" rel="next">Information about Files</a>, Previous: <a href="Writing-to-Files.html#Writing-to-Files" accesskey="p" rel="prev">Writing to Files</a>, Up: <a href="Files.html#Files" accesskey="u" rel="up">Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+        <li>A value of <code>nil</code> says to ignore the lock and
+        let this user edit the file anyway.</li>
 
+        <li>
+          <a name="index-file_002dlocked" id=
+          "index-file_002dlocked"></a> This function may instead
+          signal a <code>file-locked</code> error, in which case
+          the change that the user was about to make does not take
+          place.
 
+          <p>The error message for this error looks like this:</p>
 
+          <div class="example">
+            <pre class="example">
+error&rarr; File is locked: <var>file</var> <var>other-user</var>
+</pre>
+          </div>
+
+          <p>where <code>file</code> is the name of the file and
+          <var>other-user</var> is the name of the user who has
+          locked the file.</p>
+        </li>
+      </ul>
+
+      <p>If you wish, you can replace the
+      <code>ask-user-about-lock</code> function with your own
+      version that makes the decision in another way.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Information-about-Files.html#Information-about-Files"
+    accesskey="n" rel="next">Information about Files</a>, Previous:
+    <a href="Writing-to-Files.html#Writing-to-Files" accesskey="p"
+    rel="prev">Writing to Files</a>, Up: <a href="Files.html#Files"
+    accesskey="u" rel="up">Files</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

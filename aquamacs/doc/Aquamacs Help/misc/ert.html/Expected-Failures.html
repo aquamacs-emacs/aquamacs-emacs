@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2008, 2010-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,119 +14,158 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Emacs Lisp Regression Testing: Expected Failures</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Emacs Lisp Regression Testing: Expected Failures">
-<meta name="keywords" content="Emacs Lisp Regression Testing: Expected Failures">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="How-to-Write-Tests.html#How-to-Write-Tests" rel="up" title="How to Write Tests">
-<link href="Tests-and-Their-Environment.html#Tests-and-Their-Environment" rel="next" title="Tests and Their Environment">
-<link href="The-should-Macro.html#The-should-Macro" rel="prev" title="The should Macro">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Emacs Lisp Regression Testing: Expected Failures</title>
+  <meta name="description" content=
+  "Emacs Lisp Regression Testing: Expected Failures" />
+  <meta name="keywords" content=
+  "Emacs Lisp Regression Testing: Expected Failures" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="How-to-Write-Tests.html#How-to-Write-Tests" rel="up"
+  title="How to Write Tests" />
+  <link href=
+  "Tests-and-Their-Environment.html#Tests-and-Their-Environment"
+  rel="next" title="Tests and Their Environment" />
+  <link href="The-should-Macro.html#The-should-Macro" rel="prev"
+  title="The should Macro" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Expected-Failures"></a>
-<div class="header">
-<p>
-Next: <a href="Tests-and-Their-Environment.html#Tests-and-Their-Environment" accesskey="n" rel="next">Tests and Their Environment</a>, Previous: <a href="The-should-Macro.html#The-should-Macro" accesskey="p" rel="prev">The <code>should</code> Macro</a>, Up: <a href="How-to-Write-Tests.html#How-to-Write-Tests" accesskey="u" rel="up">How to Write Tests</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
-<hr>
-<a name="Expected-Failures-1"></a>
-<h3 class="section">3.2 Expected Failures</h3>
+<body lang="en" xml:lang="en">
+  <a name="Expected-Failures" id="Expected-Failures"></a>
 
-<p>Some bugs are complicated to fix, or not very important, and are left as
-<em>known bugs</em>.  If there is a test case that triggers the bug and
-fails, ERT will alert you of this failure every time you run all
-tests.  For known bugs, this alert is a distraction.  The way to
-suppress it is to add <code>:expected-result :failed</code> to the test
-definition:
-</p>
-<div class="lisp">
-<pre class="lisp">(ert-deftest future-bug ()
-  &quot;Test `time-forward' with negative arguments.
-Since this functionality isn't implemented, the test is known to fail.&quot;
+  <div class="header">
+    <p>Next: <a href=
+    "Tests-and-Their-Environment.html#Tests-and-Their-Environment"
+    accesskey="n" rel="next">Tests and Their Environment</a>,
+    Previous: <a href="The-should-Macro.html#The-should-Macro"
+    accesskey="p" rel="prev">The <code>should</code> Macro</a>, Up:
+    <a href="How-to-Write-Tests.html#How-to-Write-Tests" accesskey=
+    "u" rel="up">How to Write Tests</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>]</p>
+  </div>
+  <hr />
+  <a name="Expected-Failures-1" id="Expected-Failures-1"></a>
+
+  <h3 class="section">3.2 Expected Failures</h3>
+
+  <p>Some bugs are complicated to fix, or not very important, and
+  are left as <em>known bugs</em>. If there is a test case that
+  triggers the bug and fails, ERT will alert you of this failure
+  every time you run all tests. For known bugs, this alert is a
+  distraction. The way to suppress it is to add
+  <code>:expected-result :failed</code> to the test definition:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(ert-deftest future-bug ()
+  "Test `time-forward' with negative arguments.
+Since this functionality isn't implemented, the test is known to fail."
   :expected-result :failed
   (time-forward -1))
-</pre></div>
+</pre>
+  </div>
 
-<p>ERT will still display a small <code>f</code> in the progress bar as a
-reminder that there is a known bug, and will count the test as failed,
-but it will be quiet about it otherwise.
-</p>
-<p>An alternative to marking the test as a known failure this way is to
-delete the test.  This is a good idea if there is no intent to fix it,
-i.e., if the behavior that was formerly considered a bug has become an
-accepted feature.
-</p>
-<p>In general, however, it can be useful to keep tests that are known to
-fail.  If someone wants to fix the bug, they will have a very good
-starting point: an automated test case that reproduces the bug.  This
-makes it much easier to fix the bug, demonstrate that it is fixed, and
-prevent future regressions.
-</p>
-<p>ERT displays the same kind of alerts for tests that pass unexpectedly
-as it displays for unexpected failures.  This way, if you make code
-changes that happen to fix a bug that you weren&rsquo;t aware of, you will
-know to remove the <code>:expected-result</code> clause of that test and
-close the corresponding bug report, if any.
-</p>
-<p>Since <code>:expected-result</code> evaluates its argument when the test is
-loaded, tests can be marked as known failures only on certain Emacs
-versions, specific architectures, etc.:
-</p>
-<div class="lisp">
-<pre class="lisp">(ert-deftest foo ()
-  &quot;A test that is expected to fail on Emacs 23 but succeed elsewhere.&quot;
-  :expected-result (if (string-match &quot;GNU Emacs 23[.]&quot; (emacs-version))
+  <p>ERT will still display a small <code>f</code> in the progress
+  bar as a reminder that there is a known bug, and will count the
+  test as failed, but it will be quiet about it otherwise.</p>
+
+  <p>An alternative to marking the test as a known failure this way
+  is to delete the test. This is a good idea if there is no intent
+  to fix it, i.e., if the behavior that was formerly considered a
+  bug has become an accepted feature.</p>
+
+  <p>In general, however, it can be useful to keep tests that are
+  known to fail. If someone wants to fix the bug, they will have a
+  very good starting point: an automated test case that reproduces
+  the bug. This makes it much easier to fix the bug, demonstrate
+  that it is fixed, and prevent future regressions.</p>
+
+  <p>ERT displays the same kind of alerts for tests that pass
+  unexpectedly as it displays for unexpected failures. This way, if
+  you make code changes that happen to fix a bug that you
+  weren&rsquo;t aware of, you will know to remove the
+  <code>:expected-result</code> clause of that test and close the
+  corresponding bug report, if any.</p>
+
+  <p>Since <code>:expected-result</code> evaluates its argument
+  when the test is loaded, tests can be marked as known failures
+  only on certain Emacs versions, specific architectures, etc.:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(ert-deftest foo ()
+  "A test that is expected to fail on Emacs 23 but succeed elsewhere."
+  :expected-result (if (string-match "GNU Emacs 23[.]" (emacs-version))
                        :failed
                      :passed)
   ...)
-</pre></div>
+</pre>
+  </div>
+  <hr />
 
-
-<hr>
-<div class="header">
-<p>
-Next: <a href="Tests-and-Their-Environment.html#Tests-and-Their-Environment" accesskey="n" rel="next">Tests and Their Environment</a>, Previous: <a href="The-should-Macro.html#The-should-Macro" accesskey="p" rel="prev">The <code>should</code> Macro</a>, Up: <a href="How-to-Write-Tests.html#How-to-Write-Tests" accesskey="u" rel="up">How to Write Tests</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href=
+    "Tests-and-Their-Environment.html#Tests-and-Their-Environment"
+    accesskey="n" rel="next">Tests and Their Environment</a>,
+    Previous: <a href="The-should-Macro.html#The-should-Macro"
+    accesskey="p" rel="prev">The <code>should</code> Macro</a>, Up:
+    <a href="How-to-Write-Tests.html#How-to-Write-Tests" accesskey=
+    "u" rel="up">How to Write Tests</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>]</p>
+  </div>
 </body>
 </html>

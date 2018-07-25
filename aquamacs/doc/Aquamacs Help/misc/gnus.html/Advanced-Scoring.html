@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,84 +14,131 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Advanced Scoring</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Advanced Scoring">
-<meta name="keywords" content="Gnus Manual: Advanced Scoring">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Scoring.html#Scoring" rel="up" title="Scoring">
-<link href="Advanced-Scoring-Syntax.html#Advanced-Scoring-Syntax" rel="next" title="Advanced Scoring Syntax">
-<link href="Converting-Kill-Files.html#Converting-Kill-Files" rel="prev" title="Converting Kill Files">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Advanced Scoring</title>
+  <meta name="description" content=
+  "Gnus Manual: Advanced Scoring" />
+  <meta name="keywords" content="Gnus Manual: Advanced Scoring" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Scoring.html#Scoring" rel="up" title="Scoring" />
+  <link href="Advanced-Scoring-Syntax.html#Advanced-Scoring-Syntax"
+  rel="next" title="Advanced Scoring Syntax" />
+  <link href="Converting-Kill-Files.html#Converting-Kill-Files"
+  rel="prev" title="Converting Kill Files" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Advanced-Scoring"></a>
-<div class="header">
-<p>
-Next: <a href="Score-Decays.html#Score-Decays" accesskey="n" rel="next">Score Decays</a>, Previous: <a href="Converting-Kill-Files.html#Converting-Kill-Files" accesskey="p" rel="prev">Converting Kill Files</a>, Up: <a href="Scoring.html#Scoring" accesskey="u" rel="up">Scoring</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Advanced-Scoring-1"></a>
-<h3 class="section">7.15 Advanced Scoring</h3>
+<body lang="en" xml:lang="en">
+  <a name="Advanced-Scoring" id="Advanced-Scoring"></a>
 
-<p>Scoring on Subjects and From headers is nice enough, but what if you&rsquo;re
-really interested in what a person has to say only when she&rsquo;s talking
-about a particular subject?  Or what if you really don&rsquo;t want to
-read what person A has to say when she&rsquo;s following up to person B, but
-want to read what she says when she&rsquo;s following up to person C?
-</p>
-<p>By using advanced scoring rules you may create arbitrarily complex
-scoring patterns.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Advanced-Scoring-Syntax.html#Advanced-Scoring-Syntax" accesskey="1">Advanced Scoring Syntax</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A definition.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Advanced-Scoring-Examples.html#Advanced-Scoring-Examples" accesskey="2">Advanced Scoring Examples</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">What they look like.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Advanced-Scoring-Tips.html#Advanced-Scoring-Tips" accesskey="3">Advanced Scoring Tips</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Getting the most out of it.
-</td></tr>
-</table>
+  <div class="header">
+    <p>Next: <a href="Score-Decays.html#Score-Decays" accesskey="n"
+    rel="next">Score Decays</a>, Previous: <a href=
+    "Converting-Kill-Files.html#Converting-Kill-Files" accesskey=
+    "p" rel="prev">Converting Kill Files</a>, Up: <a href=
+    "Scoring.html#Scoring" accesskey="u" rel="up">Scoring</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Advanced-Scoring-1" id="Advanced-Scoring-1"></a>
 
+  <h3 class="section">7.15 Advanced Scoring</h3>
 
+  <p>Scoring on Subjects and From headers is nice enough, but what
+  if you&rsquo;re really interested in what a person has to say
+  only when she&rsquo;s talking about a particular subject? Or what
+  if you really don&rsquo;t want to read what person A has to say
+  when she&rsquo;s following up to person B, but want to read what
+  she says when she&rsquo;s following up to person C?</p>
 
+  <p>By using advanced scoring rules you may create arbitrarily
+  complex scoring patterns.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Advanced-Scoring-Syntax.html#Advanced-Scoring-Syntax"
+      accesskey="1">Advanced Scoring Syntax</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">A definition.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Advanced-Scoring-Examples.html#Advanced-Scoring-Examples"
+      accesskey="2">Advanced Scoring Examples</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">What they look like.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Advanced-Scoring-Tips.html#Advanced-Scoring-Tips" accesskey=
+      "3">Advanced Scoring Tips</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Getting the most out of
+      it.</td>
+    </tr>
+  </table>
 </body>
 </html>

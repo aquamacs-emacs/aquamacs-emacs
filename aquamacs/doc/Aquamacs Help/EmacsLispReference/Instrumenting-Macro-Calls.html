@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,156 +19,223 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Instrumenting Macro Calls</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Instrumenting Macro Calls">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Instrumenting Macro Calls">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Edebug-and-Macros.html#Edebug-and-Macros" rel="up" title="Edebug and Macros">
-<link href="Specification-List.html#Specification-List" rel="next" title="Specification List">
-<link href="Edebug-and-Macros.html#Edebug-and-Macros" rel="prev" title="Edebug and Macros">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Instrumenting Macro
+  Calls</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Instrumenting Macro Calls" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Instrumenting Macro Calls" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Edebug-and-Macros.html#Edebug-and-Macros" rel="up"
+  title="Edebug and Macros" />
+  <link href="Specification-List.html#Specification-List" rel=
+  "next" title="Specification List" />
+  <link href="Edebug-and-Macros.html#Edebug-and-Macros" rel="prev"
+  title="Edebug and Macros" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Instrumenting-Macro-Calls" id=
+  "Instrumenting-Macro-Calls"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Specification-List.html#Specification-List"
+    accesskey="n" rel="next">Specification List</a>, Up: <a href=
+    "Edebug-and-Macros.html#Edebug-and-Macros" accesskey="u" rel=
+    "up">Edebug and Macros</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Instrumenting-Macro-Calls-1" id=
+  "Instrumenting-Macro-Calls-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Instrumenting-Macro-Calls"></a>
-<div class="header">
-<p>
-Next: <a href="Specification-List.html#Specification-List" accesskey="n" rel="next">Specification List</a>, Up: <a href="Edebug-and-Macros.html#Edebug-and-Macros" accesskey="u" rel="up">Edebug and Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Instrumenting-Macro-Calls-1"></a>
-<h4 class="subsubsection">17.2.15.1 Instrumenting Macro Calls</h4>
+  <h4 class="subsubsection">17.2.15.1 Instrumenting Macro
+  Calls</h4>
 
-<p>When Edebug instruments an expression that calls a Lisp macro, it needs
-additional information about the macro to do the job properly.  This is
-because there is no a-priori way to tell which subexpressions of the
-macro call are forms to be evaluated.  (Evaluation may occur explicitly
-in the macro body, or when the resulting expansion is evaluated, or any
-time later.)
-</p>
-<p>Therefore, you must define an Edebug specification for each macro
-that Edebug will encounter, to explain the format of calls to that
-macro.  To do this, add a <code>debug</code> declaration to the macro
-definition.  Here is a simple example that shows the specification for
-the <code>for</code> example macro (see <a href="Argument-Evaluation.html#Argument-Evaluation">Argument Evaluation</a>).
-</p>
-<div class="smallexample">
-<pre class="smallexample">(defmacro for (var from init to final do &amp;rest body)
-  &quot;Execute a simple \&quot;for\&quot; loop.
-For example, (for i from 1 to 10 do (print i)).&quot;
-  (declare (debug (symbolp &quot;from&quot; form &quot;to&quot; form &quot;do&quot; &amp;rest form)))
+  <p>When Edebug instruments an expression that calls a Lisp macro,
+  it needs additional information about the macro to do the job
+  properly. This is because there is no a-priori way to tell which
+  subexpressions of the macro call are forms to be evaluated.
+  (Evaluation may occur explicitly in the macro body, or when the
+  resulting expansion is evaluated, or any time later.)</p>
+
+  <p>Therefore, you must define an Edebug specification for each
+  macro that Edebug will encounter, to explain the format of calls
+  to that macro. To do this, add a <code>debug</code> declaration
+  to the macro definition. Here is a simple example that shows the
+  specification for the <code>for</code> example macro (see
+  <a href="Argument-Evaluation.html#Argument-Evaluation">Argument
+  Evaluation</a>).</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+(defmacro for (var from init to final do &amp;rest body)
+  "Execute a simple \"for\" loop.
+For example, (for i from 1 to 10 do (print i))."
+  (declare (debug (symbolp "from" form "to" form "do" &amp;rest form)))
   ...)
-</pre></div>
+</pre>
+  </div>
 
-<p>The Edebug specification says which parts of a call to the macro are
-forms to be evaluated.  For simple macros, the specification
-often looks very similar to the formal argument list of the macro
-definition, but specifications are much more general than macro
-arguments.  See <a href="Defining-Macros.html#Defining-Macros">Defining Macros</a>, for more explanation of
-the <code>declare</code> form.
-</p>
-<p>Take care to ensure that the specifications are known to Edebug when
-you instrument code.  If you are instrumenting a function from a file
-that uses <code>eval-when-compile</code> to require another file containing
-macro definitions, you may need to explicitly load that file.
-</p>
-<p>You can also define an edebug specification for a macro separately
-from the macro definition with <code>def-edebug-spec</code>.  Adding
-<code>debug</code> declarations is preferred, and more convenient, for macro
-definitions in Lisp, but <code>def-edebug-spec</code> makes it possible to
-define Edebug specifications for special forms implemented in C.
-</p>
-<dl>
-<dt><a name="index-def_002dedebug_002dspec"></a>Macro: <strong>def-edebug-spec</strong> <em>macro specification</em></dt>
-<dd><p>Specify which expressions of a call to macro <var>macro</var> are forms to be
-evaluated.  <var>specification</var> should be the edebug specification.
-Neither argument is evaluated.
-</p>
-<p>The <var>macro</var> argument can actually be any symbol, not just a macro
-name.
-</p></dd></dl>
+  <p>The Edebug specification says which parts of a call to the
+  macro are forms to be evaluated. For simple macros, the
+  specification often looks very similar to the formal argument
+  list of the macro definition, but specifications are much more
+  general than macro arguments. See <a href=
+  "Defining-Macros.html#Defining-Macros">Defining Macros</a>, for
+  more explanation of the <code>declare</code> form.</p>
 
-<p>Here is a table of the possibilities for <var>specification</var> and how each
-directs processing of arguments.
-</p>
-<dl compact="compact">
-<dt><code>t</code></dt>
-<dd><p>All arguments are instrumented for evaluation.
-</p>
-</dd>
-<dt><code>0</code></dt>
-<dd><p>None of the arguments is instrumented.
-</p>
-</dd>
-<dt>a symbol</dt>
-<dd><p>The symbol must have an Edebug specification, which is used instead.
-This indirection is repeated until another kind of specification is
-found.  This allows you to inherit the specification from another macro.
-</p>
-</dd>
-<dt>a list</dt>
-<dd><p>The elements of the list describe the types of the arguments of a
-calling form.  The possible elements of a specification list are
-described in the following sections.
-</p></dd>
-</dl>
+  <p>Take care to ensure that the specifications are known to
+  Edebug when you instrument code. If you are instrumenting a
+  function from a file that uses <code>eval-when-compile</code> to
+  require another file containing macro definitions, you may need
+  to explicitly load that file.</p>
 
-<p>If a macro has no Edebug specification, neither through a <code>debug</code>
-declaration nor through a <code>def-edebug-spec</code> call, the variable
-<code>edebug-eval-macro-args</code> comes into play.
-</p>
-<dl>
-<dt><a name="index-edebug_002deval_002dmacro_002dargs"></a>User Option: <strong>edebug-eval-macro-args</strong></dt>
-<dd><p>This controls the way Edebug treats macro arguments with no explicit
-Edebug specification.  If it is <code>nil</code> (the default), none of the
-arguments is instrumented for evaluation.  Otherwise, all arguments
-are instrumented.
-</p></dd></dl>
+  <p>You can also define an edebug specification for a macro
+  separately from the macro definition with
+  <code>def-edebug-spec</code>. Adding <code>debug</code>
+  declarations is preferred, and more convenient, for macro
+  definitions in Lisp, but <code>def-edebug-spec</code> makes it
+  possible to define Edebug specifications for special forms
+  implemented in C.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Specification-List.html#Specification-List" accesskey="n" rel="next">Specification List</a>, Up: <a href="Edebug-and-Macros.html#Edebug-and-Macros" accesskey="u" rel="up">Edebug and Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-def_002dedebug_002dspec" id=
+    "index-def_002dedebug_002dspec"></a>Macro:
+    <strong>def-edebug-spec</strong> <em>macro
+    specification</em></dt>
 
+    <dd>
+      <p>Specify which expressions of a call to macro
+      <var>macro</var> are forms to be evaluated.
+      <var>specification</var> should be the edebug specification.
+      Neither argument is evaluated.</p>
 
+      <p>The <var>macro</var> argument can actually be any symbol,
+      not just a macro name.</p>
+    </dd>
+  </dl>
 
+  <p>Here is a table of the possibilities for
+  <var>specification</var> and how each directs processing of
+  arguments.</p>
+
+  <dl compact="compact">
+    <dt><code>t</code></dt>
+
+    <dd>
+      <p>All arguments are instrumented for evaluation.</p>
+    </dd>
+
+    <dt><code>0</code></dt>
+
+    <dd>
+      <p>None of the arguments is instrumented.</p>
+    </dd>
+
+    <dt>a symbol</dt>
+
+    <dd>
+      <p>The symbol must have an Edebug specification, which is
+      used instead. This indirection is repeated until another kind
+      of specification is found. This allows you to inherit the
+      specification from another macro.</p>
+    </dd>
+
+    <dt>a list</dt>
+
+    <dd>
+      <p>The elements of the list describe the types of the
+      arguments of a calling form. The possible elements of a
+      specification list are described in the following
+      sections.</p>
+    </dd>
+  </dl>
+
+  <p>If a macro has no Edebug specification, neither through a
+  <code>debug</code> declaration nor through a
+  <code>def-edebug-spec</code> call, the variable
+  <code>edebug-eval-macro-args</code> comes into play.</p>
+
+  <dl>
+    <dt><a name="index-edebug_002deval_002dmacro_002dargs" id=
+    "index-edebug_002deval_002dmacro_002dargs"></a>User Option:
+    <strong>edebug-eval-macro-args</strong></dt>
+
+    <dd>
+      <p>This controls the way Edebug treats macro arguments with
+      no explicit Edebug specification. If it is <code>nil</code>
+      (the default), none of the arguments is instrumented for
+      evaluation. Otherwise, all arguments are instrumented.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Specification-List.html#Specification-List"
+    accesskey="n" rel="next">Specification List</a>, Up: <a href=
+    "Edebug-and-Macros.html#Edebug-and-Macros" accesskey="u" rel=
+    "up">Edebug and Macros</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

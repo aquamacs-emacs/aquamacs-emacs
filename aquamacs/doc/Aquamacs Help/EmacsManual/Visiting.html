@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,272 +20,383 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Visiting</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Visiting">
-<meta name="keywords" content="GNU Emacs Manual: Visiting">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Files.html#Files" rel="up" title="Files">
-<link href="Saving.html#Saving" rel="next" title="Saving">
-<link href="File-Names.html#File-Names" rel="prev" title="File Names">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Visiting</title>
+  <meta name="description" content="GNU Emacs Manual: Visiting" />
+  <meta name="keywords" content="GNU Emacs Manual: Visiting" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Files.html#Files" rel="up" title="Files" />
+  <link href="Saving.html#Saving" rel="next" title="Saving" />
+  <link href="File-Names.html#File-Names" rel="prev" title=
+  "File Names" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Visiting" id="Visiting"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Saving.html#Saving" accesskey="n" rel=
+    "next">Saving</a>, Previous: <a href=
+    "File-Names.html#File-Names" accesskey="p" rel="prev">File
+    Names</a>, Up: <a href="Files.html#Files" accesskey="u" rel=
+    "up">Files</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Visiting-Files" id="Visiting-Files"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Visiting"></a>
-<div class="header">
-<p>
-Next: <a href="Saving.html#Saving" accesskey="n" rel="next">Saving</a>, Previous: <a href="File-Names.html#File-Names" accesskey="p" rel="prev">File Names</a>, Up: <a href="Files.html#Files" accesskey="u" rel="up">Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Visiting-Files"></a>
-<h3 class="section">18.2 Visiting Files</h3>
-<a name="index-visiting-files"></a>
-<a name="index-open-file"></a>
+  <h3 class="section">18.2 Visiting Files</h3><a name=
+  "index-visiting-files" id="index-visiting-files"></a> <a name=
+  "index-open-file" id="index-open-file"></a>
 
-<dl compact="compact">
-<dt><kbd>C-x C-f</kbd></dt>
-<dd><p>Visit a file (<code>find-file</code>).
-</p></dd>
-<dt><kbd>C-x C-r</kbd></dt>
-<dd><p>Visit a file for viewing, without allowing changes to it
-(<code>find-file-read-only</code>).
-</p></dd>
-<dt><kbd>C-x C-v</kbd></dt>
-<dd><p>Visit a different file instead of the one visited last
-(<code>find-alternate-file</code>).
-</p></dd>
-<dt><kbd>C-x 4 f</kbd></dt>
-<dd><p>Visit a file, in another window (<code>find-file-other-window</code>).  Don&rsquo;t
-alter what is displayed in the selected window.
-</p></dd>
-<dt><kbd>C-x 5 f</kbd></dt>
-<dd><p>Visit a file, in a new frame (<code>find-file-other-frame</code>).  Don&rsquo;t
-alter what is displayed in the selected frame.
-</p></dd>
-<dt><kbd>M-x find-file-literally</kbd></dt>
-<dd><p>Visit a file with no conversion of the contents.
-</p></dd>
-</dl>
+  <dl compact="compact">
+    <dt><kbd>C-x C-f</kbd></dt>
 
-<a name="index-files_002c-visiting-and-saving"></a>
-<a name="index-saving-files"></a>
-<p><em>Visiting</em> a file means reading its contents into an Emacs
-buffer so you can edit them.  Emacs makes a new buffer for each file
-that you visit.
-</p>
-<a name="index-C_002dx-C_002df"></a>
-<a name="index-find_002dfile"></a>
-<p>To visit a file, type <kbd>C-x C-f</kbd> (<code>find-file</code>) and use the
-minibuffer to enter the name of the desired file.  While in the
-minibuffer, you can abort the command by typing <kbd>C-g</kbd>.  See <a href="File-Names.html#File-Names">File Names</a>, for details about entering file names into minibuffers.
-</p>
-<p>If the specified file exists but the system does not allow you to
-read it, an error message is displayed in the echo area.  Otherwise,
-you can tell that <kbd>C-x C-f</kbd> has completed successfully by the
-appearance of new text on the screen, and by the buffer name shown in
-the mode line (see <a href="Mode-Line.html#Mode-Line">Mode Line</a>).  Emacs normally constructs the
-buffer name from the file name, omitting the directory name.  For
-example, a file named <samp>/usr/rms/emacs.tex</samp> is visited in a buffer
-named &lsquo;<samp>emacs.tex</samp>&rsquo;.  If there is already a buffer with that name,
-Emacs constructs a unique name; the normal method is to add a suffix
-based on the directory name (e.g., &lsquo;<samp>&lt;rms&gt;</samp>&rsquo;, &lsquo;<samp>&lt;tmp&gt;</samp>&rsquo;,
-and so on), but you can select other methods.  See <a href="Uniquify.html#Uniquify">Uniquify</a>.
-</p>
-<a name="index-creating-files"></a>
-<p>To create a new file, just visit it using the same command, <kbd>C-x
-C-f</kbd>.  Emacs displays &lsquo;<samp>(New file)</samp>&rsquo; in the echo area, but in other
-respects behaves as if you had visited an existing empty file.
-</p>
-<a name="index-modified-_0028buffer_0029"></a>
-<p>After visiting a file, the changes you make with editing commands are
-made in the Emacs buffer.  They do not take effect in the visited
-file, until you <em>save</em> the buffer (see <a href="Saving.html#Saving">Saving</a>).  If a buffer
-contains changes that have not been saved, we say the buffer is
-<em>modified</em>.  This implies that some changes will be lost if the
-buffer is not saved.  The mode line displays two stars near the left
-margin to indicate that the buffer is modified.
-</p>
-<p>If you visit a file that is already in Emacs, <kbd>C-x C-f</kbd> switches
-to the existing buffer instead of making another copy.  Before doing
-so, it checks whether the file has changed since you last visited or
-saved it.  If the file has changed, Emacs offers to reread it.
-</p>
-<a name="index-large_002dfile_002dwarning_002dthreshold"></a>
-<a name="index-file_002c-warning-when-size-is-large"></a>
-<a name="index-size-of-file_002c-warning-when-visiting"></a>
-<a name="index-maximum-buffer-size-exceeded_002c-error-message"></a>
-<p>If you try to visit a file larger than
-<code>large-file-warning-threshold</code> (the default is 10000000, which is
-about 10 megabytes), Emacs asks you for confirmation first.  You can
-answer <kbd>y</kbd> to proceed with visiting the file.  Note, however, that
-Emacs cannot visit files that are larger than the maximum Emacs buffer
-size, which is limited by the amount of memory Emacs can allocate and
-by the integers that Emacs can represent (see <a href="Buffers.html#Buffers">Buffers</a>).  If you
-try, Emacs displays an error message saying that the maximum buffer
-size has been exceeded.
-</p>
-<a name="index-wildcard-characters-in-file-names"></a>
-<a name="index-find_002dfile_002dwildcards"></a>
-<p>If the file name you specify contains shell-style wildcard
-characters, Emacs visits all the files that match it.  (On
-case-insensitive filesystems, Emacs matches the wildcards disregarding
-the letter case.)  Wildcards include &lsquo;<samp>?</samp>&rsquo;, &lsquo;<samp>*</samp>&rsquo;, and
-&lsquo;<samp>[&hellip;]</samp>&rsquo; sequences.  To enter the wild card &lsquo;<samp>?</samp>&rsquo; in a file
-name in the minibuffer, you need to type <kbd>C-q ?</kbd>.  See <a href="Quoted-File-Names.html#Quoted-File-Names">Quoted File Names</a>, for information on how to visit a file whose name
-actually contains wildcard characters.  You can disable the wildcard
-feature by customizing <code>find-file-wildcards</code>.
-</p>
-<a name="index-C_002dx-C_002dv"></a>
-<a name="index-find_002dalternate_002dfile"></a>
-<p>If you visit the wrong file unintentionally by typing its name
-incorrectly, type <kbd>C-x C-v</kbd> (<code>find-alternate-file</code>) to visit
-the file you really wanted.  <kbd>C-x C-v</kbd> is similar to <kbd>C-x
-C-f</kbd>, but it kills the current buffer (after first offering to save it
-if it is modified).  When <kbd>C-x C-v</kbd> reads the file name to visit,
-it inserts the entire default file name in the buffer, with point just
-after the directory part; this is convenient if you made a slight
-error in typing the name.
-</p>
-<a name="index-find_002dfile_002drun_002ddired"></a>
-<p>If you visit a file that is actually a directory, Emacs invokes
-Dired, the Emacs directory browser.  See <a href="Dired.html#Dired">Dired</a>.  You can disable
-this behavior by setting the variable <code>find-file-run-dired</code> to
-<code>nil</code>; in that case, it is an error to try to visit a directory.
-</p>
-<p>Files which are actually collections of other files, or <em>file
-archives</em>, are visited in special modes which invoke a Dired-like
-environment to allow operations on archive members.  See <a href="File-Archives.html#File-Archives">File Archives</a>, for more about these features.
-</p>
-<p>If you visit a file that the operating system won&rsquo;t let you modify,
-or that is marked read-only, Emacs makes the buffer read-only too, so
-that you won&rsquo;t go ahead and make changes that you&rsquo;ll have trouble
-saving afterward.  You can make the buffer writable with <kbd>C-x C-q</kbd>
-(<code>read-only-mode</code>).  See <a href="Misc-Buffer.html#Misc-Buffer">Misc Buffer</a>.
-</p>
-<a name="index-C_002dx-C_002dr"></a>
-<a name="index-find_002dfile_002dread_002donly"></a>
-<p>If you want to visit a file as read-only in order to protect
-yourself from entering changes accidentally, visit it with the command
-<kbd>C-x C-r</kbd> (<code>find-file-read-only</code>) instead of <kbd>C-x C-f</kbd>.
-</p>
-<a name="index-C_002dx-4-f"></a>
-<a name="index-find_002dfile_002dother_002dwindow"></a>
-<p><kbd>C-x 4 f</kbd> (<code>find-file-other-window</code>) is like <kbd>C-x C-f</kbd>
-except that the buffer containing the specified file is selected in another
-window.  The window that was selected before <kbd>C-x 4 f</kbd> continues to
-show the same buffer it was already showing.  If this command is used when
-only one window is being displayed, that window is split in two, with one
-window showing the same buffer as before, and the other one showing the
-newly requested file.  See <a href="Windows.html#Windows">Windows</a>.
-</p>
-<a name="index-C_002dx-5-f"></a>
-<a name="index-find_002dfile_002dother_002dframe"></a>
-<p><kbd>C-x 5 f</kbd> (<code>find-file-other-frame</code>) is similar, but opens a
-new frame, or selects any existing frame showing the specified file.
-See <a href="Frames.html#Frames">Frames</a>.
-</p>
-<a name="index-file-selection-dialog"></a>
-<p>On graphical displays, there are two additional methods for visiting
-files.  Firstly, when Emacs is built with a suitable GUI toolkit,
-commands invoked with the mouse (by clicking on the menu bar or tool
-bar) use the toolkit&rsquo;s standard file selection dialog instead of
-prompting for the file name in the minibuffer.  On GNU/Linux and Unix
-platforms, Emacs does this when built with GTK, LessTif, and Motif
-toolkits; on MS-Windows and Mac, the GUI version does that by default.
-For information on how to customize this, see <a href="Dialog-Boxes.html#Dialog-Boxes">Dialog Boxes</a>.
-</p>
-<p>Secondly, Emacs supports drag and drop: dropping a file into an
-ordinary Emacs window visits the file using that window.  As an
-exception, dropping a file into a window displaying a Dired buffer
-moves or copies the file into the displayed directory.  For details,
-see <a href="Drag-and-Drop.html#Drag-and-Drop">Drag and Drop</a>, and <a href="Misc-Dired-Features.html#Misc-Dired-Features">Misc Dired Features</a>.
-</p>
-<p>On text-mode terminals and on graphical displays when Emacs was
-built without a GUI toolkit, you can visit files via the menu-bar
-&lsquo;<samp>File</samp>&rsquo; menu, which has a &lsquo;<samp>Visit New File</samp>&rsquo; item.
-</p>
-<p>Each time you visit a file, Emacs automatically scans its contents
-to detect what character encoding and end-of-line convention it uses,
-and converts these to Emacs&rsquo;s internal encoding and end-of-line
-convention within the buffer.  When you save the buffer, Emacs
-performs the inverse conversion, writing the file to disk with its
-original encoding and end-of-line convention.  See <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>.
-</p>
-<a name="index-find_002dfile_002dliterally"></a>
-<p>If you wish to edit a file as a sequence of <acronym>ASCII</acronym>
-characters with no special encoding or conversion, use the <kbd>M-x
-find-file-literally</kbd> command.  This visits a file, like <kbd>C-x C-f</kbd>,
-but does not do format conversion (see <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Format-Conversion.html#Format-Conversion">Format
-Conversion</a> in <cite>the Emacs Lisp Reference Manual</cite>), character code
-conversion (see <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>), or automatic uncompression
-(see <a href="Compressed-Files.html#Compressed-Files">Compressed Files</a>), and does not add a final newline because
-of <code>require-final-newline</code> (see <a href="Customize-Save.html#Customize-Save">Customize Save</a>).  If you have
-already visited the same file in the usual (non-literal) manner, this
-command asks you whether to visit it literally instead.
-</p>
-<a name="index-find_002dfile_002dhook"></a>
-<a name="index-find_002dfile_002dnot_002dfound_002dfunctions"></a>
-<p>Two special hook variables allow extensions to modify the operation
-of visiting files.  Visiting a file that does not exist runs the
-functions in <code>find-file-not-found-functions</code>; this variable holds
-a list of functions, which are called one by one (with no arguments)
-until one of them returns non-<code>nil</code>.  This is not a normal hook,
-and the name ends in &lsquo;<samp>-functions</samp>&rsquo; rather than &lsquo;<samp>-hook</samp>&rsquo; to
-indicate that fact.
-</p>
-<p>Successful visiting of any file, whether existing or not, calls the
-functions in <code>find-file-hook</code>, with no arguments.  This variable
-is a normal hook.  In the case of a nonexistent file, the
-<code>find-file-not-found-functions</code> are run first.  See <a href="Hooks.html#Hooks">Hooks</a>.
-</p>
-<p>There are several ways to specify automatically the major mode for
-editing the file (see <a href="Choosing-Modes.html#Choosing-Modes">Choosing Modes</a>), and to specify local
-variables defined for that file (see <a href="File-Variables.html#File-Variables">File Variables</a>).
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Saving.html#Saving" accesskey="n" rel="next">Saving</a>, Previous: <a href="File-Names.html#File-Names" accesskey="p" rel="prev">File Names</a>, Up: <a href="Files.html#Files" accesskey="u" rel="up">Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>Visit a file (<code>find-file</code>).</p>
+    </dd>
 
+    <dt><kbd>C-x C-r</kbd></dt>
 
+    <dd>
+      <p>Visit a file for viewing, without allowing changes to it
+      (<code>find-file-read-only</code>).</p>
+    </dd>
 
+    <dt><kbd>C-x C-v</kbd></dt>
+
+    <dd>
+      <p>Visit a different file instead of the one visited last
+      (<code>find-alternate-file</code>).</p>
+    </dd>
+
+    <dt><kbd>C-x 4 f</kbd></dt>
+
+    <dd>
+      <p>Visit a file, in another window
+      (<code>find-file-other-window</code>). Don&rsquo;t alter what
+      is displayed in the selected window.</p>
+    </dd>
+
+    <dt><kbd>C-x 5 f</kbd></dt>
+
+    <dd>
+      <p>Visit a file, in a new frame
+      (<code>find-file-other-frame</code>). Don&rsquo;t alter what
+      is displayed in the selected frame.</p>
+    </dd>
+
+    <dt><kbd>M-x find-file-literally</kbd></dt>
+
+    <dd>
+      <p>Visit a file with no conversion of the contents.</p>
+    </dd>
+  </dl><a name="index-files_002c-visiting-and-saving" id=
+  "index-files_002c-visiting-and-saving"></a> <a name=
+  "index-saving-files" id="index-saving-files"></a>
+
+  <p><em>Visiting</em> a file means reading its contents into an
+  Emacs buffer so you can edit them. Emacs makes a new buffer for
+  each file that you visit.</p><a name="index-C_002dx-C_002df" id=
+  "index-C_002dx-C_002df"></a> <a name="index-find_002dfile" id=
+  "index-find_002dfile"></a>
+
+  <p>To visit a file, type <kbd>C-x C-f</kbd>
+  (<code>find-file</code>) and use the minibuffer to enter the name
+  of the desired file. While in the minibuffer, you can abort the
+  command by typing <kbd>C-g</kbd>. See <a href=
+  "File-Names.html#File-Names">File Names</a>, for details about
+  entering file names into minibuffers.</p>
+
+  <p>If the specified file exists but the system does not allow you
+  to read it, an error message is displayed in the echo area.
+  Otherwise, you can tell that <kbd>C-x C-f</kbd> has completed
+  successfully by the appearance of new text on the screen, and by
+  the buffer name shown in the mode line (see <a href=
+  "Mode-Line.html#Mode-Line">Mode Line</a>). Emacs normally
+  constructs the buffer name from the file name, omitting the
+  directory name. For example, a file named
+  <samp>/usr/rms/emacs.tex</samp> is visited in a buffer named
+  &lsquo;<samp>emacs.tex</samp>&rsquo;. If there is already a
+  buffer with that name, Emacs constructs a unique name; the normal
+  method is to add a suffix based on the directory name (e.g.,
+  &lsquo;<samp>&lt;rms&gt;</samp>&rsquo;,
+  &lsquo;<samp>&lt;tmp&gt;</samp>&rsquo;, and so on), but you can
+  select other methods. See <a href=
+  "Uniquify.html#Uniquify">Uniquify</a>.</p><a name=
+  "index-creating-files" id="index-creating-files"></a>
+
+  <p>To create a new file, just visit it using the same command,
+  <kbd>C-x C-f</kbd>. Emacs displays &lsquo;<samp>(New
+  file)</samp>&rsquo; in the echo area, but in other respects
+  behaves as if you had visited an existing empty file.</p><a name=
+  "index-modified-_0028buffer_0029" id=
+  "index-modified-_0028buffer_0029"></a>
+
+  <p>After visiting a file, the changes you make with editing
+  commands are made in the Emacs buffer. They do not take effect in
+  the visited file, until you <em>save</em> the buffer (see
+  <a href="Saving.html#Saving">Saving</a>). If a buffer contains
+  changes that have not been saved, we say the buffer is
+  <em>modified</em>. This implies that some changes will be lost if
+  the buffer is not saved. The mode line displays two stars near
+  the left margin to indicate that the buffer is modified.</p>
+
+  <p>If you visit a file that is already in Emacs, <kbd>C-x
+  C-f</kbd> switches to the existing buffer instead of making
+  another copy. Before doing so, it checks whether the file has
+  changed since you last visited or saved it. If the file has
+  changed, Emacs offers to reread it.</p><a name=
+  "index-large_002dfile_002dwarning_002dthreshold" id=
+  "index-large_002dfile_002dwarning_002dthreshold"></a> <a name=
+  "index-file_002c-warning-when-size-is-large" id=
+  "index-file_002c-warning-when-size-is-large"></a> <a name=
+  "index-size-of-file_002c-warning-when-visiting" id=
+  "index-size-of-file_002c-warning-when-visiting"></a> <a name=
+  "index-maximum-buffer-size-exceeded_002c-error-message" id=
+  "index-maximum-buffer-size-exceeded_002c-error-message"></a>
+
+  <p>If you try to visit a file larger than
+  <code>large-file-warning-threshold</code> (the default is
+  10000000, which is about 10 megabytes), Emacs asks you for
+  confirmation first. You can answer <kbd>y</kbd> to proceed with
+  visiting the file. Note, however, that Emacs cannot visit files
+  that are larger than the maximum Emacs buffer size, which is
+  limited by the amount of memory Emacs can allocate and by the
+  integers that Emacs can represent (see <a href=
+  "Buffers.html#Buffers">Buffers</a>). If you try, Emacs displays
+  an error message saying that the maximum buffer size has been
+  exceeded.</p><a name="index-wildcard-characters-in-file-names"
+  id="index-wildcard-characters-in-file-names"></a> <a name=
+  "index-find_002dfile_002dwildcards" id=
+  "index-find_002dfile_002dwildcards"></a>
+
+  <p>If the file name you specify contains shell-style wildcard
+  characters, Emacs visits all the files that match it. (On
+  case-insensitive filesystems, Emacs matches the wildcards
+  disregarding the letter case.) Wildcards include
+  &lsquo;<samp>?</samp>&rsquo;, &lsquo;<samp>*</samp>&rsquo;, and
+  &lsquo;<samp>[&hellip;]</samp>&rsquo; sequences. To enter the
+  wild card &lsquo;<samp>?</samp>&rsquo; in a file name in the
+  minibuffer, you need to type <kbd>C-q ?</kbd>. See <a href=
+  "Quoted-File-Names.html#Quoted-File-Names">Quoted File Names</a>,
+  for information on how to visit a file whose name actually
+  contains wildcard characters. You can disable the wildcard
+  feature by customizing
+  <code>find-file-wildcards</code>.</p><a name=
+  "index-C_002dx-C_002dv" id="index-C_002dx-C_002dv"></a> <a name=
+  "index-find_002dalternate_002dfile" id=
+  "index-find_002dalternate_002dfile"></a>
+
+  <p>If you visit the wrong file unintentionally by typing its name
+  incorrectly, type <kbd>C-x C-v</kbd>
+  (<code>find-alternate-file</code>) to visit the file you really
+  wanted. <kbd>C-x C-v</kbd> is similar to <kbd>C-x C-f</kbd>, but
+  it kills the current buffer (after first offering to save it if
+  it is modified). When <kbd>C-x C-v</kbd> reads the file name to
+  visit, it inserts the entire default file name in the buffer,
+  with point just after the directory part; this is convenient if
+  you made a slight error in typing the name.</p><a name=
+  "index-find_002dfile_002drun_002ddired" id=
+  "index-find_002dfile_002drun_002ddired"></a>
+
+  <p>If you visit a file that is actually a directory, Emacs
+  invokes Dired, the Emacs directory browser. See <a href=
+  "Dired.html#Dired">Dired</a>. You can disable this behavior by
+  setting the variable <code>find-file-run-dired</code> to
+  <code>nil</code>; in that case, it is an error to try to visit a
+  directory.</p>
+
+  <p>Files which are actually collections of other files, or
+  <em>file archives</em>, are visited in special modes which invoke
+  a Dired-like environment to allow operations on archive members.
+  See <a href="File-Archives.html#File-Archives">File Archives</a>,
+  for more about these features.</p>
+
+  <p>If you visit a file that the operating system won&rsquo;t let
+  you modify, or that is marked read-only, Emacs makes the buffer
+  read-only too, so that you won&rsquo;t go ahead and make changes
+  that you&rsquo;ll have trouble saving afterward. You can make the
+  buffer writable with <kbd>C-x C-q</kbd>
+  (<code>read-only-mode</code>). See <a href=
+  "Misc-Buffer.html#Misc-Buffer">Misc Buffer</a>.</p><a name=
+  "index-C_002dx-C_002dr" id="index-C_002dx-C_002dr"></a> <a name=
+  "index-find_002dfile_002dread_002donly" id=
+  "index-find_002dfile_002dread_002donly"></a>
+
+  <p>If you want to visit a file as read-only in order to protect
+  yourself from entering changes accidentally, visit it with the
+  command <kbd>C-x C-r</kbd> (<code>find-file-read-only</code>)
+  instead of <kbd>C-x C-f</kbd>.</p><a name="index-C_002dx-4-f" id=
+  "index-C_002dx-4-f"></a> <a name=
+  "index-find_002dfile_002dother_002dwindow" id=
+  "index-find_002dfile_002dother_002dwindow"></a>
+
+  <p><kbd>C-x 4 f</kbd> (<code>find-file-other-window</code>) is
+  like <kbd>C-x C-f</kbd> except that the buffer containing the
+  specified file is selected in another window. The window that was
+  selected before <kbd>C-x 4 f</kbd> continues to show the same
+  buffer it was already showing. If this command is used when only
+  one window is being displayed, that window is split in two, with
+  one window showing the same buffer as before, and the other one
+  showing the newly requested file. See <a href=
+  "Windows.html#Windows">Windows</a>.</p><a name=
+  "index-C_002dx-5-f" id="index-C_002dx-5-f"></a> <a name=
+  "index-find_002dfile_002dother_002dframe" id=
+  "index-find_002dfile_002dother_002dframe"></a>
+
+  <p><kbd>C-x 5 f</kbd> (<code>find-file-other-frame</code>) is
+  similar, but opens a new frame, or selects any existing frame
+  showing the specified file. See <a href=
+  "Frames.html#Frames">Frames</a>.</p><a name=
+  "index-file-selection-dialog" id=
+  "index-file-selection-dialog"></a>
+
+  <p>On graphical displays, there are two additional methods for
+  visiting files. Firstly, when Emacs is built with a suitable GUI
+  toolkit, commands invoked with the mouse (by clicking on the menu
+  bar or tool bar) use the toolkit&rsquo;s standard file selection
+  dialog instead of prompting for the file name in the minibuffer.
+  On GNU/Linux and Unix platforms, Emacs does this when built with
+  GTK, LessTif, and Motif toolkits; on MS-Windows and Mac, the GUI
+  version does that by default. For information on how to customize
+  this, see <a href="Dialog-Boxes.html#Dialog-Boxes">Dialog
+  Boxes</a>.</p>
+
+  <p>Secondly, Emacs supports drag and drop: dropping a file into
+  an ordinary Emacs window visits the file using that window. As an
+  exception, dropping a file into a window displaying a Dired
+  buffer moves or copies the file into the displayed directory. For
+  details, see <a href="Drag-and-Drop.html#Drag-and-Drop">Drag and
+  Drop</a>, and <a href=
+  "Misc-Dired-Features.html#Misc-Dired-Features">Misc Dired
+  Features</a>.</p>
+
+  <p>On text-mode terminals and on graphical displays when Emacs
+  was built without a GUI toolkit, you can visit files via the
+  menu-bar &lsquo;<samp>File</samp>&rsquo; menu, which has a
+  &lsquo;<samp>Visit New File</samp>&rsquo; item.</p>
+
+  <p>Each time you visit a file, Emacs automatically scans its
+  contents to detect what character encoding and end-of-line
+  convention it uses, and converts these to Emacs&rsquo;s internal
+  encoding and end-of-line convention within the buffer. When you
+  save the buffer, Emacs performs the inverse conversion, writing
+  the file to disk with its original encoding and end-of-line
+  convention. See <a href=
+  "Coding-Systems.html#Coding-Systems">Coding
+  Systems</a>.</p><a name="index-find_002dfile_002dliterally" id=
+  "index-find_002dfile_002dliterally"></a>
+
+  <p>If you wish to edit a file as a sequence of
+  <acronym>ASCII</acronym> characters with no special encoding or
+  conversion, use the <kbd>M-x find-file-literally</kbd> command.
+  This visits a file, like <kbd>C-x C-f</kbd>, but does not do
+  format conversion (see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/elisp/Format-Conversion.html#Format-Conversion">
+  Format Conversion</a> in <cite>the Emacs Lisp Reference
+  Manual</cite>), character code conversion (see <a href=
+  "Coding-Systems.html#Coding-Systems">Coding Systems</a>), or
+  automatic uncompression (see <a href=
+  "Compressed-Files.html#Compressed-Files">Compressed Files</a>),
+  and does not add a final newline because of
+  <code>require-final-newline</code> (see <a href=
+  "Customize-Save.html#Customize-Save">Customize Save</a>). If you
+  have already visited the same file in the usual (non-literal)
+  manner, this command asks you whether to visit it literally
+  instead.</p><a name="index-find_002dfile_002dhook" id=
+  "index-find_002dfile_002dhook"></a> <a name=
+  "index-find_002dfile_002dnot_002dfound_002dfunctions" id=
+  "index-find_002dfile_002dnot_002dfound_002dfunctions"></a>
+
+  <p>Two special hook variables allow extensions to modify the
+  operation of visiting files. Visiting a file that does not exist
+  runs the functions in <code>find-file-not-found-functions</code>;
+  this variable holds a list of functions, which are called one by
+  one (with no arguments) until one of them returns
+  non-<code>nil</code>. This is not a normal hook, and the name
+  ends in &lsquo;<samp>-functions</samp>&rsquo; rather than
+  &lsquo;<samp>-hook</samp>&rsquo; to indicate that fact.</p>
+
+  <p>Successful visiting of any file, whether existing or not,
+  calls the functions in <code>find-file-hook</code>, with no
+  arguments. This variable is a normal hook. In the case of a
+  nonexistent file, the <code>find-file-not-found-functions</code>
+  are run first. See <a href="Hooks.html#Hooks">Hooks</a>.</p>
+
+  <p>There are several ways to specify automatically the major mode
+  for editing the file (see <a href=
+  "Choosing-Modes.html#Choosing-Modes">Choosing Modes</a>), and to
+  specify local variables defined for that file (see <a href=
+  "File-Variables.html#File-Variables">File Variables</a>).</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Saving.html#Saving" accesskey="n" rel=
+    "next">Saving</a>, Previous: <a href=
+    "File-Names.html#File-Names" accesskey="p" rel="prev">File
+    Names</a>, Up: <a href="Files.html#Files" accesskey="u" rel=
+    "up">Files</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

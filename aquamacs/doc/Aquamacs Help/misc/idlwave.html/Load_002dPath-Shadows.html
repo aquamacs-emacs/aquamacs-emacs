@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents IDLWAVE, a major mode for editing IDL files with
 Emacs, and interacting with an IDL shell run as a subprocess.
 
@@ -18,130 +20,187 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>IDLWAVE User Manual: Load-Path Shadows</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="IDLWAVE User Manual: Load-Path Shadows">
-<meta name="keywords" content="IDLWAVE User Manual: Load-Path Shadows">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Sources-of-Routine-Info.html#Sources-of-Routine-Info" rel="up" title="Sources of Routine Info">
-<link href="Documentation-Scan.html#Documentation-Scan" rel="next" title="Documentation Scan">
-<link href="User-Catalog.html#User-Catalog" rel="prev" title="User Catalog">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>IDLWAVE User Manual: Load-Path Shadows</title>
+  <meta name="description" content=
+  "IDLWAVE User Manual: Load-Path Shadows" />
+  <meta name="keywords" content=
+  "IDLWAVE User Manual: Load-Path Shadows" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Sources-of-Routine-Info.html#Sources-of-Routine-Info"
+  rel="up" title="Sources of Routine Info" />
+  <link href="Documentation-Scan.html#Documentation-Scan" rel=
+  "next" title="Documentation Scan" />
+  <link href="User-Catalog.html#User-Catalog" rel="prev" title=
+  "User Catalog" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Load_002dPath-Shadows"></a>
-<div class="header">
-<p>
-Next: <a href="Documentation-Scan.html#Documentation-Scan" accesskey="n" rel="next">Documentation Scan</a>, Previous: <a href="Catalogs.html#Catalogs" accesskey="p" rel="prev">Catalogs</a>, Up: <a href="Sources-of-Routine-Info.html#Sources-of-Routine-Info" accesskey="u" rel="up">Sources of Routine Info</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Load_002dPath-Shadows-1"></a>
-<h3 class="appendixsec">A.4 Load-Path Shadows</h3>
-<a name="index-Load_002dpath-shadows-1"></a>
-<a name="index-Shadows_002c-load_002dpath-1"></a>
-<a name="index-Duplicate-routines-1"></a>
-<a name="index-Multiply-defined-routines-1"></a>
-<a name="index-Routine-definitions_002c-multiple-1"></a>
-<a name="index-Application_002c-testing-for-shadowing"></a>
-<a name="index-Buffer_002c-testing-for-shadowing"></a>
+<body lang="en" xml:lang="en">
+  <a name="Load_002dPath-Shadows" id="Load_002dPath-Shadows"></a>
 
-<p>IDLWAVE can compile a list of routines which are (re-)defined in more
-than one file.  Since one definition will hide (shadow) the others
-depending on which file is compiled first, such multiple definitions are
-called &quot;load-path shadows&quot;.  IDLWAVE has several routines to scan for
-load path shadows.  The output is placed into the special buffer
-<samp>*Shadows*</samp>.  The format of the output is identical to the source
-section of the routine info buffer (see <a href="Routine-Info.html#Routine-Info">Routine Info</a>).  The
-different definitions of a routine are ordered by <em>likelihood of
-use</em>.  So the first entry will be most likely the one you&rsquo;ll get if an
-unsuspecting command uses that routine.  Before listing shadows, you
-should make sure that routine info is up-to-date by pressing <kbd>C-c
-C-i</kbd>.  Here are the different routines (also available in the Menu
-&lsquo;<samp>IDLWAVE-&gt;Routine Info</samp>&rsquo;):
-</p>
-<dl compact="compact">
-<dt><kbd>M-x idlwave-list-buffer-load-path-shadows</kbd></dt>
-<dd><p>This command checks the names of all routines defined in the current
-buffer for shadowing conflicts with other routines accessible to
-IDLWAVE.  The command also has a key binding: <kbd>C-c C-b</kbd>
-</p></dd>
-<dt><kbd>M-x idlwave-list-shell-load-path-shadows</kbd>.</dt>
-<dd><p>Checks all routines compiled under the shell for shadowing.  This is
-very useful when you have written a complete application.  Just compile
-the application, use <code>RESOLVE_ALL</code> to compile any routines used by
-your code, update the routine info inside IDLWAVE with <kbd>C-c C-i</kbd> and
-then check for shadowing.
-</p></dd>
-<dt><kbd>M-x idlwave-list-all-load-path-shadows</kbd></dt>
-<dd><p>This command checks all routines accessible to IDLWAVE for conflicts.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Documentation-Scan.html#Documentation-Scan"
+    accesskey="n" rel="next">Documentation Scan</a>, Previous:
+    <a href="Catalogs.html#Catalogs" accesskey="p" rel=
+    "prev">Catalogs</a>, Up: <a href=
+    "Sources-of-Routine-Info.html#Sources-of-Routine-Info"
+    accesskey="u" rel="up">Sources of Routine Info</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Load_002dPath-Shadows-1" id=
+  "Load_002dPath-Shadows-1"></a>
 
-<p>For these commands to work fully you need to scan the entire load path
-in either a user or library catalog.  Also, IDLWAVE should be able to
-distinguish between the system library files (normally installed in
-<samp>/usr/local/rsi/idl/lib</samp>) and any site specific or user specific
-files.  Therefore, such local files should not be installed inside the
-<samp>lib</samp> directory of the IDL directory.  This is also advisable for
-many other reasons.
-</p>
-<a name="index-Windows-2"></a>
-<a name="index-MacOS-2"></a>
-<a name="index-IDL-variable-_0021DIR-2"></a>
-<a name="index-_0021DIR_002c-IDL-variable-2"></a>
-<p>Users of Windows and MacOS (not X) also must set the variable
-<code>idlwave-system-directory</code> to the value of the <code>!DIR</code> system
-variable in IDL.  IDLWAVE appends <samp>lib</samp> to the value of this
-variable and assumes that all files found on that path are system
-routines.
-</p>
-<p>Another way to find out if a specific routine has multiple definitions
-on the load path is routine info display (see <a href="Routine-Info.html#Routine-Info">Routine Info</a>).
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Documentation-Scan.html#Documentation-Scan" accesskey="n" rel="next">Documentation Scan</a>, Previous: <a href="Catalogs.html#Catalogs" accesskey="p" rel="prev">Catalogs</a>, Up: <a href="Sources-of-Routine-Info.html#Sources-of-Routine-Info" accesskey="u" rel="up">Sources of Routine Info</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <h3 class="appendixsec">A.4 Load-Path Shadows</h3><a name=
+  "index-Load_002dpath-shadows-1" id=
+  "index-Load_002dpath-shadows-1"></a> <a name=
+  "index-Shadows_002c-load_002dpath-1" id=
+  "index-Shadows_002c-load_002dpath-1"></a> <a name=
+  "index-Duplicate-routines-1" id="index-Duplicate-routines-1"></a>
+  <a name="index-Multiply-defined-routines-1" id=
+  "index-Multiply-defined-routines-1"></a> <a name=
+  "index-Routine-definitions_002c-multiple-1" id=
+  "index-Routine-definitions_002c-multiple-1"></a> <a name=
+  "index-Application_002c-testing-for-shadowing" id=
+  "index-Application_002c-testing-for-shadowing"></a> <a name=
+  "index-Buffer_002c-testing-for-shadowing" id=
+  "index-Buffer_002c-testing-for-shadowing"></a>
 
+  <p>IDLWAVE can compile a list of routines which are (re-)defined
+  in more than one file. Since one definition will hide (shadow)
+  the others depending on which file is compiled first, such
+  multiple definitions are called "load-path shadows". IDLWAVE has
+  several routines to scan for load path shadows. The output is
+  placed into the special buffer <samp>*Shadows*</samp>. The format
+  of the output is identical to the source section of the routine
+  info buffer (see <a href="Routine-Info.html#Routine-Info">Routine
+  Info</a>). The different definitions of a routine are ordered by
+  <em>likelihood of use</em>. So the first entry will be most
+  likely the one you&rsquo;ll get if an unsuspecting command uses
+  that routine. Before listing shadows, you should make sure that
+  routine info is up-to-date by pressing <kbd>C-c C-i</kbd>. Here
+  are the different routines (also available in the Menu
+  &lsquo;<samp>IDLWAVE-&gt;Routine Info</samp>&rsquo;):</p>
 
+  <dl compact="compact">
+    <dt><kbd>M-x idlwave-list-buffer-load-path-shadows</kbd></dt>
 
+    <dd>
+      <p>This command checks the names of all routines defined in
+      the current buffer for shadowing conflicts with other
+      routines accessible to IDLWAVE. The command also has a key
+      binding: <kbd>C-c C-b</kbd></p>
+    </dd>
+
+    <dt><kbd>M-x idlwave-list-shell-load-path-shadows</kbd>.</dt>
+
+    <dd>
+      <p>Checks all routines compiled under the shell for
+      shadowing. This is very useful when you have written a
+      complete application. Just compile the application, use
+      <code>RESOLVE_ALL</code> to compile any routines used by your
+      code, update the routine info inside IDLWAVE with <kbd>C-c
+      C-i</kbd> and then check for shadowing.</p>
+    </dd>
+
+    <dt><kbd>M-x idlwave-list-all-load-path-shadows</kbd></dt>
+
+    <dd>
+      <p>This command checks all routines accessible to IDLWAVE for
+      conflicts.</p>
+    </dd>
+  </dl>
+
+  <p>For these commands to work fully you need to scan the entire
+  load path in either a user or library catalog. Also, IDLWAVE
+  should be able to distinguish between the system library files
+  (normally installed in <samp>/usr/local/rsi/idl/lib</samp>) and
+  any site specific or user specific files. Therefore, such local
+  files should not be installed inside the <samp>lib</samp>
+  directory of the IDL directory. This is also advisable for many
+  other reasons.</p><a name="index-Windows-2" id=
+  "index-Windows-2"></a> <a name="index-MacOS-2" id=
+  "index-MacOS-2"></a> <a name="index-IDL-variable-_0021DIR-2" id=
+  "index-IDL-variable-_0021DIR-2"></a> <a name=
+  "index-_0021DIR_002c-IDL-variable-2" id=
+  "index-_0021DIR_002c-IDL-variable-2"></a>
+
+  <p>Users of Windows and MacOS (not X) also must set the variable
+  <code>idlwave-system-directory</code> to the value of the
+  <code>!DIR</code> system variable in IDL. IDLWAVE appends
+  <samp>lib</samp> to the value of this variable and assumes that
+  all files found on that path are system routines.</p>
+
+  <p>Another way to find out if a specific routine has multiple
+  definitions on the load path is routine info display (see
+  <a href="Routine-Info.html#Routine-Info">Routine Info</a>).</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Documentation-Scan.html#Documentation-Scan"
+    accesskey="n" rel="next">Documentation Scan</a>, Previous:
+    <a href="Catalogs.html#Catalogs" accesskey="p" rel=
+    "prev">Catalogs</a>, Up: <a href=
+    "Sources-of-Routine-Info.html#Sources-of-Routine-Info"
+    accesskey="u" rel="up">Sources of Routine Info</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

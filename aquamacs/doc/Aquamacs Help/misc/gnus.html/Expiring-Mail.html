@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,282 +14,362 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Expiring Mail</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Expiring Mail">
-<meta name="keywords" content="Gnus Manual: Expiring Mail">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Getting-Mail.html#Getting-Mail" rel="up" title="Getting Mail">
-<link href="Washing-Mail.html#Washing-Mail" rel="next" title="Washing Mail">
-<link href="Incorporating-Old-Mail.html#Incorporating-Old-Mail" rel="prev" title="Incorporating Old Mail">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Expiring Mail</title>
+  <meta name="description" content="Gnus Manual: Expiring Mail" />
+  <meta name="keywords" content="Gnus Manual: Expiring Mail" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Getting-Mail.html#Getting-Mail" rel="up" title=
+  "Getting Mail" />
+  <link href="Washing-Mail.html#Washing-Mail" rel="next" title=
+  "Washing Mail" />
+  <link href="Incorporating-Old-Mail.html#Incorporating-Old-Mail"
+  rel="prev" title="Incorporating Old Mail" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Expiring-Mail"></a>
-<div class="header">
-<p>
-Next: <a href="Washing-Mail.html#Washing-Mail" accesskey="n" rel="next">Washing Mail</a>, Previous: <a href="Incorporating-Old-Mail.html#Incorporating-Old-Mail" accesskey="p" rel="prev">Incorporating Old Mail</a>, Up: <a href="Getting-Mail.html#Getting-Mail" accesskey="u" rel="up">Getting Mail</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Expiring-Mail-1"></a>
-<h4 class="subsection">6.4.9 Expiring Mail</h4>
-<a name="index-article-expiry"></a>
-<a name="index-expiring-mail-7"></a>
+<body lang="en" xml:lang="en">
+  <a name="Expiring-Mail" id="Expiring-Mail"></a>
 
-<p>Traditional mail readers have a tendency to remove mail articles when
-you mark them as read, in some way.  Gnus takes a fundamentally
-different approach to mail reading.
-</p>
-<p>Gnus basically considers mail just to be news that has been received in
-a rather peculiar manner.  It does not think that it has the power to
-actually change the mail, or delete any mail messages.  If you enter a
-mail group, and mark articles as &ldquo;read&rdquo;, or kill them in some other
-fashion, the mail articles will still exist on the system.  I repeat:
-Gnus will not delete your old, read mail.  Unless you ask it to, of
-course.
-</p>
-<p>To make Gnus get rid of your unwanted mail, you have to mark the
-articles as <em>expirable</em>.  (With the default key bindings, this means
-that you have to type <kbd>E</kbd>.)  This does not mean that the articles
-will disappear right away, however.  In general, a mail article will be
-deleted from your system if, 1) it is marked as expirable, AND 2) it is
-more than one week old.  If you do not mark an article as expirable, it
-will remain on your system until hell freezes over.  This bears
-repeating one more time, with some spurious capitalizations: IF you do
-NOT mark articles as EXPIRABLE, Gnus will NEVER delete those ARTICLES.
-</p>
-<a name="index-gnus_002dauto_002dexpirable_002dmarks"></a>
-<p>You do not have to mark articles as expirable by hand.  Gnus provides
-two features, called &ldquo;auto-expire&rdquo; and &ldquo;total-expire&rdquo;, that can help you
-with this.  In a nutshell, &ldquo;auto-expire&rdquo; means that Gnus hits <kbd>E</kbd>
-for you when you select an article.  And &ldquo;total-expire&rdquo; means that Gnus
-considers all articles as expirable that are read.  So, in addition to
-the articles marked &lsquo;<samp>E</samp>&rsquo;, also the articles marked &lsquo;<samp>r</samp>&rsquo;,
-&lsquo;<samp>R</samp>&rsquo;, &lsquo;<samp>O</samp>&rsquo;, &lsquo;<samp>K</samp>&rsquo;, &lsquo;<samp>Y</samp>&rsquo; (and so on) are considered
-expirable.  <code>gnus-auto-expirable-marks</code> has the full list of
-these marks.
-</p>
-<p>When should either auto-expire or total-expire be used?  Most people
-who are subscribed to mailing lists split each list into its own group
-and then turn on auto-expire or total-expire for those groups.
-(See <a href="Splitting-Mail.html#Splitting-Mail">Splitting Mail</a>, for more information on splitting each list
-into its own group.)
-</p>
-<p>Which one is better, auto-expire or total-expire?  It&rsquo;s not easy to
-answer.  Generally speaking, auto-expire is probably faster.  Another
-advantage of auto-expire is that you get more marks to work with: for
-the articles that are supposed to stick around, you can still choose
-between tick and dormant and read marks.  But with total-expire, you
-only have dormant and ticked to choose from.  The advantage of
-total-expire is that it works well with adaptive scoring (see <a href="Adaptive-Scoring.html#Adaptive-Scoring">Adaptive Scoring</a>).  Auto-expire works with normal scoring but not with adaptive
-scoring.
-</p>
-<a name="index-gnus_002dauto_002dexpirable_002dnewsgroups"></a>
-<p>Groups that match the regular expression
-<code>gnus-auto-expirable-newsgroups</code> will have all articles that you
-read marked as expirable automatically.  All articles marked as
-expirable have an &lsquo;<samp>E</samp>&rsquo; in the first column in the summary buffer.
-</p>
-<p>By default, if you have auto expiry switched on, Gnus will mark all the
-articles you read as expirable, no matter if they were read or unread
-before.  To avoid having articles marked as read marked as expirable
-automatically, you can put something like the following in your
-<samp>~/.gnus.el</samp> file:
-</p>
-<a name="index-gnus_002dmark_002darticle_002dhook-1"></a>
-<div class="lisp">
-<pre class="lisp">(remove-hook 'gnus-mark-article-hook
+  <div class="header">
+    <p>Next: <a href="Washing-Mail.html#Washing-Mail" accesskey="n"
+    rel="next">Washing Mail</a>, Previous: <a href=
+    "Incorporating-Old-Mail.html#Incorporating-Old-Mail" accesskey=
+    "p" rel="prev">Incorporating Old Mail</a>, Up: <a href=
+    "Getting-Mail.html#Getting-Mail" accesskey="u" rel="up">Getting
+    Mail</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Expiring-Mail-1" id="Expiring-Mail-1"></a>
+
+  <h4 class="subsection">6.4.9 Expiring Mail</h4><a name=
+  "index-article-expiry" id="index-article-expiry"></a> <a name=
+  "index-expiring-mail-7" id="index-expiring-mail-7"></a>
+
+  <p>Traditional mail readers have a tendency to remove mail
+  articles when you mark them as read, in some way. Gnus takes a
+  fundamentally different approach to mail reading.</p>
+
+  <p>Gnus basically considers mail just to be news that has been
+  received in a rather peculiar manner. It does not think that it
+  has the power to actually change the mail, or delete any mail
+  messages. If you enter a mail group, and mark articles as
+  &ldquo;read&rdquo;, or kill them in some other fashion, the mail
+  articles will still exist on the system. I repeat: Gnus will not
+  delete your old, read mail. Unless you ask it to, of course.</p>
+
+  <p>To make Gnus get rid of your unwanted mail, you have to mark
+  the articles as <em>expirable</em>. (With the default key
+  bindings, this means that you have to type <kbd>E</kbd>.) This
+  does not mean that the articles will disappear right away,
+  however. In general, a mail article will be deleted from your
+  system if, 1) it is marked as expirable, AND 2) it is more than
+  one week old. If you do not mark an article as expirable, it will
+  remain on your system until hell freezes over. This bears
+  repeating one more time, with some spurious capitalizations: IF
+  you do NOT mark articles as EXPIRABLE, Gnus will NEVER delete
+  those ARTICLES.</p><a name=
+  "index-gnus_002dauto_002dexpirable_002dmarks" id=
+  "index-gnus_002dauto_002dexpirable_002dmarks"></a>
+
+  <p>You do not have to mark articles as expirable by hand. Gnus
+  provides two features, called &ldquo;auto-expire&rdquo; and
+  &ldquo;total-expire&rdquo;, that can help you with this. In a
+  nutshell, &ldquo;auto-expire&rdquo; means that Gnus hits
+  <kbd>E</kbd> for you when you select an article. And
+  &ldquo;total-expire&rdquo; means that Gnus considers all articles
+  as expirable that are read. So, in addition to the articles
+  marked &lsquo;<samp>E</samp>&rsquo;, also the articles marked
+  &lsquo;<samp>r</samp>&rsquo;, &lsquo;<samp>R</samp>&rsquo;,
+  &lsquo;<samp>O</samp>&rsquo;, &lsquo;<samp>K</samp>&rsquo;,
+  &lsquo;<samp>Y</samp>&rsquo; (and so on) are considered
+  expirable. <code>gnus-auto-expirable-marks</code> has the full
+  list of these marks.</p>
+
+  <p>When should either auto-expire or total-expire be used? Most
+  people who are subscribed to mailing lists split each list into
+  its own group and then turn on auto-expire or total-expire for
+  those groups. (See <a href=
+  "Splitting-Mail.html#Splitting-Mail">Splitting Mail</a>, for more
+  information on splitting each list into its own group.)</p>
+
+  <p>Which one is better, auto-expire or total-expire? It&rsquo;s
+  not easy to answer. Generally speaking, auto-expire is probably
+  faster. Another advantage of auto-expire is that you get more
+  marks to work with: for the articles that are supposed to stick
+  around, you can still choose between tick and dormant and read
+  marks. But with total-expire, you only have dormant and ticked to
+  choose from. The advantage of total-expire is that it works well
+  with adaptive scoring (see <a href=
+  "Adaptive-Scoring.html#Adaptive-Scoring">Adaptive Scoring</a>).
+  Auto-expire works with normal scoring but not with adaptive
+  scoring.</p><a name=
+  "index-gnus_002dauto_002dexpirable_002dnewsgroups" id=
+  "index-gnus_002dauto_002dexpirable_002dnewsgroups"></a>
+
+  <p>Groups that match the regular expression
+  <code>gnus-auto-expirable-newsgroups</code> will have all
+  articles that you read marked as expirable automatically. All
+  articles marked as expirable have an &lsquo;<samp>E</samp>&rsquo;
+  in the first column in the summary buffer.</p>
+
+  <p>By default, if you have auto expiry switched on, Gnus will
+  mark all the articles you read as expirable, no matter if they
+  were read or unread before. To avoid having articles marked as
+  read marked as expirable automatically, you can put something
+  like the following in your <samp>~/.gnus.el</samp>
+  file:</p><a name="index-gnus_002dmark_002darticle_002dhook-1" id=
+  "index-gnus_002dmark_002darticle_002dhook-1"></a>
+
+  <div class="lisp">
+    <pre class="lisp">
+(remove-hook 'gnus-mark-article-hook
              'gnus-summary-mark-read-and-unread-as-read)
 (add-hook 'gnus-mark-article-hook 'gnus-summary-mark-unread-as-read)
-</pre></div>
+</pre>
+  </div>
 
-<p>Note that making a group auto-expirable doesn&rsquo;t mean that all read
-articles are expired&mdash;only the articles marked as expirable
-will be expired.  Also note that using the <kbd>d</kbd> command won&rsquo;t make
-articles expirable&mdash;only semi-automatic marking of articles as read will
-mark the articles as expirable in auto-expirable groups.
-</p>
-<p>Let&rsquo;s say you subscribe to a couple of mailing lists, and you want the
-articles you have read to disappear after a while:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq gnus-auto-expirable-newsgroups
-      &quot;mail.nonsense-list\\|mail.nice-list&quot;)
-</pre></div>
+  <p>Note that making a group auto-expirable doesn&rsquo;t mean
+  that all read articles are expired&mdash;only the articles marked
+  as expirable will be expired. Also note that using the
+  <kbd>d</kbd> command won&rsquo;t make articles
+  expirable&mdash;only semi-automatic marking of articles as read
+  will mark the articles as expirable in auto-expirable groups.</p>
 
-<p>Another way to have auto-expiry happen is to have the element
-<code>auto-expire</code> in the group parameters of the group.
-</p>
-<p>If you use adaptive scoring (see <a href="Adaptive-Scoring.html#Adaptive-Scoring">Adaptive Scoring</a>) and
-auto-expiring, you&rsquo;ll have problems.  Auto-expiring and adaptive scoring
-don&rsquo;t really mix very well.
-</p>
-<a name="index-nnmail_002dexpiry_002dwait"></a>
-<p>The <code>nnmail-expiry-wait</code> variable supplies the default time an
-expirable article has to live.  Gnus starts counting days from when the
-message <em>arrived</em>, not from when it was sent.  The default is seven
-days.
-</p>
-<p>Gnus also supplies a function that lets you fine-tune how long articles
-are to live, based on what group they are in.  Let&rsquo;s say you want to
-have one month expiry period in the &lsquo;<samp>mail.private</samp>&rsquo; group, a one day
-expiry period in the &lsquo;<samp>mail.junk</samp>&rsquo; group, and a six day expiry period
-everywhere else:
-</p>
-<a name="index-nnmail_002dexpiry_002dwait_002dfunction-1"></a>
-<div class="lisp">
-<pre class="lisp">(setq nnmail-expiry-wait-function
+  <p>Let&rsquo;s say you subscribe to a couple of mailing lists,
+  and you want the articles you have read to disappear after a
+  while:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq gnus-auto-expirable-newsgroups
+      "mail.nonsense-list\\|mail.nice-list")
+</pre>
+  </div>
+
+  <p>Another way to have auto-expiry happen is to have the element
+  <code>auto-expire</code> in the group parameters of the
+  group.</p>
+
+  <p>If you use adaptive scoring (see <a href=
+  "Adaptive-Scoring.html#Adaptive-Scoring">Adaptive Scoring</a>)
+  and auto-expiring, you&rsquo;ll have problems. Auto-expiring and
+  adaptive scoring don&rsquo;t really mix very well.</p><a name=
+  "index-nnmail_002dexpiry_002dwait" id=
+  "index-nnmail_002dexpiry_002dwait"></a>
+
+  <p>The <code>nnmail-expiry-wait</code> variable supplies the
+  default time an expirable article has to live. Gnus starts
+  counting days from when the message <em>arrived</em>, not from
+  when it was sent. The default is seven days.</p>
+
+  <p>Gnus also supplies a function that lets you fine-tune how long
+  articles are to live, based on what group they are in.
+  Let&rsquo;s say you want to have one month expiry period in the
+  &lsquo;<samp>mail.private</samp>&rsquo; group, a one day expiry
+  period in the &lsquo;<samp>mail.junk</samp>&rsquo; group, and a
+  six day expiry period everywhere else:</p><a name=
+  "index-nnmail_002dexpiry_002dwait_002dfunction-1" id=
+  "index-nnmail_002dexpiry_002dwait_002dfunction-1"></a>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq nnmail-expiry-wait-function
       (lambda (group)
-       (cond ((string= group &quot;mail.private&quot;)
+       (cond ((string= group "mail.private")
                31)
-             ((string= group &quot;mail.junk&quot;)
+             ((string= group "mail.junk")
                1)
-             ((string= group &quot;important&quot;)
+             ((string= group "important")
                'never)
              (t
                6))))
-</pre></div>
+</pre>
+  </div>
 
-<p>The group names this function is fed are &ldquo;unadorned&rdquo; group
-names&mdash;no &lsquo;<samp>nnml:</samp>&rsquo; prefixes and the like.
-</p>
-<p>The <code>nnmail-expiry-wait</code> variable and
-<code>nnmail-expiry-wait-function</code> function can either be a number (not
-necessarily an integer) or one of the symbols <code>immediate</code> or
-<code>never</code>.
-</p>
-<p>You can also use the <code>expiry-wait</code> group parameter to selectively
-change the expiry period (see <a href="Group-Parameters.html#Group-Parameters">Group Parameters</a>).
-</p>
-<a name="index-nnmail_002dexpiry_002dtarget"></a>
-<p>The normal action taken when expiring articles is to delete them.
-However, in some circumstances it might make more sense to move them
-to other groups instead of deleting them.  The variable
-<code>nnmail-expiry-target</code> (and the <code>expiry-target</code> group
-parameter) controls this.  The variable supplies a default value for
-all groups, which can be overridden for specific groups by the group
-parameter.  default value is <code>delete</code>, but this can also be a
-string (which should be the name of the group the message should be
-moved to), or a function (which will be called in a buffer narrowed to
-the message in question, and with the name of the group being moved
-from as its parameter) which should return a target&mdash;either a group
-name or <code>delete</code>.
-</p>
-<p>Here&rsquo;s an example for specifying a group name:
-</p><div class="lisp">
-<pre class="lisp">(setq nnmail-expiry-target &quot;nnml:expired&quot;)
-</pre></div>
+  <p>The group names this function is fed are
+  &ldquo;unadorned&rdquo; group names&mdash;no
+  &lsquo;<samp>nnml:</samp>&rsquo; prefixes and the like.</p>
 
-<a name="index-nnmail_002dfancy_002dexpiry_002dtarget"></a>
-<a name="index-nnmail_002dfancy_002dexpiry_002dtargets"></a>
-<p>Gnus provides a function <code>nnmail-fancy-expiry-target</code> which will
-expire mail to groups according to the variable
-<code>nnmail-fancy-expiry-targets</code>.  Here&rsquo;s an example:
-</p>
-<div class="lisp">
-<pre class="lisp"> (setq nnmail-expiry-target 'nnmail-fancy-expiry-target
+  <p>The <code>nnmail-expiry-wait</code> variable and
+  <code>nnmail-expiry-wait-function</code> function can either be a
+  number (not necessarily an integer) or one of the symbols
+  <code>immediate</code> or <code>never</code>.</p>
+
+  <p>You can also use the <code>expiry-wait</code> group parameter
+  to selectively change the expiry period (see <a href=
+  "Group-Parameters.html#Group-Parameters">Group
+  Parameters</a>).</p><a name="index-nnmail_002dexpiry_002dtarget"
+  id="index-nnmail_002dexpiry_002dtarget"></a>
+
+  <p>The normal action taken when expiring articles is to delete
+  them. However, in some circumstances it might make more sense to
+  move them to other groups instead of deleting them. The variable
+  <code>nnmail-expiry-target</code> (and the
+  <code>expiry-target</code> group parameter) controls this. The
+  variable supplies a default value for all groups, which can be
+  overridden for specific groups by the group parameter. default
+  value is <code>delete</code>, but this can also be a string
+  (which should be the name of the group the message should be
+  moved to), or a function (which will be called in a buffer
+  narrowed to the message in question, and with the name of the
+  group being moved from as its parameter) which should return a
+  target&mdash;either a group name or <code>delete</code>.</p>
+
+  <p>Here&rsquo;s an example for specifying a group name:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq nnmail-expiry-target "nnml:expired")
+</pre>
+  </div><a name="index-nnmail_002dfancy_002dexpiry_002dtarget" id=
+  "index-nnmail_002dfancy_002dexpiry_002dtarget"></a> <a name=
+  "index-nnmail_002dfancy_002dexpiry_002dtargets" id=
+  "index-nnmail_002dfancy_002dexpiry_002dtargets"></a>
+
+  <p>Gnus provides a function
+  <code>nnmail-fancy-expiry-target</code> which will expire mail to
+  groups according to the variable
+  <code>nnmail-fancy-expiry-targets</code>. Here&rsquo;s an
+  example:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+ (setq nnmail-expiry-target 'nnmail-fancy-expiry-target
        nnmail-fancy-expiry-targets
-       '((to-from &quot;boss&quot; &quot;nnfolder:Work&quot;)
-         (&quot;subject&quot; &quot;IMPORTANT&quot; &quot;nnfolder:IMPORTANT.%Y.%b&quot;)
-         (&quot;from&quot; &quot;.*&quot; &quot;nnfolder:Archive-%Y&quot;)))
-</pre></div>
+       '((to-from "boss" "nnfolder:Work")
+         ("subject" "IMPORTANT" "nnfolder:IMPORTANT.%Y.%b")
+         ("from" ".*" "nnfolder:Archive-%Y")))
+</pre>
+  </div>
 
-<p>With this setup, any mail that has <code>IMPORTANT</code> in its Subject
-header and was sent in the year <code>YYYY</code> and month <code>MMM</code>, will
-get expired to the group <code>nnfolder:IMPORTANT.YYYY.MMM</code>.  If its
-From or To header contains the string <code>boss</code>, it will get expired
-to <code>nnfolder:Work</code>.  All other mail will get expired to
-<code>nnfolder:Archive-YYYY</code>.
-</p>
-<a name="index-nnmail_002dkeep_002dlast_002darticle"></a>
-<p>If <code>nnmail-keep-last-article</code> is non-<code>nil</code>, Gnus will never
-expire the final article in a mail newsgroup.  This is to make life
-easier for procmail users.
-</p>
-<a name="index-gnus_002dtotal_002dexpirable_002dnewsgroups"></a>
-<p>By the way: That line up there, about Gnus never expiring non-expirable
-articles, is a lie.  If you put <code>total-expire</code> in the group
-parameters, articles will not be marked as expirable, but all read
-articles will be put through the expiry process.  Use with extreme
-caution.  Even more dangerous is the
-<code>gnus-total-expirable-newsgroups</code> variable.  All groups that match
-this regexp will have all read articles put through the expiry process,
-which means that <em>all</em> old mail articles in the groups in question
-will be deleted after a while.  Use with extreme caution, and don&rsquo;t come
-crying to me when you discover that the regexp you used matched the
-wrong group and all your important mail has disappeared.  Be a
-<em>man</em>!  Or a <em>woman</em>!  Whatever you feel more comfortable
-with!  So there!
-</p>
-<p>Most people make most of their mail groups total-expirable, though.
-</p>
-<a name="index-gnus_002dinhibit_002duser_002dauto_002dexpire"></a>
-<p>If <code>gnus-inhibit-user-auto-expire</code> is non-<code>nil</code>, user marking
-commands will not mark an article as expirable, even if the group has
-auto-expire turned on.
-</p>
-<a name="index-gnus_002dmark_002dcopied_002dor_002dmoved_002darticles_002das_002dexpirable"></a>
-<p>The expirable marks of articles will be removed when copying or moving
-them to a group in which auto-expire is not turned on.  This is for
-preventing articles from being expired unintentionally.  On the other
-hand, to a group that has turned auto-expire on, the expirable marks of
-articles that are copied or moved will not be changed by default.  I.e.,
-when copying or moving to such a group, articles that were expirable
-will be left expirable and ones that were not expirable will not be
-marked as expirable.  So, even though in auto-expire groups, some
-articles will never get expired (unless you read them again).  If you
-don&rsquo;t side with that behavior that unexpirable articles may be mixed
-into auto-expire groups, you can set
-<code>gnus-mark-copied-or-moved-articles-as-expirable</code> to a
-non-<code>nil</code> value.  In that case, articles that have been read will
-be marked as expirable automatically when being copied or moved to a
-group that has auto-expire turned on.  The default value is <code>nil</code>.
-</p>
+  <p>With this setup, any mail that has <code>IMPORTANT</code> in
+  its Subject header and was sent in the year <code>YYYY</code> and
+  month <code>MMM</code>, will get expired to the group
+  <code>nnfolder:IMPORTANT.YYYY.MMM</code>. If its From or To
+  header contains the string <code>boss</code>, it will get expired
+  to <code>nnfolder:Work</code>. All other mail will get expired to
+  <code>nnfolder:Archive-YYYY</code>.</p><a name=
+  "index-nnmail_002dkeep_002dlast_002darticle" id=
+  "index-nnmail_002dkeep_002dlast_002darticle"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Washing-Mail.html#Washing-Mail" accesskey="n" rel="next">Washing Mail</a>, Previous: <a href="Incorporating-Old-Mail.html#Incorporating-Old-Mail" accesskey="p" rel="prev">Incorporating Old Mail</a>, Up: <a href="Getting-Mail.html#Getting-Mail" accesskey="u" rel="up">Getting Mail</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>If <code>nnmail-keep-last-article</code> is
+  non-<code>nil</code>, Gnus will never expire the final article in
+  a mail newsgroup. This is to make life easier for procmail
+  users.</p><a name=
+  "index-gnus_002dtotal_002dexpirable_002dnewsgroups" id=
+  "index-gnus_002dtotal_002dexpirable_002dnewsgroups"></a>
 
+  <p>By the way: That line up there, about Gnus never expiring
+  non-expirable articles, is a lie. If you put
+  <code>total-expire</code> in the group parameters, articles will
+  not be marked as expirable, but all read articles will be put
+  through the expiry process. Use with extreme caution. Even more
+  dangerous is the <code>gnus-total-expirable-newsgroups</code>
+  variable. All groups that match this regexp will have all read
+  articles put through the expiry process, which means that
+  <em>all</em> old mail articles in the groups in question will be
+  deleted after a while. Use with extreme caution, and don&rsquo;t
+  come crying to me when you discover that the regexp you used
+  matched the wrong group and all your important mail has
+  disappeared. Be a <em>man</em>! Or a <em>woman</em>! Whatever you
+  feel more comfortable with! So there!</p>
 
+  <p>Most people make most of their mail groups total-expirable,
+  though.</p><a name=
+  "index-gnus_002dinhibit_002duser_002dauto_002dexpire" id=
+  "index-gnus_002dinhibit_002duser_002dauto_002dexpire"></a>
 
+  <p>If <code>gnus-inhibit-user-auto-expire</code> is
+  non-<code>nil</code>, user marking commands will not mark an
+  article as expirable, even if the group has auto-expire turned
+  on.</p><a name=
+  "index-gnus_002dmark_002dcopied_002dor_002dmoved_002darticles_002das_002dexpirable"
+  id=
+  "index-gnus_002dmark_002dcopied_002dor_002dmoved_002darticles_002das_002dexpirable"></a>
+
+  <p>The expirable marks of articles will be removed when copying
+  or moving them to a group in which auto-expire is not turned on.
+  This is for preventing articles from being expired
+  unintentionally. On the other hand, to a group that has turned
+  auto-expire on, the expirable marks of articles that are copied
+  or moved will not be changed by default. I.e., when copying or
+  moving to such a group, articles that were expirable will be left
+  expirable and ones that were not expirable will not be marked as
+  expirable. So, even though in auto-expire groups, some articles
+  will never get expired (unless you read them again). If you
+  don&rsquo;t side with that behavior that unexpirable articles may
+  be mixed into auto-expire groups, you can set
+  <code>gnus-mark-copied-or-moved-articles-as-expirable</code> to a
+  non-<code>nil</code> value. In that case, articles that have been
+  read will be marked as expirable automatically when being copied
+  or moved to a group that has auto-expire turned on. The default
+  value is <code>nil</code>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Washing-Mail.html#Washing-Mail" accesskey="n"
+    rel="next">Washing Mail</a>, Previous: <a href=
+    "Incorporating-Old-Mail.html#Incorporating-Old-Mail" accesskey=
+    "p" rel="prev">Incorporating Old Mail</a>, Up: <a href=
+    "Getting-Mail.html#Getting-Mail" accesskey="u" rel="up">Getting
+    Mail</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

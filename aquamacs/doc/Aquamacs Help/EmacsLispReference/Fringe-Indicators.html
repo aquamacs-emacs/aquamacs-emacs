@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,183 +19,276 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Fringe Indicators</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Fringe Indicators">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Fringe Indicators">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Fringes.html#Fringes" rel="up" title="Fringes">
-<link href="Fringe-Cursors.html#Fringe-Cursors" rel="next" title="Fringe Cursors">
-<link href="Fringe-Size_002fPos.html#Fringe-Size_002fPos" rel="prev" title="Fringe Size/Pos">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Fringe Indicators</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Fringe Indicators" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Fringe Indicators" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Fringes.html#Fringes" rel="up" title="Fringes" />
+  <link href="Fringe-Cursors.html#Fringe-Cursors" rel="next" title=
+  "Fringe Cursors" />
+  <link href="Fringe-Size_002fPos.html#Fringe-Size_002fPos" rel=
+  "prev" title="Fringe Size/Pos" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Fringe-Indicators" id="Fringe-Indicators"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Fringe-Cursors.html#Fringe-Cursors"
+    accesskey="n" rel="next">Fringe Cursors</a>, Previous: <a href=
+    "Fringe-Size_002fPos.html#Fringe-Size_002fPos" accesskey="p"
+    rel="prev">Fringe Size/Pos</a>, Up: <a href=
+    "Fringes.html#Fringes" accesskey="u" rel="up">Fringes</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Fringe-Indicators-1" id="Fringe-Indicators-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Fringe-Indicators"></a>
-<div class="header">
-<p>
-Next: <a href="Fringe-Cursors.html#Fringe-Cursors" accesskey="n" rel="next">Fringe Cursors</a>, Previous: <a href="Fringe-Size_002fPos.html#Fringe-Size_002fPos" accesskey="p" rel="prev">Fringe Size/Pos</a>, Up: <a href="Fringes.html#Fringes" accesskey="u" rel="up">Fringes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Fringe-Indicators-1"></a>
-<h4 class="subsection">37.13.2 Fringe Indicators</h4>
-<a name="index-fringe-indicators"></a>
-<a name="index-indicators_002c-fringe"></a>
+  <h4 class="subsection">37.13.2 Fringe Indicators</h4><a name=
+  "index-fringe-indicators" id="index-fringe-indicators"></a>
+  <a name="index-indicators_002c-fringe" id=
+  "index-indicators_002c-fringe"></a>
 
-<p><em>Fringe indicators</em> are tiny icons displayed in the window
-fringe to indicate truncated or continued lines, buffer boundaries,
-etc.
-</p>
-<dl>
-<dt><a name="index-indicate_002dempty_002dlines"></a>User Option: <strong>indicate-empty-lines</strong></dt>
-<dd><a name="index-fringes_002c-and-empty-line-indication"></a>
-<a name="index-empty-lines_002c-indicating"></a>
-<p>When this is non-<code>nil</code>, Emacs displays a special glyph in the
-fringe of each empty line at the end of the buffer, on graphical
-displays.  See <a href="Fringes.html#Fringes">Fringes</a>.  This variable is automatically
-buffer-local in every buffer.
-</p></dd></dl>
+  <p><em>Fringe indicators</em> are tiny icons displayed in the
+  window fringe to indicate truncated or continued lines, buffer
+  boundaries, etc.</p>
 
-<dl>
-<dt><a name="index-indicate_002dbuffer_002dboundaries"></a>User Option: <strong>indicate-buffer-boundaries</strong></dt>
-<dd><a name="index-buffer-boundaries_002c-indicating"></a>
-<p>This buffer-local variable controls how the buffer boundaries and
-window scrolling are indicated in the window fringes.
-</p>
-<p>Emacs can indicate the buffer boundaries&mdash;that is, the first and last
-line in the buffer&mdash;with angle icons when they appear on the screen.
-In addition, Emacs can display an up-arrow in the fringe to show
-that there is text above the screen, and a down-arrow to show
-there is text below the screen.
-</p>
-<p>There are three kinds of basic values:
-</p>
-<dl compact="compact">
-<dt><code>nil</code></dt>
-<dd><p>Don&rsquo;t display any of these fringe icons.
-</p></dd>
-<dt><code>left</code></dt>
-<dd><p>Display the angle icons and arrows in the left fringe.
-</p></dd>
-<dt><code>right</code></dt>
-<dd><p>Display the angle icons and arrows in the right fringe.
-</p></dd>
-<dt>any non-alist</dt>
-<dd><p>Display the angle icons in the left fringe
-and don&rsquo;t display the arrows.
-</p></dd>
-</dl>
+  <dl>
+    <dt><a name="index-indicate_002dempty_002dlines" id=
+    "index-indicate_002dempty_002dlines"></a>User Option:
+    <strong>indicate-empty-lines</strong></dt>
 
-<p>Otherwise the value should be an alist that specifies which fringe
-indicators to display and where.  Each element of the alist should
-have the form <code>(<var>indicator</var> . <var>position</var>)</code>.  Here,
-<var>indicator</var> is one of <code>top</code>, <code>bottom</code>, <code>up</code>,
-<code>down</code>, and <code>t</code> (which covers all the icons not yet
-specified), while <var>position</var> is one of <code>left</code>, <code>right</code>
-and <code>nil</code>.
-</p>
-<p>For example, <code>((top . left) (t . right))</code> places the top angle
-bitmap in left fringe, and the bottom angle bitmap as well as both
-arrow bitmaps in right fringe.  To show the angle bitmaps in the left
-fringe, and no arrow bitmaps, use <code>((top .  left) (bottom . left))</code>.
-</p></dd></dl>
+    <dd>
+      <a name="index-fringes_002c-and-empty-line-indication" id=
+      "index-fringes_002c-and-empty-line-indication"></a> <a name=
+      "index-empty-lines_002c-indicating" id=
+      "index-empty-lines_002c-indicating"></a>
 
-<dl>
-<dt><a name="index-fringe_002dindicator_002dalist"></a>Variable: <strong>fringe-indicator-alist</strong></dt>
-<dd><p>This buffer-local variable specifies the mapping from logical fringe
-indicators to the actual bitmaps displayed in the window fringes.  The
-value is an alist of elements <code>(<var>indicator</var>
-. <var>bitmaps</var>)</code>, where <var>indicator</var> specifies a logical indicator
-type and <var>bitmaps</var> specifies the fringe bitmaps to use for that
-indicator.
-</p>
-<p>Each <var>indicator</var> should be one of the following symbols:
-</p>
-<dl compact="compact">
-<dt><code>truncation</code>, <code>continuation</code>.</dt>
-<dd><p>Used for truncation and continuation lines.
-</p>
-</dd>
-<dt><code>up</code>, <code>down</code>, <code>top</code>, <code>bottom</code>, <code>top-bottom</code></dt>
-<dd><p>Used when <code>indicate-buffer-boundaries</code> is non-<code>nil</code>:
-<code>up</code> and <code>down</code> indicate a buffer boundary lying above or
-below the window edge; <code>top</code> and <code>bottom</code> indicate the
-topmost and bottommost buffer text line; and <code>top-bottom</code>
-indicates where there is just one line of text in the buffer.
-</p>
-</dd>
-<dt><code>empty-line</code></dt>
-<dd><p>Used to indicate empty lines when <code>indicate-empty-lines</code> is
-non-<code>nil</code>.
-</p>
-</dd>
-<dt><code>overlay-arrow</code></dt>
-<dd><p>Used for overlay arrows (see <a href="Overlay-Arrow.html#Overlay-Arrow">Overlay Arrow</a>).
-</p></dd>
-</dl>
+      <p>When this is non-<code>nil</code>, Emacs displays a
+      special glyph in the fringe of each empty line at the end of
+      the buffer, on graphical displays. See <a href=
+      "Fringes.html#Fringes">Fringes</a>. This variable is
+      automatically buffer-local in every buffer.</p>
+    </dd>
+  </dl>
 
-<p>Each <var>bitmaps</var> value may be a list of symbols <code>(<var>left</var>
-<var>right</var> [<var>left1</var> <var>right1</var>])</code>.  The <var>left</var> and
-<var>right</var> symbols specify the bitmaps shown in the left and/or right
-fringe, for the specific indicator.  <var>left1</var> and <var>right1</var> are
-specific to the <code>bottom</code> and <code>top-bottom</code> indicators, and
-are used to indicate that the last text line has no final newline.
-Alternatively, <var>bitmaps</var> may be a single symbol which is used in
-both left and right fringes.
-</p>
-<p>See <a href="Fringe-Bitmaps.html#Fringe-Bitmaps">Fringe Bitmaps</a>, for a list of standard bitmap symbols and how
-to define your own.  In addition, <code>nil</code> represents the empty
-bitmap (i.e., an indicator that is not shown).
-</p>
-<p>When <code>fringe-indicator-alist</code> has a buffer-local value, and
-there is no bitmap defined for a logical indicator, or the bitmap is
-<code>t</code>, the corresponding value from the default value of
-<code>fringe-indicator-alist</code> is used.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-indicate_002dbuffer_002dboundaries" id=
+    "index-indicate_002dbuffer_002dboundaries"></a>User Option:
+    <strong>indicate-buffer-boundaries</strong></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Fringe-Cursors.html#Fringe-Cursors" accesskey="n" rel="next">Fringe Cursors</a>, Previous: <a href="Fringe-Size_002fPos.html#Fringe-Size_002fPos" accesskey="p" rel="prev">Fringe Size/Pos</a>, Up: <a href="Fringes.html#Fringes" accesskey="u" rel="up">Fringes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <a name="index-buffer-boundaries_002c-indicating" id=
+      "index-buffer-boundaries_002c-indicating"></a>
 
+      <p>This buffer-local variable controls how the buffer
+      boundaries and window scrolling are indicated in the window
+      fringes.</p>
 
+      <p>Emacs can indicate the buffer boundaries&mdash;that is,
+      the first and last line in the buffer&mdash;with angle icons
+      when they appear on the screen. In addition, Emacs can
+      display an up-arrow in the fringe to show that there is text
+      above the screen, and a down-arrow to show there is text
+      below the screen.</p>
 
+      <p>There are three kinds of basic values:</p>
+
+      <dl compact="compact">
+        <dt><code>nil</code></dt>
+
+        <dd>
+          <p>Don&rsquo;t display any of these fringe icons.</p>
+        </dd>
+
+        <dt><code>left</code></dt>
+
+        <dd>
+          <p>Display the angle icons and arrows in the left
+          fringe.</p>
+        </dd>
+
+        <dt><code>right</code></dt>
+
+        <dd>
+          <p>Display the angle icons and arrows in the right
+          fringe.</p>
+        </dd>
+
+        <dt>any non-alist</dt>
+
+        <dd>
+          <p>Display the angle icons in the left fringe and
+          don&rsquo;t display the arrows.</p>
+        </dd>
+      </dl>
+
+      <p>Otherwise the value should be an alist that specifies
+      which fringe indicators to display and where. Each element of
+      the alist should have the form <code>(<var>indicator</var> .
+      <var>position</var>)</code>. Here, <var>indicator</var> is
+      one of <code>top</code>, <code>bottom</code>,
+      <code>up</code>, <code>down</code>, and <code>t</code> (which
+      covers all the icons not yet specified), while
+      <var>position</var> is one of <code>left</code>,
+      <code>right</code> and <code>nil</code>.</p>
+
+      <p>For example, <code>((top . left) (t . right))</code>
+      places the top angle bitmap in left fringe, and the bottom
+      angle bitmap as well as both arrow bitmaps in right fringe.
+      To show the angle bitmaps in the left fringe, and no arrow
+      bitmaps, use <code>((top . left) (bottom . left))</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-fringe_002dindicator_002dalist" id=
+    "index-fringe_002dindicator_002dalist"></a>Variable:
+    <strong>fringe-indicator-alist</strong></dt>
+
+    <dd>
+      <p>This buffer-local variable specifies the mapping from
+      logical fringe indicators to the actual bitmaps displayed in
+      the window fringes. The value is an alist of elements
+      <code>(<var>indicator</var> . <var>bitmaps</var>)</code>,
+      where <var>indicator</var> specifies a logical indicator type
+      and <var>bitmaps</var> specifies the fringe bitmaps to use
+      for that indicator.</p>
+
+      <p>Each <var>indicator</var> should be one of the following
+      symbols:</p>
+
+      <dl compact="compact">
+        <dt><code>truncation</code>,
+        <code>continuation</code>.</dt>
+
+        <dd>
+          <p>Used for truncation and continuation lines.</p>
+        </dd>
+
+        <dt><code>up</code>, <code>down</code>, <code>top</code>,
+        <code>bottom</code>, <code>top-bottom</code></dt>
+
+        <dd>
+          <p>Used when <code>indicate-buffer-boundaries</code> is
+          non-<code>nil</code>: <code>up</code> and
+          <code>down</code> indicate a buffer boundary lying above
+          or below the window edge; <code>top</code> and
+          <code>bottom</code> indicate the topmost and bottommost
+          buffer text line; and <code>top-bottom</code> indicates
+          where there is just one line of text in the buffer.</p>
+        </dd>
+
+        <dt><code>empty-line</code></dt>
+
+        <dd>
+          <p>Used to indicate empty lines when
+          <code>indicate-empty-lines</code> is
+          non-<code>nil</code>.</p>
+        </dd>
+
+        <dt><code>overlay-arrow</code></dt>
+
+        <dd>
+          <p>Used for overlay arrows (see <a href=
+          "Overlay-Arrow.html#Overlay-Arrow">Overlay
+          Arrow</a>).</p>
+        </dd>
+      </dl>
+
+      <p>Each <var>bitmaps</var> value may be a list of symbols
+      <code>(<var>left</var> <var>right</var> [<var>left1</var>
+      <var>right1</var>])</code>. The <var>left</var> and
+      <var>right</var> symbols specify the bitmaps shown in the
+      left and/or right fringe, for the specific indicator.
+      <var>left1</var> and <var>right1</var> are specific to the
+      <code>bottom</code> and <code>top-bottom</code> indicators,
+      and are used to indicate that the last text line has no final
+      newline. Alternatively, <var>bitmaps</var> may be a single
+      symbol which is used in both left and right fringes.</p>
+
+      <p>See <a href="Fringe-Bitmaps.html#Fringe-Bitmaps">Fringe
+      Bitmaps</a>, for a list of standard bitmap symbols and how to
+      define your own. In addition, <code>nil</code> represents the
+      empty bitmap (i.e., an indicator that is not shown).</p>
+
+      <p>When <code>fringe-indicator-alist</code> has a
+      buffer-local value, and there is no bitmap defined for a
+      logical indicator, or the bitmap is <code>t</code>, the
+      corresponding value from the default value of
+      <code>fringe-indicator-alist</code> is used.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Fringe-Cursors.html#Fringe-Cursors"
+    accesskey="n" rel="next">Fringe Cursors</a>, Previous: <a href=
+    "Fringe-Size_002fPos.html#Fringe-Size_002fPos" accesskey="p"
+    rel="prev">Fringe Size/Pos</a>, Up: <a href=
+    "Fringes.html#Fringes" accesskey="u" rel="up">Fringes</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

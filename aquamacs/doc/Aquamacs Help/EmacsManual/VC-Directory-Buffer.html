@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,123 +20,172 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: VC Directory Buffer</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: VC Directory Buffer">
-<meta name="keywords" content="GNU Emacs Manual: VC Directory Buffer">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="VC-Directory-Mode.html#VC-Directory-Mode" rel="up" title="VC Directory Mode">
-<link href="VC-Directory-Commands.html#VC-Directory-Commands" rel="next" title="VC Directory Commands">
-<link href="VC-Directory-Mode.html#VC-Directory-Mode" rel="prev" title="VC Directory Mode">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: VC Directory Buffer</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: VC Directory Buffer" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: VC Directory Buffer" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="VC-Directory-Mode.html#VC-Directory-Mode" rel="up"
+  title="VC Directory Mode" />
+  <link href="VC-Directory-Commands.html#VC-Directory-Commands"
+  rel="next" title="VC Directory Commands" />
+  <link href="VC-Directory-Mode.html#VC-Directory-Mode" rel="prev"
+  title="VC Directory Mode" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="VC-Directory-Buffer" id="VC-Directory-Buffer"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "VC-Directory-Commands.html#VC-Directory-Commands" accesskey=
+    "n" rel="next">VC Directory Commands</a>, Up: <a href=
+    "VC-Directory-Mode.html#VC-Directory-Mode" accesskey="u" rel=
+    "up">VC Directory Mode</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="The-VC-Directory-Buffer" id=
+  "The-VC-Directory-Buffer"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="VC-Directory-Buffer"></a>
-<div class="header">
-<p>
-Next: <a href="VC-Directory-Commands.html#VC-Directory-Commands" accesskey="n" rel="next">VC Directory Commands</a>, Up: <a href="VC-Directory-Mode.html#VC-Directory-Mode" accesskey="u" rel="up">VC Directory Mode</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="The-VC-Directory-Buffer"></a>
-<h4 class="subsubsection">28.1.10.1 The VC Directory Buffer</h4>
+  <h4 class="subsubsection">28.1.10.1 The VC Directory Buffer</h4>
 
-<p>The VC Directory buffer contains a list of version-controlled files
-and their version control statuses.  It lists files in the current
-directory (the one specified when you called <kbd>C-x v d</kbd>) and its
-subdirectories, but only those with a noteworthy status.  Files
-that are up-to-date (i.e., the same as in the repository) are
-omitted.  If all the files in a subdirectory are up-to-date, the
-subdirectory is not listed either.  As an exception, if a file has
-become up-to-date as a direct result of a VC command, it is listed.
-</p>
-<p>Here is an example of a VC Directory buffer listing:
-</p>
-<div class="smallexample">
-<pre class="smallexample">                     ./
+  <p>The VC Directory buffer contains a list of version-controlled
+  files and their version control statuses. It lists files in the
+  current directory (the one specified when you called <kbd>C-x v
+  d</kbd>) and its subdirectories, but only those with a noteworthy
+  status. Files that are up-to-date (i.e., the same as in the
+  repository) are omitted. If all the files in a subdirectory are
+  up-to-date, the subdirectory is not listed either. As an
+  exception, if a file has become up-to-date as a direct result of
+  a VC command, it is listed.</p>
+
+  <p>Here is an example of a VC Directory buffer listing:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+                     ./
     edited           configure.ac
 *   added            README
     unregistered     temp.txt
                      src/
 *   edited           src/main.c
-</pre></div>
+</pre>
+  </div>
 
-<p>Two work files have been modified but not committed:
-<samp>configure.ac</samp> in the current directory, and <samp>foo.c</samp> in the
-<samp>src/</samp> subdirectory.  The file named <samp>README</samp> has been added
-but is not yet committed, while <samp>temp.txt</samp> is not under version
-control (see <a href="Registering.html#Registering">Registering</a>).
-</p>
-<p>The &lsquo;<samp>*</samp>&rsquo; characters next to the entries for <samp>README</samp> and
-<samp>src/main.c</samp> indicate that the user has marked out these files as
-the current VC fileset
-(see <a href="VC-Directory-Commands.html#VC-Directory-Commands">VC Directory Commands</a>).
-</p>
-<p>The above example is typical for a decentralized version control
-system like Bazaar, Git, or Mercurial.  Other systems can show other
-statuses.  For instance, CVS shows the &lsquo;<samp>needs-update</samp>&rsquo; status if
-the repository has changes that have not been applied to the work
-file.  RCS and SCCS show the name of the user locking a file as its
-status.
-</p>
-<a name="index-vc_002dstay_002dlocal"></a>
-<a name="index-vc_002dcvs_002dstay_002dlocal"></a>
-<p>On CVS and Subversion, the <code>vc-dir</code> command normally contacts
-the repository, which may be on a remote machine, to check for
-updates.  If you change the variable <code>vc-stay-local</code> or
-<code>vc-cvs-stay-local</code> (for CVS) to <code>nil</code> (see <a href="CVS-Options.html#CVS-Options">CVS Options</a>), then Emacs avoids contacting a remote repository when
-generating the VC Directory buffer (it will still contact it when
-necessary, e.g., when doing a commit).  This may be desirable if you
-are working offline or the network is slow.
-</p>
-<a name="index-vc_002ddirectory_002dexclusion_002dlist"></a>
-<p>The VC Directory buffer omits subdirectories listed in the variable
-<code>vc-directory-exclusion-list</code>.  Its default value contains
-directories that are used internally by version control systems.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="VC-Directory-Commands.html#VC-Directory-Commands" accesskey="n" rel="next">VC Directory Commands</a>, Up: <a href="VC-Directory-Mode.html#VC-Directory-Mode" accesskey="u" rel="up">VC Directory Mode</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Two work files have been modified but not committed:
+  <samp>configure.ac</samp> in the current directory, and
+  <samp>foo.c</samp> in the <samp>src/</samp> subdirectory. The
+  file named <samp>README</samp> has been added but is not yet
+  committed, while <samp>temp.txt</samp> is not under version
+  control (see <a href=
+  "Registering.html#Registering">Registering</a>).</p>
 
+  <p>The &lsquo;<samp>*</samp>&rsquo; characters next to the
+  entries for <samp>README</samp> and <samp>src/main.c</samp>
+  indicate that the user has marked out these files as the current
+  VC fileset (see <a href=
+  "VC-Directory-Commands.html#VC-Directory-Commands">VC Directory
+  Commands</a>).</p>
 
+  <p>The above example is typical for a decentralized version
+  control system like Bazaar, Git, or Mercurial. Other systems can
+  show other statuses. For instance, CVS shows the
+  &lsquo;<samp>needs-update</samp>&rsquo; status if the repository
+  has changes that have not been applied to the work file. RCS and
+  SCCS show the name of the user locking a file as its
+  status.</p><a name="index-vc_002dstay_002dlocal" id=
+  "index-vc_002dstay_002dlocal"></a> <a name=
+  "index-vc_002dcvs_002dstay_002dlocal" id=
+  "index-vc_002dcvs_002dstay_002dlocal"></a>
 
+  <p>On CVS and Subversion, the <code>vc-dir</code> command
+  normally contacts the repository, which may be on a remote
+  machine, to check for updates. If you change the variable
+  <code>vc-stay-local</code> or <code>vc-cvs-stay-local</code> (for
+  CVS) to <code>nil</code> (see <a href=
+  "CVS-Options.html#CVS-Options">CVS Options</a>), then Emacs
+  avoids contacting a remote repository when generating the VC
+  Directory buffer (it will still contact it when necessary, e.g.,
+  when doing a commit). This may be desirable if you are working
+  offline or the network is slow.</p><a name=
+  "index-vc_002ddirectory_002dexclusion_002dlist" id=
+  "index-vc_002ddirectory_002dexclusion_002dlist"></a>
+
+  <p>The VC Directory buffer omits subdirectories listed in the
+  variable <code>vc-directory-exclusion-list</code>. Its default
+  value contains directories that are used internally by version
+  control systems.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "VC-Directory-Commands.html#VC-Directory-Commands" accesskey=
+    "n" rel="next">VC Directory Commands</a>, Up: <a href=
+    "VC-Directory-Mode.html#VC-Directory-Mode" accesskey="u" rel=
+    "up">VC Directory Mode</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

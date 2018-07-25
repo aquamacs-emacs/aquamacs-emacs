@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,101 +14,140 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: MH Spool</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: MH Spool">
-<meta name="keywords" content="Gnus Manual: MH Spool">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Choosing-a-Mail-Back-End.html#Choosing-a-Mail-Back-End" rel="up" title="Choosing a Mail Back End">
-<link href="Maildir.html#Maildir" rel="next" title="Maildir">
-<link href="Mail-Spool.html#Mail-Spool" rel="prev" title="Mail Spool">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: MH Spool</title>
+  <meta name="description" content="Gnus Manual: MH Spool" />
+  <meta name="keywords" content="Gnus Manual: MH Spool" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href=
+  "Choosing-a-Mail-Back-End.html#Choosing-a-Mail-Back-End" rel="up"
+  title="Choosing a Mail Back End" />
+  <link href="Maildir.html#Maildir" rel="next" title="Maildir" />
+  <link href="Mail-Spool.html#Mail-Spool" rel="prev" title=
+  "Mail Spool" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="MH-Spool"></a>
-<div class="header">
-<p>
-Next: <a href="Maildir.html#Maildir" accesskey="n" rel="next">Maildir</a>, Previous: <a href="Mail-Spool.html#Mail-Spool" accesskey="p" rel="prev">Mail Spool</a>, Up: <a href="Choosing-a-Mail-Back-End.html#Choosing-a-Mail-Back-End" accesskey="u" rel="up">Choosing a Mail Back End</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="MH-Spool-1"></a>
-<h4 class="subsubsection">6.4.13.4 MH Spool</h4>
-<a name="index-nnmh"></a>
-<a name="index-mh_002de-mail-spool"></a>
+<body lang="en" xml:lang="en">
+  <a name="MH-Spool" id="MH-Spool"></a>
 
-<p><code>nnmh</code> is just like <code>nnml</code>, except that is doesn&rsquo;t generate
-<acronym>NOV</acronym> databases and it doesn&rsquo;t keep an active file or marks
-file.  This makes <code>nnmh</code> a <em>much</em> slower back end than
-<code>nnml</code>, but it also makes it easier to write procmail scripts
-for.
-</p>
-<p>Virtual server settings:
-</p>
-<dl compact="compact">
-<dt><code>nnmh-directory</code></dt>
-<dd><a name="index-nnmh_002ddirectory"></a>
-<p>All <code>nnmh</code> directories will be located under this directory.  The
-default is the value of <code>message-directory</code> (whose default is
-<samp>~/Mail</samp>)
-</p>
-</dd>
-<dt><code>nnmh-get-new-mail</code></dt>
-<dd><a name="index-nnmh_002dget_002dnew_002dmail-1"></a>
-<p>If non-<code>nil</code>, <code>nnmh</code> will read incoming mail.  The default is
-<code>t</code>.
-</p>
-</dd>
-<dt><code>nnmh-be-safe</code></dt>
-<dd><a name="index-nnmh_002dbe_002dsafe"></a>
-<p>If non-<code>nil</code>, <code>nnmh</code> will go to ridiculous lengths to make
-sure that the articles in the folder are actually what Gnus thinks
-they are.  It will check date stamps and stat everything in sight, so
-setting this to <code>t</code> will mean a serious slow-down.  If you never
-use anything but Gnus to read the <code>nnmh</code> articles, you do not
-have to set this variable to <code>t</code>.  The default is <code>nil</code>.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Maildir.html#Maildir" accesskey="n" rel=
+    "next">Maildir</a>, Previous: <a href=
+    "Mail-Spool.html#Mail-Spool" accesskey="p" rel="prev">Mail
+    Spool</a>, Up: <a href=
+    "Choosing-a-Mail-Back-End.html#Choosing-a-Mail-Back-End"
+    accesskey="u" rel="up">Choosing a Mail Back End</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="MH-Spool-1" id="MH-Spool-1"></a>
 
+  <h4 class="subsubsection">6.4.13.4 MH Spool</h4><a name=
+  "index-nnmh" id="index-nnmh"></a> <a name=
+  "index-mh_002de-mail-spool" id="index-mh_002de-mail-spool"></a>
 
+  <p><code>nnmh</code> is just like <code>nnml</code>, except that
+  is doesn&rsquo;t generate <acronym>NOV</acronym> databases and it
+  doesn&rsquo;t keep an active file or marks file. This makes
+  <code>nnmh</code> a <em>much</em> slower back end than
+  <code>nnml</code>, but it also makes it easier to write procmail
+  scripts for.</p>
 
+  <p>Virtual server settings:</p>
 
+  <dl compact="compact">
+    <dt><code>nnmh-directory</code></dt>
 
+    <dd>
+      <a name="index-nnmh_002ddirectory" id=
+      "index-nnmh_002ddirectory"></a>
+
+      <p>All <code>nnmh</code> directories will be located under
+      this directory. The default is the value of
+      <code>message-directory</code> (whose default is
+      <samp>~/Mail</samp>)</p>
+    </dd>
+
+    <dt><code>nnmh-get-new-mail</code></dt>
+
+    <dd>
+      <a name="index-nnmh_002dget_002dnew_002dmail-1" id=
+      "index-nnmh_002dget_002dnew_002dmail-1"></a>
+
+      <p>If non-<code>nil</code>, <code>nnmh</code> will read
+      incoming mail. The default is <code>t</code>.</p>
+    </dd>
+
+    <dt><code>nnmh-be-safe</code></dt>
+
+    <dd>
+      <a name="index-nnmh_002dbe_002dsafe" id=
+      "index-nnmh_002dbe_002dsafe"></a>
+
+      <p>If non-<code>nil</code>, <code>nnmh</code> will go to
+      ridiculous lengths to make sure that the articles in the
+      folder are actually what Gnus thinks they are. It will check
+      date stamps and stat everything in sight, so setting this to
+      <code>t</code> will mean a serious slow-down. If you never
+      use anything but Gnus to read the <code>nnmh</code> articles,
+      you do not have to set this variable to <code>t</code>. The
+      default is <code>nil</code>.</p>
+    </dd>
+  </dl>
 </body>
 </html>

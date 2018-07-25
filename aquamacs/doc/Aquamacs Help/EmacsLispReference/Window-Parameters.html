@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,253 +19,384 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Window Parameters</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Window Parameters">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Window Parameters">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Windows.html#Windows" rel="up" title="Windows">
-<link href="Window-Hooks.html#Window-Hooks" rel="next" title="Window Hooks">
-<link href="Window-Configurations.html#Window-Configurations" rel="prev" title="Window Configurations">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Window Parameters</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Window Parameters" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Window Parameters" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Windows.html#Windows" rel="up" title="Windows" />
+  <link href="Window-Hooks.html#Window-Hooks" rel="next" title=
+  "Window Hooks" />
+  <link href="Window-Configurations.html#Window-Configurations"
+  rel="prev" title="Window Configurations" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Window-Parameters" id="Window-Parameters"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Window-Hooks.html#Window-Hooks" accesskey="n"
+    rel="next">Window Hooks</a>, Previous: <a href=
+    "Window-Configurations.html#Window-Configurations" accesskey=
+    "p" rel="prev">Window Configurations</a>, Up: <a href=
+    "Windows.html#Windows" accesskey="u" rel="up">Windows</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Window-Parameters-1" id="Window-Parameters-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Window-Parameters"></a>
-<div class="header">
-<p>
-Next: <a href="Window-Hooks.html#Window-Hooks" accesskey="n" rel="next">Window Hooks</a>, Previous: <a href="Window-Configurations.html#Window-Configurations" accesskey="p" rel="prev">Window Configurations</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Window-Parameters-1"></a>
-<h3 class="section">27.26 Window Parameters</h3>
-<a name="index-window-parameters"></a>
+  <h3 class="section">27.26 Window Parameters</h3><a name=
+  "index-window-parameters" id="index-window-parameters"></a>
 
-<p>This section describes how window parameters can be used to associate
-additional information with windows.
-</p>
-<dl>
-<dt><a name="index-window_002dparameter"></a>Function: <strong>window-parameter</strong> <em>window parameter</em></dt>
-<dd><p>This function returns <var>window</var>&rsquo;s value for <var>parameter</var>.  The
-default for <var>window</var> is the selected window.  If <var>window</var> has no
-setting for <var>parameter</var>, this function returns <code>nil</code>.
-</p></dd></dl>
+  <p>This section describes how window parameters can be used to
+  associate additional information with windows.</p>
 
-<dl>
-<dt><a name="index-window_002dparameters"></a>Function: <strong>window-parameters</strong> <em>&amp;optional window</em></dt>
-<dd><p>This function returns all parameters of <var>window</var> and their values.
-The default for <var>window</var> is the selected window.  The return value
-is either <code>nil</code>, or an association list whose elements have the form
-<code>(<var>parameter</var> . <var>value</var>)</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-window_002dparameter" id=
+    "index-window_002dparameter"></a>Function:
+    <strong>window-parameter</strong> <em>window
+    parameter</em></dt>
 
-<dl>
-<dt><a name="index-set_002dwindow_002dparameter"></a>Function: <strong>set-window-parameter</strong> <em>window parameter value</em></dt>
-<dd><p>This function sets <var>window</var>&rsquo;s value of <var>parameter</var> to
-<var>value</var> and returns <var>value</var>.  The default for <var>window</var>
-is the selected window.
-</p></dd></dl>
+    <dd>
+      <p>This function returns <var>window</var>&rsquo;s value for
+      <var>parameter</var>. The default for <var>window</var> is
+      the selected window. If <var>window</var> has no setting for
+      <var>parameter</var>, this function returns
+      <code>nil</code>.</p>
+    </dd>
+  </dl>
 
-<p>By default, the functions that save and restore window configurations or the
-states of windows (see <a href="Window-Configurations.html#Window-Configurations">Window Configurations</a>) do not care about
-window parameters.  This means that when you change the value of a
-parameter within the body of a <code>save-window-excursion</code>, the
-previous value is not restored when that macro exits.  It also means
-that when you restore via <code>window-state-put</code> a window state saved
-earlier by <code>window-state-get</code>, all cloned windows have their
-parameters reset to <code>nil</code>.  The following variable allows you to
-override the standard behavior:
-</p>
-<dl>
-<dt><a name="index-window_002dpersistent_002dparameters"></a>Variable: <strong>window-persistent-parameters</strong></dt>
-<dd><p>This variable is an alist specifying which parameters get saved by
-<code>current-window-configuration</code> and <code>window-state-get</code>, and
-subsequently restored by <code>set-window-configuration</code> and
-<code>window-state-put</code>.  See <a href="Window-Configurations.html#Window-Configurations">Window Configurations</a>.
-</p>
-<p>The <small>CAR</small> of each entry of this alist is a symbol specifying the
-parameter.  The <small>CDR</small> should be one of the following:
-</p>
-<dl compact="compact">
-<dt><code>nil</code></dt>
-<dd><p>This value means the parameter is saved neither by
-<code>window-state-get</code> nor by <code>current-window-configuration</code>.
-</p>
-</dd>
-<dt><code>t</code></dt>
-<dd><p>This value specifies that the parameter is saved by
-<code>current-window-configuration</code> and (provided its <var>writable</var>
-argument is <code>nil</code>) by <code>window-state-get</code>.
-</p>
-</dd>
-<dt><code>writable</code></dt>
-<dd><p>This means that the parameter is saved unconditionally by both
-<code>current-window-configuration</code> and <code>window-state-get</code>.  This
-value should not be used for parameters whose values do not have a read
-syntax.  Otherwise, invoking <code>window-state-put</code> in another session
-may fail with an <code>invalid-read-syntax</code> error.
-</p></dd>
-</dl>
-</dd></dl>
+  <dl>
+    <dt><a name="index-window_002dparameters" id=
+    "index-window_002dparameters"></a>Function:
+    <strong>window-parameters</strong> <em>&amp;optional
+    window</em></dt>
 
-<p>Some functions (notably <code>delete-window</code>,
-<code>delete-other-windows</code> and <code>split-window</code>), may behave specially
-when their <var>window</var> argument has a parameter set.  You can override
-such special behavior by binding the following variable to a
-non-<code>nil</code> value:
-</p>
-<dl>
-<dt><a name="index-ignore_002dwindow_002dparameters"></a>Variable: <strong>ignore-window-parameters</strong></dt>
-<dd><p>If this variable is non-<code>nil</code>, some standard functions do not
-process window parameters.  The functions currently affected by this are
-<code>split-window</code>, <code>delete-window</code>, <code>delete-other-windows</code>,
-and <code>other-window</code>.
-</p>
-<p>An application can bind this variable to a non-<code>nil</code> value around
-calls to these functions.  If it does so, the application is fully
-responsible for correctly assigning the parameters of all involved
-windows when exiting that function.
-</p></dd></dl>
+    <dd>
+      <p>This function returns all parameters of <var>window</var>
+      and their values. The default for <var>window</var> is the
+      selected window. The return value is either <code>nil</code>,
+      or an association list whose elements have the form
+      <code>(<var>parameter</var> . <var>value</var>)</code>.</p>
+    </dd>
+  </dl>
 
-<p>The following parameters are currently used by the window management
-code:
-</p>
-<dl compact="compact">
-<dt><code>delete-window</code></dt>
-<dd><p>This parameter affects the execution of <code>delete-window</code>
-(see <a href="Deleting-Windows.html#Deleting-Windows">Deleting Windows</a>).
-</p>
-</dd>
-<dt><code>delete-other-windows</code></dt>
-<dd><p>This parameter affects the execution of <code>delete-other-windows</code>
-(see <a href="Deleting-Windows.html#Deleting-Windows">Deleting Windows</a>).
-</p>
-</dd>
-<dt><code>split-window</code></dt>
-<dd><p>This parameter affects the execution of <code>split-window</code>
-(see <a href="Splitting-Windows.html#Splitting-Windows">Splitting Windows</a>).
-</p>
-</dd>
-<dt><code>other-window</code></dt>
-<dd><p>This parameter affects the execution of <code>other-window</code>
-(see <a href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering">Cyclic Window Ordering</a>).
-</p>
-</dd>
-<dt><code>no-other-window</code></dt>
-<dd><p>This parameter marks the window as not selectable by <code>other-window</code>
-(see <a href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering">Cyclic Window Ordering</a>).
-</p>
-</dd>
-<dt><code>clone-of</code></dt>
-<dd><p>This parameter specifies the window that this one has been cloned
-from.  It is installed by <code>window-state-get</code> (see <a href="Window-Configurations.html#Window-Configurations">Window Configurations</a>).
-</p>
-</dd>
-<dt><code>preserved-size</code></dt>
-<dd><p>This parameter specifies a buffer, a direction where <code>nil</code> means
-vertical and <code>t</code> horizontal, and a size in pixels.  If this window
-displays the specified buffer and its size in the indicated direction
-equals the size specified by this parameter, then Emacs will try to
-preserve the size of this window in the indicated direction.  This
-parameter is installed and updated by the function
-<code>window-preserve-size</code> (see <a href="Preserving-Window-Sizes.html#Preserving-Window-Sizes">Preserving Window Sizes</a>).
-</p>
-</dd>
-<dt><code>quit-restore</code></dt>
-<dd><p>This parameter is installed by the buffer display functions
-(see <a href="Choosing-Window.html#Choosing-Window">Choosing Window</a>) and consulted by <code>quit-restore-window</code>
-(see <a href="Quitting-Windows.html#Quitting-Windows">Quitting Windows</a>).  It contains four elements:
-</p>
-<p>The first element is one of the symbols <code>window</code>, meaning that the
-window has been specially created by <code>display-buffer</code>; <code>frame</code>,
-a separate frame has been created; <code>same</code>, the window has
-displayed the same buffer before; or <code>other</code>, the window showed
-another buffer before.
-</p>
-<p>The second element is either one of the symbols <code>window</code> or
-<code>frame</code>, or a list whose elements are the buffer shown in the
-window before, that buffer&rsquo;s window start and window point positions,
-and the window&rsquo;s height at that time.
-</p>
-<p>The third element is the window selected at the time the parameter was
-created.  The function <code>quit-restore-window</code> tries to reselect that
-window when it deletes the window passed to it as argument.
-</p>
-<p>The fourth element is the buffer whose display caused the creation of
-this parameter.  <code>quit-restore-window</code> deletes the specified window
-only if it still shows that buffer.
-</p>
-</dd>
-<dt><code>min-margins</code></dt>
-<dd><p>The value of this parameter is a cons cell whose <small>CAR</small> and <small>CDR</small>,
-if non-<code>nil</code>, specify the minimum values (in columns) for the left
-and right margin of this window.  When present, Emacs will use these
-values instead of the actual margin widths for determining whether a
-window can be split or shrunk horizontally.
-</p>
-<p>Emacs never auto-adjusts the margins of any window after splitting or
-resizing it.  It is the sole responsibility of any application setting
-this parameter to adjust the margins of this window as well as those of
-any new window that inherits this window&rsquo;s margins due to a split.
-Both <code>window-configuration-change-hook</code> and
-<code>window-size-change-functions</code> (see <a href="Window-Hooks.html#Window-Hooks">Window Hooks</a>) should be
-employed for this purpose.
-</p>
-<p>This parameter was introduced in Emacs version 25.1 to support
-applications that use large margins to center buffer text within a
-window and should be used, with due care, exclusively by those
-applications.  It might be replaced by an improved solution in future
-versions of Emacs.
-</p></dd>
-</dl>
+  <dl>
+    <dt><a name="index-set_002dwindow_002dparameter" id=
+    "index-set_002dwindow_002dparameter"></a>Function:
+    <strong>set-window-parameter</strong> <em>window parameter
+    value</em></dt>
 
-<p>There are additional parameters <code>window-atom</code> and <code>window-side</code>;
-these are reserved and should not be used by applications.
-</p>
+    <dd>
+      <p>This function sets <var>window</var>&rsquo;s value of
+      <var>parameter</var> to <var>value</var> and returns
+      <var>value</var>. The default for <var>window</var> is the
+      selected window.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Window-Hooks.html#Window-Hooks" accesskey="n" rel="next">Window Hooks</a>, Previous: <a href="Window-Configurations.html#Window-Configurations" accesskey="p" rel="prev">Window Configurations</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>By default, the functions that save and restore window
+  configurations or the states of windows (see <a href=
+  "Window-Configurations.html#Window-Configurations">Window
+  Configurations</a>) do not care about window parameters. This
+  means that when you change the value of a parameter within the
+  body of a <code>save-window-excursion</code>, the previous value
+  is not restored when that macro exits. It also means that when
+  you restore via <code>window-state-put</code> a window state
+  saved earlier by <code>window-state-get</code>, all cloned
+  windows have their parameters reset to <code>nil</code>. The
+  following variable allows you to override the standard
+  behavior:</p>
 
+  <dl>
+    <dt><a name="index-window_002dpersistent_002dparameters" id=
+    "index-window_002dpersistent_002dparameters"></a>Variable:
+    <strong>window-persistent-parameters</strong></dt>
 
+    <dd>
+      <p>This variable is an alist specifying which parameters get
+      saved by <code>current-window-configuration</code> and
+      <code>window-state-get</code>, and subsequently restored by
+      <code>set-window-configuration</code> and
+      <code>window-state-put</code>. See <a href=
+      "Window-Configurations.html#Window-Configurations">Window
+      Configurations</a>.</p>
 
+      <p>The <small>CAR</small> of each entry of this alist is a
+      symbol specifying the parameter. The <small>CDR</small>
+      should be one of the following:</p>
+
+      <dl compact="compact">
+        <dt><code>nil</code></dt>
+
+        <dd>
+          <p>This value means the parameter is saved neither by
+          <code>window-state-get</code> nor by
+          <code>current-window-configuration</code>.</p>
+        </dd>
+
+        <dt><code>t</code></dt>
+
+        <dd>
+          <p>This value specifies that the parameter is saved by
+          <code>current-window-configuration</code> and (provided
+          its <var>writable</var> argument is <code>nil</code>) by
+          <code>window-state-get</code>.</p>
+        </dd>
+
+        <dt><code>writable</code></dt>
+
+        <dd>
+          <p>This means that the parameter is saved unconditionally
+          by both <code>current-window-configuration</code> and
+          <code>window-state-get</code>. This value should not be
+          used for parameters whose values do not have a read
+          syntax. Otherwise, invoking <code>window-state-put</code>
+          in another session may fail with an
+          <code>invalid-read-syntax</code> error.</p>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
+
+  <p>Some functions (notably <code>delete-window</code>,
+  <code>delete-other-windows</code> and <code>split-window</code>),
+  may behave specially when their <var>window</var> argument has a
+  parameter set. You can override such special behavior by binding
+  the following variable to a non-<code>nil</code> value:</p>
+
+  <dl>
+    <dt><a name="index-ignore_002dwindow_002dparameters" id=
+    "index-ignore_002dwindow_002dparameters"></a>Variable:
+    <strong>ignore-window-parameters</strong></dt>
+
+    <dd>
+      <p>If this variable is non-<code>nil</code>, some standard
+      functions do not process window parameters. The functions
+      currently affected by this are <code>split-window</code>,
+      <code>delete-window</code>,
+      <code>delete-other-windows</code>, and
+      <code>other-window</code>.</p>
+
+      <p>An application can bind this variable to a
+      non-<code>nil</code> value around calls to these functions.
+      If it does so, the application is fully responsible for
+      correctly assigning the parameters of all involved windows
+      when exiting that function.</p>
+    </dd>
+  </dl>
+
+  <p>The following parameters are currently used by the window
+  management code:</p>
+
+  <dl compact="compact">
+    <dt><code>delete-window</code></dt>
+
+    <dd>
+      <p>This parameter affects the execution of
+      <code>delete-window</code> (see <a href=
+      "Deleting-Windows.html#Deleting-Windows">Deleting
+      Windows</a>).</p>
+    </dd>
+
+    <dt><code>delete-other-windows</code></dt>
+
+    <dd>
+      <p>This parameter affects the execution of
+      <code>delete-other-windows</code> (see <a href=
+      "Deleting-Windows.html#Deleting-Windows">Deleting
+      Windows</a>).</p>
+    </dd>
+
+    <dt><code>split-window</code></dt>
+
+    <dd>
+      <p>This parameter affects the execution of
+      <code>split-window</code> (see <a href=
+      "Splitting-Windows.html#Splitting-Windows">Splitting
+      Windows</a>).</p>
+    </dd>
+
+    <dt><code>other-window</code></dt>
+
+    <dd>
+      <p>This parameter affects the execution of
+      <code>other-window</code> (see <a href=
+      "Cyclic-Window-Ordering.html#Cyclic-Window-Ordering">Cyclic
+      Window Ordering</a>).</p>
+    </dd>
+
+    <dt><code>no-other-window</code></dt>
+
+    <dd>
+      <p>This parameter marks the window as not selectable by
+      <code>other-window</code> (see <a href=
+      "Cyclic-Window-Ordering.html#Cyclic-Window-Ordering">Cyclic
+      Window Ordering</a>).</p>
+    </dd>
+
+    <dt><code>clone-of</code></dt>
+
+    <dd>
+      <p>This parameter specifies the window that this one has been
+      cloned from. It is installed by <code>window-state-get</code>
+      (see <a href=
+      "Window-Configurations.html#Window-Configurations">Window
+      Configurations</a>).</p>
+    </dd>
+
+    <dt><code>preserved-size</code></dt>
+
+    <dd>
+      <p>This parameter specifies a buffer, a direction where
+      <code>nil</code> means vertical and <code>t</code>
+      horizontal, and a size in pixels. If this window displays the
+      specified buffer and its size in the indicated direction
+      equals the size specified by this parameter, then Emacs will
+      try to preserve the size of this window in the indicated
+      direction. This parameter is installed and updated by the
+      function <code>window-preserve-size</code> (see <a href=
+      "Preserving-Window-Sizes.html#Preserving-Window-Sizes">Preserving
+      Window Sizes</a>).</p>
+    </dd>
+
+    <dt><code>quit-restore</code></dt>
+
+    <dd>
+      <p>This parameter is installed by the buffer display
+      functions (see <a href=
+      "Choosing-Window.html#Choosing-Window">Choosing Window</a>)
+      and consulted by <code>quit-restore-window</code> (see
+      <a href="Quitting-Windows.html#Quitting-Windows">Quitting
+      Windows</a>). It contains four elements:</p>
+
+      <p>The first element is one of the symbols
+      <code>window</code>, meaning that the window has been
+      specially created by <code>display-buffer</code>;
+      <code>frame</code>, a separate frame has been created;
+      <code>same</code>, the window has displayed the same buffer
+      before; or <code>other</code>, the window showed another
+      buffer before.</p>
+
+      <p>The second element is either one of the symbols
+      <code>window</code> or <code>frame</code>, or a list whose
+      elements are the buffer shown in the window before, that
+      buffer&rsquo;s window start and window point positions, and
+      the window&rsquo;s height at that time.</p>
+
+      <p>The third element is the window selected at the time the
+      parameter was created. The function
+      <code>quit-restore-window</code> tries to reselect that
+      window when it deletes the window passed to it as
+      argument.</p>
+
+      <p>The fourth element is the buffer whose display caused the
+      creation of this parameter. <code>quit-restore-window</code>
+      deletes the specified window only if it still shows that
+      buffer.</p>
+    </dd>
+
+    <dt><code>min-margins</code></dt>
+
+    <dd>
+      <p>The value of this parameter is a cons cell whose
+      <small>CAR</small> and <small>CDR</small>, if
+      non-<code>nil</code>, specify the minimum values (in columns)
+      for the left and right margin of this window. When present,
+      Emacs will use these values instead of the actual margin
+      widths for determining whether a window can be split or
+      shrunk horizontally.</p>
+
+      <p>Emacs never auto-adjusts the margins of any window after
+      splitting or resizing it. It is the sole responsibility of
+      any application setting this parameter to adjust the margins
+      of this window as well as those of any new window that
+      inherits this window&rsquo;s margins due to a split. Both
+      <code>window-configuration-change-hook</code> and
+      <code>window-size-change-functions</code> (see <a href=
+      "Window-Hooks.html#Window-Hooks">Window Hooks</a>) should be
+      employed for this purpose.</p>
+
+      <p>This parameter was introduced in Emacs version 25.1 to
+      support applications that use large margins to center buffer
+      text within a window and should be used, with due care,
+      exclusively by those applications. It might be replaced by an
+      improved solution in future versions of Emacs.</p>
+    </dd>
+  </dl>
+
+  <p>There are additional parameters <code>window-atom</code> and
+  <code>window-side</code>; these are reserved and should not be
+  used by applications.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Window-Hooks.html#Window-Hooks" accesskey="n"
+    rel="next">Window Hooks</a>, Previous: <a href=
+    "Window-Configurations.html#Window-Configurations" accesskey=
+    "p" rel="prev">Window Configurations</a>, Up: <a href=
+    "Windows.html#Windows" accesskey="u" rel="up">Windows</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

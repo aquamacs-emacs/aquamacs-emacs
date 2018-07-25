@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,125 +19,233 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: File Names</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: File Names">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: File Names">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Files.html#Files" rel="up" title="Files">
-<link href="File-Name-Components.html#File-Name-Components" rel="next" title="File Name Components">
-<link href="Changing-Files.html#Changing-Files" rel="prev" title="Changing Files">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: File Names</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: File Names" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: File Names" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Files.html#Files" rel="up" title="Files" />
+  <link href="File-Name-Components.html#File-Name-Components" rel=
+  "next" title="File Name Components" />
+  <link href="Changing-Files.html#Changing-Files" rel="prev" title=
+  "Changing Files" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="File-Names" id="File-Names"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Contents-of-Directories.html#Contents-of-Directories"
+    accesskey="n" rel="next">Contents of Directories</a>, Previous:
+    <a href="Changing-Files.html#Changing-Files" accesskey="p" rel=
+    "prev">Changing Files</a>, Up: <a href="Files.html#Files"
+    accesskey="u" rel="up">Files</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="File-Names-1" id="File-Names-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="File-Names"></a>
-<div class="header">
-<p>
-Next: <a href="Contents-of-Directories.html#Contents-of-Directories" accesskey="n" rel="next">Contents of Directories</a>, Previous: <a href="Changing-Files.html#Changing-Files" accesskey="p" rel="prev">Changing Files</a>, Up: <a href="Files.html#Files" accesskey="u" rel="up">Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="File-Names-1"></a>
-<h3 class="section">24.8 File Names</h3>
-<a name="index-file-names"></a>
+  <h3 class="section">24.8 File Names</h3><a name=
+  "index-file-names" id="index-file-names"></a>
 
-<p>Files are generally referred to by their names, in Emacs as elsewhere.
-File names in Emacs are represented as strings.  The functions that
-operate on a file all expect a file name argument.
-</p>
-<p>In addition to operating on files themselves, Emacs Lisp programs
-often need to operate on file names; i.e., to take them apart and to use
-part of a name to construct related file names.  This section describes
-how to manipulate file names.
-</p>
-<p>The functions in this section do not actually access files, so they
-can operate on file names that do not refer to an existing file or
-directory.
-</p>
-<a name="index-cygwin_002dconvert_002dfile_002dname_002dfrom_002dwindows"></a>
-<a name="index-cygwin_002dconvert_002dfile_002dname_002dto_002dwindows"></a>
-<a name="index-MS_002dWindows-file_002dname-syntax"></a>
-<a name="index-converting-file-names-from_002fto-MS_002dWindows-syntax"></a>
-<p>On MS-DOS and MS-Windows, these functions (like the function that
-actually operate on files) accept MS-DOS or MS-Windows file-name syntax,
-where backslashes separate the components, as well as Unix syntax; but
-they always return Unix syntax.  This enables Lisp programs to specify
-file names in Unix syntax and work properly on all systems without
-change.<a name="DOCF13" href="#FOOT13"><sup>13</sup></a>
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="File-Name-Components.html#File-Name-Components" accesskey="1">File Name Components</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The directory part of a file name, and the rest.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Relative-File-Names.html#Relative-File-Names" accesskey="2">Relative File Names</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Some file names are relative to a current directory.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Directory-Names.html#Directory-Names" accesskey="3">Directory Names</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A directory&rsquo;s name as a directory
-                            is different from its name as a file.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="File-Name-Expansion.html#File-Name-Expansion" accesskey="4">File Name Expansion</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Converting relative file names to absolute ones.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Unique-File-Names.html#Unique-File-Names" accesskey="5">Unique File Names</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Generating names for temporary files.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="File-Name-Completion.html#File-Name-Completion" accesskey="6">File Name Completion</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Finding the completions for a given file name.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Standard-File-Names.html#Standard-File-Names" accesskey="7">Standard File Names</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">If your package uses a fixed file name,
-                            how to handle various operating systems simply.
-</td></tr>
-</table>
+  <p>Files are generally referred to by their names, in Emacs as
+  elsewhere. File names in Emacs are represented as strings. The
+  functions that operate on a file all expect a file name
+  argument.</p>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <p>In addition to operating on files themselves, Emacs Lisp
+  programs often need to operate on file names; i.e., to take them
+  apart and to use part of a name to construct related file names.
+  This section describes how to manipulate file names.</p>
 
-<h3><a name="FOOT13" href="#DOCF13">(13)</a></h3>
-<p>In MS-Windows versions of Emacs compiled for the Cygwin
-environment, you can use the functions
-<code>cygwin-convert-file-name-to-windows</code> and
-<code>cygwin-convert-file-name-from-windows</code> to convert between the
-two file-name syntaxes.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Contents-of-Directories.html#Contents-of-Directories" accesskey="n" rel="next">Contents of Directories</a>, Previous: <a href="Changing-Files.html#Changing-Files" accesskey="p" rel="prev">Changing Files</a>, Up: <a href="Files.html#Files" accesskey="u" rel="up">Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>The functions in this section do not actually access files, so
+  they can operate on file names that do not refer to an existing
+  file or directory.</p><a name=
+  "index-cygwin_002dconvert_002dfile_002dname_002dfrom_002dwindows"
+  id=
+  "index-cygwin_002dconvert_002dfile_002dname_002dfrom_002dwindows"></a>
+  <a name=
+  "index-cygwin_002dconvert_002dfile_002dname_002dto_002dwindows"
+  id=
+  "index-cygwin_002dconvert_002dfile_002dname_002dto_002dwindows"></a>
+  <a name="index-MS_002dWindows-file_002dname-syntax" id=
+  "index-MS_002dWindows-file_002dname-syntax"></a> <a name=
+  "index-converting-file-names-from_002fto-MS_002dWindows-syntax"
+  id=
+  "index-converting-file-names-from_002fto-MS_002dWindows-syntax"></a>
 
+  <p>On MS-DOS and MS-Windows, these functions (like the function
+  that actually operate on files) accept MS-DOS or MS-Windows
+  file-name syntax, where backslashes separate the components, as
+  well as Unix syntax; but they always return Unix syntax. This
+  enables Lisp programs to specify file names in Unix syntax and
+  work properly on all systems without change.<a name="DOCF13"
+  href="#FOOT13" id="DOCF13"><sup>13</sup></a></p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "File-Name-Components.html#File-Name-Components" accesskey=
+      "1">File Name Components</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">The directory part of a file
+      name, and the rest.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Relative-File-Names.html#Relative-File-Names" accesskey=
+      "2">Relative File Names</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Some file names are relative to
+      a current directory.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Directory-Names.html#Directory-Names" accesskey=
+      "3">Directory Names</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">A directory&rsquo;s name as a
+      directory is different from its name as a file.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "File-Name-Expansion.html#File-Name-Expansion" accesskey=
+      "4">File Name Expansion</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Converting relative file names
+      to absolute ones.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Unique-File-Names.html#Unique-File-Names" accesskey=
+      "5">Unique File Names</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Generating names for temporary
+      files.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "File-Name-Completion.html#File-Name-Completion" accesskey=
+      "6">File Name Completion</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Finding the completions for a
+      given file name.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Standard-File-Names.html#Standard-File-Names" accesskey=
+      "7">Standard File Names</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">If your package uses a fixed
+      file name, how to handle various operating systems
+      simply.</td>
+    </tr>
+  </table>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT13" href="#DOCF13" id="FOOT13">(13)</a></h3>
+
+    <p>In MS-Windows versions of Emacs compiled for the Cygwin
+    environment, you can use the functions
+    <code>cygwin-convert-file-name-to-windows</code> and
+    <code>cygwin-convert-file-name-from-windows</code> to convert
+    between the two file-name syntaxes.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Contents-of-Directories.html#Contents-of-Directories"
+    accesskey="n" rel="next">Contents of Directories</a>, Previous:
+    <a href="Changing-Files.html#Changing-Files" accesskey="p" rel=
+    "prev">Changing Files</a>, Up: <a href="Files.html#Files"
+    accesskey="u" rel="up">Files</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

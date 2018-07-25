@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents EIEIO, an object framework for Emacs Lisp.
 
 Copyright (C) 2007-2016 Free Software Foundation, Inc.
@@ -14,137 +16,200 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Enhanced Implementation of Emacs Interpreted Objects: CLOS compatibility</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Enhanced Implementation of Emacs Interpreted Objects: CLOS compatibility">
-<meta name="keywords" content="Enhanced Implementation of Emacs Interpreted Objects: CLOS compatibility">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="Function-Index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Wish-List.html#Wish-List" rel="next" title="Wish List">
-<link href="Naming-Conventions.html#Naming-Conventions" rel="prev" title="Naming Conventions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Enhanced Implementation of Emacs Interpreted Objects: CLOS
+  compatibility</title>
+  <meta name="description" content=
+  "Enhanced Implementation of Emacs Interpreted Objects: CLOS compatibility" />
+  <meta name="keywords" content=
+  "Enhanced Implementation of Emacs Interpreted Objects: CLOS compatibility" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="Function-Index.html#SEC_Contents" rel="contents"
+  title="Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Wish-List.html#Wish-List" rel="next" title=
+  "Wish List" />
+  <link href="Naming-Conventions.html#Naming-Conventions" rel=
+  "prev" title="Naming Conventions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="CLOS-compatibility"></a>
-<div class="header">
-<p>
-Next: <a href="Wish-List.html#Wish-List" accesskey="n" rel="next">Wish List</a>, Previous: <a href="Naming-Conventions.html#Naming-Conventions" accesskey="p" rel="prev">Naming Conventions</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Function-Index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="CLOS-compatibility-1"></a>
-<h2 class="chapter">18 CLOS compatibility</h2>
+<body lang="en" xml:lang="en">
+  <a name="CLOS-compatibility" id="CLOS-compatibility"></a>
 
-<p>Currently, the following functions should behave almost as expected from
-CLOS.
-</p>
-<dl compact="compact">
-<dt><code>defclass</code></dt>
-<dd><p>All slot keywords are available but not all work correctly.
-Slot keyword differences are:
-</p>
-<dl compact="compact">
-<dt>:reader, and :writer tags</dt>
-<dd><p>Create methods that signal errors instead of creating an unqualified
-method.  You can still create new ones to do its business.
-</p>
-</dd>
-<dt>:accessor</dt>
-<dd><p>This should create an unqualified method to access a slot, but
-instead pre-builds a method that gets the slot&rsquo;s value.
-</p>
-</dd>
-<dt>:type</dt>
-<dd><p>Specifier uses the <code>typep</code> function from the <samp>cl</samp>
-package.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/cl/Type-Predicates.html#Type-Predicates">Type Predicates</a> in <cite>Common Lisp Extensions</cite>.
-It therefore has the same issues as that package.  Extensions include
-the ability to provide object names.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Wish-List.html#Wish-List" accesskey="n" rel=
+    "next">Wish List</a>, Previous: <a href=
+    "Naming-Conventions.html#Naming-Conventions" accesskey="p" rel=
+    "prev">Naming Conventions</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "Function-Index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="CLOS-compatibility-1" id="CLOS-compatibility-1"></a>
 
-<p>defclass also supports class options, but does not currently use values
-of <code>:metaclass</code>, and <code>:default-initargs</code>.
-</p>
-</dd>
-<dt><code>make-instance</code></dt>
-<dd><p>Make instance works as expected, however it just uses the <i>EIEIO</i> instance
-creator automatically generated when a new class is created.
-See <a href="Making-New-Objects.html#Making-New-Objects">Making New Objects</a>.
-</p>
-</dd>
-<dt><code>defgeneric</code></dt>
-<dd><p>Creates the desired symbol, and accepts all of the expected arguments
-except <code>:around</code>.
-</p>
-</dd>
-<dt><code>defmethod</code></dt>
-<dd><p>Calls defgeneric, and accepts most of the expected arguments.  Only
-the first argument to the created method may have a type specifier.
-To type cast against a class, the class must exist before defmethod is
-called.  In addition, the <code>:around</code> tag is not supported.
-</p>
-</dd>
-<dt><code>call-next-method</code></dt>
-<dd><p>Inside a method, calls the next available method up the inheritance tree
-for the given object.  This is different than that found in CLOS because
-in <i>EIEIO</i> this function accepts replacement arguments.  This permits
-subclasses to modify arguments as they are passed up the tree.  If no
-arguments are given, the expected CLOS behavior is used.
-</p></dd>
-</dl>
+  <h2 class="chapter">18 CLOS compatibility</h2>
 
-<p>CLOS supports the <code>describe</code> command, but <i>EIEIO</i> provides
-support for using the standard <code>describe-function</code> command on a
-constructor or generic function.
-</p>
-<p>When creating a new class (see <a href="Building-Classes.html#Building-Classes">Building Classes</a>) there are several
-new keywords supported by <i>EIEIO</i>.
-</p>
-<p>In <i>EIEIO</i> tags are in lower case, not mixed case.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Wish-List.html#Wish-List" accesskey="n" rel="next">Wish List</a>, Previous: <a href="Naming-Conventions.html#Naming-Conventions" accesskey="p" rel="prev">Naming Conventions</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Function-Index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Currently, the following functions should behave almost as
+  expected from CLOS.</p>
 
+  <dl compact="compact">
+    <dt><code>defclass</code></dt>
 
+    <dd>
+      <p>All slot keywords are available but not all work
+      correctly. Slot keyword differences are:</p>
 
+      <dl compact="compact">
+        <dt>:reader, and :writer tags</dt>
+
+        <dd>
+          <p>Create methods that signal errors instead of creating
+          an unqualified method. You can still create new ones to
+          do its business.</p>
+        </dd>
+
+        <dt>:accessor</dt>
+
+        <dd>
+          <p>This should create an unqualified method to access a
+          slot, but instead pre-builds a method that gets the
+          slot&rsquo;s value.</p>
+        </dd>
+
+        <dt>:type</dt>
+
+        <dd>
+          <p>Specifier uses the <code>typep</code> function from
+          the <samp>cl</samp> package. See <a href=
+          "http://www.gnu.org/software/emacs/manual/html_node/cl/Type-Predicates.html#Type-Predicates">
+          Type Predicates</a> in <cite>Common Lisp
+          Extensions</cite>. It therefore has the same issues as
+          that package. Extensions include the ability to provide
+          object names.</p>
+        </dd>
+      </dl>
+
+      <p>defclass also supports class options, but does not
+      currently use values of <code>:metaclass</code>, and
+      <code>:default-initargs</code>.</p>
+    </dd>
+
+    <dt><code>make-instance</code></dt>
+
+    <dd>
+      <p>Make instance works as expected, however it just uses the
+      <i>EIEIO</i> instance creator automatically generated when a
+      new class is created. See <a href=
+      "Making-New-Objects.html#Making-New-Objects">Making New
+      Objects</a>.</p>
+    </dd>
+
+    <dt><code>defgeneric</code></dt>
+
+    <dd>
+      <p>Creates the desired symbol, and accepts all of the
+      expected arguments except <code>:around</code>.</p>
+    </dd>
+
+    <dt><code>defmethod</code></dt>
+
+    <dd>
+      <p>Calls defgeneric, and accepts most of the expected
+      arguments. Only the first argument to the created method may
+      have a type specifier. To type cast against a class, the
+      class must exist before defmethod is called. In addition, the
+      <code>:around</code> tag is not supported.</p>
+    </dd>
+
+    <dt><code>call-next-method</code></dt>
+
+    <dd>
+      <p>Inside a method, calls the next available method up the
+      inheritance tree for the given object. This is different than
+      that found in CLOS because in <i>EIEIO</i> this function
+      accepts replacement arguments. This permits subclasses to
+      modify arguments as they are passed up the tree. If no
+      arguments are given, the expected CLOS behavior is used.</p>
+    </dd>
+  </dl>
+
+  <p>CLOS supports the <code>describe</code> command, but
+  <i>EIEIO</i> provides support for using the standard
+  <code>describe-function</code> command on a constructor or
+  generic function.</p>
+
+  <p>When creating a new class (see <a href=
+  "Building-Classes.html#Building-Classes">Building Classes</a>)
+  there are several new keywords supported by <i>EIEIO</i>.</p>
+
+  <p>In <i>EIEIO</i> tags are in lower case, not mixed case.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Wish-List.html#Wish-List" accesskey="n" rel=
+    "next">Wish List</a>, Previous: <a href=
+    "Naming-Conventions.html#Naming-Conventions" accesskey="p" rel=
+    "prev">Naming Conventions</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "Function-Index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

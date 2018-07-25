@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,122 +19,191 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Memory Usage</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Memory Usage">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Memory Usage">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="GNU-Emacs-Internals.html#GNU-Emacs-Internals" rel="up" title="GNU Emacs Internals">
-<link href="C-Dialect.html#C-Dialect" rel="next" title="C Dialect">
-<link href="Stack_002dallocated-Objects.html#Stack_002dallocated-Objects" rel="prev" title="Stack-allocated Objects">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Memory Usage</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Memory Usage" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Memory Usage" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="GNU-Emacs-Internals.html#GNU-Emacs-Internals" rel=
+  "up" title="GNU Emacs Internals" />
+  <link href="C-Dialect.html#C-Dialect" rel="next" title=
+  "C Dialect" />
+  <link href=
+  "Stack_002dallocated-Objects.html#Stack_002dallocated-Objects"
+  rel="prev" title="Stack-allocated Objects" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Memory-Usage" id="Memory-Usage"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="C-Dialect.html#C-Dialect" accesskey="n" rel=
+    "next">C Dialect</a>, Previous: <a href=
+    "Stack_002dallocated-Objects.html#Stack_002dallocated-Objects"
+    accesskey="p" rel="prev">Stack-allocated Objects</a>, Up:
+    <a href="GNU-Emacs-Internals.html#GNU-Emacs-Internals"
+    accesskey="u" rel="up">GNU Emacs Internals</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Memory-Usage-1" id="Memory-Usage-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Memory-Usage"></a>
-<div class="header">
-<p>
-Next: <a href="C-Dialect.html#C-Dialect" accesskey="n" rel="next">C Dialect</a>, Previous: <a href="Stack_002dallocated-Objects.html#Stack_002dallocated-Objects" accesskey="p" rel="prev">Stack-allocated Objects</a>, Up: <a href="GNU-Emacs-Internals.html#GNU-Emacs-Internals" accesskey="u" rel="up">GNU Emacs Internals</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Memory-Usage-1"></a>
-<h3 class="section">E.5 Memory Usage</h3>
-<a name="index-memory-usage-1"></a>
+  <h3 class="section">E.5 Memory Usage</h3><a name=
+  "index-memory-usage-1" id="index-memory-usage-1"></a>
 
-<p>These functions and variables give information about the total amount
-of memory allocation that Emacs has done, broken down by data type.
-Note the difference between these and the values returned by
-<code>garbage-collect</code>; those count objects that currently exist, but
-these count the number or size of all allocations, including those for
-objects that have since been freed.
-</p>
-<dl>
-<dt><a name="index-cons_002dcells_002dconsed"></a>Variable: <strong>cons-cells-consed</strong></dt>
-<dd><p>The total number of cons cells that have been allocated so far
-in this Emacs session.
-</p></dd></dl>
+  <p>These functions and variables give information about the total
+  amount of memory allocation that Emacs has done, broken down by
+  data type. Note the difference between these and the values
+  returned by <code>garbage-collect</code>; those count objects
+  that currently exist, but these count the number or size of all
+  allocations, including those for objects that have since been
+  freed.</p>
 
-<dl>
-<dt><a name="index-floats_002dconsed"></a>Variable: <strong>floats-consed</strong></dt>
-<dd><p>The total number of floats that have been allocated so far
-in this Emacs session.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-cons_002dcells_002dconsed" id=
+    "index-cons_002dcells_002dconsed"></a>Variable:
+    <strong>cons-cells-consed</strong></dt>
 
-<dl>
-<dt><a name="index-vector_002dcells_002dconsed"></a>Variable: <strong>vector-cells-consed</strong></dt>
-<dd><p>The total number of vector cells that have been allocated so far
-in this Emacs session.
-</p></dd></dl>
+    <dd>
+      <p>The total number of cons cells that have been allocated so
+      far in this Emacs session.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-symbols_002dconsed"></a>Variable: <strong>symbols-consed</strong></dt>
-<dd><p>The total number of symbols that have been allocated so far
-in this Emacs session.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-floats_002dconsed" id=
+    "index-floats_002dconsed"></a>Variable:
+    <strong>floats-consed</strong></dt>
 
-<dl>
-<dt><a name="index-string_002dchars_002dconsed"></a>Variable: <strong>string-chars-consed</strong></dt>
-<dd><p>The total number of string characters that have been allocated so far
-in this session.
-</p></dd></dl>
+    <dd>
+      <p>The total number of floats that have been allocated so far
+      in this Emacs session.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-misc_002dobjects_002dconsed"></a>Variable: <strong>misc-objects-consed</strong></dt>
-<dd><p>The total number of miscellaneous objects that have been allocated so
-far in this session.  These include markers and overlays, plus
-certain objects not visible to users.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-vector_002dcells_002dconsed" id=
+    "index-vector_002dcells_002dconsed"></a>Variable:
+    <strong>vector-cells-consed</strong></dt>
 
-<dl>
-<dt><a name="index-intervals_002dconsed"></a>Variable: <strong>intervals-consed</strong></dt>
-<dd><p>The total number of intervals that have been allocated so far
-in this Emacs session.
-</p></dd></dl>
+    <dd>
+      <p>The total number of vector cells that have been allocated
+      so far in this Emacs session.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-strings_002dconsed"></a>Variable: <strong>strings-consed</strong></dt>
-<dd><p>The total number of strings that have been allocated so far in this
-Emacs session.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-symbols_002dconsed" id=
+    "index-symbols_002dconsed"></a>Variable:
+    <strong>symbols-consed</strong></dt>
 
+    <dd>
+      <p>The total number of symbols that have been allocated so
+      far in this Emacs session.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-string_002dchars_002dconsed" id=
+    "index-string_002dchars_002dconsed"></a>Variable:
+    <strong>string-chars-consed</strong></dt>
 
+    <dd>
+      <p>The total number of string characters that have been
+      allocated so far in this session.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-misc_002dobjects_002dconsed" id=
+    "index-misc_002dobjects_002dconsed"></a>Variable:
+    <strong>misc-objects-consed</strong></dt>
+
+    <dd>
+      <p>The total number of miscellaneous objects that have been
+      allocated so far in this session. These include markers and
+      overlays, plus certain objects not visible to users.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-intervals_002dconsed" id=
+    "index-intervals_002dconsed"></a>Variable:
+    <strong>intervals-consed</strong></dt>
+
+    <dd>
+      <p>The total number of intervals that have been allocated so
+      far in this Emacs session.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-strings_002dconsed" id=
+    "index-strings_002dconsed"></a>Variable:
+    <strong>strings-consed</strong></dt>
+
+    <dd>
+      <p>The total number of strings that have been allocated so
+      far in this Emacs session.</p>
+    </dd>
+  </dl>
 </body>
 </html>

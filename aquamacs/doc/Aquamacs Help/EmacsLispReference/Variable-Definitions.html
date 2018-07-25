@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,325 +19,480 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Variable Definitions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Variable Definitions">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Variable Definitions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Customization.html#Customization" rel="up" title="Customization">
-<link href="Customization-Types.html#Customization-Types" rel="next" title="Customization Types">
-<link href="Group-Definitions.html#Group-Definitions" rel="prev" title="Group Definitions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Variable
+  Definitions</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Variable Definitions" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Variable Definitions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Customization.html#Customization" rel="up" title=
+  "Customization" />
+  <link href="Customization-Types.html#Customization-Types" rel=
+  "next" title="Customization Types" />
+  <link href="Group-Definitions.html#Group-Definitions" rel="prev"
+  title="Group Definitions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Variable-Definitions" id="Variable-Definitions"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Customization-Types.html#Customization-Types"
+    accesskey="n" rel="next">Customization Types</a>, Previous:
+    <a href="Group-Definitions.html#Group-Definitions" accesskey=
+    "p" rel="prev">Group Definitions</a>, Up: <a href=
+    "Customization.html#Customization" accesskey="u" rel=
+    "up">Customization</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Defining-Customization-Variables" id=
+  "Defining-Customization-Variables"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Variable-Definitions"></a>
-<div class="header">
-<p>
-Next: <a href="Customization-Types.html#Customization-Types" accesskey="n" rel="next">Customization Types</a>, Previous: <a href="Group-Definitions.html#Group-Definitions" accesskey="p" rel="prev">Group Definitions</a>, Up: <a href="Customization.html#Customization" accesskey="u" rel="up">Customization</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Defining-Customization-Variables"></a>
-<h3 class="section">14.3 Defining Customization Variables</h3>
-<a name="index-define-customization-options"></a>
-<a name="index-customizable-variables_002c-how-to-define"></a>
-<a name="index-user-options_002c-how-to-define"></a>
+  <h3 class="section">14.3 Defining Customization
+  Variables</h3><a name="index-define-customization-options" id=
+  "index-define-customization-options"></a> <a name=
+  "index-customizable-variables_002c-how-to-define" id=
+  "index-customizable-variables_002c-how-to-define"></a> <a name=
+  "index-user-options_002c-how-to-define" id=
+  "index-user-options_002c-how-to-define"></a>
 
-<p><em>Customizable variables</em>, also called <em>user options</em>, are
-global Lisp variables whose values can be set through the Customize
-interface.  Unlike other global variables, which are defined with
-<code>defvar</code> (see <a href="Defining-Variables.html#Defining-Variables">Defining Variables</a>), customizable variables are
-defined using the <code>defcustom</code> macro.  In addition to calling
-<code>defvar</code> as a subroutine, <code>defcustom</code> states how the
-variable should be displayed in the Customize interface, the values it
-is allowed to take, etc.
-</p>
-<dl>
-<dt><a name="index-defcustom"></a>Macro: <strong>defcustom</strong> <em>option standard doc [keyword value]&hellip;</em></dt>
-<dd><p>This macro declares <var>option</var> as a user option (i.e., a
-customizable variable).  You should not quote <var>option</var>.
-</p>
-<p>The argument <var>standard</var> is an expression that specifies the
-standard value for <var>option</var>.  Evaluating the <code>defcustom</code> form
-evaluates <var>standard</var>, but does not necessarily bind the option to
-that value.  If <var>option</var> already has a default value, it is left
-unchanged.  If the user has already saved a customization for
-<var>option</var>, the user&rsquo;s customized value is installed as the default
-value.  Otherwise, the result of evaluating <var>standard</var> is
-installed as the default value.
-</p>
-<p>Like <code>defvar</code>, this macro marks <code>option</code> as a special
-variable, meaning that it should always be dynamically bound.  If
-<var>option</var> is already lexically bound, that lexical binding remains
-in effect until the binding construct exits.  See <a href="Variable-Scoping.html#Variable-Scoping">Variable Scoping</a>.
-</p>
-<p>The expression <var>standard</var> can be evaluated at various other times,
-too&mdash;whenever the customization facility needs to know <var>option</var>&rsquo;s
-standard value.  So be sure to use an expression which is harmless to
-evaluate at any time.
-</p>
-<p>The argument <var>doc</var> specifies the documentation string for the
-variable.
-</p>
-<p>If a <code>defcustom</code> does not specify any <code>:group</code>, the last group
-defined with <code>defgroup</code> in the same file will be used.  This way, most
-<code>defcustom</code> do not need an explicit <code>:group</code>.
-</p>
-<p>When you evaluate a <code>defcustom</code> form with <kbd>C-M-x</kbd> in Emacs Lisp
-mode (<code>eval-defun</code>), a special feature of <code>eval-defun</code>
-arranges to set the variable unconditionally, without testing whether
-its value is void.  (The same feature applies to <code>defvar</code>,
-see <a href="Defining-Variables.html#Defining-Variables">Defining Variables</a>.)  Using <code>eval-defun</code> on a defcustom
-that is already defined calls the <code>:set</code> function (see below),
-if there is one.
-</p>
-<p>If you put a <code>defcustom</code> in a pre-loaded Emacs Lisp file
-(see <a href="Building-Emacs.html#Building-Emacs">Building Emacs</a>), the standard value installed at dump time
-might be incorrect, e.g., because another variable that it depends on
-has not been assigned the right value yet.  In that case, use
-<code>custom-reevaluate-setting</code>, described below, to re-evaluate the
-standard value after Emacs starts up.
-</p></dd></dl>
+  <p><em>Customizable variables</em>, also called <em>user
+  options</em>, are global Lisp variables whose values can be set
+  through the Customize interface. Unlike other global variables,
+  which are defined with <code>defvar</code> (see <a href=
+  "Defining-Variables.html#Defining-Variables">Defining
+  Variables</a>), customizable variables are defined using the
+  <code>defcustom</code> macro. In addition to calling
+  <code>defvar</code> as a subroutine, <code>defcustom</code>
+  states how the variable should be displayed in the Customize
+  interface, the values it is allowed to take, etc.</p>
 
-<p>In addition to the keywords listed in <a href="Common-Keywords.html#Common-Keywords">Common Keywords</a>, this
-macro accepts the following keywords:
-</p>
-<dl compact="compact">
-<dt><code>:type <var>type</var></code></dt>
-<dd><p>Use <var>type</var> as the data type for this option.  It specifies which
-values are legitimate, and how to display the value
-(see <a href="Customization-Types.html#Customization-Types">Customization Types</a>).  Every <code>defcustom</code> should specify
-a value for this keyword.
-</p>
-</dd>
-<dt><code>:options <var>value-list</var></code></dt>
-<dd><a name="index-options_002c-defcustom-keyword"></a>
-<p>Specify the list of reasonable values for use in this
-option.  The user is not restricted to using only these values, but they
-are offered as convenient alternatives.
-</p>
-<p>This is meaningful only for certain types, currently including
-<code>hook</code>, <code>plist</code> and <code>alist</code>.  See the definition of the
-individual types for a description of how to use <code>:options</code>.
-</p>
-</dd>
-<dt><code>:set <var>setfunction</var></code></dt>
-<dd><a name="index-set_002c-defcustom-keyword"></a>
-<p>Specify <var>setfunction</var> as the way to change the value of this
-option when using the Customize interface.  The function
-<var>setfunction</var> should take two arguments, a symbol (the option
-name) and the new value, and should do whatever is necessary to update
-the value properly for this option (which may not mean simply setting
-the option as a Lisp variable); preferably, though, it should not
-modify its value argument destructively.  The default for
-<var>setfunction</var> is <code>set-default</code>.
-</p>
-<p>If you specify this keyword, the variable&rsquo;s documentation string
-should describe how to do the same job in hand-written Lisp code.
-</p>
-</dd>
-<dt><code>:get <var>getfunction</var></code></dt>
-<dd><a name="index-get_002c-defcustom-keyword"></a>
-<p>Specify <var>getfunction</var> as the way to extract the value of this
-option.  The function <var>getfunction</var> should take one argument, a
-symbol, and should return whatever customize should use as the
-current value for that symbol (which need not be the symbol&rsquo;s Lisp
-value).  The default is <code>default-value</code>.
-</p>
-<p>You have to really understand the workings of Custom to use
-<code>:get</code> correctly.  It is meant for values that are treated in
-Custom as variables but are not actually stored in Lisp variables.  It
-is almost surely a mistake to specify <var>getfunction</var> for a value
-that really is stored in a Lisp variable.
-</p>
-</dd>
-<dt><code>:initialize <var>function</var></code></dt>
-<dd><a name="index-initialize_002c-defcustom-keyword"></a>
-<p><var>function</var> should be a function used to initialize the variable
-when the <code>defcustom</code> is evaluated.  It should take two arguments,
-the option name (a symbol) and the value.  Here are some predefined
-functions meant for use in this way:
-</p>
-<dl compact="compact">
-<dt><code>custom-initialize-set</code></dt>
-<dd><p>Use the variable&rsquo;s <code>:set</code> function to initialize the variable, but
-do not reinitialize it if it is already non-void.
-</p>
-</dd>
-<dt><code>custom-initialize-default</code></dt>
-<dd><p>Like <code>custom-initialize-set</code>, but use the function
-<code>set-default</code> to set the variable, instead of the variable&rsquo;s
-<code>:set</code> function.  This is the usual choice for a variable whose
-<code>:set</code> function enables or disables a minor mode; with this choice,
-defining the variable will not call the minor mode function, but
-customizing the variable will do so.
-</p>
-</dd>
-<dt><code>custom-initialize-reset</code></dt>
-<dd><p>Always use the <code>:set</code> function to initialize the variable.  If
-the variable is already non-void, reset it by calling the <code>:set</code>
-function using the current value (returned by the <code>:get</code> method).
-This is the default <code>:initialize</code> function.
-</p>
-</dd>
-<dt><code>custom-initialize-changed</code></dt>
-<dd><p>Use the <code>:set</code> function to initialize the variable, if it is
-already set or has been customized; otherwise, just use
-<code>set-default</code>.
-</p>
-</dd>
-<dt><code>custom-initialize-safe-set</code></dt>
-<dt><code>custom-initialize-safe-default</code></dt>
-<dd><p>These functions behave like <code>custom-initialize-set</code>
-(<code>custom-initialize-default</code>, respectively), but catch errors.
-If an error occurs during initialization, they set the variable to
-<code>nil</code> using <code>set-default</code>, and signal no error.
-</p>
-<p>These functions are meant for options defined in pre-loaded files,
-where the <var>standard</var> expression may signal an error because some
-required variable or function is not yet defined.  The value normally
-gets updated in <samp>startup.el</samp>, ignoring the value computed by
-<code>defcustom</code>.  After startup, if one unsets the value and
-reevaluates the <code>defcustom</code>, the <var>standard</var> expression can be
-evaluated without error.
-</p></dd>
-</dl>
+  <dl>
+    <dt><a name="index-defcustom" id="index-defcustom"></a>Macro:
+    <strong>defcustom</strong> <em>option standard doc [keyword
+    value]&hellip;</em></dt>
 
-</dd>
-<dt><code>:risky <var>value</var></code></dt>
-<dd><a name="index-risky_002c-defcustom-keyword"></a>
-<p>Set the variable&rsquo;s <code>risky-local-variable</code> property to
-<var>value</var> (see <a href="File-Local-Variables.html#File-Local-Variables">File Local Variables</a>).
-</p>
-</dd>
-<dt><code>:safe <var>function</var></code></dt>
-<dd><a name="index-safe_002c-defcustom-keyword"></a>
-<p>Set the variable&rsquo;s <code>safe-local-variable</code> property to
-<var>function</var> (see <a href="File-Local-Variables.html#File-Local-Variables">File Local Variables</a>).
-</p>
-</dd>
-<dt><code>:set-after <var>variables</var></code></dt>
-<dd><a name="index-set_002dafter_002c-defcustom-keyword"></a>
-<p>When setting variables according to saved customizations, make sure to
-set the variables <var>variables</var> before this one; i.e., delay
-setting this variable until after those others have been handled.  Use
-<code>:set-after</code> if setting this variable won&rsquo;t work properly unless
-those other variables already have their intended values.
-</p></dd>
-</dl>
+    <dd>
+      <p>This macro declares <var>option</var> as a user option
+      (i.e., a customizable variable). You should not quote
+      <var>option</var>.</p>
 
-<p>It is useful to specify the <code>:require</code> keyword for an option
-that turns on a certain feature.  This causes Emacs to load the
-feature, if it is not already loaded, whenever the option is set.
-See <a href="Common-Keywords.html#Common-Keywords">Common Keywords</a>.  Here is an example, from the library
-<samp>saveplace.el</samp>:
-</p>
-<div class="example">
-<pre class="example">(defcustom save-place nil
-  &quot;Non-nil means automatically save place in each file...&quot;
+      <p>The argument <var>standard</var> is an expression that
+      specifies the standard value for <var>option</var>.
+      Evaluating the <code>defcustom</code> form evaluates
+      <var>standard</var>, but does not necessarily bind the option
+      to that value. If <var>option</var> already has a default
+      value, it is left unchanged. If the user has already saved a
+      customization for <var>option</var>, the user&rsquo;s
+      customized value is installed as the default value.
+      Otherwise, the result of evaluating <var>standard</var> is
+      installed as the default value.</p>
+
+      <p>Like <code>defvar</code>, this macro marks
+      <code>option</code> as a special variable, meaning that it
+      should always be dynamically bound. If <var>option</var> is
+      already lexically bound, that lexical binding remains in
+      effect until the binding construct exits. See <a href=
+      "Variable-Scoping.html#Variable-Scoping">Variable
+      Scoping</a>.</p>
+
+      <p>The expression <var>standard</var> can be evaluated at
+      various other times, too&mdash;whenever the customization
+      facility needs to know <var>option</var>&rsquo;s standard
+      value. So be sure to use an expression which is harmless to
+      evaluate at any time.</p>
+
+      <p>The argument <var>doc</var> specifies the documentation
+      string for the variable.</p>
+
+      <p>If a <code>defcustom</code> does not specify any
+      <code>:group</code>, the last group defined with
+      <code>defgroup</code> in the same file will be used. This
+      way, most <code>defcustom</code> do not need an explicit
+      <code>:group</code>.</p>
+
+      <p>When you evaluate a <code>defcustom</code> form with
+      <kbd>C-M-x</kbd> in Emacs Lisp mode
+      (<code>eval-defun</code>), a special feature of
+      <code>eval-defun</code> arranges to set the variable
+      unconditionally, without testing whether its value is void.
+      (The same feature applies to <code>defvar</code>, see
+      <a href="Defining-Variables.html#Defining-Variables">Defining
+      Variables</a>.) Using <code>eval-defun</code> on a defcustom
+      that is already defined calls the <code>:set</code> function
+      (see below), if there is one.</p>
+
+      <p>If you put a <code>defcustom</code> in a pre-loaded Emacs
+      Lisp file (see <a href=
+      "Building-Emacs.html#Building-Emacs">Building Emacs</a>), the
+      standard value installed at dump time might be incorrect,
+      e.g., because another variable that it depends on has not
+      been assigned the right value yet. In that case, use
+      <code>custom-reevaluate-setting</code>, described below, to
+      re-evaluate the standard value after Emacs starts up.</p>
+    </dd>
+  </dl>
+
+  <p>In addition to the keywords listed in <a href=
+  "Common-Keywords.html#Common-Keywords">Common Keywords</a>, this
+  macro accepts the following keywords:</p>
+
+  <dl compact="compact">
+    <dt><code>:type <var>type</var></code></dt>
+
+    <dd>
+      <p>Use <var>type</var> as the data type for this option. It
+      specifies which values are legitimate, and how to display the
+      value (see <a href=
+      "Customization-Types.html#Customization-Types">Customization
+      Types</a>). Every <code>defcustom</code> should specify a
+      value for this keyword.</p>
+    </dd>
+
+    <dt><code>:options <var>value-list</var></code></dt>
+
+    <dd>
+      <a name="index-options_002c-defcustom-keyword" id=
+      "index-options_002c-defcustom-keyword"></a>
+
+      <p>Specify the list of reasonable values for use in this
+      option. The user is not restricted to using only these
+      values, but they are offered as convenient alternatives.</p>
+
+      <p>This is meaningful only for certain types, currently
+      including <code>hook</code>, <code>plist</code> and
+      <code>alist</code>. See the definition of the individual
+      types for a description of how to use
+      <code>:options</code>.</p>
+    </dd>
+
+    <dt><code>:set <var>setfunction</var></code></dt>
+
+    <dd>
+      <a name="index-set_002c-defcustom-keyword" id=
+      "index-set_002c-defcustom-keyword"></a>
+
+      <p>Specify <var>setfunction</var> as the way to change the
+      value of this option when using the Customize interface. The
+      function <var>setfunction</var> should take two arguments, a
+      symbol (the option name) and the new value, and should do
+      whatever is necessary to update the value properly for this
+      option (which may not mean simply setting the option as a
+      Lisp variable); preferably, though, it should not modify its
+      value argument destructively. The default for
+      <var>setfunction</var> is <code>set-default</code>.</p>
+
+      <p>If you specify this keyword, the variable&rsquo;s
+      documentation string should describe how to do the same job
+      in hand-written Lisp code.</p>
+    </dd>
+
+    <dt><code>:get <var>getfunction</var></code></dt>
+
+    <dd>
+      <a name="index-get_002c-defcustom-keyword" id=
+      "index-get_002c-defcustom-keyword"></a>
+
+      <p>Specify <var>getfunction</var> as the way to extract the
+      value of this option. The function <var>getfunction</var>
+      should take one argument, a symbol, and should return
+      whatever customize should use as the current value for that
+      symbol (which need not be the symbol&rsquo;s Lisp value). The
+      default is <code>default-value</code>.</p>
+
+      <p>You have to really understand the workings of Custom to
+      use <code>:get</code> correctly. It is meant for values that
+      are treated in Custom as variables but are not actually
+      stored in Lisp variables. It is almost surely a mistake to
+      specify <var>getfunction</var> for a value that really is
+      stored in a Lisp variable.</p>
+    </dd>
+
+    <dt><code>:initialize <var>function</var></code></dt>
+
+    <dd>
+      <a name="index-initialize_002c-defcustom-keyword" id=
+      "index-initialize_002c-defcustom-keyword"></a>
+
+      <p><var>function</var> should be a function used to
+      initialize the variable when the <code>defcustom</code> is
+      evaluated. It should take two arguments, the option name (a
+      symbol) and the value. Here are some predefined functions
+      meant for use in this way:</p>
+
+      <dl compact="compact">
+        <dt><code>custom-initialize-set</code></dt>
+
+        <dd>
+          <p>Use the variable&rsquo;s <code>:set</code> function to
+          initialize the variable, but do not reinitialize it if it
+          is already non-void.</p>
+        </dd>
+
+        <dt><code>custom-initialize-default</code></dt>
+
+        <dd>
+          <p>Like <code>custom-initialize-set</code>, but use the
+          function <code>set-default</code> to set the variable,
+          instead of the variable&rsquo;s <code>:set</code>
+          function. This is the usual choice for a variable whose
+          <code>:set</code> function enables or disables a minor
+          mode; with this choice, defining the variable will not
+          call the minor mode function, but customizing the
+          variable will do so.</p>
+        </dd>
+
+        <dt><code>custom-initialize-reset</code></dt>
+
+        <dd>
+          <p>Always use the <code>:set</code> function to
+          initialize the variable. If the variable is already
+          non-void, reset it by calling the <code>:set</code>
+          function using the current value (returned by the
+          <code>:get</code> method). This is the default
+          <code>:initialize</code> function.</p>
+        </dd>
+
+        <dt><code>custom-initialize-changed</code></dt>
+
+        <dd>
+          <p>Use the <code>:set</code> function to initialize the
+          variable, if it is already set or has been customized;
+          otherwise, just use <code>set-default</code>.</p>
+        </dd>
+
+        <dt><code>custom-initialize-safe-set</code></dt>
+
+        <dt><code>custom-initialize-safe-default</code></dt>
+
+        <dd>
+          <p>These functions behave like
+          <code>custom-initialize-set</code>
+          (<code>custom-initialize-default</code>, respectively),
+          but catch errors. If an error occurs during
+          initialization, they set the variable to <code>nil</code>
+          using <code>set-default</code>, and signal no error.</p>
+
+          <p>These functions are meant for options defined in
+          pre-loaded files, where the <var>standard</var>
+          expression may signal an error because some required
+          variable or function is not yet defined. The value
+          normally gets updated in <samp>startup.el</samp>,
+          ignoring the value computed by <code>defcustom</code>.
+          After startup, if one unsets the value and reevaluates
+          the <code>defcustom</code>, the <var>standard</var>
+          expression can be evaluated without error.</p>
+        </dd>
+      </dl>
+    </dd>
+
+    <dt><code>:risky <var>value</var></code></dt>
+
+    <dd>
+      <a name="index-risky_002c-defcustom-keyword" id=
+      "index-risky_002c-defcustom-keyword"></a>
+
+      <p>Set the variable&rsquo;s <code>risky-local-variable</code>
+      property to <var>value</var> (see <a href=
+      "File-Local-Variables.html#File-Local-Variables">File Local
+      Variables</a>).</p>
+    </dd>
+
+    <dt><code>:safe <var>function</var></code></dt>
+
+    <dd>
+      <a name="index-safe_002c-defcustom-keyword" id=
+      "index-safe_002c-defcustom-keyword"></a>
+
+      <p>Set the variable&rsquo;s <code>safe-local-variable</code>
+      property to <var>function</var> (see <a href=
+      "File-Local-Variables.html#File-Local-Variables">File Local
+      Variables</a>).</p>
+    </dd>
+
+    <dt><code>:set-after <var>variables</var></code></dt>
+
+    <dd>
+      <a name="index-set_002dafter_002c-defcustom-keyword" id=
+      "index-set_002dafter_002c-defcustom-keyword"></a>
+
+      <p>When setting variables according to saved customizations,
+      make sure to set the variables <var>variables</var> before
+      this one; i.e., delay setting this variable until after those
+      others have been handled. Use <code>:set-after</code> if
+      setting this variable won&rsquo;t work properly unless those
+      other variables already have their intended values.</p>
+    </dd>
+  </dl>
+
+  <p>It is useful to specify the <code>:require</code> keyword for
+  an option that turns on a certain feature. This causes Emacs to
+  load the feature, if it is not already loaded, whenever the
+  option is set. See <a href=
+  "Common-Keywords.html#Common-Keywords">Common Keywords</a>. Here
+  is an example, from the library <samp>saveplace.el</samp>:</p>
+
+  <div class="example">
+    <pre class="example">
+(defcustom save-place nil
+  "Non-nil means automatically save place in each file..."
   :type 'boolean
   :require 'saveplace
   :group 'save-place)
-</pre></div>
+</pre>
+  </div>
 
-<p>If a customization item has a type such as <code>hook</code> or
-<code>alist</code>, which supports <code>:options</code>, you can add additional
-values to the list from outside the <code>defcustom</code> declaration by
-calling <code>custom-add-frequent-value</code>.  For example, if you define a
-function <code>my-lisp-mode-initialization</code> intended to be called from
-<code>emacs-lisp-mode-hook</code>, you might want to add that to the list of
-reasonable values for <code>emacs-lisp-mode-hook</code>, but not by editing
-its definition.  You can do it thus:
-</p>
-<div class="example">
-<pre class="example">(custom-add-frequent-value 'emacs-lisp-mode-hook
+  <p>If a customization item has a type such as <code>hook</code>
+  or <code>alist</code>, which supports <code>:options</code>, you
+  can add additional values to the list from outside the
+  <code>defcustom</code> declaration by calling
+  <code>custom-add-frequent-value</code>. For example, if you
+  define a function <code>my-lisp-mode-initialization</code>
+  intended to be called from <code>emacs-lisp-mode-hook</code>, you
+  might want to add that to the list of reasonable values for
+  <code>emacs-lisp-mode-hook</code>, but not by editing its
+  definition. You can do it thus:</p>
+
+  <div class="example">
+    <pre class="example">
+(custom-add-frequent-value 'emacs-lisp-mode-hook
    'my-lisp-mode-initialization)
-</pre></div>
+</pre>
+  </div>
 
-<dl>
-<dt><a name="index-custom_002dadd_002dfrequent_002dvalue"></a>Function: <strong>custom-add-frequent-value</strong> <em>symbol value</em></dt>
-<dd><p>For the customization option <var>symbol</var>, add <var>value</var> to the
-list of reasonable values.
-</p>
-<p>The precise effect of adding a value depends on the customization type
-of <var>symbol</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-custom_002dadd_002dfrequent_002dvalue" id=
+    "index-custom_002dadd_002dfrequent_002dvalue"></a>Function:
+    <strong>custom-add-frequent-value</strong> <em>symbol
+    value</em></dt>
 
-<p>Internally, <code>defcustom</code> uses the symbol property
-<code>standard-value</code> to record the expression for the standard value,
-<code>saved-value</code> to record the value saved by the user with the
-customization buffer, and <code>customized-value</code> to record the value
-set by the user with the customization buffer, but not saved.
-See <a href="Symbol-Properties.html#Symbol-Properties">Symbol Properties</a>.  These properties are lists, the car of
-which is an expression that evaluates to the value.
-</p>
-<dl>
-<dt><a name="index-custom_002dreevaluate_002dsetting"></a>Function: <strong>custom-reevaluate-setting</strong> <em>symbol</em></dt>
-<dd><p>This function re-evaluates the standard value of <var>symbol</var>, which
-should be a user option declared via <code>defcustom</code>.  If the
-variable was customized, this function re-evaluates the saved value
-instead.  Then it sets the user option to that value (using the
-option&rsquo;s <code>:set</code> property if that is defined).
-</p>
-<p>This is useful for customizable options that are defined before their
-value could be computed correctly.  For example, during startup Emacs
-calls this function for some user options that were defined in
-pre-loaded Emacs Lisp files, but whose initial values depend on
-information available only at run-time.
-</p></dd></dl>
+    <dd>
+      <p>For the customization option <var>symbol</var>, add
+      <var>value</var> to the list of reasonable values.</p>
 
-<dl>
-<dt><a name="index-custom_002dvariable_002dp"></a>Function: <strong>custom-variable-p</strong> <em>arg</em></dt>
-<dd><p>This function returns non-<code>nil</code> if <var>arg</var> is a customizable
-variable.  A customizable variable is either a variable that has a
-<code>standard-value</code> or <code>custom-autoload</code> property (usually
-meaning it was declared with <code>defcustom</code>), or an alias for
-another customizable variable.
-</p></dd></dl>
+      <p>The precise effect of adding a value depends on the
+      customization type of <var>symbol</var>.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Customization-Types.html#Customization-Types" accesskey="n" rel="next">Customization Types</a>, Previous: <a href="Group-Definitions.html#Group-Definitions" accesskey="p" rel="prev">Group Definitions</a>, Up: <a href="Customization.html#Customization" accesskey="u" rel="up">Customization</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Internally, <code>defcustom</code> uses the symbol property
+  <code>standard-value</code> to record the expression for the
+  standard value, <code>saved-value</code> to record the value
+  saved by the user with the customization buffer, and
+  <code>customized-value</code> to record the value set by the user
+  with the customization buffer, but not saved. See <a href=
+  "Symbol-Properties.html#Symbol-Properties">Symbol Properties</a>.
+  These properties are lists, the car of which is an expression
+  that evaluates to the value.</p>
 
+  <dl>
+    <dt><a name="index-custom_002dreevaluate_002dsetting" id=
+    "index-custom_002dreevaluate_002dsetting"></a>Function:
+    <strong>custom-reevaluate-setting</strong> <em>symbol</em></dt>
 
+    <dd>
+      <p>This function re-evaluates the standard value of
+      <var>symbol</var>, which should be a user option declared via
+      <code>defcustom</code>. If the variable was customized, this
+      function re-evaluates the saved value instead. Then it sets
+      the user option to that value (using the option&rsquo;s
+      <code>:set</code> property if that is defined).</p>
 
+      <p>This is useful for customizable options that are defined
+      before their value could be computed correctly. For example,
+      during startup Emacs calls this function for some user
+      options that were defined in pre-loaded Emacs Lisp files, but
+      whose initial values depend on information available only at
+      run-time.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-custom_002dvariable_002dp" id=
+    "index-custom_002dvariable_002dp"></a>Function:
+    <strong>custom-variable-p</strong> <em>arg</em></dt>
+
+    <dd>
+      <p>This function returns non-<code>nil</code> if
+      <var>arg</var> is a customizable variable. A customizable
+      variable is either a variable that has a
+      <code>standard-value</code> or <code>custom-autoload</code>
+      property (usually meaning it was declared with
+      <code>defcustom</code>), or an alias for another customizable
+      variable.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Customization-Types.html#Customization-Types"
+    accesskey="n" rel="next">Customization Types</a>, Previous:
+    <a href="Group-Definitions.html#Group-Definitions" accesskey=
+    "p" rel="prev">Group Definitions</a>, Up: <a href=
+    "Customization.html#Customization" accesskey="u" rel=
+    "up">Customization</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

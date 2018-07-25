@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for CC Mode in Emacs.
 
 Copyright (C) 1995-2016 Free Software Foundation, Inc.
@@ -14,252 +16,382 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>CC Mode Manual: Config Basics</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="CC Mode Manual: Config Basics">
-<meta name="keywords" content="CC Mode Manual: Config Basics">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Command-and-Function-Index.html#Command-and-Function-Index" rel="index" title="Command and Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="CC-Hooks.html#CC-Hooks" rel="next" title="CC Hooks">
-<link href="AWK-Mode-Font-Locking.html#AWK-Mode-Font-Locking" rel="prev" title="AWK Mode Font Locking">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>CC Mode Manual: Config Basics</title>
+  <meta name="description" content=
+  "CC Mode Manual: Config Basics" />
+  <meta name="keywords" content="CC Mode Manual: Config Basics" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href=
+  "Command-and-Function-Index.html#Command-and-Function-Index" rel=
+  "index" title="Command and Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="CC-Hooks.html#CC-Hooks" rel="next" title=
+  "CC Hooks" />
+  <link href="AWK-Mode-Font-Locking.html#AWK-Mode-Font-Locking"
+  rel="prev" title="AWK Mode Font Locking" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Config-Basics"></a>
-<div class="header">
-<p>
-Next: <a href="Custom-Filling-and-Breaking.html#Custom-Filling-and-Breaking" accesskey="n" rel="next">Custom Filling and Breaking</a>, Previous: <a href="Font-Locking.html#Font-Locking" accesskey="p" rel="prev">Font Locking</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Command-and-Function-Index.html#Command-and-Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Configuration-Basics"></a>
-<h2 class="chapter">6 Configuration Basics</h2>
+<body lang="en" xml:lang="en">
+  <a name="Config-Basics" id="Config-Basics"></a>
 
-<a name="index-Emacs-Initialization-File"></a>
-<a name="index-Configuration"></a>
-<p>You configure CC Mode by setting Lisp variables and calling (and
-perhaps writing) Lisp functions<a name="DOCF14" href="#FOOT14"><sup>14</sup></a>, which is usually done by adding code to an Emacs
-initialization file.  This file might be <samp>site-start.el</samp> or
-<samp>.emacs</samp> or <samp>init.el</samp> or <samp>default.el</samp> or perhaps some
-other file.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Init-File.html#Init-File">Init File</a> in <cite>GNU Emacs Manual</cite>.  For
-the sake of conciseness, we just call this file &ldquo;your <samp>.emacs</samp>&rdquo;
-throughout the rest of the manual.
-</p>
-<p>Several of these variables (currently 16), are known collectively as
-<em>style variables</em>.  CC Mode provides a special mechanism, known
-as <em>styles</em> to make it easier to set these variables as a group,
-to &ldquo;inherit&rdquo; settings from one style into another, and so on.  Style
-variables remain ordinary Lisp variables, whose values can be read and
-changed independently of the style system.  See <a href="Style-Variables.html#Style-Variables">Style Variables</a>.
-</p>
-<p>There are several ways you can write the code, depending on the
-precise effect you want&mdash;they are described further down on this page.
-If you are new to CC Mode, we suggest you begin with the simplest
-method, &ldquo;Top-level commands or the customization interface&rdquo;.
-</p>
-<p>If you make conflicting settings in several of these ways, the way
-that takes precedence is the one that appears latest in this list:
-</p><ul class="no-bullet">
-<li><!-- /@w --> <dl compact="compact">
-<dt>Style</dt>
-<dt>File Style<a name="DOCF15" href="#FOOT15"><sup>15</sup></a></dt>
-<dt>Top-level command or &ldquo;customization interface&rdquo;</dt>
-<dt>Hook</dt>
-<dt>File Local Variable setting</dt>
-</dl>
-</li></ul>
+  <div class="header">
+    <p>Next: <a href=
+    "Custom-Filling-and-Breaking.html#Custom-Filling-and-Breaking"
+    accesskey="n" rel="next">Custom Filling and Breaking</a>,
+    Previous: <a href="Font-Locking.html#Font-Locking" accesskey=
+    "p" rel="prev">Font Locking</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Command-and-Function-Index.html#Command-and-Function-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Configuration-Basics" id="Configuration-Basics"></a>
 
-<p>Here is a summary of the different ways of writing your configuration
-settings:
-</p>
-<dl compact="compact">
-<dt>Top-level commands or the &ldquo;customization interface&rdquo;</dt>
-<dd><p>Most simply, you can write <code>setq</code> and similar commands at the top
-level of your <samp>.emacs</samp> file.  When you load a CC Mode buffer,
-it initializes its configuration from these global values (at least,
-for those settings you have given values to), so it makes sense to
-have these <code>setq</code> commands run <em>before</em> CC Mode is first
-initialized&mdash;in particular, before any call to <code>desktop-read</code>
-(see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Saving-Emacs-Sessions.html#Saving-Emacs-Sessions">Saving Emacs Sessions</a> in <cite>GNU Emacs Manual</cite>).  For
-example, you might set c-basic-offset thus:
-</p>
-<div class="example">
-<pre class="example">(setq c-basic-offset 4)
-</pre></div>
+  <h2 class="chapter">6 Configuration Basics</h2><a name=
+  "index-Emacs-Initialization-File" id=
+  "index-Emacs-Initialization-File"></a> <a name=
+  "index-Configuration" id="index-Configuration"></a>
 
-<p>You can use the more user friendly Customization interface instead,
-but this manual does not cover in detail how that works.  To do this,
-start by typing <kbd>M-x customize-group <span class="key">RET</span> c <span class="key">RET</span></kbd>.
-See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Easy-Customization.html#Easy-Customization">Easy Customization</a> in <cite>GNU Emacs Manual</cite>.
-Emacs normally writes the customizations at the end of your
-<samp>.emacs</samp> file.  If you use <code>desktop-read</code>, you should edit
-your <samp>.emacs</samp> to place the call to <code>desktop-read</code> <em>after</em>
-the customizations.
-</p>
-<p>The first initialization of CC Mode puts a snapshot of the
-configuration settings into the special style <code>user</code>.
-See <a href="Built_002din-Styles.html#Built_002din-Styles">Built-in Styles</a>.
-</p>
-<p>For basic use of Emacs, either of these ways of configuring is
-adequate.  However, the settings are then the same in all CC Mode
-buffers and it can be clumsy to communicate them between programmers.
-For more flexibility, you&rsquo;ll want to use one (or both) of CC Mode&rsquo;s
-more sophisticated facilities, hooks and styles.
-</p>
-</dd>
-<dt>Hooks</dt>
-<dd><p>An Emacs <em>hook</em> is a place to put Lisp functions that you want
-Emacs to execute later in specific circumstances.
-See <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Hooks.html#Hooks">Hooks</a> in <cite>GNU Emacs Lisp Reference Manual</cite>.  CC Mode supplies a main
-hook and a language-specific hook for each language it supports; any
-functions you put onto these hooks get executed as the last part of a
-buffer&rsquo;s initialization.  Typically you put most of your customization
-within the main hook, and use the language-specific hooks to vary the
-customization settings between language modes.  For example, if you
-wanted different (non-standard) values of <code>c-basic-offset</code> in C
-Mode and Java Mode buffers, you could do it like this:
-</p>
-<div class="example">
-<pre class="example">(defun my-c-mode-hook ()
+  <p>You configure CC Mode by setting Lisp variables and calling
+  (and perhaps writing) Lisp functions<a name="DOCF14" href=
+  "#FOOT14" id="DOCF14"><sup>14</sup></a>, which is usually done by
+  adding code to an Emacs initialization file. This file might be
+  <samp>site-start.el</samp> or <samp>.emacs</samp> or
+  <samp>init.el</samp> or <samp>default.el</samp> or perhaps some
+  other file. See <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Init-File.html#Init-File">
+  Init File</a> in <cite>GNU Emacs Manual</cite>. For the sake of
+  conciseness, we just call this file &ldquo;your
+  <samp>.emacs</samp>&rdquo; throughout the rest of the manual.</p>
+
+  <p>Several of these variables (currently 16), are known
+  collectively as <em>style variables</em>. CC Mode provides a
+  special mechanism, known as <em>styles</em> to make it easier to
+  set these variables as a group, to &ldquo;inherit&rdquo; settings
+  from one style into another, and so on. Style variables remain
+  ordinary Lisp variables, whose values can be read and changed
+  independently of the style system. See <a href=
+  "Style-Variables.html#Style-Variables">Style Variables</a>.</p>
+
+  <p>There are several ways you can write the code, depending on
+  the precise effect you want&mdash;they are described further down
+  on this page. If you are new to CC Mode, we suggest you begin
+  with the simplest method, &ldquo;Top-level commands or the
+  customization interface&rdquo;.</p>
+
+  <p>If you make conflicting settings in several of these ways, the
+  way that takes precedence is the one that appears latest in this
+  list:</p>
+
+  <ul class="no-bullet">
+    <li>
+      <!-- /@w -->
+
+      <dl compact="compact">
+        <dt>Style</dt>
+
+        <dt>File Style<a name="DOCF15" href="#FOOT15" id=
+        "DOCF15"><sup>15</sup></a></dt>
+
+        <dt>Top-level command or &ldquo;customization
+        interface&rdquo;</dt>
+
+        <dt>Hook</dt>
+
+        <dt>File Local Variable setting</dt>
+      </dl>
+    </li>
+  </ul>
+
+  <p>Here is a summary of the different ways of writing your
+  configuration settings:</p>
+
+  <dl compact="compact">
+    <dt>Top-level commands or the &ldquo;customization
+    interface&rdquo;</dt>
+
+    <dd>
+      <p>Most simply, you can write <code>setq</code> and similar
+      commands at the top level of your <samp>.emacs</samp> file.
+      When you load a CC Mode buffer, it initializes its
+      configuration from these global values (at least, for those
+      settings you have given values to), so it makes sense to have
+      these <code>setq</code> commands run <em>before</em> CC Mode
+      is first initialized&mdash;in particular, before any call to
+      <code>desktop-read</code> (see <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Saving-Emacs-Sessions.html#Saving-Emacs-Sessions">
+      Saving Emacs Sessions</a> in <cite>GNU Emacs Manual</cite>).
+      For example, you might set c-basic-offset thus:</p>
+
+      <div class="example">
+        <pre class="example">
+(setq c-basic-offset 4)
+</pre>
+      </div>
+
+      <p>You can use the more user friendly Customization interface
+      instead, but this manual does not cover in detail how that
+      works. To do this, start by typing <kbd>M-x customize-group
+      <span class="key">RET</span> c <span class=
+      "key">RET</span></kbd>. See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Easy-Customization.html#Easy-Customization">
+      Easy Customization</a> in <cite>GNU Emacs Manual</cite>.
+      Emacs normally writes the customizations at the end of your
+      <samp>.emacs</samp> file. If you use
+      <code>desktop-read</code>, you should edit your
+      <samp>.emacs</samp> to place the call to
+      <code>desktop-read</code> <em>after</em> the
+      customizations.</p>
+
+      <p>The first initialization of CC Mode puts a snapshot of the
+      configuration settings into the special style
+      <code>user</code>. See <a href=
+      "Built_002din-Styles.html#Built_002din-Styles">Built-in
+      Styles</a>.</p>
+
+      <p>For basic use of Emacs, either of these ways of
+      configuring is adequate. However, the settings are then the
+      same in all CC Mode buffers and it can be clumsy to
+      communicate them between programmers. For more flexibility,
+      you&rsquo;ll want to use one (or both) of CC Mode&rsquo;s
+      more sophisticated facilities, hooks and styles.</p>
+    </dd>
+
+    <dt>Hooks</dt>
+
+    <dd>
+      <p>An Emacs <em>hook</em> is a place to put Lisp functions
+      that you want Emacs to execute later in specific
+      circumstances. See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/elisp/Hooks.html#Hooks">
+      Hooks</a> in <cite>GNU Emacs Lisp Reference Manual</cite>. CC
+      Mode supplies a main hook and a language-specific hook for
+      each language it supports; any functions you put onto these
+      hooks get executed as the last part of a buffer&rsquo;s
+      initialization. Typically you put most of your customization
+      within the main hook, and use the language-specific hooks to
+      vary the customization settings between language modes. For
+      example, if you wanted different (non-standard) values of
+      <code>c-basic-offset</code> in C Mode and Java Mode buffers,
+      you could do it like this:</p>
+
+      <div class="example">
+        <pre class="example">
+(defun my-c-mode-hook ()
   (setq c-basic-offset 3))
 (add-hook 'c-mode-hook 'my-c-mode-hook)
 
 (defun my-java-mode-hook ()
   (setq c-basic-offset 6))
 (add-hook 'java-mode-hook 'my-java-mode-hook)
-</pre></div>
+</pre>
+      </div>
 
-<p>See <a href="CC-Hooks.html#CC-Hooks">CC Hooks</a> for more details on the use of CC Mode hooks.
-</p>
-</dd>
-<dt>Styles</dt>
-<dd><p>A CC Mode <em>style</em> is a coherent collection of customizations
-with a name.  At any time, exactly one style is active in each
-CC Mode buffer, either the one you have selected or a default.
-CC Mode is delivered with several existing styles.  Additionally,
-you can create your own styles, possibly based on these existing
-styles.  If you worked in a programming team called the &ldquo;Free
-Group&rdquo;, which had its own coding standards, you might well have this
-in your <samp>.emacs</samp> file:
-</p>
-<div class="example">
-<pre class="example">(setq c-default-style '((java-mode . &quot;java&quot;)
-                        (awk-mode . &quot;awk&quot;)
-                        (other . &quot;free-group-style&quot;)))
-</pre></div>
+      <p>See <a href="CC-Hooks.html#CC-Hooks">CC Hooks</a> for more
+      details on the use of CC Mode hooks.</p>
+    </dd>
 
-<p>See <a href="Styles.html#Styles">Styles</a> for fuller details on using CC Mode styles and how
-to create them.
-</p>
-</dd>
-<dt>File Local Variable setting</dt>
-<dd><p>A <em>file local variable setting</em> is a setting which applies to an
-individual source file.  You put this in a <em>local variables list</em>,
-a special block at the end of the source file (see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Specifying-File-Variables.html#Specifying-File-Variables">(emacs)Specifying File
-Variables</a>).
-</p>
-</dd>
-<dt>File Styles</dt>
-<dd><p>A <em>file style</em> is a rarely used variant of the &ldquo;style&rdquo; mechanism
-described above, which applies to an individual source file.
-See <a href="File-Styles.html#File-Styles">File Styles</a>.  You use this by setting certain special variables
-in a local variables list (see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Specifying-File-Variables.html#Specifying-File-Variables">(emacs)Specifying File
-Variables</a>).
-</p>
-</dd>
-<dt>Hooks with Styles</dt>
-<dd><p>For ultimate flexibility, you can use hooks and styles together.  For
-example, if your team were developing a product which required a
-Linux driver, you&rsquo;d probably want to use the &ldquo;linux&rdquo; style for the
-driver, and your own team&rsquo;s style for the rest of the code.  You
-could achieve this with code like this in your <samp>.emacs</samp>:
-</p>
-<div class="example">
-<pre class="example">(defun my-c-mode-hook ()
+    <dt>Styles</dt>
+
+    <dd>
+      <p>A CC Mode <em>style</em> is a coherent collection of
+      customizations with a name. At any time, exactly one style is
+      active in each CC Mode buffer, either the one you have
+      selected or a default. CC Mode is delivered with several
+      existing styles. Additionally, you can create your own
+      styles, possibly based on these existing styles. If you
+      worked in a programming team called the &ldquo;Free
+      Group&rdquo;, which had its own coding standards, you might
+      well have this in your <samp>.emacs</samp> file:</p>
+
+      <div class="example">
+        <pre class="example">
+(setq c-default-style '((java-mode . "java")
+                        (awk-mode . "awk")
+                        (other . "free-group-style")))
+</pre>
+      </div>
+
+      <p>See <a href="Styles.html#Styles">Styles</a> for fuller
+      details on using CC Mode styles and how to create them.</p>
+    </dd>
+
+    <dt>File Local Variable setting</dt>
+
+    <dd>
+      <p>A <em>file local variable setting</em> is a setting which
+      applies to an individual source file. You put this in a
+      <em>local variables list</em>, a special block at the end of
+      the source file (see <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Specifying-File-Variables.html#Specifying-File-Variables">
+      (emacs)Specifying File Variables</a>).</p>
+    </dd>
+
+    <dt>File Styles</dt>
+
+    <dd>
+      <p>A <em>file style</em> is a rarely used variant of the
+      &ldquo;style&rdquo; mechanism described above, which applies
+      to an individual source file. See <a href=
+      "File-Styles.html#File-Styles">File Styles</a>. You use this
+      by setting certain special variables in a local variables
+      list (see <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Specifying-File-Variables.html#Specifying-File-Variables">
+      (emacs)Specifying File Variables</a>).</p>
+    </dd>
+
+    <dt>Hooks with Styles</dt>
+
+    <dd>
+      <p>For ultimate flexibility, you can use hooks and styles
+      together. For example, if your team were developing a product
+      which required a Linux driver, you&rsquo;d probably want to
+      use the &ldquo;linux&rdquo; style for the driver, and your
+      own team&rsquo;s style for the rest of the code. You could
+      achieve this with code like this in your
+      <samp>.emacs</samp>:</p>
+
+      <div class="example">
+        <pre class="example">
+(defun my-c-mode-hook ()
   (c-set-style
    (if (and (buffer-file-name)
-            (string-match &quot;/usr/src/linux&quot; (buffer-file-name)))
-       &quot;linux&quot;
-     &quot;free-group-style&quot;)))
+            (string-match "/usr/src/linux" (buffer-file-name)))
+       "linux"
+     "free-group-style")))
 (add-hook 'c-mode-hook 'my-c-mode-hook)
-</pre></div>
+</pre>
+      </div>
 
-<p>In a programming team, a hook is a also a good place for each member
-to put his own personal preferences.  For example, you might be the
-only person in your team who likes Auto-newline minor mode.  You could
-have it enabled by default by placing the following in your
-<samp>.emacs</samp>:
-</p>
-<div class="example">
-<pre class="example">(defun my-turn-on-auto-newline ()
+      <p>In a programming team, a hook is a also a good place for
+      each member to put his own personal preferences. For example,
+      you might be the only person in your team who likes
+      Auto-newline minor mode. You could have it enabled by default
+      by placing the following in your <samp>.emacs</samp>:</p>
+
+      <div class="example">
+        <pre class="example">
+(defun my-turn-on-auto-newline ()
   (c-toggle-auto-newline 1))
 (add-hook 'c-mode-common-hook 'my-turn-on-auto-newline)
-</pre></div>
-</dd>
-</dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="CC-Hooks.html#CC-Hooks" accesskey="1">CC Hooks</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Style-Variables.html#Style-Variables" accesskey="2">Style Variables</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Styles.html#Styles" accesskey="3">Styles</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-</table>
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "CC-Hooks.html#CC-Hooks" accesskey="1">CC Hooks</a>:</td>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+      <td>&nbsp;&nbsp;</td>
 
-<h3><a name="FOOT14" href="#DOCF14">(14)</a></h3>
-<p>DON&rsquo;T PANIC!!!  This isn&rsquo;t
-difficult.</p>
-<h3><a name="FOOT15" href="#DOCF15">(15)</a></h3>
-<p>In earlier versions of CC Mode, a File Style setting took precedence over any other setting apart from a File Local Variable setting.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Custom-Filling-and-Breaking.html#Custom-Filling-and-Breaking" accesskey="n" rel="next">Custom Filling and Breaking</a>, Previous: <a href="Font-Locking.html#Font-Locking" accesskey="p" rel="prev">Font Locking</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Command-and-Function-Index.html#Command-and-Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <td align="left" valign="top"></td>
+    </tr>
 
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Style-Variables.html#Style-Variables" accesskey="2">Style
+      Variables</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Styles.html#Styles" accesskey="3">Styles</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+  </table>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT14" href="#DOCF14" id="FOOT14">(14)</a></h3>
+
+    <p>DON&rsquo;T PANIC!!! This isn&rsquo;t difficult.</p>
+
+    <h3><a name="FOOT15" href="#DOCF15" id="FOOT15">(15)</a></h3>
+
+    <p>In earlier versions of CC Mode, a File Style setting took
+    precedence over any other setting apart from a File Local
+    Variable setting.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Custom-Filling-and-Breaking.html#Custom-Filling-and-Breaking"
+    accesskey="n" rel="next">Custom Filling and Breaking</a>,
+    Previous: <a href="Font-Locking.html#Font-Locking" accesskey=
+    "p" rel="prev">Font Locking</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Command-and-Function-Index.html#Command-and-Function-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

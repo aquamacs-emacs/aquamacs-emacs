@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001-2016 Free Software Foundation, Inc.
@@ -14,141 +16,190 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Common Lisp Extensions: Sequence Basics</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Common Lisp Extensions: Sequence Basics">
-<meta name="keywords" content="Common Lisp Extensions: Sequence Basics">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Sequences.html#Sequences" rel="up" title="Sequences">
-<link href="Mapping-over-Sequences.html#Mapping-over-Sequences" rel="next" title="Mapping over Sequences">
-<link href="Sequences.html#Sequences" rel="prev" title="Sequences">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Common Lisp Extensions: Sequence Basics</title>
+  <meta name="description" content=
+  "Common Lisp Extensions: Sequence Basics" />
+  <meta name="keywords" content=
+  "Common Lisp Extensions: Sequence Basics" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Sequences.html#Sequences" rel="up" title=
+  "Sequences" />
+  <link href="Mapping-over-Sequences.html#Mapping-over-Sequences"
+  rel="next" title="Mapping over Sequences" />
+  <link href="Sequences.html#Sequences" rel="prev" title=
+  "Sequences" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Sequence-Basics"></a>
-<div class="header">
-<p>
-Next: <a href="Mapping-over-Sequences.html#Mapping-over-Sequences" accesskey="n" rel="next">Mapping over Sequences</a>, Up: <a href="Sequences.html#Sequences" accesskey="u" rel="up">Sequences</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Sequence-Basics-1"></a>
-<h3 class="section">9.1 Sequence Basics</h3>
+<body lang="en" xml:lang="en">
+  <a name="Sequence-Basics" id="Sequence-Basics"></a>
 
-<p>Many of the sequence functions take keyword arguments; see <a href="Argument-Lists.html#Argument-Lists">Argument Lists</a>.  All keyword arguments are optional and, if specified,
-may appear in any order.
-</p>
-<p>The <code>:key</code> argument should be passed either <code>nil</code>, or a
-function of one argument.  This key function is used as a filter
-through which the elements of the sequence are seen; for example,
-<code>(cl-find x y :key 'car)</code> is similar to <code>(cl-assoc x y)</code>.
-It searches for an element of the list whose <small>CAR</small> equals
-<code>x</code>, rather than for an element which equals <code>x</code> itself.
-If <code>:key</code> is omitted or <code>nil</code>, the filter is effectively
-the identity function.
-</p>
-<p>The <code>:test</code> and <code>:test-not</code> arguments should be either
-<code>nil</code>, or functions of two arguments.  The test function is
-used to compare two sequence elements, or to compare a search value
-with sequence elements.  (The two values are passed to the test
-function in the same order as the original sequence function
-arguments from which they are derived, or, if they both come from
-the same sequence, in the same order as they appear in that sequence.)
-The <code>:test</code> argument specifies a function which must return
-true (non-<code>nil</code>) to indicate a match; instead, you may use
-<code>:test-not</code> to give a function which returns <em>false</em> to
-indicate a match.  The default test function is <code>eql</code>.
-</p>
-<p>Many functions that take <var>item</var> and <code>:test</code> or <code>:test-not</code>
-arguments also come in <code>-if</code> and <code>-if-not</code> varieties,
-where a <var>predicate</var> function is passed instead of <var>item</var>,
-and sequence elements match if the predicate returns true on them
-(or false in the case of <code>-if-not</code>).  For example:
-</p>
-<div class="example">
-<pre class="example">(cl-remove 0 seq :test '=)  &equiv;  (cl-remove-if 'zerop seq)
-</pre></div>
+  <div class="header">
+    <p>Next: <a href=
+    "Mapping-over-Sequences.html#Mapping-over-Sequences" accesskey=
+    "n" rel="next">Mapping over Sequences</a>, Up: <a href=
+    "Sequences.html#Sequences" accesskey="u" rel="up">Sequences</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Sequence-Basics-1" id="Sequence-Basics-1"></a>
 
-<p>to remove all zeros from sequence <code>seq</code>.
-</p>
-<p>Some operations can work on a subsequence of the argument sequence;
-these function take <code>:start</code> and <code>:end</code> arguments, which
-default to zero and the length of the sequence, respectively.
-Only elements between <var>start</var> (inclusive) and <var>end</var>
-(exclusive) are affected by the operation.  The <var>end</var> argument
-may be passed <code>nil</code> to signify the length of the sequence;
-otherwise, both <var>start</var> and <var>end</var> must be integers, with
-<code>0 &lt;= <var>start</var> &lt;= <var>end</var> &lt;= (length <var>seq</var>)</code>.
-If the function takes two sequence arguments, the limits are
-defined by keywords <code>:start1</code> and <code>:end1</code> for the first,
-and <code>:start2</code> and <code>:end2</code> for the second.
-</p>
-<p>A few functions accept a <code>:from-end</code> argument, which, if
-non-<code>nil</code>, causes the operation to go from right-to-left
-through the sequence instead of left-to-right, and a <code>:count</code>
-argument, which specifies an integer maximum number of elements
-to be removed or otherwise processed.
-</p>
-<p>The sequence functions make no guarantees about the order in
-which the <code>:test</code>, <code>:test-not</code>, and <code>:key</code> functions
-are called on various elements.  Therefore, it is a bad idea to depend
-on side effects of these functions.  For example, <code>:from-end</code>
-may cause the sequence to be scanned actually in reverse, or it may
-be scanned forwards but computing a result &ldquo;as if&rdquo; it were scanned
-backwards.  (Some functions, like <code>cl-mapcar</code> and <code>cl-every</code>,
-<em>do</em> specify exactly the order in which the function is called
-so side effects are perfectly acceptable in those cases.)
-</p>
-<p>Strings may contain &ldquo;text properties&rdquo; as well
-as character data.  Except as noted, it is undefined whether or
-not text properties are preserved by sequence functions.  For
-example, <code>(cl-remove ?A <var>str</var>)</code> may or may not preserve
-the properties of the characters copied from <var>str</var> into the
-result.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Mapping-over-Sequences.html#Mapping-over-Sequences" accesskey="n" rel="next">Mapping over Sequences</a>, Up: <a href="Sequences.html#Sequences" accesskey="u" rel="up">Sequences</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <h3 class="section">9.1 Sequence Basics</h3>
 
+  <p>Many of the sequence functions take keyword arguments; see
+  <a href="Argument-Lists.html#Argument-Lists">Argument Lists</a>.
+  All keyword arguments are optional and, if specified, may appear
+  in any order.</p>
 
+  <p>The <code>:key</code> argument should be passed either
+  <code>nil</code>, or a function of one argument. This key
+  function is used as a filter through which the elements of the
+  sequence are seen; for example, <code>(cl-find x y :key
+  'car)</code> is similar to <code>(cl-assoc x y)</code>. It
+  searches for an element of the list whose <small>CAR</small>
+  equals <code>x</code>, rather than for an element which equals
+  <code>x</code> itself. If <code>:key</code> is omitted or
+  <code>nil</code>, the filter is effectively the identity
+  function.</p>
 
+  <p>The <code>:test</code> and <code>:test-not</code> arguments
+  should be either <code>nil</code>, or functions of two arguments.
+  The test function is used to compare two sequence elements, or to
+  compare a search value with sequence elements. (The two values
+  are passed to the test function in the same order as the original
+  sequence function arguments from which they are derived, or, if
+  they both come from the same sequence, in the same order as they
+  appear in that sequence.) The <code>:test</code> argument
+  specifies a function which must return true
+  (non-<code>nil</code>) to indicate a match; instead, you may use
+  <code>:test-not</code> to give a function which returns
+  <em>false</em> to indicate a match. The default test function is
+  <code>eql</code>.</p>
+
+  <p>Many functions that take <var>item</var> and
+  <code>:test</code> or <code>:test-not</code> arguments also come
+  in <code>-if</code> and <code>-if-not</code> varieties, where a
+  <var>predicate</var> function is passed instead of
+  <var>item</var>, and sequence elements match if the predicate
+  returns true on them (or false in the case of
+  <code>-if-not</code>). For example:</p>
+
+  <div class="example">
+    <pre class="example">
+(cl-remove 0 seq :test '=)  &equiv;  (cl-remove-if 'zerop seq)
+</pre>
+  </div>
+
+  <p>to remove all zeros from sequence <code>seq</code>.</p>
+
+  <p>Some operations can work on a subsequence of the argument
+  sequence; these function take <code>:start</code> and
+  <code>:end</code> arguments, which default to zero and the length
+  of the sequence, respectively. Only elements between
+  <var>start</var> (inclusive) and <var>end</var> (exclusive) are
+  affected by the operation. The <var>end</var> argument may be
+  passed <code>nil</code> to signify the length of the sequence;
+  otherwise, both <var>start</var> and <var>end</var> must be
+  integers, with <code>0 &lt;= <var>start</var> &lt;=
+  <var>end</var> &lt;= (length <var>seq</var>)</code>. If the
+  function takes two sequence arguments, the limits are defined by
+  keywords <code>:start1</code> and <code>:end1</code> for the
+  first, and <code>:start2</code> and <code>:end2</code> for the
+  second.</p>
+
+  <p>A few functions accept a <code>:from-end</code> argument,
+  which, if non-<code>nil</code>, causes the operation to go from
+  right-to-left through the sequence instead of left-to-right, and
+  a <code>:count</code> argument, which specifies an integer
+  maximum number of elements to be removed or otherwise
+  processed.</p>
+
+  <p>The sequence functions make no guarantees about the order in
+  which the <code>:test</code>, <code>:test-not</code>, and
+  <code>:key</code> functions are called on various elements.
+  Therefore, it is a bad idea to depend on side effects of these
+  functions. For example, <code>:from-end</code> may cause the
+  sequence to be scanned actually in reverse, or it may be scanned
+  forwards but computing a result &ldquo;as if&rdquo; it were
+  scanned backwards. (Some functions, like <code>cl-mapcar</code>
+  and <code>cl-every</code>, <em>do</em> specify exactly the order
+  in which the function is called so side effects are perfectly
+  acceptable in those cases.)</p>
+
+  <p>Strings may contain &ldquo;text properties&rdquo; as well as
+  character data. Except as noted, it is undefined whether or not
+  text properties are preserved by sequence functions. For example,
+  <code>(cl-remove ?A <var>str</var>)</code> may or may not
+  preserve the properties of the characters copied from
+  <var>str</var> into the result.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Mapping-over-Sequences.html#Mapping-over-Sequences" accesskey=
+    "n" rel="next">Mapping over Sequences</a>, Up: <a href=
+    "Sequences.html#Sequences" accesskey="u" rel="up">Sequences</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

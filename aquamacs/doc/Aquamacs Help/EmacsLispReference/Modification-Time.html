@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,169 +19,254 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Modification Time</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Modification Time">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Modification Time">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Buffers.html#Buffers" rel="up" title="Buffers">
-<link href="Read-Only-Buffers.html#Read-Only-Buffers" rel="next" title="Read Only Buffers">
-<link href="Buffer-Modification.html#Buffer-Modification" rel="prev" title="Buffer Modification">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Modification Time</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Modification Time" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Modification Time" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Buffers.html#Buffers" rel="up" title="Buffers" />
+  <link href="Read-Only-Buffers.html#Read-Only-Buffers" rel="next"
+  title="Read Only Buffers" />
+  <link href="Buffer-Modification.html#Buffer-Modification" rel=
+  "prev" title="Buffer Modification" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Modification-Time" id="Modification-Time"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Read-Only-Buffers.html#Read-Only-Buffers"
+    accesskey="n" rel="next">Read Only Buffers</a>, Previous:
+    <a href="Buffer-Modification.html#Buffer-Modification"
+    accesskey="p" rel="prev">Buffer Modification</a>, Up: <a href=
+    "Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Buffer-Modification-Time" id=
+  "Buffer-Modification-Time"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Modification-Time"></a>
-<div class="header">
-<p>
-Next: <a href="Read-Only-Buffers.html#Read-Only-Buffers" accesskey="n" rel="next">Read Only Buffers</a>, Previous: <a href="Buffer-Modification.html#Buffer-Modification" accesskey="p" rel="prev">Buffer Modification</a>, Up: <a href="Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Buffer-Modification-Time"></a>
-<h3 class="section">26.6 Buffer Modification Time</h3>
-<a name="index-comparing-file-modification-time"></a>
-<a name="index-modification-time-of-buffer"></a>
+  <h3 class="section">26.6 Buffer Modification Time</h3><a name=
+  "index-comparing-file-modification-time" id=
+  "index-comparing-file-modification-time"></a> <a name=
+  "index-modification-time-of-buffer" id=
+  "index-modification-time-of-buffer"></a>
 
-<p>Suppose that you visit a file and make changes in its buffer, and
-meanwhile the file itself is changed on disk.  At this point, saving the
-buffer would overwrite the changes in the file.  Occasionally this may
-be what you want, but usually it would lose valuable information.  Emacs
-therefore checks the file&rsquo;s modification time using the functions
-described below before saving the file.  (See <a href="File-Attributes.html#File-Attributes">File Attributes</a>,
-for how to examine a file&rsquo;s modification time.)
-</p>
-<dl>
-<dt><a name="index-verify_002dvisited_002dfile_002dmodtime"></a>Function: <strong>verify-visited-file-modtime</strong> <em>&amp;optional buffer</em></dt>
-<dd><p>This function compares what <var>buffer</var> (by default, the
-current-buffer) has recorded for the modification time of its visited
-file against the actual modification time of the file as recorded by the
-operating system.  The two should be the same unless some other process
-has written the file since Emacs visited or saved it.
-</p>
-<p>The function returns <code>t</code> if the last actual modification time and
-Emacs&rsquo;s recorded modification time are the same, <code>nil</code> otherwise.
-It also returns <code>t</code> if the buffer has no recorded last
-modification time, that is if <code>visited-file-modtime</code> would return
-zero.
-</p>
-<p>It always returns <code>t</code> for buffers that are not visiting a file,
-even if <code>visited-file-modtime</code> returns a non-zero value.  For
-instance, it always returns <code>t</code> for dired buffers.  It returns
-<code>t</code> for buffers that are visiting a file that does not exist and
-never existed, but <code>nil</code> for file-visiting buffers whose file has
-been deleted.
-</p></dd></dl>
+  <p>Suppose that you visit a file and make changes in its buffer,
+  and meanwhile the file itself is changed on disk. At this point,
+  saving the buffer would overwrite the changes in the file.
+  Occasionally this may be what you want, but usually it would lose
+  valuable information. Emacs therefore checks the file&rsquo;s
+  modification time using the functions described below before
+  saving the file. (See <a href=
+  "File-Attributes.html#File-Attributes">File Attributes</a>, for
+  how to examine a file&rsquo;s modification time.)</p>
 
-<dl>
-<dt><a name="index-clear_002dvisited_002dfile_002dmodtime"></a>Function: <strong>clear-visited-file-modtime</strong></dt>
-<dd><p>This function clears out the record of the last modification time of
-the file being visited by the current buffer.  As a result, the next
-attempt to save this buffer will not complain of a discrepancy in
-file modification times.
-</p>
-<p>This function is called in <code>set-visited-file-name</code> and other
-exceptional places where the usual test to avoid overwriting a changed
-file should not be done.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-verify_002dvisited_002dfile_002dmodtime" id=
+    "index-verify_002dvisited_002dfile_002dmodtime"></a>Function:
+    <strong>verify-visited-file-modtime</strong> <em>&amp;optional
+    buffer</em></dt>
 
-<dl>
-<dt><a name="index-visited_002dfile_002dmodtime"></a>Function: <strong>visited-file-modtime</strong></dt>
-<dd><p>This function returns the current buffer&rsquo;s recorded last file
-modification time, as a list of the form <code>(<var>high</var> <var>low</var>
-<var>microsec</var> <var>picosec</var>)</code>.  (This is the same format that
-<code>file-attributes</code> uses to return time values; see <a href="File-Attributes.html#File-Attributes">File Attributes</a>.)
-</p>
-<p>If the buffer has no recorded last modification time, this function
-returns zero.  This case occurs, for instance, if the buffer is not
-visiting a file or if the time has been explicitly cleared by
-<code>clear-visited-file-modtime</code>.  Note, however, that
-<code>visited-file-modtime</code> returns a list for some non-file buffers
-too.  For instance, in a Dired buffer listing a directory, it returns
-the last modification time of that directory, as recorded by Dired.
-</p>
-<p>If the buffer is not visiting a file, this function returns -1.
-</p></dd></dl>
+    <dd>
+      <p>This function compares what <var>buffer</var> (by default,
+      the current-buffer) has recorded for the modification time of
+      its visited file against the actual modification time of the
+      file as recorded by the operating system. The two should be
+      the same unless some other process has written the file since
+      Emacs visited or saved it.</p>
 
-<dl>
-<dt><a name="index-set_002dvisited_002dfile_002dmodtime"></a>Function: <strong>set-visited-file-modtime</strong> <em>&amp;optional time</em></dt>
-<dd><p>This function updates the buffer&rsquo;s record of the last modification time
-of the visited file, to the value specified by <var>time</var> if <var>time</var>
-is not <code>nil</code>, and otherwise to the last modification time of the
-visited file.
-</p>
-<p>If <var>time</var> is neither <code>nil</code> nor zero, it should have the form
-<code>(<var>high</var> <var>low</var> <var>microsec</var> <var>picosec</var>)</code>,
-the format used by <code>current-time</code> (see <a href="Time-of-Day.html#Time-of-Day">Time of Day</a>).
-</p>
-<p>This function is useful if the buffer was not read from the file
-normally, or if the file itself has been changed for some known benign
-reason.
-</p></dd></dl>
+      <p>The function returns <code>t</code> if the last actual
+      modification time and Emacs&rsquo;s recorded modification
+      time are the same, <code>nil</code> otherwise. It also
+      returns <code>t</code> if the buffer has no recorded last
+      modification time, that is if
+      <code>visited-file-modtime</code> would return zero.</p>
 
-<dl>
-<dt><a name="index-ask_002duser_002dabout_002dsupersession_002dthreat"></a>Function: <strong>ask-user-about-supersession-threat</strong> <em>filename</em></dt>
-<dd><p>This function is used to ask a user how to proceed after an attempt to
-modify an buffer visiting file <var>filename</var> when the file is newer
-than the buffer text.  Emacs detects this because the modification
-time of the file on disk is newer than the last save-time of the
-buffer.  This means some other program has probably altered the file.
-</p>
-<a name="index-file_002dsupersession"></a>
-<p>Depending on the user&rsquo;s answer, the function may return normally, in
-which case the modification of the buffer proceeds, or it may signal a
-<code>file-supersession</code> error with data <code>(<var>filename</var>)</code>, in which
-case the proposed buffer modification is not allowed.
-</p>
-<p>This function is called automatically by Emacs on the proper
-occasions.  It exists so you can customize Emacs by redefining it.
-See the file <samp>userlock.el</samp> for the standard definition.
-</p>
-<p>See also the file locking mechanism in <a href="File-Locks.html#File-Locks">File Locks</a>.
-</p></dd></dl>
+      <p>It always returns <code>t</code> for buffers that are not
+      visiting a file, even if <code>visited-file-modtime</code>
+      returns a non-zero value. For instance, it always returns
+      <code>t</code> for dired buffers. It returns <code>t</code>
+      for buffers that are visiting a file that does not exist and
+      never existed, but <code>nil</code> for file-visiting buffers
+      whose file has been deleted.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Read-Only-Buffers.html#Read-Only-Buffers" accesskey="n" rel="next">Read Only Buffers</a>, Previous: <a href="Buffer-Modification.html#Buffer-Modification" accesskey="p" rel="prev">Buffer Modification</a>, Up: <a href="Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-clear_002dvisited_002dfile_002dmodtime" id=
+    "index-clear_002dvisited_002dfile_002dmodtime"></a>Function:
+    <strong>clear-visited-file-modtime</strong></dt>
 
+    <dd>
+      <p>This function clears out the record of the last
+      modification time of the file being visited by the current
+      buffer. As a result, the next attempt to save this buffer
+      will not complain of a discrepancy in file modification
+      times.</p>
 
+      <p>This function is called in
+      <code>set-visited-file-name</code> and other exceptional
+      places where the usual test to avoid overwriting a changed
+      file should not be done.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-visited_002dfile_002dmodtime" id=
+    "index-visited_002dfile_002dmodtime"></a>Function:
+    <strong>visited-file-modtime</strong></dt>
+
+    <dd>
+      <p>This function returns the current buffer&rsquo;s recorded
+      last file modification time, as a list of the form
+      <code>(<var>high</var> <var>low</var> <var>microsec</var>
+      <var>picosec</var>)</code>. (This is the same format that
+      <code>file-attributes</code> uses to return time values; see
+      <a href="File-Attributes.html#File-Attributes">File
+      Attributes</a>.)</p>
+
+      <p>If the buffer has no recorded last modification time, this
+      function returns zero. This case occurs, for instance, if the
+      buffer is not visiting a file or if the time has been
+      explicitly cleared by
+      <code>clear-visited-file-modtime</code>. Note, however, that
+      <code>visited-file-modtime</code> returns a list for some
+      non-file buffers too. For instance, in a Dired buffer listing
+      a directory, it returns the last modification time of that
+      directory, as recorded by Dired.</p>
+
+      <p>If the buffer is not visiting a file, this function
+      returns -1.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-set_002dvisited_002dfile_002dmodtime" id=
+    "index-set_002dvisited_002dfile_002dmodtime"></a>Function:
+    <strong>set-visited-file-modtime</strong> <em>&amp;optional
+    time</em></dt>
+
+    <dd>
+      <p>This function updates the buffer&rsquo;s record of the
+      last modification time of the visited file, to the value
+      specified by <var>time</var> if <var>time</var> is not
+      <code>nil</code>, and otherwise to the last modification time
+      of the visited file.</p>
+
+      <p>If <var>time</var> is neither <code>nil</code> nor zero,
+      it should have the form <code>(<var>high</var> <var>low</var>
+      <var>microsec</var> <var>picosec</var>)</code>, the format
+      used by <code>current-time</code> (see <a href=
+      "Time-of-Day.html#Time-of-Day">Time of Day</a>).</p>
+
+      <p>This function is useful if the buffer was not read from
+      the file normally, or if the file itself has been changed for
+      some known benign reason.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-ask_002duser_002dabout_002dsupersession_002dthreat" id=
+    "index-ask_002duser_002dabout_002dsupersession_002dthreat"></a>Function:
+    <strong>ask-user-about-supersession-threat</strong>
+    <em>filename</em></dt>
+
+    <dd>
+      <p>This function is used to ask a user how to proceed after
+      an attempt to modify an buffer visiting file
+      <var>filename</var> when the file is newer than the buffer
+      text. Emacs detects this because the modification time of the
+      file on disk is newer than the last save-time of the buffer.
+      This means some other program has probably altered the
+      file.</p><a name="index-file_002dsupersession" id=
+      "index-file_002dsupersession"></a>
+
+      <p>Depending on the user&rsquo;s answer, the function may
+      return normally, in which case the modification of the buffer
+      proceeds, or it may signal a <code>file-supersession</code>
+      error with data <code>(<var>filename</var>)</code>, in which
+      case the proposed buffer modification is not allowed.</p>
+
+      <p>This function is called automatically by Emacs on the
+      proper occasions. It exists so you can customize Emacs by
+      redefining it. See the file <samp>userlock.el</samp> for the
+      standard definition.</p>
+
+      <p>See also the file locking mechanism in <a href=
+      "File-Locks.html#File-Locks">File Locks</a>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Read-Only-Buffers.html#Read-Only-Buffers"
+    accesskey="n" rel="next">Read Only Buffers</a>, Previous:
+    <a href="Buffer-Modification.html#Buffer-Modification"
+    accesskey="p" rel="prev">Buffer Modification</a>, Up: <a href=
+    "Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

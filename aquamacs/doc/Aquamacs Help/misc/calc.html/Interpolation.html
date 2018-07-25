@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,124 +18,175 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Interpolation</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Interpolation">
-<meta name="keywords" content="GNU Emacs Calc Manual: Interpolation">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Curve-Fitting.html#Curve-Fitting" rel="up" title="Curve Fitting">
-<link href="Summations.html#Summations" rel="next" title="Summations">
-<link href="Curve-Fitting-Details.html#Curve-Fitting-Details" rel="prev" title="Curve Fitting Details">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Interpolation</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Interpolation" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Interpolation" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Curve-Fitting.html#Curve-Fitting" rel="up" title=
+  "Curve Fitting" />
+  <link href="Summations.html#Summations" rel="next" title=
+  "Summations" />
+  <link href="Curve-Fitting-Details.html#Curve-Fitting-Details"
+  rel="prev" title="Curve Fitting Details" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Interpolation"></a>
-<div class="header">
-<p>
-Previous: <a href="Curve-Fitting-Details.html#Curve-Fitting-Details" accesskey="p" rel="prev">Curve Fitting Details</a>, Up: <a href="Curve-Fitting.html#Curve-Fitting" accesskey="u" rel="up">Curve Fitting</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Polynomial-Interpolation"></a>
-<h4 class="subsection">10.8.6 Polynomial Interpolation</h4>
+<body lang="en" xml:lang="en">
+  <a name="Interpolation" id="Interpolation"></a>
 
-<a name="index-a-p"></a>
-<a name="index-calc_002dpoly_002dinterp"></a>
-<a name="index-polint"></a>
-<p>The <kbd>a p</kbd> (<code>calc-poly-interp</code>) [<code>polint</code>] command does
-a polynomial interpolation at a particular &lsquo;<samp>x</samp>&rsquo; value.  It takes
-two arguments from the stack:  A data matrix of the sort used by
-<kbd>a F</kbd>, and a single number which represents the desired &lsquo;<samp>x</samp>&rsquo;
-value.  Calc effectively does an exact polynomial fit as if by <kbd>a F i</kbd>,
-then substitutes the &lsquo;<samp>x</samp>&rsquo; value into the result in order to get an
-approximate &lsquo;<samp>y</samp>&rsquo; value based on the fit.  (Calc does not actually
-use <kbd>a F i</kbd>, however; it uses a direct method which is both more
-efficient and more numerically stable.)
-</p>
-<p>The result of <kbd>a p</kbd> is actually a vector of two values:  The &lsquo;<samp>y</samp>&rsquo;
-value approximation, and an error measure &lsquo;<samp>dy</samp>&rsquo; that reflects Calc&rsquo;s
-estimation of the probable error of the approximation at that value of
-&lsquo;<samp>x</samp>&rsquo;.  If the input &lsquo;<samp>x</samp>&rsquo; is equal to any of the &lsquo;<samp>x</samp>&rsquo; values
-in the data matrix, the output &lsquo;<samp>y</samp>&rsquo; will be the corresponding &lsquo;<samp>y</samp>&rsquo;
-value from the matrix, and the output &lsquo;<samp>dy</samp>&rsquo; will be exactly zero.
-</p>
-<p>A prefix argument of 2 causes <kbd>a p</kbd> to take separate x- and
-y-vectors from the stack instead of one data matrix.
-</p>
-<p>If &lsquo;<samp>x</samp>&rsquo; is a vector of numbers, <kbd>a p</kbd> will return a matrix of
-interpolated results for each of those &lsquo;<samp>x</samp>&rsquo; values.  (The matrix will
-have two columns, the &lsquo;<samp>y</samp>&rsquo; values and the &lsquo;<samp>dy</samp>&rsquo; values.)
-If &lsquo;<samp>x</samp>&rsquo; is a formula instead of a number, the <code>polint</code> function
-remains in symbolic form; use the <kbd>a &quot;</kbd> command to expand it out to
-a formula that describes the fit in symbolic terms.
-</p>
-<p>In all cases, the <kbd>a p</kbd> command leaves the data vectors or matrix
-on the stack.  Only the &lsquo;<samp>x</samp>&rsquo; value is replaced by the result.
-</p>
-<a name="index-H-a-p"></a>
-<a name="index-ratint"></a>
-<p>The <kbd>H a p</kbd> [<code>ratint</code>] command does a rational function
-interpolation.  It is used exactly like <kbd>a p</kbd>, except that it
-uses as its model the quotient of two polynomials.  If there are
-&lsquo;<samp>N</samp>&rsquo; data points, the numerator and denominator polynomials will
-each have degree &lsquo;<samp>N/2</samp>&rsquo; (if &lsquo;<samp>N</samp>&rsquo; is odd, the denominator will
-have degree one higher than the numerator).
-</p>
-<p>Rational approximations have the advantage that they can accurately
-describe functions that have poles (points at which the function&rsquo;s value
-goes to infinity, so that the denominator polynomial of the approximation
-goes to zero).  If &lsquo;<samp>x</samp>&rsquo; corresponds to a pole of the fitted rational
-function, then the result will be a division by zero.  If Infinite mode
-is enabled, the result will be &lsquo;<samp>[uinf, uinf]</samp>&rsquo;.
-</p>
-<p>There is no way to get the actual coefficients of the rational function
-used by <kbd>H a p</kbd>.  (The algorithm never generates these coefficients
-explicitly, and quotients of polynomials are beyond <kbd>a&nbsp;F</kbd><!-- /@w -->&rsquo;s
-capabilities to fit.)
-</p>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Curve-Fitting-Details.html#Curve-Fitting-Details" accesskey="p" rel="prev">Curve Fitting Details</a>, Up: <a href="Curve-Fitting.html#Curve-Fitting" accesskey="u" rel="up">Curve Fitting</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Previous: <a href=
+    "Curve-Fitting-Details.html#Curve-Fitting-Details" accesskey=
+    "p" rel="prev">Curve Fitting Details</a>, Up: <a href=
+    "Curve-Fitting.html#Curve-Fitting" accesskey="u" rel="up">Curve
+    Fitting</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Polynomial-Interpolation" id=
+  "Polynomial-Interpolation"></a>
 
+  <h4 class="subsection">10.8.6 Polynomial
+  Interpolation</h4><a name="index-a-p" id="index-a-p"></a>
+  <a name="index-calc_002dpoly_002dinterp" id=
+  "index-calc_002dpoly_002dinterp"></a> <a name="index-polint" id=
+  "index-polint"></a>
 
+  <p>The <kbd>a p</kbd> (<code>calc-poly-interp</code>)
+  [<code>polint</code>] command does a polynomial interpolation at
+  a particular &lsquo;<samp>x</samp>&rsquo; value. It takes two
+  arguments from the stack: A data matrix of the sort used by
+  <kbd>a F</kbd>, and a single number which represents the desired
+  &lsquo;<samp>x</samp>&rsquo; value. Calc effectively does an
+  exact polynomial fit as if by <kbd>a F i</kbd>, then substitutes
+  the &lsquo;<samp>x</samp>&rsquo; value into the result in order
+  to get an approximate &lsquo;<samp>y</samp>&rsquo; value based on
+  the fit. (Calc does not actually use <kbd>a F i</kbd>, however;
+  it uses a direct method which is both more efficient and more
+  numerically stable.)</p>
 
+  <p>The result of <kbd>a p</kbd> is actually a vector of two
+  values: The &lsquo;<samp>y</samp>&rsquo; value approximation, and
+  an error measure &lsquo;<samp>dy</samp>&rsquo; that reflects
+  Calc&rsquo;s estimation of the probable error of the
+  approximation at that value of &lsquo;<samp>x</samp>&rsquo;. If
+  the input &lsquo;<samp>x</samp>&rsquo; is equal to any of the
+  &lsquo;<samp>x</samp>&rsquo; values in the data matrix, the
+  output &lsquo;<samp>y</samp>&rsquo; will be the corresponding
+  &lsquo;<samp>y</samp>&rsquo; value from the matrix, and the
+  output &lsquo;<samp>dy</samp>&rsquo; will be exactly zero.</p>
+
+  <p>A prefix argument of 2 causes <kbd>a p</kbd> to take separate
+  x- and y-vectors from the stack instead of one data matrix.</p>
+
+  <p>If &lsquo;<samp>x</samp>&rsquo; is a vector of numbers, <kbd>a
+  p</kbd> will return a matrix of interpolated results for each of
+  those &lsquo;<samp>x</samp>&rsquo; values. (The matrix will have
+  two columns, the &lsquo;<samp>y</samp>&rsquo; values and the
+  &lsquo;<samp>dy</samp>&rsquo; values.) If
+  &lsquo;<samp>x</samp>&rsquo; is a formula instead of a number,
+  the <code>polint</code> function remains in symbolic form; use
+  the <kbd>a "</kbd> command to expand it out to a formula that
+  describes the fit in symbolic terms.</p>
+
+  <p>In all cases, the <kbd>a p</kbd> command leaves the data
+  vectors or matrix on the stack. Only the
+  &lsquo;<samp>x</samp>&rsquo; value is replaced by the
+  result.</p><a name="index-H-a-p" id="index-H-a-p"></a> <a name=
+  "index-ratint" id="index-ratint"></a>
+
+  <p>The <kbd>H a p</kbd> [<code>ratint</code>] command does a
+  rational function interpolation. It is used exactly like <kbd>a
+  p</kbd>, except that it uses as its model the quotient of two
+  polynomials. If there are &lsquo;<samp>N</samp>&rsquo; data
+  points, the numerator and denominator polynomials will each have
+  degree &lsquo;<samp>N/2</samp>&rsquo; (if
+  &lsquo;<samp>N</samp>&rsquo; is odd, the denominator will have
+  degree one higher than the numerator).</p>
+
+  <p>Rational approximations have the advantage that they can
+  accurately describe functions that have poles (points at which
+  the function&rsquo;s value goes to infinity, so that the
+  denominator polynomial of the approximation goes to zero). If
+  &lsquo;<samp>x</samp>&rsquo; corresponds to a pole of the fitted
+  rational function, then the result will be a division by zero. If
+  Infinite mode is enabled, the result will be &lsquo;<samp>[uinf,
+  uinf]</samp>&rsquo;.</p>
+
+  <p>There is no way to get the actual coefficients of the rational
+  function used by <kbd>H a p</kbd>. (The algorithm never generates
+  these coefficients explicitly, and quotients of polynomials are
+  beyond <kbd>a&nbsp;F</kbd><!-- /@w -->&rsquo;s capabilities to
+  fit.)</p>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Curve-Fitting-Details.html#Curve-Fitting-Details" accesskey=
+    "p" rel="prev">Curve Fitting Details</a>, Up: <a href=
+    "Curve-Fitting.html#Curve-Fitting" accesskey="u" rel="up">Curve
+    Fitting</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

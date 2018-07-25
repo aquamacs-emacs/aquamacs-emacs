@@ -1,14 +1,22 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Working With Source Code - The Org Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="The Org Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Publishing.html#Publishing" title="Publishing">
-<link rel="next" href="Miscellaneous.html#Miscellaneous" title="Miscellaneous">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Working With Source Code - The Org Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="The Org Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="prev" href="Publishing.html#Publishing" title=
+  "Publishing" />
+  <link rel="next" href="Miscellaneous.html#Miscellaneous" title=
+  "Miscellaneous" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for Org version 7.4.
 
 Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
@@ -32,8 +40,10 @@ Free Software Foundation, Inc.
      copy of the license to the document, as described in section 6 of
      the license.
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -43,54 +53,103 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Working-With-Source-Code"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Miscellaneous.html#Miscellaneous">Miscellaneous</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Publishing.html#Publishing">Publishing</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Working-With-Source-Code" id=
+    "Working-With-Source-Code"></a>
 
-<h2 class="chapter">14 Working with source code</h2>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Miscellaneous.html#Miscellaneous">Miscellaneous</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Publishing.html#Publishing">Publishing</a>, Up:&nbsp;<a rel=
+    "up" accesskey="u" href="index.html#Top">Top</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-Schulte_002c-Eric-1687"></a><a name="index-Davison_002c-Dan-1688"></a><a name="index-source-code_002c-working-with-1689"></a>
-Source code can be included in Org-mode documents using a &lsquo;<samp><span class="samp">src</span></samp>&rsquo; block,
-e.g.
+  <h2 class="chapter">14 Working with source code</h2>
 
-<pre class="example">     #+BEGIN_SRC emacs-lisp
+  <p><a name="index-Schulte_002c-Eric-1687" id=
+  "index-Schulte_002c-Eric-1687"></a><a name=
+  "index-Davison_002c-Dan-1688" id=
+  "index-Davison_002c-Dan-1688"></a><a name=
+  "index-source-code_002c-working-with-1689" id=
+  "index-source-code_002c-working-with-1689"></a> Source code can
+  be included in Org-mode documents using a
+  &lsquo;<samp><span class="samp">src</span></samp>&rsquo; block,
+  e.g.</p>
+  <pre class="example">
+     #+BEGIN_SRC emacs-lisp
        (defun org-xor (a b)
           "Exclusive or."
           (if a (not b) b))
      #+END_SRC
 </pre>
-   <p>Org-mode provides a number of features for working with live source code,
-including editing of code blocks in their native major-mode, evaluation of
-code blocks, tangling of code blocks, and exporting code blocks and their
-results in several formats.  This functionality was contributed by Eric
-Schulte and Dan Davison, and was originally named Org-babel.
 
-   <p>The following sections describe Org-mode's code block handling facilities.
+  <p>Org-mode provides a number of features for working with live
+  source code, including editing of code blocks in their native
+  major-mode, evaluation of code blocks, tangling of code blocks,
+  and exporting code blocks and their results in several formats.
+  This functionality was contributed by Eric Schulte and Dan
+  Davison, and was originally named Org-babel.</p>
 
-<ul class="menu">
-<li><a accesskey="1" href="Structure-of-code-blocks.html#Structure-of-code-blocks">Structure of code blocks</a>:     Code block syntax described
-<li><a accesskey="2" href="Editing-source-code.html#Editing-source-code">Editing source code</a>:          Language major-mode editing
-<li><a accesskey="3" href="Exporting-code-blocks.html#Exporting-code-blocks">Exporting code blocks</a>:        Export contents and/or results
-<li><a accesskey="4" href="Extracting-source-code.html#Extracting-source-code">Extracting source code</a>:       Create pure source code files
-<li><a accesskey="5" href="Evaluating-code-blocks.html#Evaluating-code-blocks">Evaluating code blocks</a>:       Place results of evaluation in the Org-mode buffer
-<li><a accesskey="6" href="Library-of-Babel.html#Library-of-Babel">Library of Babel</a>:             Use and contribute to a library of useful code blocks
-<li><a accesskey="7" href="Languages.html#Languages">Languages</a>:                    List of supported code block languages
-<li><a accesskey="8" href="Header-arguments.html#Header-arguments">Header arguments</a>:             Configure code block functionality
-<li><a accesskey="9" href="Results-of-evaluation.html#Results-of-evaluation">Results of evaluation</a>:        How evaluation results are handled
-<li><a href="Noweb-reference-syntax.html#Noweb-reference-syntax">Noweb reference syntax</a>:       Literate programming in Org-mode
-<li><a href="Key-bindings-and-useful-functions.html#Key-bindings-and-useful-functions">Key bindings and useful functions</a>:   Work quickly with code blocks
-<li><a href="Batch-execution.html#Batch-execution">Batch execution</a>:              Call functions from the command line
-</ul>
+  <p>The following sections describe Org-mode's code block handling
+  facilities.</p>
 
-<!-- node-name,  next,  previous,  up -->
-<!-- Structure of code blocks, Editing source code, Working With Source Code, Working With Source Code -->
-   </body></html>
+  <ul class="menu">
+    <li><a accesskey="1" href=
+    "Structure-of-code-blocks.html#Structure-of-code-blocks">Structure
+    of code blocks</a>: Code block syntax described</li>
 
+    <li><a accesskey="2" href=
+    "Editing-source-code.html#Editing-source-code">Editing source
+    code</a>: Language major-mode editing</li>
+
+    <li><a accesskey="3" href=
+    "Exporting-code-blocks.html#Exporting-code-blocks">Exporting
+    code blocks</a>: Export contents and/or results</li>
+
+    <li><a accesskey="4" href=
+    "Extracting-source-code.html#Extracting-source-code">Extracting
+    source code</a>: Create pure source code files</li>
+
+    <li><a accesskey="5" href=
+    "Evaluating-code-blocks.html#Evaluating-code-blocks">Evaluating
+    code blocks</a>: Place results of evaluation in the Org-mode
+    buffer</li>
+
+    <li><a accesskey="6" href=
+    "Library-of-Babel.html#Library-of-Babel">Library of Babel</a>:
+    Use and contribute to a library of useful code blocks</li>
+
+    <li><a accesskey="7" href=
+    "Languages.html#Languages">Languages</a>: List of supported
+    code block languages</li>
+
+    <li><a accesskey="8" href=
+    "Header-arguments.html#Header-arguments">Header arguments</a>:
+    Configure code block functionality</li>
+
+    <li><a accesskey="9" href=
+    "Results-of-evaluation.html#Results-of-evaluation">Results of
+    evaluation</a>: How evaluation results are handled</li>
+
+    <li><a href=
+    "Noweb-reference-syntax.html#Noweb-reference-syntax">Noweb
+    reference syntax</a>: Literate programming in Org-mode</li>
+
+    <li><a href=
+    "Key-bindings-and-useful-functions.html#Key-bindings-and-useful-functions">
+    Key bindings and useful functions</a>: Work quickly with code
+    blocks</li>
+
+    <li><a href="Batch-execution.html#Batch-execution">Batch
+    execution</a>: Call functions from the command line</li>
+  </ul><!-- node-name,  next,  previous,  up -->
+  <!-- Structure of code blocks, Editing source code, Working With Source Code, Working With Source Code -->
+</body>
+</html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents RefTeX (version 25.1), a package
 to do labels, references, citations and indices for LaTeX documents
 with Emacs.
@@ -16,88 +18,164 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>RefTeX User Manual: Citations</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="RefTeX User Manual: Citations">
-<meta name="keywords" content="RefTeX User Manual: Citations">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Creating-Citations.html#Creating-Citations" rel="next" title="Creating Citations">
-<link href="LaTeX-xr-Package.html#LaTeX-xr-Package" rel="prev" title="LaTeX xr Package">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>RefTeX User Manual: Citations</title>
+  <meta name="description" content=
+  "RefTeX User Manual: Citations" />
+  <meta name="keywords" content="RefTeX User Manual: Citations" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Creating-Citations.html#Creating-Citations" rel=
+  "next" title="Creating Citations" />
+  <link href="LaTeX-xr-Package.html#LaTeX-xr-Package" rel="prev"
+  title="LaTeX xr Package" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Citations"></a>
-<div class="header">
-<p>
-Next: <a href="Index-Support.html#Index-Support" accesskey="n" rel="next">Index Support</a>, Previous: <a href="Labels-and-References.html#Labels-and-References" accesskey="p" rel="prev">Labels and References</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Citations-1"></a>
-<h2 class="chapter">4 Citations</h2>
-<a name="index-Citations"></a>
-<a name="index-_005ccite"></a>
+<body lang="en" xml:lang="en">
+  <a name="Citations" id="Citations"></a>
 
-<p>Citations in LaTeX are done with the <code>\cite</code> macro or variations of
-it.  The argument of the macro is a citation key which identifies an
-article or book in either a BibTeX database file or in an explicit
-<code>thebibliography</code> environment in the document.  RefTeX&rsquo;s
-support for citations helps to select the correct key quickly.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Creating-Citations.html#Creating-Citations" accesskey="1">Creating Citations</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to create them.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Citation-Styles.html#Citation-Styles" accesskey="2">Citation Styles</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Natbib, Harvard, Chicago and Co.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Citation-Info.html#Citation-Info" accesskey="3">Citation Info</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">View the corresponding database entry.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Chapterbib-and-Bibunits.html#Chapterbib-and-Bibunits" accesskey="4">Chapterbib and Bibunits</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Multiple bibliographies in a Document.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Citations-Outside-LaTeX.html#Citations-Outside-LaTeX" accesskey="5">Citations Outside LaTeX</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to make citations in Emails etc.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="BibTeX-Database-Subsets.html#BibTeX-Database-Subsets" accesskey="6">BibTeX Database Subsets</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Extract parts of a big database.
-</td></tr>
-</table>
+  <div class="header">
+    <p>Next: <a href="Index-Support.html#Index-Support" accesskey=
+    "n" rel="next">Index Support</a>, Previous: <a href=
+    "Labels-and-References.html#Labels-and-References" accesskey=
+    "p" rel="prev">Labels and References</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Citations-1" id="Citations-1"></a>
 
+  <h2 class="chapter">4 Citations</h2><a name="index-Citations" id=
+  "index-Citations"></a> <a name="index-_005ccite" id=
+  "index-_005ccite"></a>
 
+  <p>Citations in LaTeX are done with the <code>\cite</code> macro
+  or variations of it. The argument of the macro is a citation key
+  which identifies an article or book in either a BibTeX database
+  file or in an explicit <code>thebibliography</code> environment
+  in the document. RefTeX&rsquo;s support for citations helps to
+  select the correct key quickly.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Creating-Citations.html#Creating-Citations" accesskey=
+      "1">Creating Citations</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to create them.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Citation-Styles.html#Citation-Styles" accesskey="2">Citation
+      Styles</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Natbib, Harvard, Chicago and
+      Co.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Citation-Info.html#Citation-Info" accesskey="3">Citation
+      Info</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">View the corresponding database
+      entry.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Chapterbib-and-Bibunits.html#Chapterbib-and-Bibunits"
+      accesskey="4">Chapterbib and Bibunits</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Multiple bibliographies in a
+      Document.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Citations-Outside-LaTeX.html#Citations-Outside-LaTeX"
+      accesskey="5">Citations Outside LaTeX</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to make citations in Emails
+      etc.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "BibTeX-Database-Subsets.html#BibTeX-Database-Subsets"
+      accesskey="6">BibTeX Database Subsets</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Extract parts of a big
+      database.</td>
+    </tr>
+  </table>
 </body>
 </html>

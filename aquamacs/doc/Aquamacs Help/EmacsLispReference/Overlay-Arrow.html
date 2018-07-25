@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,125 +19,177 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Overlay Arrow</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Overlay Arrow">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Overlay Arrow">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Fringes.html#Fringes" rel="up" title="Fringes">
-<link href="Scroll-Bars.html#Scroll-Bars" rel="next" title="Scroll Bars">
-<link href="Customizing-Bitmaps.html#Customizing-Bitmaps" rel="prev" title="Customizing Bitmaps">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Overlay Arrow</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Overlay Arrow" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Overlay Arrow" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Fringes.html#Fringes" rel="up" title="Fringes" />
+  <link href="Scroll-Bars.html#Scroll-Bars" rel="next" title=
+  "Scroll Bars" />
+  <link href="Customizing-Bitmaps.html#Customizing-Bitmaps" rel=
+  "prev" title="Customizing Bitmaps" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Overlay-Arrow" id="Overlay-Arrow"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href=
+    "Customizing-Bitmaps.html#Customizing-Bitmaps" accesskey="p"
+    rel="prev">Customizing Bitmaps</a>, Up: <a href=
+    "Fringes.html#Fringes" accesskey="u" rel="up">Fringes</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="The-Overlay-Arrow" id="The-Overlay-Arrow"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Overlay-Arrow"></a>
-<div class="header">
-<p>
-Previous: <a href="Customizing-Bitmaps.html#Customizing-Bitmaps" accesskey="p" rel="prev">Customizing Bitmaps</a>, Up: <a href="Fringes.html#Fringes" accesskey="u" rel="up">Fringes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="The-Overlay-Arrow"></a>
-<h4 class="subsection">37.13.6 The Overlay Arrow</h4>
+  <h4 class="subsection">37.13.6 The Overlay Arrow</h4>
 
-<p>The <em>overlay arrow</em> is useful for directing the user&rsquo;s attention
-to a particular line in a buffer.  For example, in the modes used for
-interface to debuggers, the overlay arrow indicates the line of code
-about to be executed.  This feature has nothing to do with
-<em>overlays</em> (see <a href="Overlays.html#Overlays">Overlays</a>).
-</p>
-<dl>
-<dt><a name="index-overlay_002darrow_002dstring"></a>Variable: <strong>overlay-arrow-string</strong></dt>
-<dd><p>This variable holds the string to display to call attention to a
-particular line, or <code>nil</code> if the arrow feature is not in use.
-On a graphical display the contents of the string are ignored; instead a
-glyph is displayed in the fringe area to the left of the display area.
-</p></dd></dl>
+  <p>The <em>overlay arrow</em> is useful for directing the
+  user&rsquo;s attention to a particular line in a buffer. For
+  example, in the modes used for interface to debuggers, the
+  overlay arrow indicates the line of code about to be executed.
+  This feature has nothing to do with <em>overlays</em> (see
+  <a href="Overlays.html#Overlays">Overlays</a>).</p>
 
-<dl>
-<dt><a name="index-overlay_002darrow_002dposition"></a>Variable: <strong>overlay-arrow-position</strong></dt>
-<dd><p>This variable holds a marker that indicates where to display the overlay
-arrow.  It should point at the beginning of a line.  On a non-graphical
-display the arrow text
-appears at the beginning of that line, overlaying any text that would
-otherwise appear.  Since the arrow is usually short, and the line
-usually begins with indentation, normally nothing significant is
-overwritten.
-</p>
-<p>The overlay-arrow string is displayed in any given buffer if the value
-of <code>overlay-arrow-position</code> in that buffer points into that
-buffer.  Thus, it is possible to display multiple overlay arrow strings
-by creating buffer-local bindings of <code>overlay-arrow-position</code>.
-However, it is usually cleaner to use
-<code>overlay-arrow-variable-list</code> to achieve this result.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-overlay_002darrow_002dstring" id=
+    "index-overlay_002darrow_002dstring"></a>Variable:
+    <strong>overlay-arrow-string</strong></dt>
 
-<p>You can do a similar job by creating an overlay with a
-<code>before-string</code> property.  See <a href="Overlay-Properties.html#Overlay-Properties">Overlay Properties</a>.
-</p>
-<p>You can define multiple overlay arrows via the variable
-<code>overlay-arrow-variable-list</code>.
-</p>
-<dl>
-<dt><a name="index-overlay_002darrow_002dvariable_002dlist"></a>Variable: <strong>overlay-arrow-variable-list</strong></dt>
-<dd><p>This variable&rsquo;s value is a list of variables, each of which specifies
-the position of an overlay arrow.  The variable
-<code>overlay-arrow-position</code> has its normal meaning because it is on
-this list.
-</p></dd></dl>
+    <dd>
+      <p>This variable holds the string to display to call
+      attention to a particular line, or <code>nil</code> if the
+      arrow feature is not in use. On a graphical display the
+      contents of the string are ignored; instead a glyph is
+      displayed in the fringe area to the left of the display
+      area.</p>
+    </dd>
+  </dl>
 
-<p>Each variable on this list can have properties
-<code>overlay-arrow-string</code> and <code>overlay-arrow-bitmap</code> that
-specify an overlay arrow string (for text terminals) or fringe bitmap
-(for graphical terminals) to display at the corresponding overlay
-arrow position.  If either property is not set, the default
-<code>overlay-arrow-string</code> or <code>overlay-arrow</code> fringe indicator
-is used.
-</p>
+  <dl>
+    <dt><a name="index-overlay_002darrow_002dposition" id=
+    "index-overlay_002darrow_002dposition"></a>Variable:
+    <strong>overlay-arrow-position</strong></dt>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Customizing-Bitmaps.html#Customizing-Bitmaps" accesskey="p" rel="prev">Customizing Bitmaps</a>, Up: <a href="Fringes.html#Fringes" accesskey="u" rel="up">Fringes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This variable holds a marker that indicates where to
+      display the overlay arrow. It should point at the beginning
+      of a line. On a non-graphical display the arrow text appears
+      at the beginning of that line, overlaying any text that would
+      otherwise appear. Since the arrow is usually short, and the
+      line usually begins with indentation, normally nothing
+      significant is overwritten.</p>
 
+      <p>The overlay-arrow string is displayed in any given buffer
+      if the value of <code>overlay-arrow-position</code> in that
+      buffer points into that buffer. Thus, it is possible to
+      display multiple overlay arrow strings by creating
+      buffer-local bindings of <code>overlay-arrow-position</code>.
+      However, it is usually cleaner to use
+      <code>overlay-arrow-variable-list</code> to achieve this
+      result.</p>
+    </dd>
+  </dl>
 
+  <p>You can do a similar job by creating an overlay with a
+  <code>before-string</code> property. See <a href=
+  "Overlay-Properties.html#Overlay-Properties">Overlay
+  Properties</a>.</p>
 
+  <p>You can define multiple overlay arrows via the variable
+  <code>overlay-arrow-variable-list</code>.</p>
+
+  <dl>
+    <dt><a name="index-overlay_002darrow_002dvariable_002dlist" id=
+    "index-overlay_002darrow_002dvariable_002dlist"></a>Variable:
+    <strong>overlay-arrow-variable-list</strong></dt>
+
+    <dd>
+      <p>This variable&rsquo;s value is a list of variables, each
+      of which specifies the position of an overlay arrow. The
+      variable <code>overlay-arrow-position</code> has its normal
+      meaning because it is on this list.</p>
+    </dd>
+  </dl>
+
+  <p>Each variable on this list can have properties
+  <code>overlay-arrow-string</code> and
+  <code>overlay-arrow-bitmap</code> that specify an overlay arrow
+  string (for text terminals) or fringe bitmap (for graphical
+  terminals) to display at the corresponding overlay arrow
+  position. If either property is not set, the default
+  <code>overlay-arrow-string</code> or <code>overlay-arrow</code>
+  fringe indicator is used.</p>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Customizing-Bitmaps.html#Customizing-Bitmaps" accesskey="p"
+    rel="prev">Customizing Bitmaps</a>, Up: <a href=
+    "Fringes.html#Fringes" accesskey="u" rel="up">Fringes</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

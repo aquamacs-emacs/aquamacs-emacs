@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,172 +14,240 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Delayed Articles</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Delayed Articles">
-<meta name="keywords" content="Gnus Manual: Delayed Articles">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Summary-Buffer.html#Summary-Buffer" rel="up" title="Summary Buffer">
-<link href="Marking-Articles.html#Marking-Articles" rel="next" title="Marking Articles">
-<link href="Canceling-and-Superseding.html#Canceling-and-Superseding" rel="prev" title="Canceling and Superseding">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Delayed Articles</title>
+  <meta name="description" content=
+  "Gnus Manual: Delayed Articles" />
+  <meta name="keywords" content="Gnus Manual: Delayed Articles" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Summary-Buffer.html#Summary-Buffer" rel="up" title=
+  "Summary Buffer" />
+  <link href="Marking-Articles.html#Marking-Articles" rel="next"
+  title="Marking Articles" />
+  <link href=
+  "Canceling-and-Superseding.html#Canceling-and-Superseding" rel=
+  "prev" title="Canceling and Superseding" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Delayed-Articles"></a>
-<div class="header">
-<p>
-Next: <a href="Marking-Articles.html#Marking-Articles" accesskey="n" rel="next">Marking Articles</a>, Previous: <a href="Reply-Followup-and-Post.html#Reply-Followup-and-Post" accesskey="p" rel="prev">Reply Followup and Post</a>, Up: <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel="up">Summary Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Delayed-Articles-1"></a>
-<h3 class="section">3.6 Delayed Articles</h3>
-<a name="index-delayed-sending"></a>
-<a name="index-send-delayed"></a>
+<body lang="en" xml:lang="en">
+  <a name="Delayed-Articles" id="Delayed-Articles"></a>
 
-<p>Sometimes, you might wish to delay the sending of a message.  For
-example, you might wish to arrange for a message to turn up just in time
-to remind your about the birthday of your Significant Other.  For this,
-there is the <code>gnus-delay</code> package.  Setup is simple:
-</p>
-<div class="lisp">
-<pre class="lisp">(gnus-delay-initialize)
-</pre></div>
+  <div class="header">
+    <p>Next: <a href="Marking-Articles.html#Marking-Articles"
+    accesskey="n" rel="next">Marking Articles</a>, Previous:
+    <a href="Reply-Followup-and-Post.html#Reply-Followup-and-Post"
+    accesskey="p" rel="prev">Reply Followup and Post</a>, Up:
+    <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel=
+    "up">Summary Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Delayed-Articles-1" id="Delayed-Articles-1"></a>
 
-<a name="index-gnus_002ddelay_002darticle"></a>
-<p>Normally, to send a message you use the <kbd>C-c C-c</kbd> command from
-Message mode.  To delay a message, use <kbd>C-c C-j</kbd>
-(<code>gnus-delay-article</code>) instead.  This will ask you for how long the
-message should be delayed.  Possible answers are:
-</p>
-<ul>
-<li> A time span.  Consists of an integer and a letter.  For example,
-<code>42d</code> means to delay for 42 days.  Available letters are <code>m</code>
-(minutes), <code>h</code> (hours), <code>d</code> (days), <code>w</code> (weeks), <code>M</code>
-(months) and <code>Y</code> (years).
+  <h3 class="section">3.6 Delayed Articles</h3><a name=
+  "index-delayed-sending" id="index-delayed-sending"></a> <a name=
+  "index-send-delayed" id="index-send-delayed"></a>
 
-</li><li> A specific date.  Looks like <code>YYYY-MM-DD</code>.  The message will be
-delayed until that day, at a specific time (eight o&rsquo;clock by default).
-See also <code>gnus-delay-default-hour</code>.
+  <p>Sometimes, you might wish to delay the sending of a message.
+  For example, you might wish to arrange for a message to turn up
+  just in time to remind your about the birthday of your
+  Significant Other. For this, there is the <code>gnus-delay</code>
+  package. Setup is simple:</p>
 
-</li><li> A specific time of day.  Given in <code>hh:mm</code> format, 24h, no am/pm
-stuff.  The deadline will be at that time today, except if that time has
-already passed, then it&rsquo;s at the given time tomorrow.  So if it&rsquo;s ten
-o&rsquo;clock in the morning and you specify <code>11:15</code>, then the deadline
-is one hour and fifteen minutes hence.  But if you specify <code>9:20</code>,
-that means a time tomorrow.
-</li></ul>
+  <div class="lisp">
+    <pre class="lisp">
+(gnus-delay-initialize)
+</pre>
+  </div><a name="index-gnus_002ddelay_002darticle" id=
+  "index-gnus_002ddelay_002darticle"></a>
 
-<p>The action of the <code>gnus-delay-article</code> command is influenced by a
-couple of variables:
-</p>
-<dl compact="compact">
-<dt><code>gnus-delay-default-hour</code></dt>
-<dd><a name="index-gnus_002ddelay_002ddefault_002dhour"></a>
-<p>When you specify a specific date, the message will be due on that hour
-on the given date.  Possible values are integers 0 through 23.
-</p>
-</dd>
-<dt><code>gnus-delay-default-delay</code></dt>
-<dd><a name="index-gnus_002ddelay_002ddefault_002ddelay"></a>
-<p>This is a string and gives the default delay.  It can be of any of the
-formats described above.
-</p>
-</dd>
-<dt><code>gnus-delay-group</code></dt>
-<dd><a name="index-gnus_002ddelay_002dgroup"></a>
-<p>Delayed articles will be kept in this group on the drafts server until
-they are due.  You probably don&rsquo;t need to change this.  The default
-value is <code>&quot;delayed&quot;</code>.
-</p>
-</dd>
-<dt><code>gnus-delay-header</code></dt>
-<dd><a name="index-gnus_002ddelay_002dheader"></a>
-<p>The deadline for each article will be stored in a header.  This variable
-is a string and gives the header name.  You probably don&rsquo;t need to
-change this.  The default value is <code>&quot;X-Gnus-Delayed&quot;</code>.
-</p></dd>
-</dl>
+  <p>Normally, to send a message you use the <kbd>C-c C-c</kbd>
+  command from Message mode. To delay a message, use <kbd>C-c
+  C-j</kbd> (<code>gnus-delay-article</code>) instead. This will
+  ask you for how long the message should be delayed. Possible
+  answers are:</p>
 
-<p>The way delaying works is like this: when you use the
-<code>gnus-delay-article</code> command, you give a certain delay.  Gnus
-calculates the deadline of the message and stores it in the
-<code>X-Gnus-Delayed</code> header and puts the message in the
-<code>nndraft:delayed</code> group.
-</p>
-<a name="index-gnus_002ddelay_002dsend_002dqueue"></a>
-<p>And whenever you get new news, Gnus looks through the group for articles
-which are due and sends them.  It uses the <code>gnus-delay-send-queue</code>
-function for this.  By default, this function is added to the hook
-<code>gnus-get-new-news-hook</code>.  But of course, you can change this.
-Maybe you want to use the demon to send drafts?  Just tell the demon to
-execute the <code>gnus-delay-send-queue</code> function.
-</p>
-<dl compact="compact">
-<dt><code>gnus-delay-initialize</code></dt>
-<dd><a name="index-gnus_002ddelay_002dinitialize"></a>
-<p>By default, this function installs <code>gnus-delay-send-queue</code> in
-<code>gnus-get-new-news-hook</code>.  But it accepts the optional second
-argument <code>no-check</code>.  If it is non-<code>nil</code>,
-<code>gnus-get-new-news-hook</code> is not changed.  The optional first
-argument is ignored.
-</p>
-<p>For example, <code>(gnus-delay-initialize nil t)</code> means to do nothing.
-Presumably, you want to use the demon for sending due delayed articles.
-Just don&rsquo;t forget to set that up :-)
-</p></dd>
-</dl>
+  <ul>
+    <li>A time span. Consists of an integer and a letter. For
+    example, <code>42d</code> means to delay for 42 days. Available
+    letters are <code>m</code> (minutes), <code>h</code> (hours),
+    <code>d</code> (days), <code>w</code> (weeks), <code>M</code>
+    (months) and <code>Y</code> (years).</li>
 
-<p>When delaying an article with <kbd>C-c C-j</kbd>, Message mode will
-automatically add a <code>&quot;Date&quot;</code> header with the current time.  In
-many cases you probably want the <code>&quot;Date&quot;</code> header to reflect the
-time the message is sent instead.  To do this, you have to delete
-<code>Date</code> from <code>message-draft-headers</code>.
-</p>
+    <li>A specific date. Looks like <code>YYYY-MM-DD</code>. The
+    message will be delayed until that day, at a specific time
+    (eight o&rsquo;clock by default). See also
+    <code>gnus-delay-default-hour</code>.</li>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Marking-Articles.html#Marking-Articles" accesskey="n" rel="next">Marking Articles</a>, Previous: <a href="Reply-Followup-and-Post.html#Reply-Followup-and-Post" accesskey="p" rel="prev">Reply Followup and Post</a>, Up: <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel="up">Summary Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <li>A specific time of day. Given in <code>hh:mm</code> format,
+    24h, no am/pm stuff. The deadline will be at that time today,
+    except if that time has already passed, then it&rsquo;s at the
+    given time tomorrow. So if it&rsquo;s ten o&rsquo;clock in the
+    morning and you specify <code>11:15</code>, then the deadline
+    is one hour and fifteen minutes hence. But if you specify
+    <code>9:20</code>, that means a time tomorrow.</li>
+  </ul>
 
+  <p>The action of the <code>gnus-delay-article</code> command is
+  influenced by a couple of variables:</p>
 
+  <dl compact="compact">
+    <dt><code>gnus-delay-default-hour</code></dt>
 
+    <dd>
+      <a name="index-gnus_002ddelay_002ddefault_002dhour" id=
+      "index-gnus_002ddelay_002ddefault_002dhour"></a>
+
+      <p>When you specify a specific date, the message will be due
+      on that hour on the given date. Possible values are integers
+      0 through 23.</p>
+    </dd>
+
+    <dt><code>gnus-delay-default-delay</code></dt>
+
+    <dd>
+      <a name="index-gnus_002ddelay_002ddefault_002ddelay" id=
+      "index-gnus_002ddelay_002ddefault_002ddelay"></a>
+
+      <p>This is a string and gives the default delay. It can be of
+      any of the formats described above.</p>
+    </dd>
+
+    <dt><code>gnus-delay-group</code></dt>
+
+    <dd>
+      <a name="index-gnus_002ddelay_002dgroup" id=
+      "index-gnus_002ddelay_002dgroup"></a>
+
+      <p>Delayed articles will be kept in this group on the drafts
+      server until they are due. You probably don&rsquo;t need to
+      change this. The default value is <code>"delayed"</code>.</p>
+    </dd>
+
+    <dt><code>gnus-delay-header</code></dt>
+
+    <dd>
+      <a name="index-gnus_002ddelay_002dheader" id=
+      "index-gnus_002ddelay_002dheader"></a>
+
+      <p>The deadline for each article will be stored in a header.
+      This variable is a string and gives the header name. You
+      probably don&rsquo;t need to change this. The default value
+      is <code>"X-Gnus-Delayed"</code>.</p>
+    </dd>
+  </dl>
+
+  <p>The way delaying works is like this: when you use the
+  <code>gnus-delay-article</code> command, you give a certain
+  delay. Gnus calculates the deadline of the message and stores it
+  in the <code>X-Gnus-Delayed</code> header and puts the message in
+  the <code>nndraft:delayed</code> group.</p><a name=
+  "index-gnus_002ddelay_002dsend_002dqueue" id=
+  "index-gnus_002ddelay_002dsend_002dqueue"></a>
+
+  <p>And whenever you get new news, Gnus looks through the group
+  for articles which are due and sends them. It uses the
+  <code>gnus-delay-send-queue</code> function for this. By default,
+  this function is added to the hook
+  <code>gnus-get-new-news-hook</code>. But of course, you can
+  change this. Maybe you want to use the demon to send drafts? Just
+  tell the demon to execute the <code>gnus-delay-send-queue</code>
+  function.</p>
+
+  <dl compact="compact">
+    <dt><code>gnus-delay-initialize</code></dt>
+
+    <dd>
+      <a name="index-gnus_002ddelay_002dinitialize" id=
+      "index-gnus_002ddelay_002dinitialize"></a>
+
+      <p>By default, this function installs
+      <code>gnus-delay-send-queue</code> in
+      <code>gnus-get-new-news-hook</code>. But it accepts the
+      optional second argument <code>no-check</code>. If it is
+      non-<code>nil</code>, <code>gnus-get-new-news-hook</code> is
+      not changed. The optional first argument is ignored.</p>
+
+      <p>For example, <code>(gnus-delay-initialize nil t)</code>
+      means to do nothing. Presumably, you want to use the demon
+      for sending due delayed articles. Just don&rsquo;t forget to
+      set that up :-)</p>
+    </dd>
+  </dl>
+
+  <p>When delaying an article with <kbd>C-c C-j</kbd>, Message mode
+  will automatically add a <code>"Date"</code> header with the
+  current time. In many cases you probably want the
+  <code>"Date"</code> header to reflect the time the message is
+  sent instead. To do this, you have to delete <code>Date</code>
+  from <code>message-draft-headers</code>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Marking-Articles.html#Marking-Articles"
+    accesskey="n" rel="next">Marking Articles</a>, Previous:
+    <a href="Reply-Followup-and-Post.html#Reply-Followup-and-Post"
+    accesskey="p" rel="prev">Reply Followup and Post</a>, Up:
+    <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel=
+    "up">Summary Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

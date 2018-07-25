@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,112 +20,164 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Hungry Delete</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Hungry Delete">
-<meta name="keywords" content="GNU Emacs Manual: Hungry Delete">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="C-Modes.html#C-Modes" rel="up" title="C Modes">
-<link href="Other-C-Commands.html#Other-C-Commands" rel="next" title="Other C Commands">
-<link href="Electric-C.html#Electric-C" rel="prev" title="Electric C">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Hungry Delete</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Hungry Delete" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Hungry Delete" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="C-Modes.html#C-Modes" rel="up" title="C Modes" />
+  <link href="Other-C-Commands.html#Other-C-Commands" rel="next"
+  title="Other C Commands" />
+  <link href="Electric-C.html#Electric-C" rel="prev" title=
+  "Electric C" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Hungry-Delete" id="Hungry-Delete"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Other-C-Commands.html#Other-C-Commands"
+    accesskey="n" rel="next">Other C Commands</a>, Previous:
+    <a href="Electric-C.html#Electric-C" accesskey="p" rel=
+    "prev">Electric C</a>, Up: <a href="C-Modes.html#C-Modes"
+    accesskey="u" rel="up">C Modes</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Hungry-Delete-Feature-in-C" id=
+  "Hungry-Delete-Feature-in-C"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Hungry-Delete"></a>
-<div class="header">
-<p>
-Next: <a href="Other-C-Commands.html#Other-C-Commands" accesskey="n" rel="next">Other C Commands</a>, Previous: <a href="Electric-C.html#Electric-C" accesskey="p" rel="prev">Electric C</a>, Up: <a href="C-Modes.html#C-Modes" accesskey="u" rel="up">C Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Hungry-Delete-Feature-in-C"></a>
-<h4 class="subsection">26.12.3 Hungry Delete Feature in C</h4>
-<a name="index-hungry-deletion-_0028C-Mode_0029"></a>
+  <h4 class="subsection">26.12.3 Hungry Delete Feature in
+  C</h4><a name="index-hungry-deletion-_0028C-Mode_0029" id=
+  "index-hungry-deletion-_0028C-Mode_0029"></a>
 
-<p>If you want to delete an entire block of whitespace at point, you
-can use <em>hungry deletion</em>.  This deletes all the contiguous
-whitespace either before point or after point in a single operation.
-<em>Whitespace</em> here includes tabs and newlines, but not comments or
-preprocessor commands.
-</p>
-<dl compact="compact">
-<dt><kbd>C-c C-<span class="key">DEL</span></kbd></dt>
-<dt><kbd>C-c <span class="key">DEL</span></kbd></dt>
-<dd><a name="index-c_002dhungry_002ddelete_002dbackwards"></a>
-<a name="index-C_002dc-C_002dDEL-_0028C-Mode_0029"></a>
-<a name="index-C_002dc-DEL-_0028C-Mode_0029"></a>
-<p>Delete the entire block of whitespace preceding point (<code>c-hungry-delete-backwards</code>).
-</p>
-</dd>
-<dt><kbd>C-c C-d</kbd></dt>
-<dt><kbd>C-c C-<span class="key">Delete</span></kbd></dt>
-<dt><kbd>C-c <span class="key">Delete</span></kbd></dt>
-<dd><a name="index-c_002dhungry_002ddelete_002dforward"></a>
-<a name="index-C_002dc-C_002dd-_0028C-Mode_0029"></a>
-<a name="index-C_002dc-C_002dDelete-_0028C-Mode_0029"></a>
-<a name="index-C_002dc-Delete-_0028C-Mode_0029"></a>
-<p>Delete the entire block of whitespace after point (<code>c-hungry-delete-forward</code>).
-</p></dd>
-</dl>
+  <p>If you want to delete an entire block of whitespace at point,
+  you can use <em>hungry deletion</em>. This deletes all the
+  contiguous whitespace either before point or after point in a
+  single operation. <em>Whitespace</em> here includes tabs and
+  newlines, but not comments or preprocessor commands.</p>
 
-<p>As an alternative to the above commands, you can enable <em>hungry
-delete mode</em>.  When this feature is enabled (indicated by &lsquo;<samp>/h</samp>&rsquo; in
-the mode line after the mode name), a single <tt class="key">DEL</tt> deletes all
-preceding whitespace, not just one space, and a single <kbd>C-d</kbd>
-(but <em>not</em> plain <tt class="key">Delete</tt>) deletes all following whitespace.
-</p>
-<dl compact="compact">
-<dt><kbd>M-x c-toggle-hungry-state</kbd></dt>
-<dd><a name="index-c_002dtoggle_002dhungry_002dstate"></a>
-<p>Toggle the hungry-delete feature
-(<code>c-toggle-hungry-state</code>).  With a prefix argument,
-this command turns the hungry-delete feature on if the argument is
-positive, and off if it is negative.
-</p></dd>
-</dl>
+  <dl compact="compact">
+    <dt><kbd>C-c C-<span class="key">DEL</span></kbd></dt>
 
-<a name="index-c_002dhungry_002ddelete_002dkey"></a>
-<p>The variable <code>c-hungry-delete-key</code> controls whether the
-hungry-delete feature is enabled.
-</p>
+    <dt><kbd>C-c <span class="key">DEL</span></kbd></dt>
 
+    <dd>
+      <a name="index-c_002dhungry_002ddelete_002dbackwards" id=
+      "index-c_002dhungry_002ddelete_002dbackwards"></a> <a name=
+      "index-C_002dc-C_002dDEL-_0028C-Mode_0029" id=
+      "index-C_002dc-C_002dDEL-_0028C-Mode_0029"></a> <a name=
+      "index-C_002dc-DEL-_0028C-Mode_0029" id=
+      "index-C_002dc-DEL-_0028C-Mode_0029"></a>
 
+      <p>Delete the entire block of whitespace preceding point
+      (<code>c-hungry-delete-backwards</code>).</p>
+    </dd>
 
+    <dt><kbd>C-c C-d</kbd></dt>
+
+    <dt><kbd>C-c C-<span class="key">Delete</span></kbd></dt>
+
+    <dt><kbd>C-c <span class="key">Delete</span></kbd></dt>
+
+    <dd>
+      <a name="index-c_002dhungry_002ddelete_002dforward" id=
+      "index-c_002dhungry_002ddelete_002dforward"></a> <a name=
+      "index-C_002dc-C_002dd-_0028C-Mode_0029" id=
+      "index-C_002dc-C_002dd-_0028C-Mode_0029"></a> <a name=
+      "index-C_002dc-C_002dDelete-_0028C-Mode_0029" id=
+      "index-C_002dc-C_002dDelete-_0028C-Mode_0029"></a> <a name=
+      "index-C_002dc-Delete-_0028C-Mode_0029" id=
+      "index-C_002dc-Delete-_0028C-Mode_0029"></a>
+
+      <p>Delete the entire block of whitespace after point
+      (<code>c-hungry-delete-forward</code>).</p>
+    </dd>
+  </dl>
+
+  <p>As an alternative to the above commands, you can enable
+  <em>hungry delete mode</em>. When this feature is enabled
+  (indicated by &lsquo;<samp>/h</samp>&rsquo; in the mode line
+  after the mode name), a single <tt class="key">DEL</tt> deletes
+  all preceding whitespace, not just one space, and a single
+  <kbd>C-d</kbd> (but <em>not</em> plain <tt class=
+  "key">Delete</tt>) deletes all following whitespace.</p>
+
+  <dl compact="compact">
+    <dt><kbd>M-x c-toggle-hungry-state</kbd></dt>
+
+    <dd>
+      <a name="index-c_002dtoggle_002dhungry_002dstate" id=
+      "index-c_002dtoggle_002dhungry_002dstate"></a>
+
+      <p>Toggle the hungry-delete feature
+      (<code>c-toggle-hungry-state</code>). With a prefix argument,
+      this command turns the hungry-delete feature on if the
+      argument is positive, and off if it is negative.</p>
+    </dd>
+  </dl><a name="index-c_002dhungry_002ddelete_002dkey" id=
+  "index-c_002dhungry_002ddelete_002dkey"></a>
+
+  <p>The variable <code>c-hungry-delete-key</code> controls whether
+  the hungry-delete feature is enabled.</p>
 </body>
 </html>

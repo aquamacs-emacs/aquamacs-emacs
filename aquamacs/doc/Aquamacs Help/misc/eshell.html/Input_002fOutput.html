@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Eshell, the Emacs shell.
 
 Copyright (C) 1999-2016 Free Software Foundation, Inc.
@@ -14,139 +16,192 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Eshell: The Emacs Shell: Input/Output</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Eshell: The Emacs Shell: Input/Output">
-<meta name="keywords" content="Eshell: The Emacs Shell: Input/Output">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Concept-Index.html#Concept-Index" rel="index" title="Concept Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Extension-modules.html#Extension-modules" rel="next" title="Extension modules">
-<link href="Globbing.html#Globbing" rel="prev" title="Globbing">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Eshell: The Emacs Shell: Input/Output</title>
+  <meta name="description" content=
+  "Eshell: The Emacs Shell: Input/Output" />
+  <meta name="keywords" content=
+  "Eshell: The Emacs Shell: Input/Output" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Concept-Index.html#Concept-Index" rel="index" title=
+  "Concept Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Extension-modules.html#Extension-modules" rel="next"
+  title="Extension modules" />
+  <link href="Globbing.html#Globbing" rel="prev" title=
+  "Globbing" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Input_002fOutput"></a>
-<div class="header">
-<p>
-Next: <a href="Extension-modules.html#Extension-modules" accesskey="n" rel="next">Extension modules</a>, Previous: <a href="Expansion.html#Expansion" accesskey="p" rel="prev">Expansion</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Input_002fOutput-1"></a>
-<h2 class="chapter">4 Input/Output</h2>
-<p>Since Eshell does not communicate with a terminal like most command
-shells, IO is a little different.
-</p>
-<a name="Visual-Commands"></a>
-<h3 class="section">4.1 Visual Commands</h3>
-<p>If you try to run programs from within Eshell that are not
-line-oriented, such as programs that use ncurses, you will just get
-garbage output, since the Eshell buffer is not a terminal emulator.
-Eshell solves this problem by running such programs in Emacs&rsquo;s
-terminal emulator.
-</p>
-<p>Programs that need a terminal to display output properly are referred
-to in this manual as &ldquo;visual commands,&rdquo; because they are not simply
-line-oriented.  You must tell Eshell which commands are visual, by
-adding them to <code>eshell-visual-commands</code>; for commands that are
-visual for only certain <em>sub</em>-commands &ndash; e.g., &lsquo;<samp>git log</samp>&rsquo; but
-not &lsquo;<samp>git status</samp>&rsquo; &ndash; use <code>eshell-visual-subcommands</code>; and for
-commands that are visual only when passed certain options, use
-<code>eshell-visual-options</code>.
-</p>
-<p>Caution: Some tools such as Git use the pager &lsquo;<samp>less</samp>&rsquo; by default
-to paginate their output but call it with its &lsquo;<samp>-F</samp>&rsquo; option.  This
-option causes &lsquo;<samp>less</samp>&rsquo; to echo the output instead of paginating it
-if the output is less than one page long.  This causes undesirable
-behavior if, e.g., &lsquo;<samp>git diff</samp>&rsquo;, is defined as a visual subcommand.
-It&rsquo;ll work if the output is big enough and fail if it is less than one
-page long.  If that occurs to you, search for configuration options
-for calling &lsquo;<samp>less</samp>&rsquo; without the &lsquo;<samp>-F</samp>&rsquo; option.  For Git, you
-can do that using &lsquo;<samp>git config --global core.pager 'less -+F'</samp>&rsquo;.
-</p>
-<a name="index-eshell_002ddestroy_002dbuffer_002dwhen_002dprocess_002ddies"></a>
-<p>If you want the buffers created by visual programs killed when the
-program exits, customize the variable
-<code>eshell-destroy-buffer-when-process-dies</code> to a non-<code>nil</code>
-value; the default is <code>nil</code>.
-</p>
-<a name="Redirection"></a>
-<h3 class="section">4.2 Redirection</h3>
-<p>Redirection is mostly the same in Eshell as it is in other command
-shells.  The output redirection operators <code>&gt;</code> and <code>&gt;&gt;</code> as
-well as pipes are supported, but there is not yet any support for
-input redirection.  Output can also be redirected to buffers, using
-the <code>&gt;&gt;&gt;</code> redirection operator, and Elisp functions, using
-virtual devices.
-</p>
-<p>The buffer redirection operator, <code>&gt;&gt;&gt;</code>, expects a buffer object
-on the right-hand side, into which it inserts the output of the
-left-hand side.  e.g., &lsquo;<samp>echo hello &gt;&gt;&gt; #&lt;buffer *scratch*&gt;</samp>&rsquo;
-inserts the string <code>&quot;hello&quot;</code> into the <samp>*scratch*</samp> buffer.
-The convenience shorthand variant &lsquo;<samp>#&lt;<var>buffer-name</var>&gt;</samp>&rsquo;, as in
-&lsquo;<samp>#&lt;*scratch*&gt;</samp>&rsquo;, is also accepted.
-</p>
-<p><code>eshell-virtual-targets</code> is a list of mappings of virtual device
-names to functions.  Eshell comes with two virtual devices:
-<samp>/dev/kill</samp>, which sends the text to the kill ring, and
-<samp>/dev/clip</samp>, which sends text to the clipboard.
-</p>
-<p>You can, of course, define your own virtual targets.  They are defined
-by adding a list of the form &lsquo;<samp>(&quot;/dev/name&quot; <var>function</var> <var>mode</var>)</samp>&rsquo; to
-<code>eshell-virtual-targets</code>.  The first element is the device name;
-<var>function</var> may be either a lambda or a function name.  If
-<var>mode</var> is <code>nil</code>, then the function is the output function; if it is
-non-<code>nil</code>, then the function is passed the redirection mode as a
-symbol&ndash;<code>overwrite</code> for <code>&gt;</code>, <code>append</code> for <code>&gt;&gt;</code>, or
-<code>insert</code> for <code>&gt;&gt;&gt;</code>&ndash;and the function is expected to return
-the output function.
-</p>
-<p>The output function is called once on each line of output until
-<code>nil</code> is passed, indicating end of output.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Extension-modules.html#Extension-modules" accesskey="n" rel="next">Extension modules</a>, Previous: <a href="Expansion.html#Expansion" accesskey="p" rel="prev">Expansion</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+<body lang="en" xml:lang="en">
+  <a name="Input_002fOutput" id="Input_002fOutput"></a>
 
+  <div class="header">
+    <p>Next: <a href="Extension-modules.html#Extension-modules"
+    accesskey="n" rel="next">Extension modules</a>, Previous:
+    <a href="Expansion.html#Expansion" accesskey="p" rel=
+    "prev">Expansion</a>, Up: <a href="index.html#Top" accesskey=
+    "u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Concept-Index.html#Concept-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Input_002fOutput-1" id="Input_002fOutput-1"></a>
 
+  <h2 class="chapter">4 Input/Output</h2>
 
+  <p>Since Eshell does not communicate with a terminal like most
+  command shells, IO is a little different.</p><a name=
+  "Visual-Commands" id="Visual-Commands"></a>
+
+  <h3 class="section">4.1 Visual Commands</h3>
+
+  <p>If you try to run programs from within Eshell that are not
+  line-oriented, such as programs that use ncurses, you will just
+  get garbage output, since the Eshell buffer is not a terminal
+  emulator. Eshell solves this problem by running such programs in
+  Emacs&rsquo;s terminal emulator.</p>
+
+  <p>Programs that need a terminal to display output properly are
+  referred to in this manual as &ldquo;visual commands,&rdquo;
+  because they are not simply line-oriented. You must tell Eshell
+  which commands are visual, by adding them to
+  <code>eshell-visual-commands</code>; for commands that are visual
+  for only certain <em>sub</em>-commands &ndash; e.g.,
+  &lsquo;<samp>git log</samp>&rsquo; but not &lsquo;<samp>git
+  status</samp>&rsquo; &ndash; use
+  <code>eshell-visual-subcommands</code>; and for commands that are
+  visual only when passed certain options, use
+  <code>eshell-visual-options</code>.</p>
+
+  <p>Caution: Some tools such as Git use the pager
+  &lsquo;<samp>less</samp>&rsquo; by default to paginate their
+  output but call it with its &lsquo;<samp>-F</samp>&rsquo; option.
+  This option causes &lsquo;<samp>less</samp>&rsquo; to echo the
+  output instead of paginating it if the output is less than one
+  page long. This causes undesirable behavior if, e.g.,
+  &lsquo;<samp>git diff</samp>&rsquo;, is defined as a visual
+  subcommand. It&rsquo;ll work if the output is big enough and fail
+  if it is less than one page long. If that occurs to you, search
+  for configuration options for calling
+  &lsquo;<samp>less</samp>&rsquo; without the
+  &lsquo;<samp>-F</samp>&rsquo; option. For Git, you can do that
+  using &lsquo;<samp>git config --global core.pager 'less
+  -+F'</samp>&rsquo;.</p><a name=
+  "index-eshell_002ddestroy_002dbuffer_002dwhen_002dprocess_002ddies"
+  id=
+  "index-eshell_002ddestroy_002dbuffer_002dwhen_002dprocess_002ddies"></a>
+
+  <p>If you want the buffers created by visual programs killed when
+  the program exits, customize the variable
+  <code>eshell-destroy-buffer-when-process-dies</code> to a
+  non-<code>nil</code> value; the default is
+  <code>nil</code>.</p><a name="Redirection" id="Redirection"></a>
+
+  <h3 class="section">4.2 Redirection</h3>
+
+  <p>Redirection is mostly the same in Eshell as it is in other
+  command shells. The output redirection operators
+  <code>&gt;</code> and <code>&gt;&gt;</code> as well as pipes are
+  supported, but there is not yet any support for input
+  redirection. Output can also be redirected to buffers, using the
+  <code>&gt;&gt;&gt;</code> redirection operator, and Elisp
+  functions, using virtual devices.</p>
+
+  <p>The buffer redirection operator, <code>&gt;&gt;&gt;</code>,
+  expects a buffer object on the right-hand side, into which it
+  inserts the output of the left-hand side. e.g., &lsquo;<samp>echo
+  hello &gt;&gt;&gt; #&lt;buffer *scratch*&gt;</samp>&rsquo;
+  inserts the string <code>"hello"</code> into the
+  <samp>*scratch*</samp> buffer. The convenience shorthand variant
+  &lsquo;<samp>#&lt;<var>buffer-name</var>&gt;</samp>&rsquo;, as in
+  &lsquo;<samp>#&lt;*scratch*&gt;</samp>&rsquo;, is also
+  accepted.</p>
+
+  <p><code>eshell-virtual-targets</code> is a list of mappings of
+  virtual device names to functions. Eshell comes with two virtual
+  devices: <samp>/dev/kill</samp>, which sends the text to the kill
+  ring, and <samp>/dev/clip</samp>, which sends text to the
+  clipboard.</p>
+
+  <p>You can, of course, define your own virtual targets. They are
+  defined by adding a list of the form &lsquo;<samp>("/dev/name"
+  <var>function</var> <var>mode</var>)</samp>&rsquo; to
+  <code>eshell-virtual-targets</code>. The first element is the
+  device name; <var>function</var> may be either a lambda or a
+  function name. If <var>mode</var> is <code>nil</code>, then the
+  function is the output function; if it is non-<code>nil</code>,
+  then the function is passed the redirection mode as a
+  symbol&ndash;<code>overwrite</code> for <code>&gt;</code>,
+  <code>append</code> for <code>&gt;&gt;</code>, or
+  <code>insert</code> for <code>&gt;&gt;&gt;</code>&ndash;and the
+  function is expected to return the output function.</p>
+
+  <p>The output function is called once on each line of output
+  until <code>nil</code> is passed, indicating end of output.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Extension-modules.html#Extension-modules"
+    accesskey="n" rel="next">Extension modules</a>, Previous:
+    <a href="Expansion.html#Expansion" accesskey="p" rel=
+    "prev">Expansion</a>, Up: <a href="index.html#Top" accesskey=
+    "u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Concept-Index.html#Concept-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

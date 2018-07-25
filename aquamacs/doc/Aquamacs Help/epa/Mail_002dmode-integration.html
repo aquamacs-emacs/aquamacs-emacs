@@ -1,15 +1,26 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Mail-mode integration - EasyPG Assistant User's Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="EasyPG Assistant User's Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Commands.html#Commands" title="Commands">
-<link rel="prev" href="Dired-integration.html#Dired-integration" title="Dired integration">
-<link rel="next" href="Encrypting_002fdecrypting-_002a_002egpg-files.html#Encrypting_002fdecrypting-_002a_002egpg-files" title="Encrypting/decrypting *.gpg files">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Mail-mode integration - EasyPG Assistant User's
+  Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content=
+  "EasyPG Assistant User's Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Commands.html#Commands" title="Commands" />
+  <link rel="prev" href="Dired-integration.html#Dired-integration"
+  title="Dired integration" />
+  <link rel="next" href=
+  "Encrypting_002fdecrypting-_002a_002egpg-files.html#Encrypting_002fdecrypting-_002a_002egpg-files"
+  title="Encrypting/decrypting *.gpg files" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file describes EasyPG Assistant 1.0.0.
 
 Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
@@ -32,8 +43,10 @@ Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
      copy of the license to the document, as described in section 6 of
      the license.
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -43,48 +56,96 @@ Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Mail-mode-integration"></a>
-<a name="Mail_002dmode-integration"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Encrypting_002fdecrypting-_002a_002egpg-files.html#Encrypting_002fdecrypting-_002a_002egpg-files">Encrypting/decrypting *.gpg files</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Dired-integration.html#Dired-integration">Dired integration</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Commands.html#Commands">Commands</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Mail-mode-integration" id="Mail-mode-integration"></a>
+    <a name="Mail_002dmode-integration" id=
+    "Mail_002dmode-integration"></a>
 
-<h3 class="section">3.5 Mail-mode integration</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Encrypting_002fdecrypting-_002a_002egpg-files.html#Encrypting_002fdecrypting-_002a_002egpg-files">Encrypting/decrypting
+    *.gpg files</a>, Previous:&nbsp;<a rel="previous" accesskey="p"
+    href="Dired-integration.html#Dired-integration">Dired
+    integration</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Commands.html#Commands">Commands</a></p>
+    <hr />
+  </div>
 
-<p>EasyPG Assistant provides a minor mode <code>epa-mail-mode</code> to help
-user compose inline OpenPGP messages.  Inline OpenPGP is a traditional
-style of sending signed/encrypted emails by embedding raw OpenPGP
-blobs inside a message body, not using modern MIME format.
+  <h3 class="section">3.5 Mail-mode integration</h3>
 
-   <p>NOTE: Inline OpenPGP is not recommended and you should consider to use
-PGP/MIME.  See
-<a href="http://josefsson.org/inline-openpgp-considered-harmful.html">Inline OpenPGP in E-mail is bad, Mm'kay?</a>.
+  <p>EasyPG Assistant provides a minor mode
+  <code>epa-mail-mode</code> to help user compose inline OpenPGP
+  messages. Inline OpenPGP is a traditional style of sending
+  signed/encrypted emails by embedding raw OpenPGP blobs inside a
+  message body, not using modern MIME format.</p>
 
-<p class="noindent">Once <code>epa-mail-mode</code> is enabled, the following keys are assigned. 
-You can do it by <kbd>C-u 1 M-x epa-mail-mode</kbd> or through the Customize
-interface.  Try <kbd>M-x customize-variable epa-global-mail-mode</kbd>.
+  <p>NOTE: Inline OpenPGP is not recommended and you should
+  consider to use PGP/MIME. See <a href=
+  "http://josefsson.org/inline-openpgp-considered-harmful.html">Inline
+  OpenPGP in E-mail is bad, Mm'kay?</a>.</p>
 
-     <dl>
-<dt><kbd>C-c C-e C-d and C-c C-e d</kbd><dd><a name="index-g_t_0040kbd_007bC_002dc-C_002de-C_002dd_007d-26"></a><a name="index-g_t_0040kbd_007bC_002dc-C_002de-d_007d-27"></a><a name="index-epa_002dmail_002ddecrypt-28"></a>Decrypt OpenPGP armors in the current buffer.
+  <p class="noindent">Once <code>epa-mail-mode</code> is enabled,
+  the following keys are assigned. You can do it by <kbd>C-u 1 M-x
+  epa-mail-mode</kbd> or through the Customize interface. Try
+  <kbd>M-x customize-variable epa-global-mail-mode</kbd>.</p>
 
-     <br><dt><kbd>C-c C-e C-v and C-c C-e v</kbd><dd><a name="index-g_t_0040kbd_007bC_002dc-C_002de-C_002dv_007d-29"></a><a name="index-g_t_0040kbd_007bC_002dc-C_002de-v_007d-30"></a><a name="index-epa_002dmail_002dverify-31"></a>Verify OpenPGP cleartext signed messages in the current buffer.
+  <dl>
+    <dt><kbd>C-c C-e C-d and C-c C-e d</kbd></dt>
 
-     <br><dt><kbd>C-c C-e C-s and C-c C-e s</kbd><dd><a name="index-g_t_0040kbd_007bC_002dc-C_002de-C_002ds_007d-32"></a><a name="index-g_t_0040kbd_007bC_002dc-C_002de-s_007d-33"></a><a name="index-epa_002dmail_002dsign-34"></a>Compose a signed message from the current buffer.
+    <dd><a name=
+    "index-g_t_0040kbd_007bC_002dc-C_002de-C_002dd_007d-26" id=
+    "index-g_t_0040kbd_007bC_002dc-C_002de-C_002dd_007d-26"></a><a name="index-g_t_0040kbd_007bC_002dc-C_002de-d_007d-27"
+    id=
+    "index-g_t_0040kbd_007bC_002dc-C_002de-d_007d-27"></a><a name=
+    "index-epa_002dmail_002ddecrypt-28" id=
+    "index-epa_002dmail_002ddecrypt-28"></a>Decrypt OpenPGP armors
+    in the current buffer.<br /></dd>
 
-     <br><dt><kbd>C-c C-e C-e and C-c C-e e</kbd><dd><a name="index-g_t_0040kbd_007bC_002dc-C_002de-C_002de_007d-35"></a><a name="index-g_t_0040kbd_007bC_002dc-C_002de-e_007d-36"></a><a name="index-epa_002dmail_002dencrypt-37"></a>Compose an encrypted message from the current buffer. 
-By default it tries to build the recipient list from &lsquo;<samp><span class="samp">to</span></samp>&rsquo;,
-&lsquo;<samp><span class="samp">cc</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">bcc</span></samp>&rsquo; fields of the mail header.  To include your
-key in the recipient list, use &lsquo;<samp><span class="samp">encrypt-to</span></samp>&rsquo; option in
-<samp><span class="file">~/.gnupg/gpg.conf</span></samp>.
+    <dt><kbd>C-c C-e C-v and C-c C-e v</kbd></dt>
 
-   </dl>
+    <dd><a name=
+    "index-g_t_0040kbd_007bC_002dc-C_002de-C_002dv_007d-29" id=
+    "index-g_t_0040kbd_007bC_002dc-C_002de-C_002dv_007d-29"></a><a name="index-g_t_0040kbd_007bC_002dc-C_002de-v_007d-30"
+    id=
+    "index-g_t_0040kbd_007bC_002dc-C_002de-v_007d-30"></a><a name=
+    "index-epa_002dmail_002dverify-31" id=
+    "index-epa_002dmail_002dverify-31"></a>Verify OpenPGP cleartext
+    signed messages in the current buffer.<br /></dd>
 
-   </body></html>
+    <dt><kbd>C-c C-e C-s and C-c C-e s</kbd></dt>
 
+    <dd><a name=
+    "index-g_t_0040kbd_007bC_002dc-C_002de-C_002ds_007d-32" id=
+    "index-g_t_0040kbd_007bC_002dc-C_002de-C_002ds_007d-32"></a><a name="index-g_t_0040kbd_007bC_002dc-C_002de-s_007d-33"
+    id=
+    "index-g_t_0040kbd_007bC_002dc-C_002de-s_007d-33"></a><a name=
+    "index-epa_002dmail_002dsign-34" id=
+    "index-epa_002dmail_002dsign-34"></a>Compose a signed message
+    from the current buffer.<br /></dd>
+
+    <dt><kbd>C-c C-e C-e and C-c C-e e</kbd></dt>
+
+    <dd><a name=
+    "index-g_t_0040kbd_007bC_002dc-C_002de-C_002de_007d-35" id=
+    "index-g_t_0040kbd_007bC_002dc-C_002de-C_002de_007d-35"></a><a name="index-g_t_0040kbd_007bC_002dc-C_002de-e_007d-36"
+    id=
+    "index-g_t_0040kbd_007bC_002dc-C_002de-e_007d-36"></a><a name=
+    "index-epa_002dmail_002dencrypt-37" id=
+    "index-epa_002dmail_002dencrypt-37"></a>Compose an encrypted
+    message from the current buffer. By default it tries to build
+    the recipient list from &lsquo;<samp><span class=
+    "samp">to</span></samp>&rsquo;, &lsquo;<samp><span class=
+    "samp">cc</span></samp>&rsquo;, and &lsquo;<samp><span class=
+    "samp">bcc</span></samp>&rsquo; fields of the mail header. To
+    include your key in the recipient list, use
+    &lsquo;<samp><span class="samp">encrypt-to</span></samp>&rsquo;
+    option in <samp><span class=
+    "file">~/.gnupg/gpg.conf</span></samp>.</dd>
+  </dl>
+</body>
+</html>

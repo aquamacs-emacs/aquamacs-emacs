@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,136 +14,198 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Filling In Threads</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Filling In Threads">
-<meta name="keywords" content="Gnus Manual: Filling In Threads">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Customizing-Threading.html#Customizing-Threading" rel="up" title="Customizing Threading">
-<link href="More-Threading.html#More-Threading" rel="next" title="More Threading">
-<link href="Loose-Threads.html#Loose-Threads" rel="prev" title="Loose Threads">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Filling In Threads</title>
+  <meta name="description" content=
+  "Gnus Manual: Filling In Threads" />
+  <meta name="keywords" content=
+  "Gnus Manual: Filling In Threads" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Customizing-Threading.html#Customizing-Threading"
+  rel="up" title="Customizing Threading" />
+  <link href="More-Threading.html#More-Threading" rel="next" title=
+  "More Threading" />
+  <link href="Loose-Threads.html#Loose-Threads" rel="prev" title=
+  "Loose Threads" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Filling-In-Threads"></a>
-<div class="header">
-<p>
-Next: <a href="More-Threading.html#More-Threading" accesskey="n" rel="next">More Threading</a>, Previous: <a href="Loose-Threads.html#Loose-Threads" accesskey="p" rel="prev">Loose Threads</a>, Up: <a href="Customizing-Threading.html#Customizing-Threading" accesskey="u" rel="up">Customizing Threading</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Filling-In-Threads-1"></a>
-<h4 class="subsubsection">3.9.1.2 Filling In Threads</h4>
+<body lang="en" xml:lang="en">
+  <a name="Filling-In-Threads" id="Filling-In-Threads"></a>
 
-<dl compact="compact">
-<dt><code>gnus-fetch-old-headers</code></dt>
-<dd><a name="index-gnus_002dfetch_002dold_002dheaders"></a>
-<p>If non-<code>nil</code>, Gnus will attempt to build old threads by fetching
-more old headers&mdash;headers to articles marked as read.  If you would
-like to display as few summary lines as possible, but still connect as
-many loose threads as possible, you should set this variable to
-<code>some</code> or a number.  If you set it to a number, no more than that
-number of extra old headers will be fetched.  In either case, fetching
-old headers only works if the back end you are using carries overview
-files&mdash;this would normally be <code>nntp</code>, <code>nnspool</code>,
-<code>nnml</code>, and <code>nnmaildir</code>.  Also remember that if the root of
-the thread has been expired by the server, there&rsquo;s not much Gnus can
-do about that.
-</p>
-<p>This variable can also be set to <code>invisible</code>.  This won&rsquo;t have any
-visible effects, but is useful if you use the <kbd>A T</kbd> command a lot
-(see <a href="Finding-the-Parent.html#Finding-the-Parent">Finding the Parent</a>).
-</p>
-<p>The server has to support <acronym>NOV</acronym> for any of this to work.
-</p>
-<a name="index-Gmane_002c-gnus_002dfetch_002dold_002dheaders"></a>
-<p>This feature can seriously impact performance it ignores all locally
-cached header entries.  Setting it to <code>t</code> for groups for a server
-that doesn&rsquo;t expire articles (such as news.gmane.org), leads to very
-slow summary generation.
-</p>
-</dd>
-<dt><code>gnus-fetch-old-ephemeral-headers</code></dt>
-<dd><a name="index-gnus_002dfetch_002dold_002dephemeral_002dheaders"></a>
-<p>Same as <code>gnus-fetch-old-headers</code>, but only used for ephemeral
-newsgroups.
-</p>
-</dd>
-<dt><code>gnus-build-sparse-threads</code></dt>
-<dd><a name="index-gnus_002dbuild_002dsparse_002dthreads"></a>
-<p>Fetching old headers can be slow.  A low-rent similar effect can be
-gotten by setting this variable to <code>some</code>.  Gnus will then look at
-the complete <code>References</code> headers of all articles and try to string
-together articles that belong in the same thread.  This will leave
-<em>gaps</em> in the threading display where Gnus guesses that an article
-is missing from the thread.  (These gaps appear like normal summary
-lines.  If you select a gap, Gnus will try to fetch the article in
-question.)  If this variable is <code>t</code>, Gnus will display all these
-&ldquo;gaps&rdquo; without regard for whether they are useful for completing the
-thread or not.  Finally, if this variable is <code>more</code>, Gnus won&rsquo;t cut
-off sparse leaf nodes that don&rsquo;t lead anywhere.  This variable is
-<code>nil</code> by default.
-</p>
-</dd>
-<dt><code>gnus-read-all-available-headers</code></dt>
-<dd><a name="index-gnus_002dread_002dall_002davailable_002dheaders"></a>
-<p>This is a rather obscure variable that few will find useful.  It&rsquo;s
-intended for those non-news newsgroups where the back end has to fetch
-quite a lot to present the summary buffer, and where it&rsquo;s impossible to
-go back to parents of articles.  This is mostly the case in the
-web-based groups.
-</p>
-<p>If you don&rsquo;t use those, then it&rsquo;s safe to leave this as the default
-<code>nil</code>.  If you want to use this variable, it should be a regexp
-that matches the group name, or <code>t</code> for all groups.
-</p>
-</dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="More-Threading.html#More-Threading"
+    accesskey="n" rel="next">More Threading</a>, Previous: <a href=
+    "Loose-Threads.html#Loose-Threads" accesskey="p" rel=
+    "prev">Loose Threads</a>, Up: <a href=
+    "Customizing-Threading.html#Customizing-Threading" accesskey=
+    "u" rel="up">Customizing Threading</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Filling-In-Threads-1" id="Filling-In-Threads-1"></a>
 
+  <h4 class="subsubsection">3.9.1.2 Filling In Threads</h4>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="More-Threading.html#More-Threading" accesskey="n" rel="next">More Threading</a>, Previous: <a href="Loose-Threads.html#Loose-Threads" accesskey="p" rel="prev">Loose Threads</a>, Up: <a href="Customizing-Threading.html#Customizing-Threading" accesskey="u" rel="up">Customizing Threading</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt><code>gnus-fetch-old-headers</code></dt>
 
+    <dd>
+      <a name="index-gnus_002dfetch_002dold_002dheaders" id=
+      "index-gnus_002dfetch_002dold_002dheaders"></a>
 
+      <p>If non-<code>nil</code>, Gnus will attempt to build old
+      threads by fetching more old headers&mdash;headers to
+      articles marked as read. If you would like to display as few
+      summary lines as possible, but still connect as many loose
+      threads as possible, you should set this variable to
+      <code>some</code> or a number. If you set it to a number, no
+      more than that number of extra old headers will be fetched.
+      In either case, fetching old headers only works if the back
+      end you are using carries overview files&mdash;this would
+      normally be <code>nntp</code>, <code>nnspool</code>,
+      <code>nnml</code>, and <code>nnmaildir</code>. Also remember
+      that if the root of the thread has been expired by the
+      server, there&rsquo;s not much Gnus can do about that.</p>
 
+      <p>This variable can also be set to <code>invisible</code>.
+      This won&rsquo;t have any visible effects, but is useful if
+      you use the <kbd>A T</kbd> command a lot (see <a href=
+      "Finding-the-Parent.html#Finding-the-Parent">Finding the
+      Parent</a>).</p>
+
+      <p>The server has to support <acronym>NOV</acronym> for any
+      of this to work.</p><a name=
+      "index-Gmane_002c-gnus_002dfetch_002dold_002dheaders" id=
+      "index-Gmane_002c-gnus_002dfetch_002dold_002dheaders"></a>
+
+      <p>This feature can seriously impact performance it ignores
+      all locally cached header entries. Setting it to
+      <code>t</code> for groups for a server that doesn&rsquo;t
+      expire articles (such as news.gmane.org), leads to very slow
+      summary generation.</p>
+    </dd>
+
+    <dt><code>gnus-fetch-old-ephemeral-headers</code></dt>
+
+    <dd>
+      <a name=
+      "index-gnus_002dfetch_002dold_002dephemeral_002dheaders" id=
+      "index-gnus_002dfetch_002dold_002dephemeral_002dheaders"></a>
+
+      <p>Same as <code>gnus-fetch-old-headers</code>, but only used
+      for ephemeral newsgroups.</p>
+    </dd>
+
+    <dt><code>gnus-build-sparse-threads</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dbuild_002dsparse_002dthreads" id=
+      "index-gnus_002dbuild_002dsparse_002dthreads"></a>
+
+      <p>Fetching old headers can be slow. A low-rent similar
+      effect can be gotten by setting this variable to
+      <code>some</code>. Gnus will then look at the complete
+      <code>References</code> headers of all articles and try to
+      string together articles that belong in the same thread. This
+      will leave <em>gaps</em> in the threading display where Gnus
+      guesses that an article is missing from the thread. (These
+      gaps appear like normal summary lines. If you select a gap,
+      Gnus will try to fetch the article in question.) If this
+      variable is <code>t</code>, Gnus will display all these
+      &ldquo;gaps&rdquo; without regard for whether they are useful
+      for completing the thread or not. Finally, if this variable
+      is <code>more</code>, Gnus won&rsquo;t cut off sparse leaf
+      nodes that don&rsquo;t lead anywhere. This variable is
+      <code>nil</code> by default.</p>
+    </dd>
+
+    <dt><code>gnus-read-all-available-headers</code></dt>
+
+    <dd>
+      <a name=
+      "index-gnus_002dread_002dall_002davailable_002dheaders" id=
+      "index-gnus_002dread_002dall_002davailable_002dheaders"></a>
+
+      <p>This is a rather obscure variable that few will find
+      useful. It&rsquo;s intended for those non-news newsgroups
+      where the back end has to fetch quite a lot to present the
+      summary buffer, and where it&rsquo;s impossible to go back to
+      parents of articles. This is mostly the case in the web-based
+      groups.</p>
+
+      <p>If you don&rsquo;t use those, then it&rsquo;s safe to
+      leave this as the default <code>nil</code>. If you want to
+      use this variable, it should be a regexp that matches the
+      group name, or <code>t</code> for all groups.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="More-Threading.html#More-Threading"
+    accesskey="n" rel="next">More Threading</a>, Previous: <a href=
+    "Loose-Threads.html#Loose-Threads" accesskey="p" rel=
+    "prev">Loose Threads</a>, Up: <a href=
+    "Customizing-Threading.html#Customizing-Threading" accesskey=
+    "u" rel="up">Customizing Threading</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

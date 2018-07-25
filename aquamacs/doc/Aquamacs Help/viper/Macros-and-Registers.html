@@ -1,15 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Macros and Registers - Untitled</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Untitled">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Improvements-over-Vi.html#Improvements-over-Vi" title="Improvements over Vi">
-<link rel="prev" href="History.html#History" title="History">
-<link rel="next" href="Completion.html#Completion" title="Completion">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Macros and Registers - Untitled</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Untitled" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Improvements-over-Vi.html#Improvements-over-Vi" title=
+  "Improvements over Vi" />
+  <link rel="prev" href="History.html#History" title="History" />
+  <link rel="next" href="Completion.html#Completion" title=
+  "Completion" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 2001, 2002, 2003, 2004,
 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -25,8 +34,10 @@ Copyright (C) 1995, 1996, 1997, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,56 +47,78 @@ Copyright (C) 1995, 1996, 1997, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Macros-and-Registers"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Completion.html#Completion">Completion</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="History.html#History">History</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Improvements-over-Vi.html#Improvements-over-Vi">Improvements over Vi</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Macros-and-Registers" id="Macros-and-Registers"></a>
 
-<h3 class="section">2.4 Macros and Registers</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Completion.html#Completion">Completion</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "History.html#History">History</a>, Up:&nbsp;<a rel="up"
+    accesskey="u" href=
+    "Improvements-over-Vi.html#Improvements-over-Vi">Improvements
+    over Vi</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-keyboard-macros-80"></a><a name="index-macros-81"></a><a name="index-registers-82"></a><a name="index-register-execution-83"></a>
-Viper facilitates the use of Emacs-style keyboard macros.  <kbd>@#</kbd> will
-start a macro definition.  As you type, the commands will be executed, and
-remembered (This is called &ldquo;learn mode&rdquo; in some editors.) 
-<kbd>@register</kbd> will complete the macro, putting it into &lsquo;<samp><span class="samp">register</span></samp>&rsquo;,
-where &lsquo;<samp><span class="samp">register</span></samp>&rsquo; is any character from &lsquo;<samp><span class="samp">a</span></samp>&rsquo; through &lsquo;<samp><span class="samp">z</span></samp>&rsquo;.  Then
-you can execute this macro using <kbd>@register</kbd>.  It is, of course,
-possible to yank some text into a register and execute it using
-<kbd>@register</kbd>.  Typing <kbd>@@</kbd>, <kbd>@RET</kbd>, or <kbd>@C-j</kbd> will
-execute the last macro that was executed using <kbd>@register</kbd>.
+  <h3 class="section">2.4 Macros and Registers</h3>
 
-   <p>Viper will automatically lowercase the register, so that pressing the
-<kbd>SHIFT</kbd> key for <kbd>@</kbd> will not create problems.  This is for
-<kbd>@</kbd> macros and <kbd>"p</kbd> <em>only</em>.  In the case of <kbd>y</kbd>,
-<kbd>"Ayy</kbd> will append to <em>register a</em>.  For <kbd>[,],',`</kbd>, it
-is an error to use a Uppercase register name.
+  <p><a name="index-keyboard-macros-80" id=
+  "index-keyboard-macros-80"></a><a name="index-macros-81" id=
+  "index-macros-81"></a><a name="index-registers-82" id=
+  "index-registers-82"></a><a name="index-register-execution-83"
+  id="index-register-execution-83"></a> Viper facilitates the use
+  of Emacs-style keyboard macros. <kbd>@#</kbd> will start a macro
+  definition. As you type, the commands will be executed, and
+  remembered (This is called &ldquo;learn mode&rdquo; in some
+  editors.) <kbd>@register</kbd> will complete the macro, putting
+  it into &lsquo;<samp><span class=
+  "samp">register</span></samp>&rsquo;, where
+  &lsquo;<samp><span class="samp">register</span></samp>&rsquo; is
+  any character from &lsquo;<samp><span class=
+  "samp">a</span></samp>&rsquo; through &lsquo;<samp><span class=
+  "samp">z</span></samp>&rsquo;. Then you can execute this macro
+  using <kbd>@register</kbd>. It is, of course, possible to yank
+  some text into a register and execute it using
+  <kbd>@register</kbd>. Typing <kbd>@@</kbd>, <kbd>@RET</kbd>, or
+  <kbd>@C-j</kbd> will execute the last macro that was executed
+  using <kbd>@register</kbd>.</p>
 
-<!-- [ balance parens -->
-   <p><a name="index-viewing-registers-and-markers-84"></a>
-The contents of a register can be seen by <kbd>]register</kbd>.  (<kbd>[textmarker</kbd>
-will show the contents of a textmarker). 
-<!-- ] balance parens -->
+  <p>Viper will automatically lowercase the register, so that
+  pressing the <kbd>SHIFT</kbd> key for <kbd>@</kbd> will not
+  create problems. This is for <kbd>@</kbd> macros and
+  <kbd>"p</kbd> <em>only</em>. In the case of <kbd>y</kbd>,
+  <kbd>"Ayy</kbd> will append to <em>register a</em>. For
+  <kbd>[,],',`</kbd>, it is an error to use a Uppercase register
+  name. <!-- [ balance parens --></p>
 
-   <p><a name="index-last-keyboard-macro-85"></a>
-The last keyboard macro can also be executed using
-<kbd>*</kbd>, and it can be yanked into a register using <kbd>@!register</kbd>. 
-This is useful for Emacs style keyboard macros defined using <kbd>C-x(</kbd>
-and <kbd>C-x)</kbd>.  Emacs keyboard macros have more capabilities. 
-See <a href="../emacs/Keyboard-Macros.html#Keyboard-Macros">Keyboard Macros</a>, for
-details.
+  <p><a name="index-viewing-registers-and-markers-84" id=
+  "index-viewing-registers-and-markers-84"></a> The contents of a
+  register can be seen by <kbd>]register</kbd>.
+  (<kbd>[textmarker</kbd> will show the contents of a textmarker). 
+  <!-- ] balance parens --></p>
 
-   <p>Keyboard Macros allow an interesting form of Query-Replace:
-<kbd>/pattern</kbd> or <kbd>n</kbd> to go to the next pattern (the query), followed by a
-Keyboard Macro execution <kbd>@@</kbd> (the replace).
+  <p><a name="index-last-keyboard-macro-85" id=
+  "index-last-keyboard-macro-85"></a> The last keyboard macro can
+  also be executed using <kbd>*</kbd>, and it can be yanked into a
+  register using <kbd>@!register</kbd>. This is useful for Emacs
+  style keyboard macros defined using <kbd>C-x(</kbd> and
+  <kbd>C-x)</kbd>. Emacs keyboard macros have more capabilities.
+  See <a href=
+  "../emacs/Keyboard-Macros.html#Keyboard-Macros">Keyboard
+  Macros</a>, for details.</p>
 
-   <p>Viper also provides Vi-style macros.  See <a href="Vi-Macros.html#Vi-Macros">Vi Macros</a>, for details.
+  <p>Keyboard Macros allow an interesting form of Query-Replace:
+  <kbd>/pattern</kbd> or <kbd>n</kbd> to go to the next pattern
+  (the query), followed by a Keyboard Macro execution <kbd>@@</kbd>
+  (the replace).</p>
 
-   </body></html>
-
+  <p>Viper also provides Vi-style macros. See <a href=
+  "Vi-Macros.html#Vi-Macros">Vi Macros</a>, for details.</p>
+</body>
+</html>

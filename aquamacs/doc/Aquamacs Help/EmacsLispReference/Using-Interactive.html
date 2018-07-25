@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,231 +19,326 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Using Interactive</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Using Interactive">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Using Interactive">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Defining-Commands.html#Defining-Commands" rel="up" title="Defining Commands">
-<link href="Interactive-Codes.html#Interactive-Codes" rel="next" title="Interactive Codes">
-<link href="Defining-Commands.html#Defining-Commands" rel="prev" title="Defining Commands">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Using Interactive</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Using Interactive" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Using Interactive" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Defining-Commands.html#Defining-Commands" rel="up"
+  title="Defining Commands" />
+  <link href="Interactive-Codes.html#Interactive-Codes" rel="next"
+  title="Interactive Codes" />
+  <link href="Defining-Commands.html#Defining-Commands" rel="prev"
+  title="Defining Commands" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Using-Interactive" id="Using-Interactive"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Interactive-Codes.html#Interactive-Codes"
+    accesskey="n" rel="next">Interactive Codes</a>, Up: <a href=
+    "Defining-Commands.html#Defining-Commands" accesskey="u" rel=
+    "up">Defining Commands</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Using-interactive" id="Using-interactive"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Using-Interactive"></a>
-<div class="header">
-<p>
-Next: <a href="Interactive-Codes.html#Interactive-Codes" accesskey="n" rel="next">Interactive Codes</a>, Up: <a href="Defining-Commands.html#Defining-Commands" accesskey="u" rel="up">Defining Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Using-interactive"></a>
-<h4 class="subsection">20.2.1 Using <code>interactive</code></h4>
-<a name="index-arguments_002c-interactive-entry"></a>
-<a name="index-interactive-spec_002c-using"></a>
+  <h4 class="subsection">20.2.1 Using
+  <code>interactive</code></h4><a name=
+  "index-arguments_002c-interactive-entry" id=
+  "index-arguments_002c-interactive-entry"></a> <a name=
+  "index-interactive-spec_002c-using" id=
+  "index-interactive-spec_002c-using"></a>
 
-<p>This section describes how to write the <code>interactive</code> form that
-makes a Lisp function an interactively-callable command, and how to
-examine a command&rsquo;s <code>interactive</code> form.
-</p>
-<dl>
-<dt><a name="index-interactive"></a>Special Form: <strong>interactive</strong> <em>arg-descriptor</em></dt>
-<dd><p>This special form declares that a function is a command, and that it
-may therefore be called interactively (via <kbd>M-x</kbd> or by entering a
-key sequence bound to it).  The argument <var>arg-descriptor</var> declares
-how to compute the arguments to the command when the command is called
-interactively.
-</p>
-<p>A command may be called from Lisp programs like any other function, but
-then the caller supplies the arguments and <var>arg-descriptor</var> has no
-effect.
-</p>
-<a name="index-interactive_002dform_002c-symbol-property"></a>
-<p>The <code>interactive</code> form must be located at top-level in the
-function body, or in the function symbol&rsquo;s <code>interactive-form</code>
-property (see <a href="Symbol-Properties.html#Symbol-Properties">Symbol Properties</a>).  It has its effect because the
-command loop looks for it before calling the function
-(see <a href="Interactive-Call.html#Interactive-Call">Interactive Call</a>).  Once the function is called, all its body
-forms are executed; at this time, if the <code>interactive</code> form
-occurs within the body, the form simply returns <code>nil</code> without
-even evaluating its argument.
-</p>
-<p>By convention, you should put the <code>interactive</code> form in the
-function body, as the first top-level form.  If there is an
-<code>interactive</code> form in both the <code>interactive-form</code> symbol
-property and the function body, the former takes precedence.  The
-<code>interactive-form</code> symbol property can be used to add an
-interactive form to an existing function, or change how its arguments
-are processed interactively, without redefining the function.
-</p></dd></dl>
+  <p>This section describes how to write the
+  <code>interactive</code> form that makes a Lisp function an
+  interactively-callable command, and how to examine a
+  command&rsquo;s <code>interactive</code> form.</p>
 
-<p>There are three possibilities for the argument <var>arg-descriptor</var>:
-</p>
-<ul>
-<li> It may be omitted or <code>nil</code>; then the command is called with no
-arguments.  This leads quickly to an error if the command requires one
-or more arguments.
+  <dl>
+    <dt><a name="index-interactive" id=
+    "index-interactive"></a>Special Form:
+    <strong>interactive</strong> <em>arg-descriptor</em></dt>
 
-</li><li> It may be a string; its contents are a sequence of elements separated
-by newlines, one for each argument<a name="DOCF10" href="#FOOT10"><sup>10</sup></a>.  Each element consists of a code character
-(see <a href="Interactive-Codes.html#Interactive-Codes">Interactive Codes</a>) optionally followed by a prompt (which
-some code characters use and some ignore).  Here is an example:
+    <dd>
+      <p>This special form declares that a function is a command,
+      and that it may therefore be called interactively (via
+      <kbd>M-x</kbd> or by entering a key sequence bound to it).
+      The argument <var>arg-descriptor</var> declares how to
+      compute the arguments to the command when the command is
+      called interactively.</p>
 
-<div class="smallexample">
-<pre class="smallexample">(interactive &quot;P\nbFrobnicate buffer: &quot;)
-</pre></div>
+      <p>A command may be called from Lisp programs like any other
+      function, but then the caller supplies the arguments and
+      <var>arg-descriptor</var> has no effect.</p><a name=
+      "index-interactive_002dform_002c-symbol-property" id=
+      "index-interactive_002dform_002c-symbol-property"></a>
 
-<p>The code letter &lsquo;<samp>P</samp>&rsquo; sets the command&rsquo;s first argument to the raw
-command prefix (see <a href="Prefix-Command-Arguments.html#Prefix-Command-Arguments">Prefix Command Arguments</a>).  &lsquo;<samp>bFrobnicate
-buffer: </samp>&rsquo; prompts the user with &lsquo;<samp>Frobnicate buffer: </samp>&rsquo; to enter
-the name of an existing buffer, which becomes the second and final
-argument.
-</p>
-<p>The prompt string can use &lsquo;<samp>%</samp>&rsquo; to include previous argument values
-(starting with the first argument) in the prompt.  This is done using
-<code>format-message</code> (see <a href="Formatting-Strings.html#Formatting-Strings">Formatting Strings</a>).  For example, here is how
-you could read the name of an existing buffer followed by a new name to
-give to that buffer:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(interactive &quot;bBuffer to rename: \nsRename buffer %s to: &quot;)
-</pre></div>
+      <p>The <code>interactive</code> form must be located at
+      top-level in the function body, or in the function
+      symbol&rsquo;s <code>interactive-form</code> property (see
+      <a href="Symbol-Properties.html#Symbol-Properties">Symbol
+      Properties</a>). It has its effect because the command loop
+      looks for it before calling the function (see <a href=
+      "Interactive-Call.html#Interactive-Call">Interactive
+      Call</a>). Once the function is called, all its body forms
+      are executed; at this time, if the <code>interactive</code>
+      form occurs within the body, the form simply returns
+      <code>nil</code> without even evaluating its argument.</p>
 
-<a name="index-_002a-in-interactive"></a>
-<a name="index-read_002donly-buffers-in-interactive"></a>
-<p>If &lsquo;<samp>*</samp>&rsquo; appears at the beginning of the string, then an error is
-signaled if the buffer is read-only.
-</p>
-<a name="index-_0040-in-interactive"></a>
-<p>If &lsquo;<samp>@</samp>&rsquo; appears at the beginning of the string, and if the key
-sequence used to invoke the command includes any mouse events, then
-the window associated with the first of those events is selected
-before the command is run.
-</p>
-<a name="index-_005e-in-interactive"></a>
-<a name="index-shift_002dselection_002c-and-interactive-spec"></a>
-<p>If &lsquo;<samp>^</samp>&rsquo; appears at the beginning of the string, and if the command
-was invoked through <em>shift-translation</em>, set the mark and activate
-the region temporarily, or extend an already active region, before the
-command is run.  If the command was invoked without shift-translation,
-and the region is temporarily active, deactivate the region before the
-command is run.  Shift-translation is controlled on the user level by
-<code>shift-select-mode</code>; see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Shift-Selection.html#Shift-Selection">Shift Selection</a> in <cite>The GNU
-Emacs Manual</cite>.
-</p>
-<p>You can use &lsquo;<samp>*</samp>&rsquo;, &lsquo;<samp>@</samp>&rsquo;, and <code>^</code> together; the order does
-not matter.  Actual reading of arguments is controlled by the rest of
-the prompt string (starting with the first character that is not
-&lsquo;<samp>*</samp>&rsquo;, &lsquo;<samp>@</samp>&rsquo;, or &lsquo;<samp>^</samp>&rsquo;).
-</p>
-</li><li> It may be a Lisp expression that is not a string; then it should be a
-form that is evaluated to get a list of arguments to pass to the
-command.  Usually this form will call various functions to read input
-from the user, most often through the minibuffer (see <a href="Minibuffers.html#Minibuffers">Minibuffers</a>)
-or directly from the keyboard (see <a href="Reading-Input.html#Reading-Input">Reading Input</a>).
+      <p>By convention, you should put the <code>interactive</code>
+      form in the function body, as the first top-level form. If
+      there is an <code>interactive</code> form in both the
+      <code>interactive-form</code> symbol property and the
+      function body, the former takes precedence. The
+      <code>interactive-form</code> symbol property can be used to
+      add an interactive form to an existing function, or change
+      how its arguments are processed interactively, without
+      redefining the function.</p>
+    </dd>
+  </dl>
 
-<p>Providing point or the mark as an argument value is also common, but
-if you do this <em>and</em> read input (whether using the minibuffer or
-not), be sure to get the integer values of point or the mark after
-reading.  The current buffer may be receiving subprocess output; if
-subprocess output arrives while the command is waiting for input, it
-could relocate point and the mark.
-</p>
-<p>Here&rsquo;s an example of what <em>not</em> to do:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(interactive
+  <p>There are three possibilities for the argument
+  <var>arg-descriptor</var>:</p>
+
+  <ul>
+    <li>It may be omitted or <code>nil</code>; then the command is
+    called with no arguments. This leads quickly to an error if the
+    command requires one or more arguments.</li>
+
+    <li>It may be a string; its contents are a sequence of elements
+    separated by newlines, one for each argument<a name="DOCF10"
+    href="#FOOT10" id="DOCF10"><sup>10</sup></a>. Each element
+    consists of a code character (see <a href=
+    "Interactive-Codes.html#Interactive-Codes">Interactive
+    Codes</a>) optionally followed by a prompt (which some code
+    characters use and some ignore). Here is an example:
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(interactive "P\nbFrobnicate buffer: ")
+</pre>
+      </div>
+
+      <p>The code letter &lsquo;<samp>P</samp>&rsquo; sets the
+      command&rsquo;s first argument to the raw command prefix (see
+      <a href=
+      "Prefix-Command-Arguments.html#Prefix-Command-Arguments">Prefix
+      Command Arguments</a>). &lsquo;<samp>bFrobnicate
+      buffer:</samp> &rsquo; prompts the user with
+      &lsquo;<samp>Frobnicate buffer:</samp> &rsquo; to enter the
+      name of an existing buffer, which becomes the second and
+      final argument.</p>
+
+      <p>The prompt string can use &lsquo;<samp>%</samp>&rsquo; to
+      include previous argument values (starting with the first
+      argument) in the prompt. This is done using
+      <code>format-message</code> (see <a href=
+      "Formatting-Strings.html#Formatting-Strings">Formatting
+      Strings</a>). For example, here is how you could read the
+      name of an existing buffer followed by a new name to give to
+      that buffer:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(interactive "bBuffer to rename: \nsRename buffer %s to: ")
+</pre>
+      </div><a name="index-_002a-in-interactive" id=
+      "index-_002a-in-interactive"></a> <a name=
+      "index-read_002donly-buffers-in-interactive" id=
+      "index-read_002donly-buffers-in-interactive"></a>
+
+      <p>If &lsquo;<samp>*</samp>&rsquo; appears at the beginning
+      of the string, then an error is signaled if the buffer is
+      read-only.</p><a name="index-_0040-in-interactive" id=
+      "index-_0040-in-interactive"></a>
+
+      <p>If &lsquo;<samp>@</samp>&rsquo; appears at the beginning
+      of the string, and if the key sequence used to invoke the
+      command includes any mouse events, then the window associated
+      with the first of those events is selected before the command
+      is run.</p><a name="index-_005e-in-interactive" id=
+      "index-_005e-in-interactive"></a> <a name=
+      "index-shift_002dselection_002c-and-interactive-spec" id=
+      "index-shift_002dselection_002c-and-interactive-spec"></a>
+
+      <p>If &lsquo;<samp>^</samp>&rsquo; appears at the beginning
+      of the string, and if the command was invoked through
+      <em>shift-translation</em>, set the mark and activate the
+      region temporarily, or extend an already active region,
+      before the command is run. If the command was invoked without
+      shift-translation, and the region is temporarily active,
+      deactivate the region before the command is run.
+      Shift-translation is controlled on the user level by
+      <code>shift-select-mode</code>; see <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Shift-Selection.html#Shift-Selection">
+      Shift Selection</a> in <cite>The GNU Emacs Manual</cite>.</p>
+
+      <p>You can use &lsquo;<samp>*</samp>&rsquo;,
+      &lsquo;<samp>@</samp>&rsquo;, and <code>^</code> together;
+      the order does not matter. Actual reading of arguments is
+      controlled by the rest of the prompt string (starting with
+      the first character that is not &lsquo;<samp>*</samp>&rsquo;,
+      &lsquo;<samp>@</samp>&rsquo;, or
+      &lsquo;<samp>^</samp>&rsquo;).</p>
+    </li>
+
+    <li>It may be a Lisp expression that is not a string; then it
+    should be a form that is evaluated to get a list of arguments
+    to pass to the command. Usually this form will call various
+    functions to read input from the user, most often through the
+    minibuffer (see <a href=
+    "Minibuffers.html#Minibuffers">Minibuffers</a>) or directly
+    from the keyboard (see <a href=
+    "Reading-Input.html#Reading-Input">Reading Input</a>).
+
+      <p>Providing point or the mark as an argument value is also
+      common, but if you do this <em>and</em> read input (whether
+      using the minibuffer or not), be sure to get the integer
+      values of point or the mark after reading. The current buffer
+      may be receiving subprocess output; if subprocess output
+      arrives while the command is waiting for input, it could
+      relocate point and the mark.</p>
+
+      <p>Here&rsquo;s an example of what <em>not</em> to do:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(interactive
  (list (region-beginning) (region-end)
-       (read-string &quot;Foo: &quot; nil 'my-history)))
-</pre></div>
+       (read-string "Foo: " nil 'my-history)))
+</pre>
+      </div>
 
-<p>Here&rsquo;s how to avoid the problem, by examining point and the mark after
-reading the keyboard input:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(interactive
- (let ((string (read-string &quot;Foo: &quot; nil 'my-history)))
+      <p>Here&rsquo;s how to avoid the problem, by examining point
+      and the mark after reading the keyboard input:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(interactive
+ (let ((string (read-string "Foo: " nil 'my-history)))
    (list (region-beginning) (region-end) string)))
-</pre></div>
+</pre>
+      </div>
 
-<p><strong>Warning:</strong> the argument values should not include any data
-types that can&rsquo;t be printed and then read.  Some facilities save
-<code>command-history</code> in a file to be read in the subsequent
-sessions; if a command&rsquo;s arguments contain a data type that prints
-using &lsquo;<samp>#&lt;&hellip;&gt;</samp>&rsquo; syntax, those facilities won&rsquo;t work.
-</p>
-<p>There are, however, a few exceptions: it is ok to use a limited set of
-expressions such as <code>(point)</code>, <code>(mark)</code>,
-<code>(region-beginning)</code>, and <code>(region-end)</code>, because Emacs
-recognizes them specially and puts the expression (rather than its
-value) into the command history.  To see whether the expression you
-wrote is one of these exceptions, run the command, then examine
-<code>(car command-history)</code>.
-</p></li></ul>
+      <p><strong>Warning:</strong> the argument values should not
+      include any data types that can&rsquo;t be printed and then
+      read. Some facilities save <code>command-history</code> in a
+      file to be read in the subsequent sessions; if a
+      command&rsquo;s arguments contain a data type that prints
+      using &lsquo;<samp>#&lt;&hellip;&gt;</samp>&rsquo; syntax,
+      those facilities won&rsquo;t work.</p>
 
-<a name="index-examining-the-interactive-form"></a>
-<dl>
-<dt><a name="index-interactive_002dform"></a>Function: <strong>interactive-form</strong> <em>function</em></dt>
-<dd><p>This function returns the <code>interactive</code> form of <var>function</var>.
-If <var>function</var> is an interactively callable function
-(see <a href="Interactive-Call.html#Interactive-Call">Interactive Call</a>), the value is the command&rsquo;s
-<code>interactive</code> form <code>(interactive <var>spec</var>)</code>, which
-specifies how to compute its arguments.  Otherwise, the value is
-<code>nil</code>.  If <var>function</var> is a symbol, its function definition is
-used.
-</p></dd></dl>
+      <p>There are, however, a few exceptions: it is ok to use a
+      limited set of expressions such as <code>(point)</code>,
+      <code>(mark)</code>, <code>(region-beginning)</code>, and
+      <code>(region-end)</code>, because Emacs recognizes them
+      specially and puts the expression (rather than its value)
+      into the command history. To see whether the expression you
+      wrote is one of these exceptions, run the command, then
+      examine <code>(car command-history)</code>.</p>
+    </li>
+  </ul><a name="index-examining-the-interactive-form" id=
+  "index-examining-the-interactive-form"></a>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <dl>
+    <dt><a name="index-interactive_002dform" id=
+    "index-interactive_002dform"></a>Function:
+    <strong>interactive-form</strong> <em>function</em></dt>
 
-<h3><a name="FOOT10" href="#DOCF10">(10)</a></h3>
-<p>Some elements actually
-supply two arguments.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Interactive-Codes.html#Interactive-Codes" accesskey="n" rel="next">Interactive Codes</a>, Up: <a href="Defining-Commands.html#Defining-Commands" accesskey="u" rel="up">Defining Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This function returns the <code>interactive</code> form of
+      <var>function</var>. If <var>function</var> is an
+      interactively callable function (see <a href=
+      "Interactive-Call.html#Interactive-Call">Interactive
+      Call</a>), the value is the command&rsquo;s
+      <code>interactive</code> form <code>(interactive
+      <var>spec</var>)</code>, which specifies how to compute its
+      arguments. Otherwise, the value is <code>nil</code>. If
+      <var>function</var> is a symbol, its function definition is
+      used.</p>
+    </dd>
+  </dl>
 
+  <div class="footnote">
+    <hr />
 
+    <h4 class="footnotes-heading">Footnotes</h4>
 
+    <h3><a name="FOOT10" href="#DOCF10" id="FOOT10">(10)</a></h3>
+
+    <p>Some elements actually supply two arguments.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Interactive-Codes.html#Interactive-Codes"
+    accesskey="n" rel="next">Interactive Codes</a>, Up: <a href=
+    "Defining-Commands.html#Defining-Commands" accesskey="u" rel=
+    "up">Defining Commands</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

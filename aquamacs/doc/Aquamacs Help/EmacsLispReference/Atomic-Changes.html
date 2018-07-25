@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,160 +19,227 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Atomic Changes</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Atomic Changes">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Atomic Changes">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Text.html#Text" rel="up" title="Text">
-<link href="Change-Hooks.html#Change-Hooks" rel="next" title="Change Hooks">
-<link href="Document-Object-Model.html#Document-Object-Model" rel="prev" title="Document Object Model">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Atomic Changes</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Atomic Changes" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Atomic Changes" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Text.html#Text" rel="up" title="Text" />
+  <link href="Change-Hooks.html#Change-Hooks" rel="next" title=
+  "Change Hooks" />
+  <link href="Document-Object-Model.html#Document-Object-Model"
+  rel="prev" title="Document Object Model" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Atomic-Changes" id="Atomic-Changes"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Change-Hooks.html#Change-Hooks" accesskey="n"
+    rel="next">Change Hooks</a>, Previous: <a href=
+    "Parsing-HTML_002fXML.html#Parsing-HTML_002fXML" accesskey="p"
+    rel="prev">Parsing HTML/XML</a>, Up: <a href="Text.html#Text"
+    accesskey="u" rel="up">Text</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Atomic-Change-Groups" id="Atomic-Change-Groups"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Atomic-Changes"></a>
-<div class="header">
-<p>
-Next: <a href="Change-Hooks.html#Change-Hooks" accesskey="n" rel="next">Change Hooks</a>, Previous: <a href="Parsing-HTML_002fXML.html#Parsing-HTML_002fXML" accesskey="p" rel="prev">Parsing HTML/XML</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Atomic-Change-Groups"></a>
-<h3 class="section">31.27 Atomic Change Groups</h3>
-<a name="index-atomic-changes"></a>
+  <h3 class="section">31.27 Atomic Change Groups</h3><a name=
+  "index-atomic-changes" id="index-atomic-changes"></a>
 
-<p>In database terminology, an <em>atomic</em> change is an indivisible
-change&mdash;it can succeed entirely or it can fail entirely, but it
-cannot partly succeed.  A Lisp program can make a series of changes to
-one or several buffers as an <em>atomic change group</em>, meaning that
-either the entire series of changes will be installed in their buffers
-or, in case of an error, none of them will be.
-</p>
-<p>To do this for one buffer, the one already current, simply write a
-call to <code>atomic-change-group</code> around the code that makes the
-changes, like this:
-</p>
-<div class="example">
-<pre class="example">(atomic-change-group
+  <p>In database terminology, an <em>atomic</em> change is an
+  indivisible change&mdash;it can succeed entirely or it can fail
+  entirely, but it cannot partly succeed. A Lisp program can make a
+  series of changes to one or several buffers as an <em>atomic
+  change group</em>, meaning that either the entire series of
+  changes will be installed in their buffers or, in case of an
+  error, none of them will be.</p>
+
+  <p>To do this for one buffer, the one already current, simply
+  write a call to <code>atomic-change-group</code> around the code
+  that makes the changes, like this:</p>
+
+  <div class="example">
+    <pre class="example">
+(atomic-change-group
   (insert foo)
   (delete-region x y))
-</pre></div>
+</pre>
+  </div>
 
-<p>If an error (or other nonlocal exit) occurs inside the body of
-<code>atomic-change-group</code>, it unmakes all the changes in that buffer
-that were during the execution of the body.  This kind of change group
-has no effect on any other buffers&mdash;any such changes remain.
-</p>
-<p>If you need something more sophisticated, such as to make changes in
-various buffers constitute one atomic group, you must directly call
-lower-level functions that <code>atomic-change-group</code> uses.
-</p>
-<dl>
-<dt><a name="index-prepare_002dchange_002dgroup"></a>Function: <strong>prepare-change-group</strong> <em>&amp;optional buffer</em></dt>
-<dd><p>This function sets up a change group for buffer <var>buffer</var>, which
-defaults to the current buffer.  It returns a handle that
-represents the change group.  You must use this handle to activate the
-change group and subsequently to finish it.
-</p></dd></dl>
+  <p>If an error (or other nonlocal exit) occurs inside the body of
+  <code>atomic-change-group</code>, it unmakes all the changes in
+  that buffer that were during the execution of the body. This kind
+  of change group has no effect on any other buffers&mdash;any such
+  changes remain.</p>
 
-<p>To use the change group, you must <em>activate</em> it.  You must do
-this before making any changes in the text of <var>buffer</var>.
-</p>
-<dl>
-<dt><a name="index-activate_002dchange_002dgroup"></a>Function: <strong>activate-change-group</strong> <em>handle</em></dt>
-<dd><p>This function activates the change group that <var>handle</var> designates.
-</p></dd></dl>
+  <p>If you need something more sophisticated, such as to make
+  changes in various buffers constitute one atomic group, you must
+  directly call lower-level functions that
+  <code>atomic-change-group</code> uses.</p>
 
-<p>After you activate the change group, any changes you make in that
-buffer become part of it.  Once you have made all the desired changes
-in the buffer, you must <em>finish</em> the change group.  There are two
-ways to do this: you can either accept (and finalize) all the changes,
-or cancel them all.
-</p>
-<dl>
-<dt><a name="index-accept_002dchange_002dgroup"></a>Function: <strong>accept-change-group</strong> <em>handle</em></dt>
-<dd><p>This function accepts all the changes in the change group specified by
-<var>handle</var>, making them final.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-prepare_002dchange_002dgroup" id=
+    "index-prepare_002dchange_002dgroup"></a>Function:
+    <strong>prepare-change-group</strong> <em>&amp;optional
+    buffer</em></dt>
 
-<dl>
-<dt><a name="index-cancel_002dchange_002dgroup"></a>Function: <strong>cancel-change-group</strong> <em>handle</em></dt>
-<dd><p>This function cancels and undoes all the changes in the change group
-specified by <var>handle</var>.
-</p></dd></dl>
+    <dd>
+      <p>This function sets up a change group for buffer
+      <var>buffer</var>, which defaults to the current buffer. It
+      returns a handle that represents the change group. You must
+      use this handle to activate the change group and subsequently
+      to finish it.</p>
+    </dd>
+  </dl>
 
-<p>Your code should use <code>unwind-protect</code> to make sure the group is
-always finished.  The call to <code>activate-change-group</code> should be
-inside the <code>unwind-protect</code>, in case the user types <kbd>C-g</kbd>
-just after it runs.  (This is one reason why
-<code>prepare-change-group</code> and <code>activate-change-group</code> are
-separate functions, because normally you would call
-<code>prepare-change-group</code> before the start of that
-<code>unwind-protect</code>.)  Once you finish the group, don&rsquo;t use the
-handle again&mdash;in particular, don&rsquo;t try to finish the same group
-twice.
-</p>
-<p>To make a multibuffer change group, call <code>prepare-change-group</code>
-once for each buffer you want to cover, then use <code>nconc</code> to
-combine the returned values, like this:
-</p>
-<div class="example">
-<pre class="example">(nconc (prepare-change-group buffer-1)
+  <p>To use the change group, you must <em>activate</em> it. You
+  must do this before making any changes in the text of
+  <var>buffer</var>.</p>
+
+  <dl>
+    <dt><a name="index-activate_002dchange_002dgroup" id=
+    "index-activate_002dchange_002dgroup"></a>Function:
+    <strong>activate-change-group</strong> <em>handle</em></dt>
+
+    <dd>
+      <p>This function activates the change group that
+      <var>handle</var> designates.</p>
+    </dd>
+  </dl>
+
+  <p>After you activate the change group, any changes you make in
+  that buffer become part of it. Once you have made all the desired
+  changes in the buffer, you must <em>finish</em> the change group.
+  There are two ways to do this: you can either accept (and
+  finalize) all the changes, or cancel them all.</p>
+
+  <dl>
+    <dt><a name="index-accept_002dchange_002dgroup" id=
+    "index-accept_002dchange_002dgroup"></a>Function:
+    <strong>accept-change-group</strong> <em>handle</em></dt>
+
+    <dd>
+      <p>This function accepts all the changes in the change group
+      specified by <var>handle</var>, making them final.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cancel_002dchange_002dgroup" id=
+    "index-cancel_002dchange_002dgroup"></a>Function:
+    <strong>cancel-change-group</strong> <em>handle</em></dt>
+
+    <dd>
+      <p>This function cancels and undoes all the changes in the
+      change group specified by <var>handle</var>.</p>
+    </dd>
+  </dl>
+
+  <p>Your code should use <code>unwind-protect</code> to make sure
+  the group is always finished. The call to
+  <code>activate-change-group</code> should be inside the
+  <code>unwind-protect</code>, in case the user types
+  <kbd>C-g</kbd> just after it runs. (This is one reason why
+  <code>prepare-change-group</code> and
+  <code>activate-change-group</code> are separate functions,
+  because normally you would call <code>prepare-change-group</code>
+  before the start of that <code>unwind-protect</code>.) Once you
+  finish the group, don&rsquo;t use the handle again&mdash;in
+  particular, don&rsquo;t try to finish the same group twice.</p>
+
+  <p>To make a multibuffer change group, call
+  <code>prepare-change-group</code> once for each buffer you want
+  to cover, then use <code>nconc</code> to combine the returned
+  values, like this:</p>
+
+  <div class="example">
+    <pre class="example">
+(nconc (prepare-change-group buffer-1)
        (prepare-change-group buffer-2))
-</pre></div>
+</pre>
+  </div>
 
-<p>You can then activate the multibuffer change group with a single call
-to <code>activate-change-group</code>, and finish it with a single call to
-<code>accept-change-group</code> or <code>cancel-change-group</code>.
-</p>
-<p>Nested use of several change groups for the same buffer works as you
-would expect.  Non-nested use of change groups for the same buffer
-will get Emacs confused, so don&rsquo;t let it happen; the first change
-group you start for any given buffer should be the last one finished.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Change-Hooks.html#Change-Hooks" accesskey="n" rel="next">Change Hooks</a>, Previous: <a href="Parsing-HTML_002fXML.html#Parsing-HTML_002fXML" accesskey="p" rel="prev">Parsing HTML/XML</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>You can then activate the multibuffer change group with a
+  single call to <code>activate-change-group</code>, and finish it
+  with a single call to <code>accept-change-group</code> or
+  <code>cancel-change-group</code>.</p>
 
+  <p>Nested use of several change groups for the same buffer works
+  as you would expect. Non-nested use of change groups for the same
+  buffer will get Emacs confused, so don&rsquo;t let it happen; the
+  first change group you start for any given buffer should be the
+  last one finished.</p>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href="Change-Hooks.html#Change-Hooks" accesskey="n"
+    rel="next">Change Hooks</a>, Previous: <a href=
+    "Parsing-HTML_002fXML.html#Parsing-HTML_002fXML" accesskey="p"
+    rel="prev">Parsing HTML/XML</a>, Up: <a href="Text.html#Text"
+    accesskey="u" rel="up">Text</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

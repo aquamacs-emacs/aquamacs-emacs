@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,121 +19,183 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Blinking</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Blinking">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Blinking">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Display.html#Display" rel="up" title="Display">
-<link href="Character-Display.html#Character-Display" rel="next" title="Character Display">
-<link href="Abstract-Display-Example.html#Abstract-Display-Example" rel="prev" title="Abstract Display Example">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Blinking</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Blinking" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Blinking" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Display.html#Display" rel="up" title="Display" />
+  <link href="Character-Display.html#Character-Display" rel="next"
+  title="Character Display" />
+  <link href=
+  "Abstract-Display-Example.html#Abstract-Display-Example" rel=
+  "prev" title="Abstract Display Example" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Blinking" id="Blinking"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Character-Display.html#Character-Display"
+    accesskey="n" rel="next">Character Display</a>, Previous:
+    <a href="Abstract-Display.html#Abstract-Display" accesskey="p"
+    rel="prev">Abstract Display</a>, Up: <a href=
+    "Display.html#Display" accesskey="u" rel="up">Display</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Blinking-Parentheses" id="Blinking-Parentheses"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Blinking"></a>
-<div class="header">
-<p>
-Next: <a href="Character-Display.html#Character-Display" accesskey="n" rel="next">Character Display</a>, Previous: <a href="Abstract-Display.html#Abstract-Display" accesskey="p" rel="prev">Abstract Display</a>, Up: <a href="Display.html#Display" accesskey="u" rel="up">Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Blinking-Parentheses"></a>
-<h3 class="section">37.21 Blinking Parentheses</h3>
-<a name="index-parenthesis-matching"></a>
-<a name="index-blinking-parentheses"></a>
-<a name="index-balancing-parentheses"></a>
+  <h3 class="section">37.21 Blinking Parentheses</h3><a name=
+  "index-parenthesis-matching" id="index-parenthesis-matching"></a>
+  <a name="index-blinking-parentheses" id=
+  "index-blinking-parentheses"></a> <a name=
+  "index-balancing-parentheses" id=
+  "index-balancing-parentheses"></a>
 
-<p>This section describes the mechanism by which Emacs shows a matching
-open parenthesis when the user inserts a close parenthesis.
-</p>
-<dl>
-<dt><a name="index-blink_002dparen_002dfunction"></a>Variable: <strong>blink-paren-function</strong></dt>
-<dd><p>The value of this variable should be a function (of no arguments) to
-be called whenever a character with close parenthesis syntax is inserted.
-The value of <code>blink-paren-function</code> may be <code>nil</code>, in which
-case nothing is done.
-</p></dd></dl>
+  <p>This section describes the mechanism by which Emacs shows a
+  matching open parenthesis when the user inserts a close
+  parenthesis.</p>
 
-<dl>
-<dt><a name="index-blink_002dmatching_002dparen"></a>User Option: <strong>blink-matching-paren</strong></dt>
-<dd><p>If this variable is <code>nil</code>, then <code>blink-matching-open</code> does
-nothing.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-blink_002dparen_002dfunction" id=
+    "index-blink_002dparen_002dfunction"></a>Variable:
+    <strong>blink-paren-function</strong></dt>
 
-<dl>
-<dt><a name="index-blink_002dmatching_002dparen_002ddistance"></a>User Option: <strong>blink-matching-paren-distance</strong></dt>
-<dd><p>This variable specifies the maximum distance to scan for a matching
-parenthesis before giving up.
-</p></dd></dl>
+    <dd>
+      <p>The value of this variable should be a function (of no
+      arguments) to be called whenever a character with close
+      parenthesis syntax is inserted. The value of
+      <code>blink-paren-function</code> may be <code>nil</code>, in
+      which case nothing is done.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-blink_002dmatching_002ddelay"></a>User Option: <strong>blink-matching-delay</strong></dt>
-<dd><p>This variable specifies the number of seconds to keep indicating the
-matching parenthesis.  A fraction of a second often gives good
-results, but the default is 1, which works on all systems.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-blink_002dmatching_002dparen" id=
+    "index-blink_002dmatching_002dparen"></a>User Option:
+    <strong>blink-matching-paren</strong></dt>
 
-<dl>
-<dt><a name="index-blink_002dmatching_002dopen"></a>Command: <strong>blink-matching-open</strong></dt>
-<dd><p>This function is the default value of <code>blink-paren-function</code>.  It
-assumes that point follows a character with close parenthesis syntax
-and applies the appropriate effect momentarily to the matching opening
-character.  If that character is not already on the screen, it
-displays the character&rsquo;s context in the echo area.  To avoid long
-delays, this function does not search farther than
-<code>blink-matching-paren-distance</code> characters.
-</p>
-<p>Here is an example of calling this function explicitly.
-</p>
-<div class="smallexample">
-<pre class="smallexample">(defun interactive-blink-matching-open ()
-  &quot;Indicate momentarily the start of parenthesized sexp before point.&quot;
+    <dd>
+      <p>If this variable is <code>nil</code>, then
+      <code>blink-matching-open</code> does nothing.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-blink_002dmatching_002dparen_002ddistance"
+    id="index-blink_002dmatching_002dparen_002ddistance"></a>User
+    Option: <strong>blink-matching-paren-distance</strong></dt>
+
+    <dd>
+      <p>This variable specifies the maximum distance to scan for a
+      matching parenthesis before giving up.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-blink_002dmatching_002ddelay" id=
+    "index-blink_002dmatching_002ddelay"></a>User Option:
+    <strong>blink-matching-delay</strong></dt>
+
+    <dd>
+      <p>This variable specifies the number of seconds to keep
+      indicating the matching parenthesis. A fraction of a second
+      often gives good results, but the default is 1, which works
+      on all systems.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-blink_002dmatching_002dopen" id=
+    "index-blink_002dmatching_002dopen"></a>Command:
+    <strong>blink-matching-open</strong></dt>
+
+    <dd>
+      <p>This function is the default value of
+      <code>blink-paren-function</code>. It assumes that point
+      follows a character with close parenthesis syntax and applies
+      the appropriate effect momentarily to the matching opening
+      character. If that character is not already on the screen, it
+      displays the character&rsquo;s context in the echo area. To
+      avoid long delays, this function does not search farther than
+      <code>blink-matching-paren-distance</code> characters.</p>
+
+      <p>Here is an example of calling this function
+      explicitly.</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(defun interactive-blink-matching-open ()
+  "Indicate momentarily the start of parenthesized sexp before point."
   (interactive)
-</pre><pre class="smallexample">  (let ((blink-matching-paren-distance
+</pre>
+        <pre class="smallexample">
+  (let ((blink-matching-paren-distance
          (buffer-size))
         (blink-matching-paren t))
     (blink-matching-open)))
-</pre></div>
-</dd></dl>
-
-
-
-
+</pre>
+      </div>
+    </dd>
+  </dl>
 </body>
 </html>

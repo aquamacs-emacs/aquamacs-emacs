@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,150 +20,232 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Threads Buffer</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Threads Buffer">
-<meta name="keywords" content="GNU Emacs Manual: Threads Buffer">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="GDB-Graphical-Interface.html#GDB-Graphical-Interface" rel="up" title="GDB Graphical Interface">
-<link href="Stack-Buffer.html#Stack-Buffer" rel="next" title="Stack Buffer">
-<link href="Breakpoints-Buffer.html#Breakpoints-Buffer" rel="prev" title="Breakpoints Buffer">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Threads Buffer</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Threads Buffer" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Threads Buffer" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="GDB-Graphical-Interface.html#GDB-Graphical-Interface"
+  rel="up" title="GDB Graphical Interface" />
+  <link href="Stack-Buffer.html#Stack-Buffer" rel="next" title=
+  "Stack Buffer" />
+  <link href="Breakpoints-Buffer.html#Breakpoints-Buffer" rel=
+  "prev" title="Breakpoints Buffer" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Threads-Buffer" id="Threads-Buffer"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Stack-Buffer.html#Stack-Buffer" accesskey="n"
+    rel="next">Stack Buffer</a>, Previous: <a href=
+    "Breakpoints-Buffer.html#Breakpoints-Buffer" accesskey="p" rel=
+    "prev">Breakpoints Buffer</a>, Up: <a href=
+    "GDB-Graphical-Interface.html#GDB-Graphical-Interface"
+    accesskey="u" rel="up">GDB Graphical Interface</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Threads-Buffer-1" id="Threads-Buffer-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Threads-Buffer"></a>
-<div class="header">
-<p>
-Next: <a href="Stack-Buffer.html#Stack-Buffer" accesskey="n" rel="next">Stack Buffer</a>, Previous: <a href="Breakpoints-Buffer.html#Breakpoints-Buffer" accesskey="p" rel="prev">Breakpoints Buffer</a>, Up: <a href="GDB-Graphical-Interface.html#GDB-Graphical-Interface" accesskey="u" rel="up">GDB Graphical Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Threads-Buffer-1"></a>
-<h4 class="subsubsection">27.6.5.4 Threads Buffer</h4>
+  <h4 class="subsubsection">27.6.5.4 Threads Buffer</h4><a name=
+  "index-gdb_002dselect_002dthread" id=
+  "index-gdb_002dselect_002dthread"></a>
 
-<a name="index-gdb_002dselect_002dthread"></a>
-<p>The GDB Threads buffer displays a summary of the threads in the
-debugged program.  See <a href="http://sourceware.org/gdb/current/onlinedocs/gdb/Threads.html#Threads">Debugging programs with
-multiple threads</a> in <cite>The GNU debugger</cite>.  To select a thread, move
-point there and press <tt class="key">RET</tt> (<code>gdb-select-thread</code>), or click on
-it with <kbd>mouse-2</kbd>.  This also displays the associated source
-buffer, and updates the contents of the other GDB buffers.
-</p>
-<p>You can customize variables under <code>gdb-buffers</code> group to select
-fields included in GDB Threads buffer.
-</p>
-<dl compact="compact">
-<dt><code>gdb-thread-buffer-verbose-names</code></dt>
-<dd><a name="index-gdb_002dthread_002dbuffer_002dverbose_002dnames"></a>
-<p>Show long thread names like &lsquo;<samp>Thread 0x4e2ab70 (LWP 1983)</samp>&rsquo;.
-</p>
-</dd>
-<dt><code>gdb-thread-buffer-arguments</code></dt>
-<dd><a name="index-gdb_002dthread_002dbuffer_002darguments"></a>
-<p>Show arguments of thread top frames.
-</p>
-</dd>
-<dt><code>gdb-thread-buffer-locations</code></dt>
-<dd><a name="index-gdb_002dthread_002dbuffer_002dlocations"></a>
-<p>Show file information or library names.
-</p>
-</dd>
-<dt><code>gdb-thread-buffer-addresses</code></dt>
-<dd><a name="index-gdb_002dthread_002dbuffer_002daddresses"></a>
-<p>Show addresses for thread frames in threads buffer.
-</p></dd>
-</dl>
+  <p>The GDB Threads buffer displays a summary of the threads in
+  the debugged program. See <a href=
+  "http://sourceware.org/gdb/current/onlinedocs/gdb/Threads.html#Threads">
+  Debugging programs with multiple threads</a> in <cite>The GNU
+  debugger</cite>. To select a thread, move point there and press
+  <tt class="key">RET</tt> (<code>gdb-select-thread</code>), or
+  click on it with <kbd>mouse-2</kbd>. This also displays the
+  associated source buffer, and updates the contents of the other
+  GDB buffers.</p>
 
-<p>To view information for several threads simultaneously, use the
-following commands from the GDB Threads buffer.
-</p>
-<dl compact="compact">
-<dt><kbd>d</kbd></dt>
-<dd><a name="index-d-_0028GDB-threads-buffer_0029"></a>
-<a name="index-gdb_002ddisplay_002ddisassembly_002dfor_002dthread"></a>
-<p>Display disassembly buffer for the thread at current line
-(<code>gdb-display-disassembly-for-thread</code>).
-</p>
-</dd>
-<dt><kbd>f</kbd></dt>
-<dd><a name="index-f-_0028GDB-threads-buffer_0029"></a>
-<a name="index-gdb_002ddisplay_002dstack_002dfor_002dthread"></a>
-<p>Display the GDB Stack buffer for the thread at current line
-(<code>gdb-display-stack-for-thread</code>).
-</p>
-</dd>
-<dt><kbd>l</kbd></dt>
-<dd><a name="index-l-_0028GDB-threads-buffer_0029"></a>
-<a name="index-gdb_002ddisplay_002dlocals_002dfor_002dthread"></a>
-<p>Display the GDB Locals buffer for the thread at current line
-(<code>gdb-display-locals-for-thread</code>).
-</p>
-</dd>
-<dt><kbd>r</kbd></dt>
-<dd><a name="index-r-_0028GDB-threads-buffer_0029"></a>
-<a name="index-gdb_002ddisplay_002dregisters_002dfor_002dthread"></a>
-<p>Display the GDB Registers buffer for the thread at current line
-(<code>gdb-display-registers-for-thread</code>).
-</p></dd>
-</dl>
+  <p>You can customize variables under <code>gdb-buffers</code>
+  group to select fields included in GDB Threads buffer.</p>
 
-<p>Their upper-case counterparts, <kbd>D</kbd>, <kbd>F</kbd> ,<kbd>L</kbd> and <kbd>R</kbd>,
-display the corresponding buffer in a new frame.
-</p>
-<p>When you create a buffer showing information about some specific
-thread, it becomes bound to that thread and keeps showing actual
-information while you debug your program.  The mode indicator for each
-GDB buffer shows the number of thread it is showing information about.
-The thread number is also included in the buffer name of bound
-buffers.
-</p>
-<p>Further commands are available in the GDB Threads buffer which
-depend on the mode of GDB that is used for controlling execution of
-your program.  See <a href="Multithreaded-Debugging.html#Multithreaded-Debugging">Multithreaded Debugging</a>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Stack-Buffer.html#Stack-Buffer" accesskey="n" rel="next">Stack Buffer</a>, Previous: <a href="Breakpoints-Buffer.html#Breakpoints-Buffer" accesskey="p" rel="prev">Breakpoints Buffer</a>, Up: <a href="GDB-Graphical-Interface.html#GDB-Graphical-Interface" accesskey="u" rel="up">GDB Graphical Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt><code>gdb-thread-buffer-verbose-names</code></dt>
 
+    <dd>
+      <a name=
+      "index-gdb_002dthread_002dbuffer_002dverbose_002dnames" id=
+      "index-gdb_002dthread_002dbuffer_002dverbose_002dnames"></a>
 
+      <p>Show long thread names like &lsquo;<samp>Thread 0x4e2ab70
+      (LWP 1983)</samp>&rsquo;.</p>
+    </dd>
 
+    <dt><code>gdb-thread-buffer-arguments</code></dt>
+
+    <dd>
+      <a name="index-gdb_002dthread_002dbuffer_002darguments" id=
+      "index-gdb_002dthread_002dbuffer_002darguments"></a>
+
+      <p>Show arguments of thread top frames.</p>
+    </dd>
+
+    <dt><code>gdb-thread-buffer-locations</code></dt>
+
+    <dd>
+      <a name="index-gdb_002dthread_002dbuffer_002dlocations" id=
+      "index-gdb_002dthread_002dbuffer_002dlocations"></a>
+
+      <p>Show file information or library names.</p>
+    </dd>
+
+    <dt><code>gdb-thread-buffer-addresses</code></dt>
+
+    <dd>
+      <a name="index-gdb_002dthread_002dbuffer_002daddresses" id=
+      "index-gdb_002dthread_002dbuffer_002daddresses"></a>
+
+      <p>Show addresses for thread frames in threads buffer.</p>
+    </dd>
+  </dl>
+
+  <p>To view information for several threads simultaneously, use
+  the following commands from the GDB Threads buffer.</p>
+
+  <dl compact="compact">
+    <dt><kbd>d</kbd></dt>
+
+    <dd>
+      <a name="index-d-_0028GDB-threads-buffer_0029" id=
+      "index-d-_0028GDB-threads-buffer_0029"></a> <a name=
+      "index-gdb_002ddisplay_002ddisassembly_002dfor_002dthread"
+      id="index-gdb_002ddisplay_002ddisassembly_002dfor_002dthread">
+      </a>
+
+      <p>Display disassembly buffer for the thread at current line
+      (<code>gdb-display-disassembly-for-thread</code>).</p>
+    </dd>
+
+    <dt><kbd>f</kbd></dt>
+
+    <dd>
+      <a name="index-f-_0028GDB-threads-buffer_0029" id=
+      "index-f-_0028GDB-threads-buffer_0029"></a> <a name=
+      "index-gdb_002ddisplay_002dstack_002dfor_002dthread" id=
+      "index-gdb_002ddisplay_002dstack_002dfor_002dthread"></a>
+
+      <p>Display the GDB Stack buffer for the thread at current
+      line (<code>gdb-display-stack-for-thread</code>).</p>
+    </dd>
+
+    <dt><kbd>l</kbd></dt>
+
+    <dd>
+      <a name="index-l-_0028GDB-threads-buffer_0029" id=
+      "index-l-_0028GDB-threads-buffer_0029"></a> <a name=
+      "index-gdb_002ddisplay_002dlocals_002dfor_002dthread" id=
+      "index-gdb_002ddisplay_002dlocals_002dfor_002dthread"></a>
+
+      <p>Display the GDB Locals buffer for the thread at current
+      line (<code>gdb-display-locals-for-thread</code>).</p>
+    </dd>
+
+    <dt><kbd>r</kbd></dt>
+
+    <dd>
+      <a name="index-r-_0028GDB-threads-buffer_0029" id=
+      "index-r-_0028GDB-threads-buffer_0029"></a> <a name=
+      "index-gdb_002ddisplay_002dregisters_002dfor_002dthread" id=
+      "index-gdb_002ddisplay_002dregisters_002dfor_002dthread"></a>
+
+      <p>Display the GDB Registers buffer for the thread at current
+      line (<code>gdb-display-registers-for-thread</code>).</p>
+    </dd>
+  </dl>
+
+  <p>Their upper-case counterparts, <kbd>D</kbd>, <kbd>F</kbd>
+  ,<kbd>L</kbd> and <kbd>R</kbd>, display the corresponding buffer
+  in a new frame.</p>
+
+  <p>When you create a buffer showing information about some
+  specific thread, it becomes bound to that thread and keeps
+  showing actual information while you debug your program. The mode
+  indicator for each GDB buffer shows the number of thread it is
+  showing information about. The thread number is also included in
+  the buffer name of bound buffers.</p>
+
+  <p>Further commands are available in the GDB Threads buffer which
+  depend on the mode of GDB that is used for controlling execution
+  of your program. See <a href=
+  "Multithreaded-Debugging.html#Multithreaded-Debugging">Multithreaded
+  Debugging</a>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Stack-Buffer.html#Stack-Buffer" accesskey="n"
+    rel="next">Stack Buffer</a>, Previous: <a href=
+    "Breakpoints-Buffer.html#Breakpoints-Buffer" accesskey="p" rel=
+    "prev">Breakpoints Buffer</a>, Up: <a href=
+    "GDB-Graphical-Interface.html#GDB-Graphical-Interface"
+    accesskey="u" rel="up">GDB Graphical Interface</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2008, 2010-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,70 +14,105 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Emacs Lisp Regression Testing: Running Tests Interactively</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Emacs Lisp Regression Testing: Running Tests Interactively">
-<meta name="keywords" content="Emacs Lisp Regression Testing: Running Tests Interactively">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="How-to-Run-Tests.html#How-to-Run-Tests" rel="up" title="How to Run Tests">
-<link href="Running-Tests-in-Batch-Mode.html#Running-Tests-in-Batch-Mode" rel="next" title="Running Tests in Batch Mode">
-<link href="How-to-Run-Tests.html#How-to-Run-Tests" rel="prev" title="How to Run Tests">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Emacs Lisp Regression Testing: Running Tests
+  Interactively</title>
+  <meta name="description" content=
+  "Emacs Lisp Regression Testing: Running Tests Interactively" />
+  <meta name="keywords" content=
+  "Emacs Lisp Regression Testing: Running Tests Interactively" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="How-to-Run-Tests.html#How-to-Run-Tests" rel="up"
+  title="How to Run Tests" />
+  <link href=
+  "Running-Tests-in-Batch-Mode.html#Running-Tests-in-Batch-Mode"
+  rel="next" title="Running Tests in Batch Mode" />
+  <link href="How-to-Run-Tests.html#How-to-Run-Tests" rel="prev"
+  title="How to Run Tests" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Running-Tests-Interactively"></a>
-<div class="header">
-<p>
-Next: <a href="Running-Tests-in-Batch-Mode.html#Running-Tests-in-Batch-Mode" accesskey="n" rel="next">Running Tests in Batch Mode</a>, Up: <a href="How-to-Run-Tests.html#How-to-Run-Tests" accesskey="u" rel="up">How to Run Tests</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
-<hr>
-<a name="Running-Tests-Interactively-1"></a>
-<h3 class="section">2.1 Running Tests Interactively</h3>
+<body lang="en" xml:lang="en">
+  <a name="Running-Tests-Interactively" id=
+  "Running-Tests-Interactively"></a>
 
-<p>You can run the tests that are currently defined in your Emacs with
-the command <kbd><kbd>M-x</kbd> ert <kbd>RET</kbd> t <kbd>RET</kbd></kbd>.  (For an
-explanation of the <code>t</code> argument, see <a href="Test-Selectors.html#Test-Selectors">Test Selectors</a>.) ERT will pop
-up a new buffer, the ERT results buffer, showing the results of the
-tests run.  It looks like this:
-</p>
-<div class="example">
-<pre class="example">Selector: t
+  <div class="header">
+    <p>Next: <a href=
+    "Running-Tests-in-Batch-Mode.html#Running-Tests-in-Batch-Mode"
+    accesskey="n" rel="next">Running Tests in Batch Mode</a>, Up:
+    <a href="How-to-Run-Tests.html#How-to-Run-Tests" accesskey="u"
+    rel="up">How to Run Tests</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>]</p>
+  </div>
+  <hr />
+  <a name="Running-Tests-Interactively-1" id=
+  "Running-Tests-Interactively-1"></a>
+
+  <h3 class="section">2.1 Running Tests Interactively</h3>
+
+  <p>You can run the tests that are currently defined in your Emacs
+  with the command <kbd><kbd>M-x</kbd> ert <kbd>RET</kbd> t
+  <kbd>RET</kbd></kbd>. (For an explanation of the <code>t</code>
+  argument, see <a href="Test-Selectors.html#Test-Selectors">Test
+  Selectors</a>.) ERT will pop up a new buffer, the ERT results
+  buffer, showing the results of the tests run. It looks like
+  this:</p>
+
+  <div class="example">
+    <pre class="example">
+Selector: t
 Passed:  31
 Skipped: 0
 Failed:  2 (2 unexpected)
@@ -110,48 +147,58 @@ F list-test
       :value nil :explanation
       (list-elt 2
                 (different-atoms c d))))
-</pre></div>
+</pre>
+  </div>
 
-<p>At the top, there is a summary of the results: we ran all tests defined
-in the current Emacs (<code>Selector: t</code>), 31 of them passed, and 2
-failed unexpectedly.  See <a href="Expected-Failures.html#Expected-Failures">Expected Failures</a>, for an explanation of
-the term <em>unexpected</em> in this context.
-</p>
-<p>The line of dots and <code>F</code>s is a progress bar where each character
-represents one test; it fills while the tests are running.  A dot
-means that the test passed, an <code>F</code> means that it failed.  Below
-the progress bar, ERT shows details about each test that had an
-unexpected result.  In the example above, there are two failures, both
-due to failed <code>should</code> forms.  See <a href="Understanding-Explanations.html#Understanding-Explanations">Understanding Explanations</a>,
-for more details.
-</p>
-<p>In the ERT results buffer, <kbd>TAB</kbd> and <kbd>S-TAB</kbd> cycle between
-buttons.  Each name of a function or macro in this buffer is a button;
-moving point to it and typing <kbd>RET</kbd> jumps to its definition.
-</p>
-<p>Pressing <kbd>r</kbd> re-runs the test near point on its own.  Pressing
-<kbd>d</kbd> re-runs it with the debugger enabled.  <kbd>.</kbd> jumps to the
-definition of the test near point (<kbd>RET</kbd> has the same effect if
-point is on the name of the test).  On a failed test, <kbd>b</kbd> shows
-the backtrace of the failure.
-</p>
-<p><kbd>l</kbd> shows the list of <code>should</code> forms executed in the test.
-If any messages were generated (with the Lisp function <code>message</code>)
-in a test or any of the code that it invoked, <kbd>m</kbd> will show them.
-</p>
-<p>By default, long expressions in the failure details are abbreviated
-using <code>print-length</code> and <code>print-level</code>.  Pressing <kbd>L</kbd>
-while point is on a test failure will increase the limits to show more
-of the expression.
-</p>
+  <p>At the top, there is a summary of the results: we ran all
+  tests defined in the current Emacs (<code>Selector: t</code>), 31
+  of them passed, and 2 failed unexpectedly. See <a href=
+  "Expected-Failures.html#Expected-Failures">Expected Failures</a>,
+  for an explanation of the term <em>unexpected</em> in this
+  context.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Running-Tests-in-Batch-Mode.html#Running-Tests-in-Batch-Mode" accesskey="n" rel="next">Running Tests in Batch Mode</a>, Up: <a href="How-to-Run-Tests.html#How-to-Run-Tests" accesskey="u" rel="up">How to Run Tests</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
+  <p>The line of dots and <code>F</code>s is a progress bar where
+  each character represents one test; it fills while the tests are
+  running. A dot means that the test passed, an <code>F</code>
+  means that it failed. Below the progress bar, ERT shows details
+  about each test that had an unexpected result. In the example
+  above, there are two failures, both due to failed
+  <code>should</code> forms. See <a href=
+  "Understanding-Explanations.html#Understanding-Explanations">Understanding
+  Explanations</a>, for more details.</p>
 
+  <p>In the ERT results buffer, <kbd>TAB</kbd> and <kbd>S-TAB</kbd>
+  cycle between buttons. Each name of a function or macro in this
+  buffer is a button; moving point to it and typing <kbd>RET</kbd>
+  jumps to its definition.</p>
 
+  <p>Pressing <kbd>r</kbd> re-runs the test near point on its own.
+  Pressing <kbd>d</kbd> re-runs it with the debugger enabled.
+  <kbd>.</kbd> jumps to the definition of the test near point
+  (<kbd>RET</kbd> has the same effect if point is on the name of
+  the test). On a failed test, <kbd>b</kbd> shows the backtrace of
+  the failure.</p>
 
+  <p><kbd>l</kbd> shows the list of <code>should</code> forms
+  executed in the test. If any messages were generated (with the
+  Lisp function <code>message</code>) in a test or any of the code
+  that it invoked, <kbd>m</kbd> will show them.</p>
+
+  <p>By default, long expressions in the failure details are
+  abbreviated using <code>print-length</code> and
+  <code>print-level</code>. Pressing <kbd>L</kbd> while point is on
+  a test failure will increase the limits to show more of the
+  expression.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Running-Tests-in-Batch-Mode.html#Running-Tests-in-Batch-Mode"
+    accesskey="n" rel="next">Running Tests in Batch Mode</a>, Up:
+    <a href="How-to-Run-Tests.html#How-to-Run-Tests" accesskey="u"
+    rel="up">How to Run Tests</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>]</p>
+  </div>
 </body>
 </html>

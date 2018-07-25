@@ -1,14 +1,21 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Creating Symbols - Common Lisp Extensions</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Common Lisp Extensions">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Symbols.html#Symbols" title="Symbols">
-<link rel="prev" href="Property-Lists.html#Property-Lists" title="Property Lists">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Creating Symbols - Common Lisp Extensions</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Common Lisp Extensions" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Symbols.html#Symbols" title="Symbols" />
+  <link rel="prev" href="Property-Lists.html#Property-Lists" title=
+  "Property Lists" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
@@ -26,8 +33,10 @@ Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -37,62 +46,88 @@ Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Creating-Symbols"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Property-Lists.html#Property-Lists">Property Lists</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Symbols.html#Symbols">Symbols</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Creating-Symbols" id="Creating-Symbols"></a>
 
-<h3 class="section">8.2 Creating Symbols</h3>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Property-Lists.html#Property-Lists">Property Lists</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Symbols.html#Symbols">Symbols</a></p>
+    <hr />
+  </div>
 
-<p class="noindent">These functions create unique symbols, typically for use as
-temporary variables.
+  <h3 class="section">8.2 Creating Symbols</h3>
 
-<div class="defun">
-&mdash; Function: <b>gensym</b><var> &amp;optional x<a name="index-gensym-67"></a></var><br>
-<blockquote><p>This function creates a new, uninterned symbol (using <code>make-symbol</code>)
-with a unique name.  (The name of an uninterned symbol is relevant
-only if the symbol is printed.)  By default, the name is generated
-from an increasing sequence of numbers, &lsquo;<samp><span class="samp">G1000</span></samp>&rsquo;, &lsquo;<samp><span class="samp">G1001</span></samp>&rsquo;,
-&lsquo;<samp><span class="samp">G1002</span></samp>&rsquo;, etc.  If the optional argument <var>x</var> is a string, that
-string is used as a prefix instead of &lsquo;<samp><span class="samp">G</span></samp>&rsquo;.  Uninterned symbols
-are used in macro expansions for temporary variables, to ensure that
-their names will not conflict with &ldquo;real&rdquo; variables in the user's
-code. 
-</p></blockquote></div>
+  <p class="noindent">These functions create unique symbols,
+  typically for use as temporary variables.</p>
 
-<div class="defun">
-&mdash; Variable: <b>*gensym-counter*</b><var><a name="index-g_t_002agensym_002dcounter_002a-68"></a></var><br>
-<blockquote><p>This variable holds the counter used to generate <code>gensym</code> names. 
-It is incremented after each use by <code>gensym</code>.  In Common Lisp
-this is initialized with 0, but this package initializes it with a
-random (time-dependent) value to avoid trouble when two files that
-each used <code>gensym</code> in their compilation are loaded together. 
-(Uninterned symbols become interned when the compiler writes them
-out to a file and the Emacs loader loads them, so their names have to
-be treated a bit more carefully than in Common Lisp where uninterned
-symbols remain uninterned after loading.) 
-</p></blockquote></div>
+  <div class="defun">
+    &mdash; Function: <b>gensym</b> <var>&amp;optional x<a name=
+    "index-gensym-67" id="index-gensym-67"></a></var><br />
 
-<div class="defun">
-&mdash; Function: <b>gentemp</b><var> &amp;optional x<a name="index-gentemp-69"></a></var><br>
-<blockquote><p>This function is like <code>gensym</code>, except that it produces a new
-<em>interned</em> symbol.  If the symbol that is generated already
-exists, the function keeps incrementing the counter and trying
-again until a new symbol is generated. 
-</p></blockquote></div>
+    <blockquote>
+      <p>This function creates a new, uninterned symbol (using
+      <code>make-symbol</code>) with a unique name. (The name of an
+      uninterned symbol is relevant only if the symbol is printed.)
+      By default, the name is generated from an increasing sequence
+      of numbers, &lsquo;<samp><span class=
+      "samp">G1000</span></samp>&rsquo;, &lsquo;<samp><span class=
+      "samp">G1001</span></samp>&rsquo;, &lsquo;<samp><span class=
+      "samp">G1002</span></samp>&rsquo;, etc. If the optional
+      argument <var>x</var> is a string, that string is used as a
+      prefix instead of &lsquo;<samp><span class=
+      "samp">G</span></samp>&rsquo;. Uninterned symbols are used in
+      macro expansions for temporary variables, to ensure that
+      their names will not conflict with &ldquo;real&rdquo;
+      variables in the user's code.</p>
+    </blockquote>
+  </div>
 
-   <p>The Quiroz <samp><span class="file">cl.el</span></samp> package also defined a <code>defkeyword</code>
-form for creating self-quoting keyword symbols.  This package
-automatically creates all keywords that are called for by
-<code>&amp;key</code> argument specifiers, and discourages the use of
-keywords as data unrelated to keyword arguments, so the
-<code>defkeyword</code> form has been discontinued.
+  <div class="defun">
+    &mdash; Variable: <b>*gensym-counter*</b><var><a name=
+    "index-g_t_002agensym_002dcounter_002a-68" id=
+    "index-g_t_002agensym_002dcounter_002a-68"></a></var><br />
 
-   </body></html>
+    <blockquote>
+      <p>This variable holds the counter used to generate
+      <code>gensym</code> names. It is incremented after each use
+      by <code>gensym</code>. In Common Lisp this is initialized
+      with 0, but this package initializes it with a random
+      (time-dependent) value to avoid trouble when two files that
+      each used <code>gensym</code> in their compilation are loaded
+      together. (Uninterned symbols become interned when the
+      compiler writes them out to a file and the Emacs loader loads
+      them, so their names have to be treated a bit more carefully
+      than in Common Lisp where uninterned symbols remain
+      uninterned after loading.)</p>
+    </blockquote>
+  </div>
 
+  <div class="defun">
+    &mdash; Function: <b>gentemp</b> <var>&amp;optional x<a name=
+    "index-gentemp-69" id="index-gentemp-69"></a></var><br />
+
+    <blockquote>
+      <p>This function is like <code>gensym</code>, except that it
+      produces a new <em>interned</em> symbol. If the symbol that
+      is generated already exists, the function keeps incrementing
+      the counter and trying again until a new symbol is
+      generated.</p>
+    </blockquote>
+  </div>
+
+  <p>The Quiroz <samp><span class="file">cl.el</span></samp>
+  package also defined a <code>defkeyword</code> form for creating
+  self-quoting keyword symbols. This package automatically creates
+  all keywords that are called for by <code>&amp;key</code>
+  argument specifiers, and discourages the use of keywords as data
+  unrelated to keyword arguments, so the <code>defkeyword</code>
+  form has been discontinued.</p>
+</body>
+</html>

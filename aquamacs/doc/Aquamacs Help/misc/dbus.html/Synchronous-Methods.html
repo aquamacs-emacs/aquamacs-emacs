@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2007-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,167 +14,233 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Using of D-Bus: Synchronous Methods</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Using of D-Bus: Synchronous Methods">
-<meta name="keywords" content="Using of D-Bus: Synchronous Methods">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Asynchronous-Methods.html#Asynchronous-Methods" rel="next" title="Asynchronous Methods">
-<link href="Type-Conversion.html#Type-Conversion" rel="prev" title="Type Conversion">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Using of D-Bus: Synchronous Methods</title>
+  <meta name="description" content=
+  "Using of D-Bus: Synchronous Methods" />
+  <meta name="keywords" content=
+  "Using of D-Bus: Synchronous Methods" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Asynchronous-Methods.html#Asynchronous-Methods" rel=
+  "next" title="Asynchronous Methods" />
+  <link href="Type-Conversion.html#Type-Conversion" rel="prev"
+  title="Type Conversion" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Synchronous-Methods"></a>
-<div class="header">
-<p>
-Next: <a href="Asynchronous-Methods.html#Asynchronous-Methods" accesskey="n" rel="next">Asynchronous Methods</a>, Previous: <a href="Type-Conversion.html#Type-Conversion" accesskey="p" rel="prev">Type Conversion</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Calling-methods-in-a-blocking-way_002e"></a>
-<h2 class="chapter">4 Calling methods in a blocking way.</h2>
-<a name="index-method-calls_002c-synchronous"></a>
-<a name="index-synchronous-method-calls"></a>
+<body lang="en" xml:lang="en">
+  <a name="Synchronous-Methods" id="Synchronous-Methods"></a>
 
-<p>Methods can be called synchronously (<em>blocking</em>) or asynchronously
-(<em>non-blocking</em>).
-</p>
-<p>At D-Bus level, a method call consist of two messages: one message
-which carries the input parameters to the object owning the method to
-be called, and a reply message returning the resulting output
-parameters from the object.
-</p>
-<dl>
-<dt><a name="index-dbus_002dcall_002dmethod"></a>Function: <strong>dbus-call-method</strong> <em>bus service path interface method &amp;optional :timeout timeout &amp;rest args</em></dt>
-<dd><p>This function calls <var>method</var> on the D-Bus <var>bus</var>.  <var>bus</var> is
-either the symbol <code>:system</code> or the symbol <code>:session</code>.
-</p>
-<p><var>service</var> is the D-Bus service name to be used.  <var>path</var> is the
-D-Bus object path, <var>service</var> is registered at.  <var>interface</var> is
-an interface offered by <var>service</var>.  It must provide <var>method</var>.
-</p>
-<p>If the parameter <code>:timeout</code> is given, the following integer
-<var>timeout</var> specifies the maximum number of milliseconds the method
-call must return.  The default value is 25,000.  If the method call
-doesn&rsquo;t return in time, a D-Bus error is raised (see <a href="Errors-and-Events.html#Errors-and-Events">Errors and Events</a>).
-</p>
-<p>All other arguments args are passed to <var>method</var> as arguments.
-They are converted into D-Bus types as described in <a href="Type-Conversion.html#Type-Conversion">Type Conversion</a>.
-</p>
-<p>The function returns the resulting values of <var>method</var> as a list of
-Lisp objects, according to the type conversion rules described in
-<a href="Type-Conversion.html#Type-Conversion">Type Conversion</a>.  Example:
-</p>
-<div class="lisp">
-<pre class="lisp">(dbus-call-method
-  :session &quot;org.gnome.seahorse&quot; &quot;/org/gnome/seahorse/keys/openpgp&quot;
-  &quot;org.gnome.seahorse.Keys&quot; &quot;GetKeyField&quot;
-  &quot;openpgp:657984B8C7A966DD&quot; &quot;simple-name&quot;)
+  <div class="header">
+    <p>Next: <a href=
+    "Asynchronous-Methods.html#Asynchronous-Methods" accesskey="n"
+    rel="next">Asynchronous Methods</a>, Previous: <a href=
+    "Type-Conversion.html#Type-Conversion" accesskey="p" rel=
+    "prev">Type Conversion</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Calling-methods-in-a-blocking-way_002e" id=
+  "Calling-methods-in-a-blocking-way_002e"></a>
 
-&rArr; (t (&quot;Philip R. Zimmermann&quot;))
-</pre></div>
+  <h2 class="chapter">4 Calling methods in a blocking
+  way.</h2><a name="index-method-calls_002c-synchronous" id=
+  "index-method-calls_002c-synchronous"></a> <a name=
+  "index-synchronous-method-calls" id=
+  "index-synchronous-method-calls"></a>
 
-<p>If the result of the method call is just one value, the converted Lisp
-object is returned instead of a list containing this single Lisp
-object.  Example:
-</p>
-<div class="lisp">
-<pre class="lisp">(dbus-call-method
-  :system &quot;org.freedesktop.Hal&quot;
-  &quot;/org/freedesktop/Hal/devices/computer&quot;
-  &quot;org.freedesktop.Hal.Device&quot; &quot;GetPropertyString&quot;
-  &quot;system.kernel.machine&quot;)
+  <p>Methods can be called synchronously (<em>blocking</em>) or
+  asynchronously (<em>non-blocking</em>).</p>
 
-&rArr; &quot;i686&quot;
-</pre></div>
+  <p>At D-Bus level, a method call consist of two messages: one
+  message which carries the input parameters to the object owning
+  the method to be called, and a reply message returning the
+  resulting output parameters from the object.</p>
 
-<p>With the <code>dbus-introspect</code> function it is possible to explore the
-interfaces of &lsquo;<samp>org.freedesktop.Hal</samp>&rsquo; service. It offers the
-interfaces &lsquo;<samp>org.freedesktop.Hal.Manager</samp>&rsquo; for the object at the
-path &lsquo;<samp>/org/freedesktop/Hal/Manager</samp>&rsquo; as well as the interface
-&lsquo;<samp>org.freedesktop.Hal.Device</samp>&rsquo; for all objects prefixed with the
-path &lsquo;<samp>/org/freedesktop/Hal/devices</samp>&rsquo;.  With the methods
-&lsquo;<samp>GetAllDevices</samp>&rsquo; and &lsquo;<samp>GetAllProperties</samp>&rsquo;, it is simple to
-emulate the <code>lshal</code> command on GNU/Linux systems:
-</p>
-<div class="lisp">
-<pre class="lisp">(dolist (device
+  <dl>
+    <dt><a name="index-dbus_002dcall_002dmethod" id=
+    "index-dbus_002dcall_002dmethod"></a>Function:
+    <strong>dbus-call-method</strong> <em>bus service path
+    interface method &amp;optional :timeout timeout &amp;rest
+    args</em></dt>
+
+    <dd>
+      <p>This function calls <var>method</var> on the D-Bus
+      <var>bus</var>. <var>bus</var> is either the symbol
+      <code>:system</code> or the symbol <code>:session</code>.</p>
+
+      <p><var>service</var> is the D-Bus service name to be used.
+      <var>path</var> is the D-Bus object path, <var>service</var>
+      is registered at. <var>interface</var> is an interface
+      offered by <var>service</var>. It must provide
+      <var>method</var>.</p>
+
+      <p>If the parameter <code>:timeout</code> is given, the
+      following integer <var>timeout</var> specifies the maximum
+      number of milliseconds the method call must return. The
+      default value is 25,000. If the method call doesn&rsquo;t
+      return in time, a D-Bus error is raised (see <a href=
+      "Errors-and-Events.html#Errors-and-Events">Errors and
+      Events</a>).</p>
+
+      <p>All other arguments args are passed to <var>method</var>
+      as arguments. They are converted into D-Bus types as
+      described in <a href=
+      "Type-Conversion.html#Type-Conversion">Type
+      Conversion</a>.</p>
+
+      <p>The function returns the resulting values of
+      <var>method</var> as a list of Lisp objects, according to the
+      type conversion rules described in <a href=
+      "Type-Conversion.html#Type-Conversion">Type Conversion</a>.
+      Example:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(dbus-call-method
+  :session "org.gnome.seahorse" "/org/gnome/seahorse/keys/openpgp"
+  "org.gnome.seahorse.Keys" "GetKeyField"
+  "openpgp:657984B8C7A966DD" "simple-name")
+
+&rArr; (t ("Philip R. Zimmermann"))
+</pre>
+      </div>
+
+      <p>If the result of the method call is just one value, the
+      converted Lisp object is returned instead of a list
+      containing this single Lisp object. Example:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(dbus-call-method
+  :system "org.freedesktop.Hal"
+  "/org/freedesktop/Hal/devices/computer"
+  "org.freedesktop.Hal.Device" "GetPropertyString"
+  "system.kernel.machine")
+
+&rArr; "i686"
+</pre>
+      </div>
+
+      <p>With the <code>dbus-introspect</code> function it is
+      possible to explore the interfaces of
+      &lsquo;<samp>org.freedesktop.Hal</samp>&rsquo; service. It
+      offers the interfaces
+      &lsquo;<samp>org.freedesktop.Hal.Manager</samp>&rsquo; for
+      the object at the path
+      &lsquo;<samp>/org/freedesktop/Hal/Manager</samp>&rsquo; as
+      well as the interface
+      &lsquo;<samp>org.freedesktop.Hal.Device</samp>&rsquo; for all
+      objects prefixed with the path
+      &lsquo;<samp>/org/freedesktop/Hal/devices</samp>&rsquo;. With
+      the methods &lsquo;<samp>GetAllDevices</samp>&rsquo; and
+      &lsquo;<samp>GetAllProperties</samp>&rsquo;, it is simple to
+      emulate the <code>lshal</code> command on GNU/Linux
+      systems:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(dolist (device
           (dbus-call-method
-            :system &quot;org.freedesktop.Hal&quot;
-            &quot;/org/freedesktop/Hal/Manager&quot;
-            &quot;org.freedesktop.Hal.Manager&quot; &quot;GetAllDevices&quot;))
-  (message &quot;\nudi = %s&quot; device)
+            :system "org.freedesktop.Hal"
+            "/org/freedesktop/Hal/Manager"
+            "org.freedesktop.Hal.Manager" "GetAllDevices"))
+  (message "\nudi = %s" device)
   (dolist (properties
             (dbus-call-method
-              :system &quot;org.freedesktop.Hal&quot; device
-              &quot;org.freedesktop.Hal.Device&quot; &quot;GetAllProperties&quot;))
-    (message &quot;  %s = %S&quot;
-             (car properties) (or (caar (cdr properties)) &quot;&quot;))))
+              :system "org.freedesktop.Hal" device
+              "org.freedesktop.Hal.Device" "GetAllProperties"))
+    (message "  %s = %S"
+             (car properties) (or (caar (cdr properties)) ""))))
 
--| &quot;udi = /org/freedesktop/Hal/devices/computer
-      info.addons = (\&quot;hald-addon-acpi\&quot;)
-      info.bus = \&quot;unknown\&quot;
-      info.product = \&quot;Computer\&quot;
-      info.subsystem = \&quot;unknown\&quot;
-      info.udi = \&quot;/org/freedesktop/Hal/devices/computer\&quot;
-      linux.sysfs_path_device = \&quot;(none)\&quot;
-      power_management.acpi.linux.version = \&quot;20051216\&quot;
+-| "udi = /org/freedesktop/Hal/devices/computer
+      info.addons = (\"hald-addon-acpi\")
+      info.bus = \"unknown\"
+      info.product = \"Computer\"
+      info.subsystem = \"unknown\"
+      info.udi = \"/org/freedesktop/Hal/devices/computer\"
+      linux.sysfs_path_device = \"(none)\"
+      power_management.acpi.linux.version = \"20051216\"
       power_management.can_suspend_to_disk = t
-      power_management.can_suspend_to_ram = \&quot;\&quot;
-      power_management.type = \&quot;acpi\&quot;
-      smbios.bios.release_date = \&quot;11/07/2001\&quot;
-      system.chassis.manufacturer = \&quot;COMPAL\&quot;
-      system.chassis.type = \&quot;Notebook\&quot;
-      system.firmware.release_date = \&quot;03/19/2005\&quot;
-      &hellip;&quot;
-</pre></div>
-</dd></dl>
+      power_management.can_suspend_to_ram = \"\"
+      power_management.type = \"acpi\"
+      smbios.bios.release_date = \"11/07/2001\"
+      system.chassis.manufacturer = \"COMPAL\"
+      system.chassis.type = \"Notebook\"
+      system.firmware.release_date = \"03/19/2005\"
+      &hellip;"
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
 
-
-<hr>
-<div class="header">
-<p>
-Next: <a href="Asynchronous-Methods.html#Asynchronous-Methods" accesskey="n" rel="next">Asynchronous Methods</a>, Previous: <a href="Type-Conversion.html#Type-Conversion" accesskey="p" rel="prev">Type Conversion</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href=
+    "Asynchronous-Methods.html#Asynchronous-Methods" accesskey="n"
+    rel="next">Asynchronous Methods</a>, Previous: <a href=
+    "Type-Conversion.html#Type-Conversion" accesskey="p" rel=
+    "prev">Type Conversion</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

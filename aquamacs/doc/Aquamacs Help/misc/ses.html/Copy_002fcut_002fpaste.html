@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents SES: the Simple Emacs Spreadsheet.
 
 Copyright (C) 2002-2016 Free Software Foundation, Inc.
@@ -14,148 +16,226 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>SES: Simple Emacs Spreadsheet: Copy/cut/paste</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="SES: Simple Emacs Spreadsheet: Copy/cut/paste">
-<meta name="keywords" content="SES: Simple Emacs Spreadsheet: Copy/cut/paste">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="The-Basics.html#The-Basics" rel="up" title="The Basics">
-<link href="Customizing-SES.html#Customizing-SES" rel="next" title="Customizing SES">
-<link href="Clearing-cells.html#Clearing-cells" rel="prev" title="Clearing cells">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>SES: Simple Emacs Spreadsheet: Copy/cut/paste</title>
+  <meta name="description" content=
+  "SES: Simple Emacs Spreadsheet: Copy/cut/paste" />
+  <meta name="keywords" content=
+  "SES: Simple Emacs Spreadsheet: Copy/cut/paste" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="The-Basics.html#The-Basics" rel="up" title=
+  "The Basics" />
+  <link href="Customizing-SES.html#Customizing-SES" rel="next"
+  title="Customizing SES" />
+  <link href="Clearing-cells.html#Clearing-cells" rel="prev" title=
+  "Clearing cells" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Copy_002fcut_002fpaste"></a>
-<div class="header">
-<p>
-Next: <a href="Customizing-SES.html#Customizing-SES" accesskey="n" rel="next">Customizing <acronym>SES</acronym></a>, Previous: <a href="Clearing-cells.html#Clearing-cells" accesskey="p" rel="prev">Clearing cells</a>, Up: <a href="The-Basics.html#The-Basics" accesskey="u" rel="up">The Basics</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Copy_002c-cut_002c-and-paste"></a>
-<h3 class="section">3.5 Copy, cut, and paste</h3>
-<a name="index-copy"></a>
-<a name="index-cut"></a>
-<a name="index-paste"></a>
-<a name="index-kill_002dring_002dsave"></a>
-<a name="index-mouse_002dset_002dregion"></a>
-<a name="index-mouse_002dset_002dsecondary"></a>
-<a name="index-ses_002dkill_002doverride"></a>
-<a name="index-yank-1"></a>
-<a name="index-clipboard_002dyank"></a>
-<a name="index-mouse_002dyank_002dat_002dclick"></a>
-<a name="index-mouse_002dyank_002dat_002dsecondary"></a>
-<a name="index-ses_002dyank_002dpop"></a>
+<body lang="en" xml:lang="en">
+  <a name="Copy_002fcut_002fpaste" id="Copy_002fcut_002fpaste"></a>
 
-<p>The copy functions work on rectangular regions of cells.  You can paste the
-copies into non-<acronym>SES</acronym> buffers to export the print text.
-</p>
-<dl compact="compact">
-<dt><kbd>M-w</kbd></dt>
-<dt><kbd>[copy]</kbd></dt>
-<dt><kbd>[C-insert]</kbd></dt>
-<dd><p>Copy the highlighted cells to kill ring and primary clipboard
-(<code>kill-ring-save</code>).
-</p>
-</dd>
-<dt><kbd>[drag-mouse-1]</kbd></dt>
-<dd><p>Mark a region and copy it to kill ring and primary clipboard
-(<code>mouse-set-region</code>).
-</p>
-</dd>
-<dt><kbd>[M-drag-mouse-1]</kbd></dt>
-<dd><p>Mark a region and copy it to kill ring and secondary clipboard
-(<code>mouse-set-secondary</code>).
-</p>
-</dd>
-<dt><kbd>C-w</kbd></dt>
-<dt><kbd>[cut]</kbd></dt>
-<dt><kbd>[S-delete]</kbd></dt>
-<dd><p>The cut functions do not actually delete rows or columns&mdash;they copy
-and then clear (<code>ses-kill-override</code>).
-</p>
-</dd>
-<dt><kbd>C-y</kbd></dt>
-<dt><kbd>[S-insert]</kbd></dt>
-<dd><p>Paste from kill ring (<code>yank</code>).  The paste functions behave
-differently depending on the format of the text being inserted:
-</p><ul>
-<li> When pasting cells that were cut from a <acronym>SES</acronym> buffer, the print text is
-ignored and only the attached formula and printer are inserted; cell
-references in the formula are relocated unless you use <kbd>C-u</kbd>.
-</li><li> The pasted text overwrites a rectangle of cells whose top left corner
-is the current cell.  If part of the rectangle is beyond the edges of
-the spreadsheet, you must confirm the increase in spreadsheet size.
-</li><li> Non-<acronym>SES</acronym> text is usually inserted as a replacement formula for the
-current cell.  If the formula would be a symbol, it&rsquo;s treated as a
-string unless you use <kbd>C-u</kbd>.  Pasted formulas with syntax errors
-are always treated as strings.
-</li></ul>
+  <div class="header">
+    <p>Next: <a href="Customizing-SES.html#Customizing-SES"
+    accesskey="n" rel="next">Customizing
+    <acronym>SES</acronym></a>, Previous: <a href=
+    "Clearing-cells.html#Clearing-cells" accesskey="p" rel=
+    "prev">Clearing cells</a>, Up: <a href=
+    "The-Basics.html#The-Basics" accesskey="u" rel="up">The
+    Basics</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Copy_002c-cut_002c-and-paste" id=
+  "Copy_002c-cut_002c-and-paste"></a>
 
-</dd>
-<dt><kbd>[paste]</kbd></dt>
-<dd><p>Paste from primary clipboard or kill ring (<code>clipboard-yank</code>).
-</p>
-</dd>
-<dt><kbd>[mouse-2]</kbd></dt>
-<dd><p>Set point and paste from primary clipboard (<code>mouse-yank-at-click</code>).
-</p>
-</dd>
-<dt><kbd>[M-mouse-2]</kbd></dt>
-<dd><p>Set point and paste from secondary clipboard (<code>mouse-yank-secondary</code>).
-</p>
-</dd>
-<dt><kbd>M-y</kbd></dt>
-<dd><p>Immediately after a paste, you can replace the text with a preceding
-element from the kill ring (<code>ses-yank-pop</code>).  Unlike the standard
-Emacs yank-pop, the <acronym>SES</acronym> version uses <code>undo</code> to delete the old
-yank.  This doesn&rsquo;t make any difference?
-</p></dd>
-</dl>
+  <h3 class="section">3.5 Copy, cut, and paste</h3><a name=
+  "index-copy" id="index-copy"></a> <a name="index-cut" id=
+  "index-cut"></a> <a name="index-paste" id="index-paste"></a>
+  <a name="index-kill_002dring_002dsave" id=
+  "index-kill_002dring_002dsave"></a> <a name=
+  "index-mouse_002dset_002dregion" id=
+  "index-mouse_002dset_002dregion"></a> <a name=
+  "index-mouse_002dset_002dsecondary" id=
+  "index-mouse_002dset_002dsecondary"></a> <a name=
+  "index-ses_002dkill_002doverride" id=
+  "index-ses_002dkill_002doverride"></a> <a name="index-yank-1" id=
+  "index-yank-1"></a> <a name="index-clipboard_002dyank" id=
+  "index-clipboard_002dyank"></a> <a name=
+  "index-mouse_002dyank_002dat_002dclick" id=
+  "index-mouse_002dyank_002dat_002dclick"></a> <a name=
+  "index-mouse_002dyank_002dat_002dsecondary" id=
+  "index-mouse_002dyank_002dat_002dsecondary"></a> <a name=
+  "index-ses_002dyank_002dpop" id="index-ses_002dyank_002dpop"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Customizing-SES.html#Customizing-SES" accesskey="n" rel="next">Customizing <acronym>SES</acronym></a>, Previous: <a href="Clearing-cells.html#Clearing-cells" accesskey="p" rel="prev">Clearing cells</a>, Up: <a href="The-Basics.html#The-Basics" accesskey="u" rel="up">The Basics</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>The copy functions work on rectangular regions of cells. You
+  can paste the copies into non-<acronym>SES</acronym> buffers to
+  export the print text.</p>
 
+  <dl compact="compact">
+    <dt><kbd>M-w</kbd></dt>
 
+    <dt><kbd>[copy]</kbd></dt>
 
+    <dt><kbd>[C-insert]</kbd></dt>
+
+    <dd>
+      <p>Copy the highlighted cells to kill ring and primary
+      clipboard (<code>kill-ring-save</code>).</p>
+    </dd>
+
+    <dt><kbd>[drag-mouse-1]</kbd></dt>
+
+    <dd>
+      <p>Mark a region and copy it to kill ring and primary
+      clipboard (<code>mouse-set-region</code>).</p>
+    </dd>
+
+    <dt><kbd>[M-drag-mouse-1]</kbd></dt>
+
+    <dd>
+      <p>Mark a region and copy it to kill ring and secondary
+      clipboard (<code>mouse-set-secondary</code>).</p>
+    </dd>
+
+    <dt><kbd>C-w</kbd></dt>
+
+    <dt><kbd>[cut]</kbd></dt>
+
+    <dt><kbd>[S-delete]</kbd></dt>
+
+    <dd>
+      <p>The cut functions do not actually delete rows or
+      columns&mdash;they copy and then clear
+      (<code>ses-kill-override</code>).</p>
+    </dd>
+
+    <dt><kbd>C-y</kbd></dt>
+
+    <dt><kbd>[S-insert]</kbd></dt>
+
+    <dd>
+      <p>Paste from kill ring (<code>yank</code>). The paste
+      functions behave differently depending on the format of the
+      text being inserted:</p>
+
+      <ul>
+        <li>When pasting cells that were cut from a
+        <acronym>SES</acronym> buffer, the print text is ignored
+        and only the attached formula and printer are inserted;
+        cell references in the formula are relocated unless you use
+        <kbd>C-u</kbd>.</li>
+
+        <li>The pasted text overwrites a rectangle of cells whose
+        top left corner is the current cell. If part of the
+        rectangle is beyond the edges of the spreadsheet, you must
+        confirm the increase in spreadsheet size.</li>
+
+        <li>Non-<acronym>SES</acronym> text is usually inserted as
+        a replacement formula for the current cell. If the formula
+        would be a symbol, it&rsquo;s treated as a string unless
+        you use <kbd>C-u</kbd>. Pasted formulas with syntax errors
+        are always treated as strings.</li>
+      </ul>
+    </dd>
+
+    <dt><kbd>[paste]</kbd></dt>
+
+    <dd>
+      <p>Paste from primary clipboard or kill ring
+      (<code>clipboard-yank</code>).</p>
+    </dd>
+
+    <dt><kbd>[mouse-2]</kbd></dt>
+
+    <dd>
+      <p>Set point and paste from primary clipboard
+      (<code>mouse-yank-at-click</code>).</p>
+    </dd>
+
+    <dt><kbd>[M-mouse-2]</kbd></dt>
+
+    <dd>
+      <p>Set point and paste from secondary clipboard
+      (<code>mouse-yank-secondary</code>).</p>
+    </dd>
+
+    <dt><kbd>M-y</kbd></dt>
+
+    <dd>
+      <p>Immediately after a paste, you can replace the text with a
+      preceding element from the kill ring
+      (<code>ses-yank-pop</code>). Unlike the standard Emacs
+      yank-pop, the <acronym>SES</acronym> version uses
+      <code>undo</code> to delete the old yank. This doesn&rsquo;t
+      make any difference?</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Customizing-SES.html#Customizing-SES"
+    accesskey="n" rel="next">Customizing
+    <acronym>SES</acronym></a>, Previous: <a href=
+    "Clearing-cells.html#Clearing-cells" accesskey="p" rel=
+    "prev">Clearing cells</a>, Up: <a href=
+    "The-Basics.html#The-Basics" accesskey="u" rel="up">The
+    Basics</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

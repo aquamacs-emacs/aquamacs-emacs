@@ -1,15 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Duplicates - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Getting-Mail.html#Getting-Mail" title="Getting Mail">
-<link rel="prev" href="Washing-Mail.html#Washing-Mail" title="Washing Mail">
-<link rel="next" href="Not-Reading-Mail.html#Not-Reading-Mail" title="Not Reading Mail">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Duplicates - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Getting-Mail.html#Getting-Mail" title=
+  "Getting Mail" />
+  <link rel="prev" href="Washing-Mail.html#Washing-Mail" title=
+  "Washing Mail" />
+  <link rel="next" href="Not-Reading-Mail.html#Not-Reading-Mail"
+  title="Not Reading Mail" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -25,8 +35,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,65 +48,88 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Duplicates"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Not-Reading-Mail.html#Not-Reading-Mail">Not Reading Mail</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Washing-Mail.html#Washing-Mail">Washing Mail</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Getting-Mail.html#Getting-Mail">Getting Mail</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Duplicates" id="Duplicates"></a>
 
-<h4 class="subsection">6.4.11 Duplicates</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Not-Reading-Mail.html#Not-Reading-Mail">Not Reading Mail</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Washing-Mail.html#Washing-Mail">Washing Mail</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Getting-Mail.html#Getting-Mail">Getting Mail</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-nnmail_002dtreat_002dduplicates-2158"></a><a name="index-nnmail_002dmessage_002did_002dcache_002dlength-2159"></a><a name="index-nnmail_002dmessage_002did_002dcache_002dfile-2160"></a><a name="index-duplicate-mails-2161"></a>If you are a member of a couple of mailing lists, you will sometimes
-receive two copies of the same mail.  This can be quite annoying, so
-<code>nnmail</code> checks for and treats any duplicates it might find.  To do
-this, it keeps a cache of old <code>Message-ID</code>s&mdash;
-<code>nnmail-message-id-cache-file</code>, which is <samp><span class="file">~/.nnmail-cache</span></samp> by
-default.  The approximate maximum number of <code>Message-ID</code>s stored
-there is controlled by the <code>nnmail-message-id-cache-length</code>
-variable, which is 1000 by default.  (So 1000 <code>Message-ID</code>s will be
-stored.) If all this sounds scary to you, you can set
-<code>nnmail-treat-duplicates</code> to <code>warn</code> (which is what it is by
-default), and <code>nnmail</code> won't delete duplicate mails.  Instead it
-will insert a warning into the head of the mail saying that it thinks
-that this is a duplicate of a different message.
+  <h4 class="subsection">6.4.11 Duplicates</h4>
 
-   <p>This variable can also be a function.  If that's the case, the function
-will be called from a buffer narrowed to the message in question with
-the <code>Message-ID</code> as a parameter.  The function must return either
-<code>nil</code>, <code>warn</code>, or <code>delete</code>.
+  <p><a name="index-nnmail_002dtreat_002dduplicates-2158" id=
+  "index-nnmail_002dtreat_002dduplicates-2158"></a><a name=
+  "index-nnmail_002dmessage_002did_002dcache_002dlength-2159" id=
+  "index-nnmail_002dmessage_002did_002dcache_002dlength-2159"></a><a name="index-nnmail_002dmessage_002did_002dcache_002dfile-2160"
+  id=
+  "index-nnmail_002dmessage_002did_002dcache_002dfile-2160"></a><a name="index-duplicate-mails-2161"
+  id="index-duplicate-mails-2161"></a>If you are a member of a
+  couple of mailing lists, you will sometimes receive two copies of
+  the same mail. This can be quite annoying, so <code>nnmail</code>
+  checks for and treats any duplicates it might find. To do this,
+  it keeps a cache of old <code>Message-ID</code>s&mdash;
+  <code>nnmail-message-id-cache-file</code>, which is
+  <samp><span class="file">~/.nnmail-cache</span></samp> by
+  default. The approximate maximum number of
+  <code>Message-ID</code>s stored there is controlled by the
+  <code>nnmail-message-id-cache-length</code> variable, which is
+  1000 by default. (So 1000 <code>Message-ID</code>s will be
+  stored.) If all this sounds scary to you, you can set
+  <code>nnmail-treat-duplicates</code> to <code>warn</code> (which
+  is what it is by default), and <code>nnmail</code> won't delete
+  duplicate mails. Instead it will insert a warning into the head
+  of the mail saying that it thinks that this is a duplicate of a
+  different message.</p>
 
-   <p>You can turn this feature off completely by setting the variable to
-<code>nil</code>.
+  <p>This variable can also be a function. If that's the case, the
+  function will be called from a buffer narrowed to the message in
+  question with the <code>Message-ID</code> as a parameter. The
+  function must return either <code>nil</code>, <code>warn</code>,
+  or <code>delete</code>.</p>
 
-   <p>If you want all the duplicate mails to be put into a special
-<dfn>duplicates</dfn> group, you could do that using the normal mail split
-methods:
+  <p>You can turn this feature off completely by setting the
+  variable to <code>nil</code>.</p>
 
-<pre class="lisp">     (setq nnmail-split-fancy
-           '(| ;; <span class="roman">Messages duplicates go to a separate group.</span>
+  <p>If you want all the duplicate mails to be put into a special
+  <dfn>duplicates</dfn> group, you could do that using the normal
+  mail split methods:</p>
+  <pre class="lisp">
+     (setq nnmail-split-fancy
+           '(| ;; <span class=
+"roman">Messages duplicates go to a separate group.</span>
              ("gnus-warning" "duplicat\\(e\\|ion\\) of message" "duplicate")
-             ;; <span class="roman">Message from daemons, postmaster, and the like to another.</span>
+             ;; <span class=
+"roman">Message from daemons, postmaster, and the like to another.</span>
              (any mail "mail.misc")
              ;; <span class="roman">Other rules.</span>
              [...] ))
 </pre>
-   <p class="noindent">Or something like:
-<pre class="lisp">     (setq nnmail-split-methods
+
+  <p class="noindent">Or something like:</p>
+  <pre class="lisp">
+     (setq nnmail-split-methods
            '(("duplicates" "^Gnus-Warning:.*duplicate")
              ;; <span class="roman">Other rules.</span>
              [...]))
 </pre>
-   <p>Here's a neat feature: If you know that the recipient reads her mail
-with Gnus, and that she has <code>nnmail-treat-duplicates</code> set to
-<code>delete</code>, you can send her as many insults as you like, just by
-using a <code>Message-ID</code> of a mail that you know that she's already
-received.  Think of all the fun!  She'll never see any of it!  Whee!
 
-   </body></html>
-
+  <p>Here's a neat feature: If you know that the recipient reads
+  her mail with Gnus, and that she has
+  <code>nnmail-treat-duplicates</code> set to <code>delete</code>,
+  you can send her as many insults as you like, just by using a
+  <code>Message-ID</code> of a mail that you know that she's
+  already received. Think of all the fun! She'll never see any of
+  it! Whee!</p>
+</body>
+</html>

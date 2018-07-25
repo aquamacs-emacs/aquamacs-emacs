@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2008, 2010-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,94 +14,129 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Emacs Lisp Regression Testing: Running Tests in Batch Mode</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Emacs Lisp Regression Testing: Running Tests in Batch Mode">
-<meta name="keywords" content="Emacs Lisp Regression Testing: Running Tests in Batch Mode">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="How-to-Run-Tests.html#How-to-Run-Tests" rel="up" title="How to Run Tests">
-<link href="Test-Selectors.html#Test-Selectors" rel="next" title="Test Selectors">
-<link href="Running-Tests-Interactively.html#Running-Tests-Interactively" rel="prev" title="Running Tests Interactively">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Emacs Lisp Regression Testing: Running Tests in Batch
+  Mode</title>
+  <meta name="description" content=
+  "Emacs Lisp Regression Testing: Running Tests in Batch Mode" />
+  <meta name="keywords" content=
+  "Emacs Lisp Regression Testing: Running Tests in Batch Mode" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="How-to-Run-Tests.html#How-to-Run-Tests" rel="up"
+  title="How to Run Tests" />
+  <link href="Test-Selectors.html#Test-Selectors" rel="next" title=
+  "Test Selectors" />
+  <link href=
+  "Running-Tests-Interactively.html#Running-Tests-Interactively"
+  rel="prev" title="Running Tests Interactively" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Running-Tests-in-Batch-Mode"></a>
-<div class="header">
-<p>
-Next: <a href="Test-Selectors.html#Test-Selectors" accesskey="n" rel="next">Test Selectors</a>, Previous: <a href="Running-Tests-Interactively.html#Running-Tests-Interactively" accesskey="p" rel="prev">Running Tests Interactively</a>, Up: <a href="How-to-Run-Tests.html#How-to-Run-Tests" accesskey="u" rel="up">How to Run Tests</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
-<hr>
-<a name="Running-Tests-in-Batch-Mode-1"></a>
-<h3 class="section">2.2 Running Tests in Batch Mode</h3>
+<body lang="en" xml:lang="en">
+  <a name="Running-Tests-in-Batch-Mode" id=
+  "Running-Tests-in-Batch-Mode"></a>
 
-<p>ERT supports automated invocations from the command line or from
-scripts or makefiles.  There are two functions for this purpose,
-<code>ert-run-tests-batch</code> and <code>ert-run-tests-batch-and-exit</code>.
-They can be used like this:
-</p>
-<div class="example">
-<pre class="example">emacs -batch -l ert -l my-tests.el -f ert-run-tests-batch-and-exit
-</pre></div>
+  <div class="header">
+    <p>Next: <a href="Test-Selectors.html#Test-Selectors"
+    accesskey="n" rel="next">Test Selectors</a>, Previous: <a href=
+    "Running-Tests-Interactively.html#Running-Tests-Interactively"
+    accesskey="p" rel="prev">Running Tests Interactively</a>, Up:
+    <a href="How-to-Run-Tests.html#How-to-Run-Tests" accesskey="u"
+    rel="up">How to Run Tests</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>]</p>
+  </div>
+  <hr />
+  <a name="Running-Tests-in-Batch-Mode-1" id=
+  "Running-Tests-in-Batch-Mode-1"></a>
 
-<p>This command will start up Emacs in batch mode, load ERT, load
-<code>my-tests.el</code>, and run all tests defined in it.  It will exit
-with a zero exit status if all tests passed, or nonzero if any tests
-failed or if anything else went wrong.  It will also print progress
-messages and error diagnostics to standard output.
-</p>
-<p>You can also redirect the above output to a log file, say
-<samp>output.log</samp>, and use the
-<code>ert-summarize-tests-batch-and-exit</code> function to produce a neat
-summary as shown below:
-</p>
-<div class="example">
-<pre class="example">emacs -batch -l ert -f ert-summarize-tests-batch-and-exit output.log
-</pre></div>
+  <h3 class="section">2.2 Running Tests in Batch Mode</h3>
 
-<p>If ERT is not part of your Emacs distribution, you may need to use
-<code>-L /path/to/ert/</code> so that Emacs can find it.  You may need
-additional <code>-L</code> flags to ensure that <code>my-tests.el</code> and all the
-files that it requires are on your <code>load-path</code>.
-</p>
+  <p>ERT supports automated invocations from the command line or
+  from scripts or makefiles. There are two functions for this
+  purpose, <code>ert-run-tests-batch</code> and
+  <code>ert-run-tests-batch-and-exit</code>. They can be used like
+  this:</p>
 
+  <div class="example">
+    <pre class="example">
+emacs -batch -l ert -l my-tests.el -f ert-run-tests-batch-and-exit
+</pre>
+  </div>
 
+  <p>This command will start up Emacs in batch mode, load ERT, load
+  <code>my-tests.el</code>, and run all tests defined in it. It
+  will exit with a zero exit status if all tests passed, or nonzero
+  if any tests failed or if anything else went wrong. It will also
+  print progress messages and error diagnostics to standard
+  output.</p>
 
+  <p>You can also redirect the above output to a log file, say
+  <samp>output.log</samp>, and use the
+  <code>ert-summarize-tests-batch-and-exit</code> function to
+  produce a neat summary as shown below:</p>
 
+  <div class="example">
+    <pre class="example">
+emacs -batch -l ert -f ert-summarize-tests-batch-and-exit output.log
+</pre>
+  </div>
+
+  <p>If ERT is not part of your Emacs distribution, you may need to
+  use <code>-L /path/to/ert/</code> so that Emacs can find it. You
+  may need additional <code>-L</code> flags to ensure that
+  <code>my-tests.el</code> and all the files that it requires are
+  on your <code>load-path</code>.</p>
 </body>
 </html>

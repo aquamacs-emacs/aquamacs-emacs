@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,115 +20,165 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Table Recognition</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Table Recognition">
-<meta name="keywords" content="GNU Emacs Manual: Table Recognition">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Text-Based-Tables.html#Text-Based-Tables" rel="up" title="Text Based Tables">
-<link href="Cell-Commands.html#Cell-Commands" rel="next" title="Cell Commands">
-<link href="Table-Creation.html#Table-Creation" rel="prev" title="Table Creation">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Table Recognition</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Table Recognition" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Table Recognition" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Text-Based-Tables.html#Text-Based-Tables" rel="up"
+  title="Text Based Tables" />
+  <link href="Cell-Commands.html#Cell-Commands" rel="next" title=
+  "Cell Commands" />
+  <link href="Table-Creation.html#Table-Creation" rel="prev" title=
+  "Table Creation" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Table-Recognition" id="Table-Recognition"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Cell-Commands.html#Cell-Commands" accesskey=
+    "n" rel="next">Cell Commands</a>, Previous: <a href=
+    "Table-Creation.html#Table-Creation" accesskey="p" rel=
+    "prev">Table Creation</a>, Up: <a href=
+    "Text-Based-Tables.html#Text-Based-Tables" accesskey="u" rel=
+    "up">Text Based Tables</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Table-Recognition-1" id="Table-Recognition-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Table-Recognition"></a>
-<div class="header">
-<p>
-Next: <a href="Cell-Commands.html#Cell-Commands" accesskey="n" rel="next">Cell Commands</a>, Previous: <a href="Table-Creation.html#Table-Creation" accesskey="p" rel="prev">Table Creation</a>, Up: <a href="Text-Based-Tables.html#Text-Based-Tables" accesskey="u" rel="up">Text Based Tables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Table-Recognition-1"></a>
-<h4 class="subsection">25.15.3 Table Recognition</h4>
-<a name="index-table-recognition"></a>
+  <h4 class="subsection">25.15.3 Table Recognition</h4><a name=
+  "index-table-recognition" id="index-table-recognition"></a>
+  <a name="index-table_002drecognize" id=
+  "index-table_002drecognize"></a> <a name=
+  "index-table_002dunrecognize" id=
+  "index-table_002dunrecognize"></a>
 
-<a name="index-table_002drecognize"></a>
-<a name="index-table_002dunrecognize"></a>
-<p>Existing text-based tables in a buffer, which lack the special text
-properties applied by <kbd>M-x table-insert</kbd>, are not treated
-specially as tables.  To apply those text properties, type <kbd>M-x
-table-recognize</kbd>.  This command scans the current buffer,
-<em>recognizes</em> valid table cells, and applies the relevant text
-properties.  Conversely, type <kbd>M-x table-unrecognize</kbd> to
-<em>unrecognize</em> all tables in the current buffer, removing the
-special text properties and converting tables back to plain text.
-</p>
-<p>You can also use the following commands to selectively recognize or
-unrecognize tables:
-</p>
-<dl compact="compact">
-<dd><a name="index-table_002drecognize_002dregion"></a>
-</dd>
-<dt><kbd>M-x table-recognize-region</kbd></dt>
-<dd><p>Recognize tables within the current region.
-</p>
-<a name="index-table_002dunrecognize_002dregion"></a>
-</dd>
-<dt><kbd>M-x table-unrecognize-region</kbd></dt>
-<dd><p>Unrecognize tables within the current region.
-</p>
-<a name="index-table_002drecognize_002dtable"></a>
-</dd>
-<dt><kbd>M-x table-recognize-table</kbd></dt>
-<dd><p>Recognize the table at point and activate it.
-</p>
-<a name="index-table_002dunrecognize_002dtable"></a>
-</dd>
-<dt><kbd>M-x table-unrecognize-table</kbd></dt>
-<dd><p>Deactivate the table at point.
-</p>
-<a name="index-table_002drecognize_002dcell"></a>
-</dd>
-<dt><kbd>M-x table-recognize-cell</kbd></dt>
-<dd><p>Recognize the cell at point and activate it.
-</p>
-<a name="index-table_002dunrecognize_002dcell"></a>
-</dd>
-<dt><kbd>M-x table-unrecognize-cell</kbd></dt>
-<dd><p>Deactivate the cell at point.
-</p></dd>
-</dl>
+  <p>Existing text-based tables in a buffer, which lack the special
+  text properties applied by <kbd>M-x table-insert</kbd>, are not
+  treated specially as tables. To apply those text properties, type
+  <kbd>M-x table-recognize</kbd>. This command scans the current
+  buffer, <em>recognizes</em> valid table cells, and applies the
+  relevant text properties. Conversely, type <kbd>M-x
+  table-unrecognize</kbd> to <em>unrecognize</em> all tables in the
+  current buffer, removing the special text properties and
+  converting tables back to plain text.</p>
 
-<p>See <a href="Table-Conversion.html#Table-Conversion">Table Conversion</a>, for another way to recognize a table.
-</p>
+  <p>You can also use the following commands to selectively
+  recognize or unrecognize tables:</p>
 
+  <dl compact="compact">
+    <dd><a name="index-table_002drecognize_002dregion" id=
+    "index-table_002drecognize_002dregion"></a></dd>
 
+    <dt><kbd>M-x table-recognize-region</kbd></dt>
 
+    <dd>
+      <p>Recognize tables within the current region.</p><a name=
+      "index-table_002dunrecognize_002dregion" id=
+      "index-table_002dunrecognize_002dregion"></a>
+    </dd>
+
+    <dt><kbd>M-x table-unrecognize-region</kbd></dt>
+
+    <dd>
+      <p>Unrecognize tables within the current region.</p><a name=
+      "index-table_002drecognize_002dtable" id=
+      "index-table_002drecognize_002dtable"></a>
+    </dd>
+
+    <dt><kbd>M-x table-recognize-table</kbd></dt>
+
+    <dd>
+      <p>Recognize the table at point and activate it.</p><a name=
+      "index-table_002dunrecognize_002dtable" id=
+      "index-table_002dunrecognize_002dtable"></a>
+    </dd>
+
+    <dt><kbd>M-x table-unrecognize-table</kbd></dt>
+
+    <dd>
+      <p>Deactivate the table at point.</p><a name=
+      "index-table_002drecognize_002dcell" id=
+      "index-table_002drecognize_002dcell"></a>
+    </dd>
+
+    <dt><kbd>M-x table-recognize-cell</kbd></dt>
+
+    <dd>
+      <p>Recognize the cell at point and activate it.</p><a name=
+      "index-table_002dunrecognize_002dcell" id=
+      "index-table_002dunrecognize_002dcell"></a>
+    </dd>
+
+    <dt><kbd>M-x table-unrecognize-cell</kbd></dt>
+
+    <dd>
+      <p>Deactivate the cell at point.</p>
+    </dd>
+  </dl>
+
+  <p>See <a href="Table-Conversion.html#Table-Conversion">Table
+  Conversion</a>, for another way to recognize a table.</p>
 </body>
 </html>

@@ -1,15 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Code evaluation security - The Org Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="The Org Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Miscellaneous.html#Miscellaneous" title="Miscellaneous">
-<link rel="prev" href="Speed-keys.html#Speed-keys" title="Speed keys">
-<link rel="next" href="Customization.html#Customization" title="Customization">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Code evaluation security - The Org Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="The Org Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Miscellaneous.html#Miscellaneous" title=
+  "Miscellaneous" />
+  <link rel="prev" href="Speed-keys.html#Speed-keys" title=
+  "Speed keys" />
+  <link rel="next" href="Customization.html#Customization" title=
+  "Customization" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for Org version 7.4.
 
 Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
@@ -33,8 +42,10 @@ Free Software Foundation, Inc.
      copy of the license to the document, as described in section 6 of
      the license.
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -44,65 +55,123 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  dt.c1 {font-style: italic}
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Code-evaluation-security"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Customization.html#Customization">Customization</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Speed-keys.html#Speed-keys">Speed keys</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Miscellaneous.html#Miscellaneous">Miscellaneous</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Code-evaluation-security" id=
+    "Code-evaluation-security"></a>
 
-<h3 class="section">15.4 Code evaluation and security issues</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Customization.html#Customization">Customization</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Speed-keys.html#Speed-keys">Speed keys</a>, Up:&nbsp;<a rel=
+    "up" accesskey="u" href=
+    "Miscellaneous.html#Miscellaneous">Miscellaneous</a></p>
+    <hr />
+  </div>
 
-<p>Org provides tools to work with the code snippets, including evaluating them.
+  <h3 class="section">15.4 Code evaluation and security issues</h3>
 
-   <p>Running code on your machine always comes with a security risk.  Badly
-written or malicious code can be executed on purpose or by accident.  Org has
-default settings which will only evaluate such code if you give explicit
-permission to do so, and as a casual user of these features you should leave
-these precautions intact.
+  <p>Org provides tools to work with the code snippets, including
+  evaluating them.</p>
 
-   <p>For people who regularly work with such code, the confirmation prompts can
-become annoying, and you might want to turn them off.  This can be done, but
-you must be aware of the risks that are involved.
+  <p>Running code on your machine always comes with a security
+  risk. Badly written or malicious code can be executed on purpose
+  or by accident. Org has default settings which will only evaluate
+  such code if you give explicit permission to do so, and as a
+  casual user of these features you should leave these precautions
+  intact.</p>
 
-   <p>Code evaluation can happen under the following circumstances:
+  <p>For people who regularly work with such code, the confirmation
+  prompts can become annoying, and you might want to turn them off.
+  This can be done, but you must be aware of the risks that are
+  involved.</p>
 
-     <dl>
-<dt><i>Source code blocks</i><dd>Source code blocks can be evaluated during export, or when pressing <kbd>C-c
-C-c</kbd> in the block.  The most important thing to realize here is that Org mode
-files which contain code snippets are, in a certain sense, like executable
-files.  So you should accept them and load them into Emacs only from trusted
-sources&mdash;just like you would do with a program you install on your computer.
+  <p>Code evaluation can happen under the following
+  circumstances:</p>
 
-     <p>Make sure you know what you are doing before customizing the variables
-which take off the default security brakes.
+  <dl>
+    <dt class="c1">Source code blocks</dt>
 
-     <div class="defun">
-&mdash; User Option: <b>org-confirm-babel-evaluate</b><var><a name="index-org_002dconfirm_002dbabel_002devaluate-1764"></a></var><br>
-<blockquote> <p>When set to t user is queried before code block evaluation
-</p></blockquote></div>
+    <dd>
+      Source code blocks can be evaluated during export, or when
+      pressing <kbd>C-c C-c</kbd> in the block. The most important
+      thing to realize here is that Org mode files which contain
+      code snippets are, in a certain sense, like executable files.
+      So you should accept them and load them into Emacs only from
+      trusted sources&mdash;just like you would do with a program
+      you install on your computer.
 
-     <br><dt><i>Following </i><code>shell</code><i> and </i><code>elisp</code><i> links</i><dd>Org has two link types that can directly evaluate code (see <a href="External-links.html#External-links">External links</a>).  These links can be problematic because the code to be evaluated is
-not visible.
+      <p>Make sure you know what you are doing before customizing
+      the variables which take off the default security brakes.</p>
 
-     <div class="defun">
-&mdash; User Option: <b>org-confirm-shell-link-function</b><var><a name="index-org_002dconfirm_002dshell_002dlink_002dfunction-1765"></a></var><br>
-<blockquote> <p>Function to queries user about shell link execution. 
-</p></blockquote></div>
+      <div class="defun">
+        &mdash; User Option:
+        <b>org-confirm-babel-evaluate</b><var><a name=
+        "index-org_002dconfirm_002dbabel_002devaluate-1764" id=
+        "index-org_002dconfirm_002dbabel_002devaluate-1764"></a></var><br />
 
-     <div class="defun">
-&mdash; User Option: <b>org-confirm-elisp-link-function</b><var><a name="index-org_002dconfirm_002delisp_002dlink_002dfunction-1766"></a></var><br>
-<blockquote> <p>Functions to query user for Emacs Lisp link execution. 
-</p></blockquote></div>
 
-     <br><dt><i>Formulas in tables</i><dd>Formulas in tables (see <a href="The-spreadsheet.html#The-spreadsheet">The spreadsheet</a>) are code that is evaluated
-either by the <i>calc</i> interpreter, or by the <i>Emacs Lisp</i> interpreter. 
-</dl>
+        <blockquote>
+          <p>When set to t user is queried before code block
+          evaluation</p>
+        </blockquote>
+      </div><br />
+    </dd>
 
-   </body></html>
+    <dt><i>Following</i> <code>shell</code> <i>and</i>
+    <code>elisp</code> <i>links</i></dt>
 
+    <dd>
+      Org has two link types that can directly evaluate code (see
+      <a href="External-links.html#External-links">External
+      links</a>). These links can be problematic because the code
+      to be evaluated is not visible.
+
+      <div class="defun">
+        &mdash; User Option:
+        <b>org-confirm-shell-link-function</b><var><a name=
+        "index-org_002dconfirm_002dshell_002dlink_002dfunction-1765"
+        id=
+        "index-org_002dconfirm_002dshell_002dlink_002dfunction-1765"></a></var><br />
+
+
+        <blockquote>
+          <p>Function to queries user about shell link
+          execution.</p>
+        </blockquote>
+      </div>
+
+      <div class="defun">
+        &mdash; User Option:
+        <b>org-confirm-elisp-link-function</b><var><a name=
+        "index-org_002dconfirm_002delisp_002dlink_002dfunction-1766"
+        id=
+        "index-org_002dconfirm_002delisp_002dlink_002dfunction-1766"></a></var><br />
+
+
+        <blockquote>
+          <p>Functions to query user for Emacs Lisp link
+          execution.</p>
+        </blockquote>
+      </div><br />
+    </dd>
+
+    <dt class="c1">Formulas in tables</dt>
+
+    <dd>Formulas in tables (see <a href=
+    "The-spreadsheet.html#The-spreadsheet">The spreadsheet</a>) are
+    code that is evaluated either by the <i>calc</i> interpreter,
+    or by the <i>Emacs Lisp</i> interpreter.</dd>
+  </dl>
+</body>
+</html>

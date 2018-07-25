@@ -1,15 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Non-MIME - Emacs MIME Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Emacs MIME Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Decoding-and-Viewing.html#Decoding-and-Viewing" title="Decoding and Viewing">
-<link rel="prev" href="Dissection.html#Dissection" title="Dissection">
-<link rel="next" href="Handles.html#Handles" title="Handles">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Non-MIME - Emacs MIME Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Emacs MIME Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Decoding-and-Viewing.html#Decoding-and-Viewing" title=
+  "Decoding and Viewing" />
+  <link rel="prev" href="Dissection.html#Dissection" title=
+  "Dissection" />
+  <link rel="next" href="Handles.html#Handles" title="Handles" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents the Emacs MIME interface functionality.
 
 Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
@@ -27,8 +37,10 @@ Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -38,71 +50,137 @@ Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Non-MIME"></a>
-<a name="Non_002dMIME"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Handles.html#Handles">Handles</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Dissection.html#Dissection">Dissection</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Decoding-and-Viewing.html#Decoding-and-Viewing">Decoding and Viewing</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Non-MIME" id="Non-MIME"></a> <a name="Non_002dMIME"
+    id="Non_002dMIME"></a>
 
-<h3 class="section">1.2 Non-MIME</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Handles.html#Handles">Handles</a>, Previous:&nbsp;<a rel=
+    "previous" accesskey="p" href=
+    "Dissection.html#Dissection">Dissection</a>, Up:&nbsp;<a rel=
+    "up" accesskey="u" href=
+    "Decoding-and-Viewing.html#Decoding-and-Viewing">Decoding and
+    Viewing</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-mm_002duu_002dconfigure_002dlist-1"></a>
-Gnus also understands some non-<acronym>MIME</acronym> attachments, such as
-postscript, uuencode, binhex, yenc, shar, forward, gnatsweb, pgp,
-diff.  Each of these features can be disabled by add an item into
-<code>mm-uu-configure-list</code>.  For example,
+  <h3 class="section">1.2 Non-MIME</h3>
 
-<pre class="lisp">     (require 'mm-uu)
+  <p><a name="index-mm_002duu_002dconfigure_002dlist-1" id=
+  "index-mm_002duu_002dconfigure_002dlist-1"></a> Gnus also
+  understands some non-<acronym>MIME</acronym> attachments, such as
+  postscript, uuencode, binhex, yenc, shar, forward, gnatsweb, pgp,
+  diff. Each of these features can be disabled by add an item into
+  <code>mm-uu-configure-list</code>. For example,</p>
+  <pre class="lisp">
+     (require 'mm-uu)
      (add-to-list 'mm-uu-configure-list '(pgp-signed . disabled))
 </pre>
-     <dl>
-<dt><code>postscript</code><dd><a name="index-postscript-2"></a>PostScript file.
 
-     <br><dt><code>uu</code><dd><a name="index-uu-3"></a>Uuencoded file.
+  <dl>
+    <dt><code>postscript</code></dt>
 
-     <br><dt><code>binhex</code><dd><a name="index-binhex-4"></a>Binhex encoded file.
+    <dd><a name="index-postscript-2" id=
+    "index-postscript-2"></a>PostScript file.<br /></dd>
 
-     <br><dt><code>yenc</code><dd><a name="index-yenc-5"></a>Yenc encoded file.
+    <dt><code>uu</code></dt>
 
-     <br><dt><code>shar</code><dd><a name="index-shar-6"></a>Shar archive file.
+    <dd><a name="index-uu-3" id="index-uu-3"></a>Uuencoded
+    file.<br /></dd>
 
-     <br><dt><code>forward</code><dd><a name="index-forward-7"></a>Non-<acronym>MIME</acronym> forwarded message.
+    <dt><code>binhex</code></dt>
 
-     <br><dt><code>gnatsweb</code><dd><a name="index-gnatsweb-8"></a>Gnatsweb attachment.
+    <dd><a name="index-binhex-4" id="index-binhex-4"></a>Binhex
+    encoded file.<br /></dd>
 
-     <br><dt><code>pgp-signed</code><dd><a name="index-pgp_002dsigned-9"></a><acronym>PGP</acronym> signed clear text.
+    <dt><code>yenc</code></dt>
 
-     <br><dt><code>pgp-encrypted</code><dd><a name="index-pgp_002dencrypted-10"></a><acronym>PGP</acronym> encrypted clear text.
+    <dd><a name="index-yenc-5" id="index-yenc-5"></a>Yenc encoded
+    file.<br /></dd>
 
-     <br><dt><code>pgp-key</code><dd><a name="index-pgp_002dkey-11"></a><acronym>PGP</acronym> public keys.
+    <dt><code>shar</code></dt>
 
-     <br><dt><code>emacs-sources</code><dd><a name="index-emacs_002dsources-12"></a><a name="index-mm_002duu_002demacs_002dsources_002dregexp-13"></a>Emacs source code.  This item works only in the groups matching
-<code>mm-uu-emacs-sources-regexp</code>.
+    <dd><a name="index-shar-6" id="index-shar-6"></a>Shar archive
+    file.<br /></dd>
 
-     <br><dt><code>diff</code><dd><a name="index-diff-14"></a><a name="index-mm_002duu_002ddiff_002dgroups_002dregexp-15"></a>Patches.  This is intended for groups where diffs of committed files
-are automatically sent to.  It only works in groups matching
-<code>mm-uu-diff-groups-regexp</code>.
+    <dt><code>forward</code></dt>
 
-     <br><dt><code>verbatim-marks</code><dd><a name="index-verbatim_002dmarks-16"></a>Slrn-style verbatim marks.
+    <dd><a name="index-forward-7" id=
+    "index-forward-7"></a>Non-<acronym>MIME</acronym> forwarded
+    message.<br /></dd>
 
-     <br><dt><code>LaTeX</code><dd><a name="index-LaTeX-17"></a>LaTeX documents.  It only works in groups matching
-<code>mm-uu-tex-groups-regexp</code>.
+    <dt><code>gnatsweb</code></dt>
 
-   </dl>
+    <dd><a name="index-gnatsweb-8" id=
+    "index-gnatsweb-8"></a>Gnatsweb attachment.<br /></dd>
 
-   <p><a name="index-text_002fx_002dverbatim-18"></a><!-- Is @vindex suitable for a face? -->
-<a name="index-mm_002duu_002dextract-19"></a>Some inlined non-<acronym>MIME</acronym> attachments are displayed using the face
-<code>mm-uu-extract</code>.  By default, no <acronym>MIME</acronym> button for these
-parts is displayed.  You can force displaying a button using <kbd>K b</kbd>
-(<code>gnus-summary-display-buttonized</code>) or add <code>text/x-verbatim</code>
-to <code>gnus-buttonized-mime-types</code>, See <a href="../gnus/MIME-Commands.html#MIME-Commands">MIME Commands</a>.
+    <dt><code>pgp-signed</code></dt>
 
-   </body></html>
+    <dd><a name="index-pgp_002dsigned-9" id=
+    "index-pgp_002dsigned-9"></a><acronym>PGP</acronym> signed
+    clear text.<br /></dd>
 
+    <dt><code>pgp-encrypted</code></dt>
+
+    <dd><a name="index-pgp_002dencrypted-10" id=
+    "index-pgp_002dencrypted-10"></a><acronym>PGP</acronym>
+    encrypted clear text.<br /></dd>
+
+    <dt><code>pgp-key</code></dt>
+
+    <dd><a name="index-pgp_002dkey-11" id=
+    "index-pgp_002dkey-11"></a><acronym>PGP</acronym> public
+    keys.<br /></dd>
+
+    <dt><code>emacs-sources</code></dt>
+
+    <dd><a name="index-emacs_002dsources-12" id=
+    "index-emacs_002dsources-12"></a><a name=
+    "index-mm_002duu_002demacs_002dsources_002dregexp-13" id=
+    "index-mm_002duu_002demacs_002dsources_002dregexp-13"></a>Emacs
+    source code. This item works only in the groups matching
+    <code>mm-uu-emacs-sources-regexp</code>.<br /></dd>
+
+    <dt><code>diff</code></dt>
+
+    <dd><a name="index-diff-14" id="index-diff-14"></a><a name=
+    "index-mm_002duu_002ddiff_002dgroups_002dregexp-15" id=
+    "index-mm_002duu_002ddiff_002dgroups_002dregexp-15"></a>Patches.
+    This is intended for groups where diffs of committed files are
+    automatically sent to. It only works in groups matching
+    <code>mm-uu-diff-groups-regexp</code>.<br /></dd>
+
+    <dt><code>verbatim-marks</code></dt>
+
+    <dd><a name="index-verbatim_002dmarks-16" id=
+    "index-verbatim_002dmarks-16"></a>Slrn-style verbatim
+    marks.<br /></dd>
+
+    <dt><code>LaTeX</code></dt>
+
+    <dd><a name="index-LaTeX-17" id="index-LaTeX-17"></a>LaTeX
+    documents. It only works in groups matching
+    <code>mm-uu-tex-groups-regexp</code>.</dd>
+  </dl>
+
+  <p><a name="index-text_002fx_002dverbatim-18" id=
+  "index-text_002fx_002dverbatim-18"></a>
+  <!-- Is @vindex suitable for a face? -->
+  <a name="index-mm_002duu_002dextract-19" id=
+  "index-mm_002duu_002dextract-19"></a>Some inlined
+  non-<acronym>MIME</acronym> attachments are displayed using the
+  face <code>mm-uu-extract</code>. By default, no
+  <acronym>MIME</acronym> button for these parts is displayed. You
+  can force displaying a button using <kbd>K b</kbd>
+  (<code>gnus-summary-display-buttonized</code>) or add
+  <code>text/x-verbatim</code> to
+  <code>gnus-buttonized-mime-types</code>, See <a href=
+  "../gnus/MIME-Commands.html#MIME-Commands">MIME Commands</a>.</p>
+</body>
+</html>

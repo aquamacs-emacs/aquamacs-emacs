@@ -1,15 +1,26 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Saving Into Registers - GNU Emacs Calc Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Emacs Calc Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Kill-and-Yank.html#Kill-and-Yank" title="Kill and Yank">
-<link rel="prev" href="Yanking-Into-Stack.html#Yanking-Into-Stack" title="Yanking Into Stack">
-<link rel="next" href="Inserting-From-Registers.html#Inserting-From-Registers" title="Inserting From Registers">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Saving Into Registers - GNU Emacs Calc Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Emacs Calc Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Kill-and-Yank.html#Kill-and-Yank" title=
+  "Kill and Yank" />
+  <link rel="prev" href=
+  "Yanking-Into-Stack.html#Yanking-Into-Stack" title=
+  "Yanking Into Stack" />
+  <link rel="next" href=
+  "Inserting-From-Registers.html#Inserting-From-Registers" title=
+  "Inserting From Registers" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs {No value for `EMACSVER'}.
 
@@ -29,8 +40,10 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -40,44 +53,61 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Saving-Into-Registers"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Inserting-From-Registers.html#Inserting-From-Registers">Inserting From Registers</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Yanking-Into-Stack.html#Yanking-Into-Stack">Yanking Into Stack</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Kill-and-Yank.html#Kill-and-Yank">Kill and Yank</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Saving-Into-Registers" id="Saving-Into-Registers"></a>
 
-<h3 class="section">15.3 Saving into Registers</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Inserting-From-Registers.html#Inserting-From-Registers">Inserting
+    From Registers</a>, Previous:&nbsp;<a rel="previous" accesskey=
+    "p" href="Yanking-Into-Stack.html#Yanking-Into-Stack">Yanking
+    Into Stack</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Kill-and-Yank.html#Kill-and-Yank">Kill and Yank</a></p>
+    <hr />
+  </div>
 
-<p class="noindent"><a name="index-r-s-2200"></a><a name="index-calc_002dcopy_002dto_002dregister-2201"></a><a name="index-calc_002dprepend_002dto_002dregister-2202"></a><a name="index-calc_002dappend_002dto_002dregister-2203"></a><a name="index-Registers-2204"></a>An alternative to killing and yanking stack entries is using
-registers in Calc.  Saving stack entries in registers is like
-saving text in normal Emacs registers; although, like Calc's kill
-commands, register commands always operate on whole stack
-entries.
+  <h3 class="section">15.3 Saving into Registers</h3>
 
-   <p>Registers in Calc are places to store stack entries for later use;
-each register is indexed by a single character.  To store the current
-region (rounded up, of course, to include full stack entries) into a
-register, use the command <kbd>r s</kbd> (<code>calc-copy-to-register</code>). 
-You will then be prompted for a register to use, the next character
-you type will be the index for the register.  To store the region in
-register <var>r</var>, the full command will be <kbd>r s </kbd><var>r</var>.  With an
-argument, <kbd>C-u r s </kbd><var>r</var>, the region being copied to the
-register will be deleted from the Calc buffer.
+  <p class="noindent"><a name="index-r-s-2200" id=
+  "index-r-s-2200"></a><a name=
+  "index-calc_002dcopy_002dto_002dregister-2201" id=
+  "index-calc_002dcopy_002dto_002dregister-2201"></a><a name=
+  "index-calc_002dprepend_002dto_002dregister-2202" id=
+  "index-calc_002dprepend_002dto_002dregister-2202"></a><a name=
+  "index-calc_002dappend_002dto_002dregister-2203" id=
+  "index-calc_002dappend_002dto_002dregister-2203"></a><a name=
+  "index-Registers-2204" id="index-Registers-2204"></a>An
+  alternative to killing and yanking stack entries is using
+  registers in Calc. Saving stack entries in registers is like
+  saving text in normal Emacs registers; although, like Calc's kill
+  commands, register commands always operate on whole stack
+  entries.</p>
 
-   <p>It is possible to add additional stack entries to a register.  The
-command <kbd>M-x calc-append-to-register</kbd> will prompt for a register,
-then add the stack entries in the region to the end of the register
-contents. The command <kbd>M-x calc-prepend-to-register</kbd> will
-similarly prompt for a register and add  the stack entries in the
-region to the beginning of the register contents.  Both commands take
-<kbd>C-u</kbd> arguments, which will cause the region to be deleted after being
-added to the register.
+  <p>Registers in Calc are places to store stack entries for later
+  use; each register is indexed by a single character. To store the
+  current region (rounded up, of course, to include full stack
+  entries) into a register, use the command <kbd>r s</kbd>
+  (<code>calc-copy-to-register</code>). You will then be prompted
+  for a register to use, the next character you type will be the
+  index for the register. To store the region in register
+  <var>r</var>, the full command will be <kbd>r s</kbd>
+  <var>r</var>. With an argument, <kbd>C-u r s</kbd> <var>r</var>,
+  the region being copied to the register will be deleted from the
+  Calc buffer.</p>
 
-   </body></html>
-
+  <p>It is possible to add additional stack entries to a register.
+  The command <kbd>M-x calc-append-to-register</kbd> will prompt
+  for a register, then add the stack entries in the region to the
+  end of the register contents. The command <kbd>M-x
+  calc-prepend-to-register</kbd> will similarly prompt for a
+  register and add the stack entries in the region to the beginning
+  of the register contents. Both commands take <kbd>C-u</kbd>
+  arguments, which will cause the region to be deleted after being
+  added to the register.</p>
+</body>
+</html>

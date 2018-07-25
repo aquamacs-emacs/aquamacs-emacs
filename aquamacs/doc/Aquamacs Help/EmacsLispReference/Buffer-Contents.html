@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,236 +19,364 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Buffer Contents</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Buffer Contents">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Buffer Contents">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Text.html#Text" rel="up" title="Text">
-<link href="Comparing-Text.html#Comparing-Text" rel="next" title="Comparing Text">
-<link href="Near-Point.html#Near-Point" rel="prev" title="Near Point">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Buffer Contents</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Buffer Contents" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Buffer Contents" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Text.html#Text" rel="up" title="Text" />
+  <link href="Comparing-Text.html#Comparing-Text" rel="next" title=
+  "Comparing Text" />
+  <link href="Near-Point.html#Near-Point" rel="prev" title=
+  "Near Point" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Buffer-Contents" id="Buffer-Contents"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Comparing-Text.html#Comparing-Text"
+    accesskey="n" rel="next">Comparing Text</a>, Previous: <a href=
+    "Near-Point.html#Near-Point" accesskey="p" rel="prev">Near
+    Point</a>, Up: <a href="Text.html#Text" accesskey="u" rel=
+    "up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Examining-Buffer-Contents" id=
+  "Examining-Buffer-Contents"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Buffer-Contents"></a>
-<div class="header">
-<p>
-Next: <a href="Comparing-Text.html#Comparing-Text" accesskey="n" rel="next">Comparing Text</a>, Previous: <a href="Near-Point.html#Near-Point" accesskey="p" rel="prev">Near Point</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Examining-Buffer-Contents"></a>
-<h3 class="section">31.2 Examining Buffer Contents</h3>
-<a name="index-buffer-portion-as-string"></a>
+  <h3 class="section">31.2 Examining Buffer Contents</h3><a name=
+  "index-buffer-portion-as-string" id=
+  "index-buffer-portion-as-string"></a>
 
-<p>This section describes functions that allow a Lisp program to
-convert any portion of the text in the buffer into a string.
-</p>
-<dl>
-<dt><a name="index-buffer_002dsubstring"></a>Function: <strong>buffer-substring</strong> <em>start end</em></dt>
-<dd><p>This function returns a string containing a copy of the text of the
-region defined by positions <var>start</var> and <var>end</var> in the current
-buffer.  If the arguments are not positions in the accessible portion
-of the buffer, <code>buffer-substring</code> signals an
-<code>args-out-of-range</code> error.
-</p>
-<p>Here&rsquo;s an example which assumes Font-Lock mode is not enabled:
-</p>
-<div class="example">
-<pre class="example">---------- Buffer: foo ----------
+  <p>This section describes functions that allow a Lisp program to
+  convert any portion of the text in the buffer into a string.</p>
+
+  <dl>
+    <dt><a name="index-buffer_002dsubstring" id=
+    "index-buffer_002dsubstring"></a>Function:
+    <strong>buffer-substring</strong> <em>start end</em></dt>
+
+    <dd>
+      <p>This function returns a string containing a copy of the
+      text of the region defined by positions <var>start</var> and
+      <var>end</var> in the current buffer. If the arguments are
+      not positions in the accessible portion of the buffer,
+      <code>buffer-substring</code> signals an
+      <code>args-out-of-range</code> error.</p>
+
+      <p>Here&rsquo;s an example which assumes Font-Lock mode is
+      not enabled:</p>
+
+      <div class="example">
+        <pre class="example">
+---------- Buffer: foo ----------
 This is the contents of buffer foo
 
 ---------- Buffer: foo ----------
-</pre><pre class="example">
-</pre><pre class="example">(buffer-substring 1 10)
-     &rArr; &quot;This is t&quot;
-</pre><pre class="example">(buffer-substring (point-max) 10)
-     &rArr; &quot;he contents of buffer foo\n&quot;
-</pre></div>
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(buffer-substring 1 10)
+     &rArr; "This is t"
+</pre>
+        <pre class="example">
+(buffer-substring (point-max) 10)
+     &rArr; "he contents of buffer foo\n"
+</pre>
+      </div>
 
-<p>If the text being copied has any text properties, these are copied into
-the string along with the characters they belong to.  See <a href="Text-Properties.html#Text-Properties">Text Properties</a>.  However, overlays (see <a href="Overlays.html#Overlays">Overlays</a>) in the buffer and
-their properties are ignored, not copied.
-</p>
-<p>For example, if Font-Lock mode is enabled, you might get results like
-these:
-</p>
-<div class="example">
-<pre class="example">(buffer-substring 1 10)
-     &rArr; #(&quot;This is t&quot; 0 1 (fontified t) 1 9 (fontified t))
-</pre></div>
-</dd></dl>
+      <p>If the text being copied has any text properties, these
+      are copied into the string along with the characters they
+      belong to. See <a href=
+      "Text-Properties.html#Text-Properties">Text Properties</a>.
+      However, overlays (see <a href=
+      "Overlays.html#Overlays">Overlays</a>) in the buffer and
+      their properties are ignored, not copied.</p>
 
-<dl>
-<dt><a name="index-buffer_002dsubstring_002dno_002dproperties"></a>Function: <strong>buffer-substring-no-properties</strong> <em>start end</em></dt>
-<dd><p>This is like <code>buffer-substring</code>, except that it does not copy text
-properties, just the characters themselves.  See <a href="Text-Properties.html#Text-Properties">Text Properties</a>.
-</p></dd></dl>
+      <p>For example, if Font-Lock mode is enabled, you might get
+      results like these:</p>
 
-<dl>
-<dt><a name="index-buffer_002dstring"></a>Function: <strong>buffer-string</strong></dt>
-<dd><p>This function returns the contents of the entire accessible portion of
-the current buffer, as a string.
-</p></dd></dl>
+      <div class="example">
+        <pre class="example">
+(buffer-substring 1 10)
+     &rArr; #("This is t" 0 1 (fontified t) 1 9 (fontified t))
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<p>If you need to make sure the resulting string, when copied to a
-different location, will not change its visual appearance due to
-reordering of bidirectional text, use the
-<code>buffer-substring-with-bidi-context</code> function
-(see <a href="Bidirectional-Display.html#Bidirectional-Display">buffer-substring-with-bidi-context</a>).
-</p>
-<dl>
-<dt><a name="index-filter_002dbuffer_002dsubstring"></a>Function: <strong>filter-buffer-substring</strong> <em>start end &amp;optional delete</em></dt>
-<dd><p>This function filters the buffer text between <var>start</var> and <var>end</var>
-using a function specified by the variable
-<code>filter-buffer-substring-function</code>, and returns the result.
-</p>
-<p>The default filter function consults the obsolete wrapper hook
-<code>filter-buffer-substring-functions</code>, and the obsolete variable
-<code>buffer-substring-filters</code>.  If both of these are <code>nil</code>, it
-returns the unaltered text from the buffer, i.e., what
-<code>buffer-substring</code> would return.
-</p>
-<p>If <var>delete</var> is non-<code>nil</code>, the function deletes the text
-between <var>start</var> and <var>end</var> after copying it, like
-<code>delete-and-extract-region</code>.
-</p>
-<p>Lisp code should use this function instead of <code>buffer-substring</code>,
-<code>buffer-substring-no-properties</code>,
-or <code>delete-and-extract-region</code> when copying into user-accessible
-data structures such as the kill-ring, X clipboard, and registers.
-Major and minor modes can modify <code>filter-buffer-substring-function</code>
-to alter such text as it is copied out of the buffer.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-buffer_002dsubstring_002dno_002dproperties"
+    id=
+    "index-buffer_002dsubstring_002dno_002dproperties"></a>Function:
+    <strong>buffer-substring-no-properties</strong> <em>start
+    end</em></dt>
 
-<dl>
-<dt><a name="index-filter_002dbuffer_002dsubstring_002dfunction"></a>Variable: <strong>filter-buffer-substring-function</strong></dt>
-<dd><p>The value of this variable is a function that <code>filter-buffer-substring</code>
-will call to do the actual work.  The function receives three
-arguments, the same as those of <code>filter-buffer-substring</code>,
-which it should treat as per the documentation of that function.  It
-should return the filtered text (and optionally delete the source text).
-</p></dd></dl>
+    <dd>
+      <p>This is like <code>buffer-substring</code>, except that it
+      does not copy text properties, just the characters
+      themselves. See <a href=
+      "Text-Properties.html#Text-Properties">Text
+      Properties</a>.</p>
+    </dd>
+  </dl>
 
-<p>The following two variables are obsoleted by
-<code>filter-buffer-substring-function</code>, but are still supported for
-backward compatibility.
-</p>
-<dl>
-<dt><a name="index-filter_002dbuffer_002dsubstring_002dfunctions"></a>Variable: <strong>filter-buffer-substring-functions</strong></dt>
-<dd><p>This obsolete variable is a wrapper hook, whose members should be functions
-that accept four arguments: <var>fun</var>, <var>start</var>, <var>end</var>, and
-<var>delete</var>.  <var>fun</var> is a function that takes three arguments
-(<var>start</var>, <var>end</var>, and <var>delete</var>), and returns a string.  In
-both cases, the <var>start</var>, <var>end</var>, and <var>delete</var> arguments are
-the same as those of <code>filter-buffer-substring</code>.
-</p>
-<p>The first hook function is passed a <var>fun</var> that is equivalent to
-the default operation of <code>filter-buffer-substring</code>, i.e., it
-returns the buffer-substring between <var>start</var> and <var>end</var>
-(processed by any <code>buffer-substring-filters</code>) and optionally
-deletes the original text from the buffer.  In most cases, the hook
-function will call <var>fun</var> once, and then do its own processing of
-the result.  The next hook function receives a <var>fun</var> equivalent to
-this, and so on.  The actual return value is the result of all the
-hook functions acting in sequence.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-buffer_002dstring" id=
+    "index-buffer_002dstring"></a>Function:
+    <strong>buffer-string</strong></dt>
 
-<dl>
-<dt><a name="index-buffer_002dsubstring_002dfilters"></a>Variable: <strong>buffer-substring-filters</strong></dt>
-<dd><p>The value of this obsolete variable should be a list of functions
-that accept a single string argument and return another string.
-The default <code>filter-buffer-substring</code> function passes the buffer
-substring to the first function in this list, and the return value of
-each function is passed to the next function.  The return value of the
-last function is passed to <code>filter-buffer-substring-functions</code>.
-</p></dd></dl>
+    <dd>
+      <p>This function returns the contents of the entire
+      accessible portion of the current buffer, as a string.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-current_002dword"></a>Function: <strong>current-word</strong> <em>&amp;optional strict really-word</em></dt>
-<dd><p>This function returns the symbol (or word) at or near point, as a
-string.  The return value includes no text properties.
-</p>
-<p>If the optional argument <var>really-word</var> is non-<code>nil</code>, it finds a
-word; otherwise, it finds a symbol (which includes both word
-characters and symbol constituent characters).
-</p>
-<p>If the optional argument <var>strict</var> is non-<code>nil</code>, then point
-must be in or next to the symbol or word&mdash;if no symbol or word is
-there, the function returns <code>nil</code>.  Otherwise, a nearby symbol or
-word on the same line is acceptable.
-</p></dd></dl>
+  <p>If you need to make sure the resulting string, when copied to
+  a different location, will not change its visual appearance due
+  to reordering of bidirectional text, use the
+  <code>buffer-substring-with-bidi-context</code> function (see
+  <a href=
+  "Bidirectional-Display.html#Bidirectional-Display">buffer-substring-with-bidi-context</a>).</p>
 
-<dl>
-<dt><a name="index-thing_002dat_002dpoint"></a>Function: <strong>thing-at-point</strong> <em>thing &amp;optional no-properties</em></dt>
-<dd><p>Return the <var>thing</var> around or next to point, as a string.
-</p>
-<p>The argument <var>thing</var> is a symbol which specifies a kind of syntactic
-entity.  Possibilities include <code>symbol</code>, <code>list</code>, <code>sexp</code>,
-<code>defun</code>, <code>filename</code>, <code>url</code>, <code>word</code>, <code>sentence</code>,
-<code>whitespace</code>, <code>line</code>, <code>page</code>, and others.
-</p>
-<p>When the optional argument <var>no-properties</var> is non-<code>nil</code>, this
-function strips text properties from the return value.
-</p>
-<div class="example">
-<pre class="example">---------- Buffer: foo ----------
+  <dl>
+    <dt><a name="index-filter_002dbuffer_002dsubstring" id=
+    "index-filter_002dbuffer_002dsubstring"></a>Function:
+    <strong>filter-buffer-substring</strong> <em>start end
+    &amp;optional delete</em></dt>
+
+    <dd>
+      <p>This function filters the buffer text between
+      <var>start</var> and <var>end</var> using a function
+      specified by the variable
+      <code>filter-buffer-substring-function</code>, and returns
+      the result.</p>
+
+      <p>The default filter function consults the obsolete wrapper
+      hook <code>filter-buffer-substring-functions</code>, and the
+      obsolete variable <code>buffer-substring-filters</code>. If
+      both of these are <code>nil</code>, it returns the unaltered
+      text from the buffer, i.e., what
+      <code>buffer-substring</code> would return.</p>
+
+      <p>If <var>delete</var> is non-<code>nil</code>, the function
+      deletes the text between <var>start</var> and <var>end</var>
+      after copying it, like
+      <code>delete-and-extract-region</code>.</p>
+
+      <p>Lisp code should use this function instead of
+      <code>buffer-substring</code>,
+      <code>buffer-substring-no-properties</code>, or
+      <code>delete-and-extract-region</code> when copying into
+      user-accessible data structures such as the kill-ring, X
+      clipboard, and registers. Major and minor modes can modify
+      <code>filter-buffer-substring-function</code> to alter such
+      text as it is copied out of the buffer.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-filter_002dbuffer_002dsubstring_002dfunction" id=
+    "index-filter_002dbuffer_002dsubstring_002dfunction"></a>Variable:
+    <strong>filter-buffer-substring-function</strong></dt>
+
+    <dd>
+      <p>The value of this variable is a function that
+      <code>filter-buffer-substring</code> will call to do the
+      actual work. The function receives three arguments, the same
+      as those of <code>filter-buffer-substring</code>, which it
+      should treat as per the documentation of that function. It
+      should return the filtered text (and optionally delete the
+      source text).</p>
+    </dd>
+  </dl>
+
+  <p>The following two variables are obsoleted by
+  <code>filter-buffer-substring-function</code>, but are still
+  supported for backward compatibility.</p>
+
+  <dl>
+    <dt><a name=
+    "index-filter_002dbuffer_002dsubstring_002dfunctions" id=
+    "index-filter_002dbuffer_002dsubstring_002dfunctions"></a>Variable:
+    <strong>filter-buffer-substring-functions</strong></dt>
+
+    <dd>
+      <p>This obsolete variable is a wrapper hook, whose members
+      should be functions that accept four arguments:
+      <var>fun</var>, <var>start</var>, <var>end</var>, and
+      <var>delete</var>. <var>fun</var> is a function that takes
+      three arguments (<var>start</var>, <var>end</var>, and
+      <var>delete</var>), and returns a string. In both cases, the
+      <var>start</var>, <var>end</var>, and <var>delete</var>
+      arguments are the same as those of
+      <code>filter-buffer-substring</code>.</p>
+
+      <p>The first hook function is passed a <var>fun</var> that is
+      equivalent to the default operation of
+      <code>filter-buffer-substring</code>, i.e., it returns the
+      buffer-substring between <var>start</var> and <var>end</var>
+      (processed by any <code>buffer-substring-filters</code>) and
+      optionally deletes the original text from the buffer. In most
+      cases, the hook function will call <var>fun</var> once, and
+      then do its own processing of the result. The next hook
+      function receives a <var>fun</var> equivalent to this, and so
+      on. The actual return value is the result of all the hook
+      functions acting in sequence.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-buffer_002dsubstring_002dfilters" id=
+    "index-buffer_002dsubstring_002dfilters"></a>Variable:
+    <strong>buffer-substring-filters</strong></dt>
+
+    <dd>
+      <p>The value of this obsolete variable should be a list of
+      functions that accept a single string argument and return
+      another string. The default
+      <code>filter-buffer-substring</code> function passes the
+      buffer substring to the first function in this list, and the
+      return value of each function is passed to the next function.
+      The return value of the last function is passed to
+      <code>filter-buffer-substring-functions</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-current_002dword" id=
+    "index-current_002dword"></a>Function:
+    <strong>current-word</strong> <em>&amp;optional strict
+    really-word</em></dt>
+
+    <dd>
+      <p>This function returns the symbol (or word) at or near
+      point, as a string. The return value includes no text
+      properties.</p>
+
+      <p>If the optional argument <var>really-word</var> is
+      non-<code>nil</code>, it finds a word; otherwise, it finds a
+      symbol (which includes both word characters and symbol
+      constituent characters).</p>
+
+      <p>If the optional argument <var>strict</var> is
+      non-<code>nil</code>, then point must be in or next to the
+      symbol or word&mdash;if no symbol or word is there, the
+      function returns <code>nil</code>. Otherwise, a nearby symbol
+      or word on the same line is acceptable.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-thing_002dat_002dpoint" id=
+    "index-thing_002dat_002dpoint"></a>Function:
+    <strong>thing-at-point</strong> <em>thing &amp;optional
+    no-properties</em></dt>
+
+    <dd>
+      <p>Return the <var>thing</var> around or next to point, as a
+      string.</p>
+
+      <p>The argument <var>thing</var> is a symbol which specifies
+      a kind of syntactic entity. Possibilities include
+      <code>symbol</code>, <code>list</code>, <code>sexp</code>,
+      <code>defun</code>, <code>filename</code>, <code>url</code>,
+      <code>word</code>, <code>sentence</code>,
+      <code>whitespace</code>, <code>line</code>,
+      <code>page</code>, and others.</p>
+
+      <p>When the optional argument <var>no-properties</var> is
+      non-<code>nil</code>, this function strips text properties
+      from the return value.</p>
+
+      <div class="example">
+        <pre class="example">
+---------- Buffer: foo ----------
 Gentlemen may cry ``Pea&lowast;ce! Peace!,''
 but there is no peace.
 ---------- Buffer: foo ----------
 
 (thing-at-point 'word)
-     &rArr; &quot;Peace&quot;
+     &rArr; "Peace"
 (thing-at-point 'line)
-     &rArr; &quot;Gentlemen may cry ``Peace! Peace!,''\n&quot;
+     &rArr; "Gentlemen may cry ``Peace! Peace!,''\n"
 (thing-at-point 'whitespace)
      &rArr; nil
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Comparing-Text.html#Comparing-Text" accesskey="n" rel="next">Comparing Text</a>, Previous: <a href="Near-Point.html#Near-Point" accesskey="p" rel="prev">Near Point</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Comparing-Text.html#Comparing-Text"
+    accesskey="n" rel="next">Comparing Text</a>, Previous: <a href=
+    "Near-Point.html#Near-Point" accesskey="p" rel="prev">Near
+    Point</a>, Up: <a href="Text.html#Text" accesskey="u" rel=
+    "up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

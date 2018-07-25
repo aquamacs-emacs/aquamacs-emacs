@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the manual for the url Emacs Lisp library.
 
 Copyright (C) 1993-1999, 2002, 2004-2016 Free Software
@@ -15,114 +17,175 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>URL Programmer&rsquo;s Manual: news/nntp/snews</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="URL Programmer&rsquo;s Manual: news/nntp/snews">
-<meta name="keywords" content="URL Programmer&rsquo;s Manual: news/nntp/snews">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Supported-URL-Types.html#Supported-URL-Types" rel="up" title="Supported URL Types">
-<link href="rlogin_002ftelnet_002ftn3270.html#rlogin_002ftelnet_002ftn3270" rel="next" title="rlogin/telnet/tn3270">
-<link href="mailto.html#mailto" rel="prev" title="mailto">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>URL Programmer&rsquo;s Manual: news/nntp/snews</title>
+  <meta name="description" content=
+  "URL Programmer&rsquo;s Manual: news/nntp/snews" />
+  <meta name="keywords" content=
+  "URL Programmer&rsquo;s Manual: news/nntp/snews" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Supported-URL-Types.html#Supported-URL-Types" rel=
+  "up" title="Supported URL Types" />
+  <link href=
+  "rlogin_002ftelnet_002ftn3270.html#rlogin_002ftelnet_002ftn3270"
+  rel="next" title="rlogin/telnet/tn3270" />
+  <link href="mailto.html#mailto" rel="prev" title="mailto" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="news_002fnntp_002fsnews"></a>
-<div class="header">
-<p>
-Next: <a href="rlogin_002ftelnet_002ftn3270.html#rlogin_002ftelnet_002ftn3270" accesskey="n" rel="next">rlogin/telnet/tn3270</a>, Previous: <a href="mailto.html#mailto" accesskey="p" rel="prev">mailto</a>, Up: <a href="Supported-URL-Types.html#Supported-URL-Types" accesskey="u" rel="up">Supported URL Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="news_002c-nntp-and-snews"></a>
-<h3 class="section">4.5 <code>news</code>, <code>nntp</code> and <code>snews</code></h3>
-<a name="index-news"></a>
-<a name="index-network-news"></a>
-<a name="index-usenet"></a>
-<a name="index-NNTP"></a>
-<a name="index-snews"></a>
+<body lang="en" xml:lang="en">
+  <a name="news_002fnntp_002fsnews" id=
+  "news_002fnntp_002fsnews"></a>
 
-<p>The <code>news</code>, <code>nntp</code>, and <code>snews</code> schemes, defined in RFC
-1738, are used for reading Usenet newsgroups.  For compatibility with
-non-standard-compliant news clients, the <code>url</code> library allows
-host and port fields to be included in <code>news</code> URLs, even though
-they are properly only allowed for <code>nntp</code> and <code>snews</code>.
-</p>
-<p><code>news</code> and <code>nntp</code> URLs have the following form:
-</p>
-<dl compact="compact">
-<dt>&lsquo;<samp>news:<var>newsgroup</var></samp>&rsquo;</dt>
-<dd><p>Retrieves a list of messages in <var>newsgroup</var>;
-</p></dd>
-<dt>&lsquo;<samp>news:<var>message-id</var></samp>&rsquo;</dt>
-<dd><p>Retrieves the message with the given <var>message-id</var>;
-</p></dd>
-<dt>&lsquo;<samp>news:*</samp>&rsquo;</dt>
-<dd><p>Retrieves a list of all available newsgroups;
-</p></dd>
-<dt>&lsquo;<samp>nntp://<var>host</var>:<var>port</var>/<var>newsgroup</var></samp>&rsquo;</dt>
-<dt>&lsquo;<samp>nntp://<var>host</var>:<var>port</var>/<var>message-id</var></samp>&rsquo;</dt>
-<dt>&lsquo;<samp>nntp://<var>host</var>:<var>port</var>/*</samp>&rsquo;</dt>
-<dd><p>Similar to the &lsquo;<samp>news</samp>&rsquo; versions.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href=
+    "rlogin_002ftelnet_002ftn3270.html#rlogin_002ftelnet_002ftn3270"
+    accesskey="n" rel="next">rlogin/telnet/tn3270</a>, Previous:
+    <a href="mailto.html#mailto" accesskey="p" rel=
+    "prev">mailto</a>, Up: <a href=
+    "Supported-URL-Types.html#Supported-URL-Types" accesskey="u"
+    rel="up">Supported URL Types</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="news_002c-nntp-and-snews" id=
+  "news_002c-nntp-and-snews"></a>
 
-<p>The default port for <code>nntp</code> (and <code>news</code>) is 119.  The
-difference between an <code>nntp</code> URL and a <code>news</code> URL is that an
-<code>nttp</code> URL may specify an article by its number.  The
-&lsquo;<samp>snews</samp>&rsquo; scheme is the same as &lsquo;<samp>nntp</samp>&rsquo;, except that it is
-tunneled through SSL and has default port 563.
-</p>
-<p>These URLs are retrieved via the Gnus package.
-</p>
-<a name="index-environment-variable"></a>
-<a name="index-NNTPSERVER"></a>
-<dl>
-<dt><a name="index-url_002dnews_002dserver"></a>User Option: <strong>url-news-server</strong></dt>
-<dd><p>This variable specifies the default news server from which to fetch
-news, if no server was specified in the URL.  The default value,
-<code>nil</code>, means to use the server specified by the standard
-environment variable &lsquo;<samp>NNTPSERVER</samp>&rsquo;, or &lsquo;<samp>news</samp>&rsquo; if that
-environment variable is unset.
-</p></dd></dl>
+  <h3 class="section">4.5 <code>news</code>, <code>nntp</code> and
+  <code>snews</code></h3><a name="index-news" id="index-news"></a>
+  <a name="index-network-news" id="index-network-news"></a>
+  <a name="index-usenet" id="index-usenet"></a> <a name=
+  "index-NNTP" id="index-NNTP"></a> <a name="index-snews" id=
+  "index-snews"></a>
 
+  <p>The <code>news</code>, <code>nntp</code>, and
+  <code>snews</code> schemes, defined in RFC 1738, are used for
+  reading Usenet newsgroups. For compatibility with
+  non-standard-compliant news clients, the <code>url</code> library
+  allows host and port fields to be included in <code>news</code>
+  URLs, even though they are properly only allowed for
+  <code>nntp</code> and <code>snews</code>.</p>
 
+  <p><code>news</code> and <code>nntp</code> URLs have the
+  following form:</p>
 
+  <dl compact="compact">
+    <dt>&lsquo;<samp>news:<var>newsgroup</var></samp>&rsquo;</dt>
 
+    <dd>
+      <p>Retrieves a list of messages in <var>newsgroup</var>;</p>
+    </dd>
+
+    <dt>&lsquo;<samp>news:<var>message-id</var></samp>&rsquo;</dt>
+
+    <dd>
+      <p>Retrieves the message with the given
+      <var>message-id</var>;</p>
+    </dd>
+
+    <dt>&lsquo;<samp>news:*</samp>&rsquo;</dt>
+
+    <dd>
+      <p>Retrieves a list of all available newsgroups;</p>
+    </dd>
+
+    <dt>
+    &lsquo;<samp>nntp://<var>host</var>:<var>port</var>/<var>newsgroup</var></samp>&rsquo;</dt>
+
+    <dt>
+    &lsquo;<samp>nntp://<var>host</var>:<var>port</var>/<var>message-id</var></samp>&rsquo;</dt>
+
+    <dt>
+    &lsquo;<samp>nntp://<var>host</var>:<var>port</var>/*</samp>&rsquo;</dt>
+
+    <dd>
+      <p>Similar to the &lsquo;<samp>news</samp>&rsquo;
+      versions.</p>
+    </dd>
+  </dl>
+
+  <p>The default port for <code>nntp</code> (and <code>news</code>)
+  is 119. The difference between an <code>nntp</code> URL and a
+  <code>news</code> URL is that an <code>nttp</code> URL may
+  specify an article by its number. The
+  &lsquo;<samp>snews</samp>&rsquo; scheme is the same as
+  &lsquo;<samp>nntp</samp>&rsquo;, except that it is tunneled
+  through SSL and has default port 563.</p>
+
+  <p>These URLs are retrieved via the Gnus package.</p><a name=
+  "index-environment-variable" id="index-environment-variable"></a>
+  <a name="index-NNTPSERVER" id="index-NNTPSERVER"></a>
+
+  <dl>
+    <dt><a name="index-url_002dnews_002dserver" id=
+    "index-url_002dnews_002dserver"></a>User Option:
+    <strong>url-news-server</strong></dt>
+
+    <dd>
+      <p>This variable specifies the default news server from which
+      to fetch news, if no server was specified in the URL. The
+      default value, <code>nil</code>, means to use the server
+      specified by the standard environment variable
+      &lsquo;<samp>NNTPSERVER</samp>&rsquo;, or
+      &lsquo;<samp>news</samp>&rsquo; if that environment variable
+      is unset.</p>
+    </dd>
+  </dl>
 </body>
 </html>

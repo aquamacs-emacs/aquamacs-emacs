@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001-2016 Free Software Foundation, Inc.
@@ -14,124 +16,186 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Common Lisp Extensions: Random Numbers</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Common Lisp Extensions: Random Numbers">
-<meta name="keywords" content="Common Lisp Extensions: Random Numbers">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Numbers.html#Numbers" rel="up" title="Numbers">
-<link href="Implementation-Parameters.html#Implementation-Parameters" rel="next" title="Implementation Parameters">
-<link href="Numerical-Functions.html#Numerical-Functions" rel="prev" title="Numerical Functions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Common Lisp Extensions: Random Numbers</title>
+  <meta name="description" content=
+  "Common Lisp Extensions: Random Numbers" />
+  <meta name="keywords" content=
+  "Common Lisp Extensions: Random Numbers" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Numbers.html#Numbers" rel="up" title="Numbers" />
+  <link href=
+  "Implementation-Parameters.html#Implementation-Parameters" rel=
+  "next" title="Implementation Parameters" />
+  <link href="Numerical-Functions.html#Numerical-Functions" rel=
+  "prev" title="Numerical Functions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Random-Numbers"></a>
-<div class="header">
-<p>
-Next: <a href="Implementation-Parameters.html#Implementation-Parameters" accesskey="n" rel="next">Implementation Parameters</a>, Previous: <a href="Numerical-Functions.html#Numerical-Functions" accesskey="p" rel="prev">Numerical Functions</a>, Up: <a href="Numbers.html#Numbers" accesskey="u" rel="up">Numbers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Random-Numbers-1"></a>
-<h3 class="section">8.3 Random Numbers</h3>
+<body lang="en" xml:lang="en">
+  <a name="Random-Numbers" id="Random-Numbers"></a>
 
-<p>This package also provides an implementation of the Common Lisp
-random number generator.  It uses its own additive-congruential
-algorithm, which is much more likely to give statistically clean
-random numbers than the simple generators supplied by many
-operating systems.
-</p>
-<dl>
-<dt><a name="index-cl_002drandom"></a>Function: <strong>cl-random</strong> <em>number &amp;optional state</em></dt>
-<dd><p>This function returns a random nonnegative number less than
-<var>number</var>, and of the same type (either integer or floating-point).
-The <var>state</var> argument should be a <code>random-state</code> object
-that holds the state of the random number generator.  The
-function modifies this state object as a side effect.  If
-<var>state</var> is omitted, it defaults to the internal variable
-<code>cl--random-state</code>, which contains a pre-initialized
-default <code>random-state</code> object.  (Since any number of programs in
-the Emacs process may be accessing <code>cl--random-state</code> in
-interleaved fashion, the sequence generated from this will be
-irreproducible for all intents and purposes.)
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Implementation-Parameters.html#Implementation-Parameters"
+    accesskey="n" rel="next">Implementation Parameters</a>,
+    Previous: <a href=
+    "Numerical-Functions.html#Numerical-Functions" accesskey="p"
+    rel="prev">Numerical Functions</a>, Up: <a href=
+    "Numbers.html#Numbers" accesskey="u" rel="up">Numbers</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Random-Numbers-1" id="Random-Numbers-1"></a>
 
-<dl>
-<dt><a name="index-cl_002dmake_002drandom_002dstate"></a>Function: <strong>cl-make-random-state</strong> <em>&amp;optional state</em></dt>
-<dd><p>This function creates or copies a <code>random-state</code> object.
-If <var>state</var> is omitted or <code>nil</code>, it returns a new copy of
-<code>cl--random-state</code>.  This is a copy in the sense that future
-sequences of calls to <code>(cl-random <var>n</var>)</code> and
-<code>(cl-random <var>n</var> <var>s</var>)</code> (where <var>s</var> is the new
-random-state object) will return identical sequences of random
-numbers.
-</p>
-<p>If <var>state</var> is a <code>random-state</code> object, this function
-returns a copy of that object.  If <var>state</var> is <code>t</code>, this
-function returns a new <code>random-state</code> object seeded from the
-date and time.  As an extension to Common Lisp, <var>state</var> may also
-be an integer in which case the new object is seeded from that
-integer; each different integer seed will result in a completely
-different sequence of random numbers.
-</p>
-<p>It is valid to print a <code>random-state</code> object to a buffer or
-file and later read it back with <code>read</code>.  If a program wishes
-to use a sequence of pseudo-random numbers which can be reproduced
-later for debugging, it can call <code>(cl-make-random-state t)</code> to
-get a new sequence, then print this sequence to a file.  When the
-program is later rerun, it can read the original run&rsquo;s random-state
-from the file.
-</p></dd></dl>
+  <h3 class="section">8.3 Random Numbers</h3>
 
-<dl>
-<dt><a name="index-cl_002drandom_002dstate_002dp"></a>Function: <strong>cl-random-state-p</strong> <em>object</em></dt>
-<dd><p>This predicate returns <code>t</code> if <var>object</var> is a
-<code>random-state</code> object, or <code>nil</code> otherwise.
-</p></dd></dl>
+  <p>This package also provides an implementation of the Common
+  Lisp random number generator. It uses its own
+  additive-congruential algorithm, which is much more likely to
+  give statistically clean random numbers than the simple
+  generators supplied by many operating systems.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Implementation-Parameters.html#Implementation-Parameters" accesskey="n" rel="next">Implementation Parameters</a>, Previous: <a href="Numerical-Functions.html#Numerical-Functions" accesskey="p" rel="prev">Numerical Functions</a>, Up: <a href="Numbers.html#Numbers" accesskey="u" rel="up">Numbers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-cl_002drandom" id=
+    "index-cl_002drandom"></a>Function: <strong>cl-random</strong>
+    <em>number &amp;optional state</em></dt>
 
+    <dd>
+      <p>This function returns a random nonnegative number less
+      than <var>number</var>, and of the same type (either integer
+      or floating-point). The <var>state</var> argument should be a
+      <code>random-state</code> object that holds the state of the
+      random number generator. The function modifies this state
+      object as a side effect. If <var>state</var> is omitted, it
+      defaults to the internal variable
+      <code>cl--random-state</code>, which contains a
+      pre-initialized default <code>random-state</code> object.
+      (Since any number of programs in the Emacs process may be
+      accessing <code>cl--random-state</code> in interleaved
+      fashion, the sequence generated from this will be
+      irreproducible for all intents and purposes.)</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-cl_002dmake_002drandom_002dstate" id=
+    "index-cl_002dmake_002drandom_002dstate"></a>Function:
+    <strong>cl-make-random-state</strong> <em>&amp;optional
+    state</em></dt>
 
+    <dd>
+      <p>This function creates or copies a
+      <code>random-state</code> object. If <var>state</var> is
+      omitted or <code>nil</code>, it returns a new copy of
+      <code>cl--random-state</code>. This is a copy in the sense
+      that future sequences of calls to <code>(cl-random
+      <var>n</var>)</code> and <code>(cl-random <var>n</var>
+      <var>s</var>)</code> (where <var>s</var> is the new
+      random-state object) will return identical sequences of
+      random numbers.</p>
+
+      <p>If <var>state</var> is a <code>random-state</code> object,
+      this function returns a copy of that object. If
+      <var>state</var> is <code>t</code>, this function returns a
+      new <code>random-state</code> object seeded from the date and
+      time. As an extension to Common Lisp, <var>state</var> may
+      also be an integer in which case the new object is seeded
+      from that integer; each different integer seed will result in
+      a completely different sequence of random numbers.</p>
+
+      <p>It is valid to print a <code>random-state</code> object to
+      a buffer or file and later read it back with
+      <code>read</code>. If a program wishes to use a sequence of
+      pseudo-random numbers which can be reproduced later for
+      debugging, it can call <code>(cl-make-random-state t)</code>
+      to get a new sequence, then print this sequence to a file.
+      When the program is later rerun, it can read the original
+      run&rsquo;s random-state from the file.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002drandom_002dstate_002dp" id=
+    "index-cl_002drandom_002dstate_002dp"></a>Function:
+    <strong>cl-random-state-p</strong> <em>object</em></dt>
+
+    <dd>
+      <p>This predicate returns <code>t</code> if <var>object</var>
+      is a <code>random-state</code> object, or <code>nil</code>
+      otherwise.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Implementation-Parameters.html#Implementation-Parameters"
+    accesskey="n" rel="next">Implementation Parameters</a>,
+    Previous: <a href=
+    "Numerical-Functions.html#Numerical-Functions" accesskey="p"
+    rel="prev">Numerical Functions</a>, Up: <a href=
+    "Numbers.html#Numbers" accesskey="u" rel="up">Numbers</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

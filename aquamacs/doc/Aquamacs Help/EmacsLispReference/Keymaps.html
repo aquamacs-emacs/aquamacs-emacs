@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,119 +19,297 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Keymaps</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Keymaps">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Keymaps">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Key-Sequences.html#Key-Sequences" rel="next" title="Key Sequences">
-<link href="Keyboard-Macros.html#Keyboard-Macros" rel="prev" title="Keyboard Macros">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Keymaps</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Keymaps" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Keymaps" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Key-Sequences.html#Key-Sequences" rel="next" title=
+  "Key Sequences" />
+  <link href="Keyboard-Macros.html#Keyboard-Macros" rel="prev"
+  title="Keyboard Macros" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Keymaps" id="Keymaps"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Modes.html#Modes" accesskey="n" rel=
+    "next">Modes</a>, Previous: <a href=
+    "Command-Loop.html#Command-Loop" accesskey="p" rel=
+    "prev">Command Loop</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Keymaps-1" id="Keymaps-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Keymaps"></a>
-<div class="header">
-<p>
-Next: <a href="Modes.html#Modes" accesskey="n" rel="next">Modes</a>, Previous: <a href="Command-Loop.html#Command-Loop" accesskey="p" rel="prev">Command Loop</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Keymaps-1"></a>
-<h2 class="chapter">21 Keymaps</h2>
-<a name="index-keymap"></a>
+  <h2 class="chapter">21 Keymaps</h2><a name="index-keymap" id=
+  "index-keymap"></a>
 
-<p>The command bindings of input events are recorded in data structures
-called <em>keymaps</em>.  Each entry in a keymap associates (or
-<em>binds</em>) an individual event type, either to another keymap or to
-a command.  When an event type is bound to a keymap, that keymap is
-used to look up the next input event; this continues until a command
-is found.  The whole process is called <em>key lookup</em>.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Key-Sequences.html#Key-Sequences" accesskey="1">Key Sequences</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Key sequences as Lisp objects.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Keymap-Basics.html#Keymap-Basics" accesskey="2">Keymap Basics</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Basic concepts of keymaps.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Format-of-Keymaps.html#Format-of-Keymaps" accesskey="3">Format of Keymaps</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">What a keymap looks like as a Lisp object.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Creating-Keymaps.html#Creating-Keymaps" accesskey="4">Creating Keymaps</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Functions to create and copy keymaps.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Inheritance-and-Keymaps.html#Inheritance-and-Keymaps" accesskey="5">Inheritance and Keymaps</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How one keymap can inherit the bindings
-                                   of another keymap.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Prefix-Keys.html#Prefix-Keys" accesskey="6">Prefix Keys</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Defining a key with a keymap as its definition.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Active-Keymaps.html#Active-Keymaps" accesskey="7">Active Keymaps</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How Emacs searches the active keymaps
-                                   for a key binding.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Searching-Keymaps.html#Searching-Keymaps" accesskey="8">Searching Keymaps</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A pseudo-Lisp summary of searching active maps.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Controlling-Active-Maps.html#Controlling-Active-Maps" accesskey="9">Controlling Active Maps</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Each buffer has a local keymap
-                                   to override the standard (global) bindings.
-                                   A minor mode can also override them.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Key-Lookup.html#Key-Lookup">Key Lookup</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Finding a key&rsquo;s binding in one keymap.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Functions-for-Key-Lookup.html#Functions-for-Key-Lookup">Functions for Key Lookup</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to request key lookup.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Changing-Key-Bindings.html#Changing-Key-Bindings">Changing Key Bindings</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Redefining a key in a keymap.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Remapping-Commands.html#Remapping-Commands">Remapping Commands</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A keymap can translate one command to another.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Translation-Keymaps.html#Translation-Keymaps">Translation Keymaps</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Keymaps for translating sequences of events.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Key-Binding-Commands.html#Key-Binding-Commands">Key Binding Commands</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Interactive interfaces for redefining keys.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Scanning-Keymaps.html#Scanning-Keymaps">Scanning Keymaps</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Looking through all keymaps, for printing help.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Menu-Keymaps.html#Menu-Keymaps">Menu Keymaps</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Defining a menu as a keymap.
-</td></tr>
-</table>
+  <p>The command bindings of input events are recorded in data
+  structures called <em>keymaps</em>. Each entry in a keymap
+  associates (or <em>binds</em>) an individual event type, either
+  to another keymap or to a command. When an event type is bound to
+  a keymap, that keymap is used to look up the next input event;
+  this continues until a command is found. The whole process is
+  called <em>key lookup</em>.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Modes.html#Modes" accesskey="n" rel="next">Modes</a>, Previous: <a href="Command-Loop.html#Command-Loop" accesskey="p" rel="prev">Command Loop</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Key-Sequences.html#Key-Sequences" accesskey="1">Key
+      Sequences</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top">Key sequences as Lisp
+      objects.</td>
+    </tr>
 
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Keymap-Basics.html#Keymap-Basics" accesskey="2">Keymap
+      Basics</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Basic concepts of keymaps.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Format-of-Keymaps.html#Format-of-Keymaps" accesskey=
+      "3">Format of Keymaps</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">What a keymap looks like as a
+      Lisp object.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Creating-Keymaps.html#Creating-Keymaps" accesskey=
+      "4">Creating Keymaps</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Functions to create and copy
+      keymaps.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Inheritance-and-Keymaps.html#Inheritance-and-Keymaps"
+      accesskey="5">Inheritance and Keymaps</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How one keymap can inherit the
+      bindings of another keymap.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Prefix-Keys.html#Prefix-Keys" accesskey="6">Prefix
+      Keys</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Defining a key with a keymap as
+      its definition.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Active-Keymaps.html#Active-Keymaps" accesskey="7">Active
+      Keymaps</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How Emacs searches the active
+      keymaps for a key binding.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Searching-Keymaps.html#Searching-Keymaps" accesskey=
+      "8">Searching Keymaps</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">A pseudo-Lisp summary of
+      searching active maps.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Controlling-Active-Maps.html#Controlling-Active-Maps"
+      accesskey="9">Controlling Active Maps</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Each buffer has a local keymap
+      to override the standard (global) bindings. A minor mode can
+      also override them.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Key-Lookup.html#Key-Lookup">Key Lookup</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Finding a key&rsquo;s binding
+      in one keymap.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Functions-for-Key-Lookup.html#Functions-for-Key-Lookup">Functions
+      for Key Lookup</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to request key lookup.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Changing-Key-Bindings.html#Changing-Key-Bindings">Changing
+      Key Bindings</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Redefining a key in a
+      keymap.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Remapping-Commands.html#Remapping-Commands">Remapping
+      Commands</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">A keymap can translate one
+      command to another.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Translation-Keymaps.html#Translation-Keymaps">Translation
+      Keymaps</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Keymaps for translating
+      sequences of events.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Key-Binding-Commands.html#Key-Binding-Commands">Key Binding
+      Commands</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Interactive interfaces for
+      redefining keys.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Scanning-Keymaps.html#Scanning-Keymaps">Scanning
+      Keymaps</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Looking through all keymaps,
+      for printing help.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Menu-Keymaps.html#Menu-Keymaps">Menu Keymaps</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Defining a menu as a
+      keymap.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Modes.html#Modes" accesskey="n" rel=
+    "next">Modes</a>, Previous: <a href=
+    "Command-Loop.html#Command-Loop" accesskey="p" rel=
+    "prev">Command Loop</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

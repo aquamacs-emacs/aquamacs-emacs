@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,182 +19,272 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Minibuffer Completion</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Minibuffer Completion">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Minibuffer Completion">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Completion.html#Completion" rel="up" title="Completion">
-<link href="Completion-Commands.html#Completion-Commands" rel="next" title="Completion Commands">
-<link href="Basic-Completion.html#Basic-Completion" rel="prev" title="Basic Completion">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Minibuffer
+  Completion</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Minibuffer Completion" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Minibuffer Completion" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Completion.html#Completion" rel="up" title=
+  "Completion" />
+  <link href="Completion-Commands.html#Completion-Commands" rel=
+  "next" title="Completion Commands" />
+  <link href="Basic-Completion.html#Basic-Completion" rel="prev"
+  title="Basic Completion" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Minibuffer-Completion" id="Minibuffer-Completion"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Completion-Commands.html#Completion-Commands"
+    accesskey="n" rel="next">Completion Commands</a>, Previous:
+    <a href="Basic-Completion.html#Basic-Completion" accesskey="p"
+    rel="prev">Basic Completion</a>, Up: <a href=
+    "Completion.html#Completion" accesskey="u" rel=
+    "up">Completion</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Completion-and-the-Minibuffer" id=
+  "Completion-and-the-Minibuffer"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Minibuffer-Completion"></a>
-<div class="header">
-<p>
-Next: <a href="Completion-Commands.html#Completion-Commands" accesskey="n" rel="next">Completion Commands</a>, Previous: <a href="Basic-Completion.html#Basic-Completion" accesskey="p" rel="prev">Basic Completion</a>, Up: <a href="Completion.html#Completion" accesskey="u" rel="up">Completion</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Completion-and-the-Minibuffer"></a>
-<h4 class="subsection">19.6.2 Completion and the Minibuffer</h4>
-<a name="index-minibuffer-completion"></a>
-<a name="index-reading-from-minibuffer-with-completion"></a>
+  <h4 class="subsection">19.6.2 Completion and the
+  Minibuffer</h4><a name="index-minibuffer-completion" id=
+  "index-minibuffer-completion"></a> <a name=
+  "index-reading-from-minibuffer-with-completion" id=
+  "index-reading-from-minibuffer-with-completion"></a>
 
-<p>This section describes the basic interface for reading from the
-minibuffer with completion.
-</p>
-<dl>
-<dt><a name="index-completing_002dread"></a>Function: <strong>completing-read</strong> <em>prompt collection &amp;optional predicate require-match initial history default inherit-input-method</em></dt>
-<dd><p>This function reads a string in the minibuffer, assisting the user by
-providing completion.  It activates the minibuffer with prompt
-<var>prompt</var>, which must be a string.
-</p>
-<p>The actual completion is done by passing the completion table
-<var>collection</var> and the completion predicate <var>predicate</var> to the
-function <code>try-completion</code> (see <a href="Basic-Completion.html#Basic-Completion">Basic Completion</a>).  This
-happens in certain commands bound in the local keymaps used for
-completion.  Some of these commands also call <code>test-completion</code>.
-Thus, if <var>predicate</var> is non-<code>nil</code>, it should be compatible
-with <var>collection</var> and <code>completion-ignore-case</code>.
-See <a href="Basic-Completion.html#Definition-of-test_002dcompletion">Definition of test-completion</a>.
-</p>
-<p>See <a href="Programmed-Completion.html#Programmed-Completion">Programmed Completion</a>, for detailed requirements when
-<var>collection</var> is a function.
-</p>
-<p>The value of the optional argument <var>require-match</var> determines how
-the user may exit the minibuffer:
-</p>
-<ul>
-<li> If <code>nil</code>, the usual minibuffer exit commands work regardless of
-the input in the minibuffer.
+  <p>This section describes the basic interface for reading from
+  the minibuffer with completion.</p>
 
-</li><li> If <code>t</code>, the usual minibuffer exit commands won&rsquo;t exit unless the
-input completes to an element of <var>collection</var>.
+  <dl>
+    <dt><a name="index-completing_002dread" id=
+    "index-completing_002dread"></a>Function:
+    <strong>completing-read</strong> <em>prompt collection
+    &amp;optional predicate require-match initial history default
+    inherit-input-method</em></dt>
 
-</li><li> If <code>confirm</code>, the user can exit with any input, but is asked for
-confirmation if the input is not an element of <var>collection</var>.
+    <dd>
+      <p>This function reads a string in the minibuffer, assisting
+      the user by providing completion. It activates the minibuffer
+      with prompt <var>prompt</var>, which must be a string.</p>
 
-</li><li> If <code>confirm-after-completion</code>, the user can exit with any input,
-but is asked for confirmation if the preceding command was a
-completion command (i.e., one of the commands in
-<code>minibuffer-confirm-exit-commands</code>) and the resulting input is
-not an element of <var>collection</var>.  See <a href="Completion-Commands.html#Completion-Commands">Completion Commands</a>.
+      <p>The actual completion is done by passing the completion
+      table <var>collection</var> and the completion predicate
+      <var>predicate</var> to the function
+      <code>try-completion</code> (see <a href=
+      "Basic-Completion.html#Basic-Completion">Basic
+      Completion</a>). This happens in certain commands bound in
+      the local keymaps used for completion. Some of these commands
+      also call <code>test-completion</code>. Thus, if
+      <var>predicate</var> is non-<code>nil</code>, it should be
+      compatible with <var>collection</var> and
+      <code>completion-ignore-case</code>. See <a href=
+      "Basic-Completion.html#Definition-of-test_002dcompletion">Definition
+      of test-completion</a>.</p>
 
-</li><li> Any other value of <var>require-match</var> behaves like <code>t</code>, except
-that the exit commands won&rsquo;t exit if it performs completion.
-</li></ul>
+      <p>See <a href=
+      "Programmed-Completion.html#Programmed-Completion">Programmed
+      Completion</a>, for detailed requirements when
+      <var>collection</var> is a function.</p>
 
-<p>However, empty input is always permitted, regardless of the value of
-<var>require-match</var>; in that case, <code>completing-read</code> returns the
-first element of <var>default</var>, if it is a list; <code>&quot;&quot;</code>, if
-<var>default</var> is <code>nil</code>; or <var>default</var>.  The string or strings
-in <var>default</var> are also available to the user through the history
-commands.
-</p>
-<p>The function <code>completing-read</code> uses
-<code>minibuffer-local-completion-map</code> as the keymap if
-<var>require-match</var> is <code>nil</code>, and uses
-<code>minibuffer-local-must-match-map</code> if <var>require-match</var> is
-non-<code>nil</code>.  See <a href="Completion-Commands.html#Completion-Commands">Completion Commands</a>.
-</p>
-<p>The argument <var>history</var> specifies which history list variable to use for
-saving the input and for minibuffer history commands.  It defaults to
-<code>minibuffer-history</code>.  See <a href="Minibuffer-History.html#Minibuffer-History">Minibuffer History</a>.
-</p>
-<p>The argument <var>initial</var> is mostly deprecated; we recommend using a
-non-<code>nil</code> value only in conjunction with specifying a cons cell
-for <var>history</var>.  See <a href="Initial-Input.html#Initial-Input">Initial Input</a>.  For default input, use
-<var>default</var> instead.
-</p>
-<p>If the argument <var>inherit-input-method</var> is non-<code>nil</code>, then the
-minibuffer inherits the current input method (see <a href="Input-Methods.html#Input-Methods">Input Methods</a>) and the setting of <code>enable-multibyte-characters</code>
-(see <a href="Text-Representations.html#Text-Representations">Text Representations</a>) from whichever buffer was current before
-entering the minibuffer.
-</p>
-<p>If the variable <code>completion-ignore-case</code> is
-non-<code>nil</code>, completion ignores case when comparing the input
-against the possible matches.  See <a href="Basic-Completion.html#Basic-Completion">Basic Completion</a>.  In this mode
-of operation, <var>predicate</var> must also ignore case, or you will get
-surprising results.
-</p>
-<p>Here&rsquo;s an example of using <code>completing-read</code>:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(completing-read
- &quot;Complete a foo: &quot;
- '((&quot;foobar1&quot; 1) (&quot;barfoo&quot; 2) (&quot;foobaz&quot; 3) (&quot;foobar2&quot; 4))
- nil t &quot;fo&quot;)
-</pre><pre class="smallexample">
-</pre><pre class="smallexample">;; <span class="roman">After evaluation of the preceding expression,</span>
-;;   <span class="roman">the following appears in the minibuffer:</span>
+      <p>The value of the optional argument
+      <var>require-match</var> determines how the user may exit the
+      minibuffer:</p>
+
+      <ul>
+        <li>If <code>nil</code>, the usual minibuffer exit commands
+        work regardless of the input in the minibuffer.</li>
+
+        <li>If <code>t</code>, the usual minibuffer exit commands
+        won&rsquo;t exit unless the input completes to an element
+        of <var>collection</var>.</li>
+
+        <li>If <code>confirm</code>, the user can exit with any
+        input, but is asked for confirmation if the input is not an
+        element of <var>collection</var>.</li>
+
+        <li>If <code>confirm-after-completion</code>, the user can
+        exit with any input, but is asked for confirmation if the
+        preceding command was a completion command (i.e., one of
+        the commands in
+        <code>minibuffer-confirm-exit-commands</code>) and the
+        resulting input is not an element of <var>collection</var>.
+        See <a href=
+        "Completion-Commands.html#Completion-Commands">Completion
+        Commands</a>.</li>
+
+        <li>Any other value of <var>require-match</var> behaves
+        like <code>t</code>, except that the exit commands
+        won&rsquo;t exit if it performs completion.</li>
+      </ul>
+
+      <p>However, empty input is always permitted, regardless of
+      the value of <var>require-match</var>; in that case,
+      <code>completing-read</code> returns the first element of
+      <var>default</var>, if it is a list; <code>""</code>, if
+      <var>default</var> is <code>nil</code>; or
+      <var>default</var>. The string or strings in
+      <var>default</var> are also available to the user through the
+      history commands.</p>
+
+      <p>The function <code>completing-read</code> uses
+      <code>minibuffer-local-completion-map</code> as the keymap if
+      <var>require-match</var> is <code>nil</code>, and uses
+      <code>minibuffer-local-must-match-map</code> if
+      <var>require-match</var> is non-<code>nil</code>. See
+      <a href="Completion-Commands.html#Completion-Commands">Completion
+      Commands</a>.</p>
+
+      <p>The argument <var>history</var> specifies which history
+      list variable to use for saving the input and for minibuffer
+      history commands. It defaults to
+      <code>minibuffer-history</code>. See <a href=
+      "Minibuffer-History.html#Minibuffer-History">Minibuffer
+      History</a>.</p>
+
+      <p>The argument <var>initial</var> is mostly deprecated; we
+      recommend using a non-<code>nil</code> value only in
+      conjunction with specifying a cons cell for
+      <var>history</var>. See <a href=
+      "Initial-Input.html#Initial-Input">Initial Input</a>. For
+      default input, use <var>default</var> instead.</p>
+
+      <p>If the argument <var>inherit-input-method</var> is
+      non-<code>nil</code>, then the minibuffer inherits the
+      current input method (see <a href=
+      "Input-Methods.html#Input-Methods">Input Methods</a>) and the
+      setting of <code>enable-multibyte-characters</code> (see
+      <a href="Text-Representations.html#Text-Representations">Text
+      Representations</a>) from whichever buffer was current before
+      entering the minibuffer.</p>
+
+      <p>If the variable <code>completion-ignore-case</code> is
+      non-<code>nil</code>, completion ignores case when comparing
+      the input against the possible matches. See <a href=
+      "Basic-Completion.html#Basic-Completion">Basic
+      Completion</a>. In this mode of operation,
+      <var>predicate</var> must also ignore case, or you will get
+      surprising results.</p>
+
+      <p>Here&rsquo;s an example of using
+      <code>completing-read</code>:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(completing-read
+ "Complete a foo: "
+ '(("foobar1" 1) ("barfoo" 2) ("foobaz" 3) ("foobar2" 4))
+ nil t "fo")
+</pre>
+        <pre class="smallexample">
+</pre>
+        <pre class="smallexample">
+;; <span class=
+"roman">After evaluation of the preceding expression,</span>
+;;   <span class=
+"roman">the following appears in the minibuffer:</span>
 
 ---------- Buffer: Minibuffer ----------
 Complete a foo: fo&lowast;
 ---------- Buffer: Minibuffer ----------
-</pre></div>
+</pre>
+      </div>
 
-<p>If the user then types <kbd><span class="key">DEL</span> <span class="key">DEL</span> b <span class="key">RET</span></kbd>,
-<code>completing-read</code> returns <code>barfoo</code>.
-</p>
-<p>The <code>completing-read</code> function binds variables to pass
-information to the commands that actually do completion.
-They are described in the following section.
-</p></dd></dl>
+      <p>If the user then types <kbd><span class="key">DEL</span>
+      <span class="key">DEL</span> b <span class=
+      "key">RET</span></kbd>, <code>completing-read</code> returns
+      <code>barfoo</code>.</p>
 
-<dl>
-<dt><a name="index-completing_002dread_002dfunction"></a>Variable: <strong>completing-read-function</strong></dt>
-<dd><p>The value of this variable must be a function, which is called by
-<code>completing-read</code> to actually do its work.  It should accept the
-same arguments as <code>completing-read</code>.  This can be bound to a
-different function to completely override the normal behavior of
-<code>completing-read</code>.
-</p></dd></dl>
+      <p>The <code>completing-read</code> function binds variables
+      to pass information to the commands that actually do
+      completion. They are described in the following section.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Completion-Commands.html#Completion-Commands" accesskey="n" rel="next">Completion Commands</a>, Previous: <a href="Basic-Completion.html#Basic-Completion" accesskey="p" rel="prev">Basic Completion</a>, Up: <a href="Completion.html#Completion" accesskey="u" rel="up">Completion</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-completing_002dread_002dfunction" id=
+    "index-completing_002dread_002dfunction"></a>Variable:
+    <strong>completing-read-function</strong></dt>
 
+    <dd>
+      <p>The value of this variable must be a function, which is
+      called by <code>completing-read</code> to actually do its
+      work. It should accept the same arguments as
+      <code>completing-read</code>. This can be bound to a
+      different function to completely override the normal behavior
+      of <code>completing-read</code>.</p>
+    </dd>
+  </dl>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href="Completion-Commands.html#Completion-Commands"
+    accesskey="n" rel="next">Completion Commands</a>, Previous:
+    <a href="Basic-Completion.html#Basic-Completion" accesskey="p"
+    rel="prev">Basic Completion</a>, Up: <a href=
+    "Completion.html#Completion" accesskey="u" rel=
+    "up">Completion</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

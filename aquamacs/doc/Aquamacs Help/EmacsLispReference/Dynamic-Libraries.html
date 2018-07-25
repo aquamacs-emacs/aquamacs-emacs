@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,115 +19,156 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Dynamic Libraries</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Dynamic Libraries">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Dynamic Libraries">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="System-Interface.html#System-Interface" rel="up" title="System Interface">
-<link href="Security-Considerations.html#Security-Considerations" rel="next" title="Security Considerations">
-<link href="File-Notifications.html#File-Notifications" rel="prev" title="File Notifications">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Dynamic Libraries</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Dynamic Libraries" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Dynamic Libraries" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="System-Interface.html#System-Interface" rel="up"
+  title="System Interface" />
+  <link href="Security-Considerations.html#Security-Considerations"
+  rel="next" title="Security Considerations" />
+  <link href="File-Notifications.html#File-Notifications" rel=
+  "prev" title="File Notifications" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Dynamic-Libraries" id="Dynamic-Libraries"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Security-Considerations.html#Security-Considerations"
+    accesskey="n" rel="next">Security Considerations</a>, Previous:
+    <a href="File-Notifications.html#File-Notifications" accesskey=
+    "p" rel="prev">File Notifications</a>, Up: <a href=
+    "System-Interface.html#System-Interface" accesskey="u" rel=
+    "up">System Interface</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Dynamically-Loaded-Libraries" id=
+  "Dynamically-Loaded-Libraries"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Dynamic-Libraries"></a>
-<div class="header">
-<p>
-Next: <a href="Security-Considerations.html#Security-Considerations" accesskey="n" rel="next">Security Considerations</a>, Previous: <a href="File-Notifications.html#File-Notifications" accesskey="p" rel="prev">File Notifications</a>, Up: <a href="System-Interface.html#System-Interface" accesskey="u" rel="up">System Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Dynamically-Loaded-Libraries"></a>
-<h3 class="section">38.21 Dynamically Loaded Libraries</h3>
-<a name="index-dynamic-libraries"></a>
+  <h3 class="section">38.21 Dynamically Loaded
+  Libraries</h3><a name="index-dynamic-libraries" id=
+  "index-dynamic-libraries"></a>
 
-<p>A <em>dynamically loaded library</em> is a library that is loaded on
-demand, when its facilities are first needed.  Emacs supports such
-on-demand loading of support libraries for some of its features.
-</p>
-<dl>
-<dt><a name="index-dynamic_002dlibrary_002dalist"></a>Variable: <strong>dynamic-library-alist</strong></dt>
-<dd><p>This is an alist of dynamic libraries and external library files
-implementing them.
-</p>
-<p>Each element is a list of the form
-<code>(<var>library</var>&nbsp;<var>files</var>&hellip;)</code><!-- /@w -->, where the <code>car</code> is
-a symbol representing a supported external library, and the rest are
-strings giving alternate filenames for that library.
-</p>
-<p>Emacs tries to load the library from the files in the order they
-appear in the list; if none is found, the Emacs session won&rsquo;t have
-access to that library, and the features it provides will be
-unavailable.
-</p>
-<p>Image support on some platforms uses this facility.  Here&rsquo;s an example
-of setting this variable for supporting images on MS-Windows:
-</p>
-<div class="example">
-<pre class="example">(setq dynamic-library-alist
-      '((xpm &quot;libxpm.dll&quot; &quot;xpm4.dll&quot; &quot;libXpm-nox4.dll&quot;)
-        (png &quot;libpng12d.dll&quot; &quot;libpng12.dll&quot; &quot;libpng.dll&quot;
-             &quot;libpng13d.dll&quot; &quot;libpng13.dll&quot;)
-        (jpeg &quot;jpeg62.dll&quot; &quot;libjpeg.dll&quot; &quot;jpeg-62.dll&quot;
-              &quot;jpeg.dll&quot;)
-        (tiff &quot;libtiff3.dll&quot; &quot;libtiff.dll&quot;)
-        (gif &quot;giflib4.dll&quot; &quot;libungif4.dll&quot; &quot;libungif.dll&quot;)
-        (svg &quot;librsvg-2-2.dll&quot;)
-        (gdk-pixbuf &quot;libgdk_pixbuf-2.0-0.dll&quot;)
-        (glib &quot;libglib-2.0-0.dll&quot;)
-        (gobject &quot;libgobject-2.0-0.dll&quot;)))
-</pre></div>
+  <p>A <em>dynamically loaded library</em> is a library that is
+  loaded on demand, when its facilities are first needed. Emacs
+  supports such on-demand loading of support libraries for some of
+  its features.</p>
 
-<p>Note that image types <code>pbm</code> and <code>xbm</code> do not need entries in
-this variable because they do not depend on external libraries and are
-always available in Emacs.
-</p>
-<p>Also note that this variable is not meant to be a generic facility for
-accessing external libraries; only those already known by Emacs can
-be loaded through it.
-</p>
-<p>This variable is ignored if the given <var>library</var> is statically
-linked into Emacs.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-dynamic_002dlibrary_002dalist" id=
+    "index-dynamic_002dlibrary_002dalist"></a>Variable:
+    <strong>dynamic-library-alist</strong></dt>
 
+    <dd>
+      <p>This is an alist of dynamic libraries and external library
+      files implementing them.</p>
 
+      <p>Each element is a list of the form
+      <code>(<var>library</var>&nbsp;<var>files</var>&hellip;)</code><!-- /@w -->,
+      where the <code>car</code> is a symbol representing a
+      supported external library, and the rest are strings giving
+      alternate filenames for that library.</p>
 
+      <p>Emacs tries to load the library from the files in the
+      order they appear in the list; if none is found, the Emacs
+      session won&rsquo;t have access to that library, and the
+      features it provides will be unavailable.</p>
 
+      <p>Image support on some platforms uses this facility.
+      Here&rsquo;s an example of setting this variable for
+      supporting images on MS-Windows:</p>
+
+      <div class="example">
+        <pre class="example">
+(setq dynamic-library-alist
+      '((xpm "libxpm.dll" "xpm4.dll" "libXpm-nox4.dll")
+        (png "libpng12d.dll" "libpng12.dll" "libpng.dll"
+             "libpng13d.dll" "libpng13.dll")
+        (jpeg "jpeg62.dll" "libjpeg.dll" "jpeg-62.dll"
+              "jpeg.dll")
+        (tiff "libtiff3.dll" "libtiff.dll")
+        (gif "giflib4.dll" "libungif4.dll" "libungif.dll")
+        (svg "librsvg-2-2.dll")
+        (gdk-pixbuf "libgdk_pixbuf-2.0-0.dll")
+        (glib "libglib-2.0-0.dll")
+        (gobject "libgobject-2.0-0.dll")))
+</pre>
+      </div>
+
+      <p>Note that image types <code>pbm</code> and
+      <code>xbm</code> do not need entries in this variable because
+      they do not depend on external libraries and are always
+      available in Emacs.</p>
+
+      <p>Also note that this variable is not meant to be a generic
+      facility for accessing external libraries; only those already
+      known by Emacs can be loaded through it.</p>
+
+      <p>This variable is ignored if the given <var>library</var>
+      is statically linked into Emacs.</p>
+    </dd>
+  </dl>
 </body>
 </html>

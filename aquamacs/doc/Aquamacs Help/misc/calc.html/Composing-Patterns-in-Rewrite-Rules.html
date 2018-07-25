@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,216 +18,310 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Composing Patterns in Rewrite Rules</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Composing Patterns in Rewrite Rules">
-<meta name="keywords" content="GNU Emacs Calc Manual: Composing Patterns in Rewrite Rules">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Rewrite-Rules.html#Rewrite-Rules" rel="up" title="Rewrite Rules">
-<link href="Nested-Formulas-with-Rewrite-Rules.html#Nested-Formulas-with-Rewrite-Rules" rel="next" title="Nested Formulas with Rewrite Rules">
-<link href="Other-Features-of-Rewrite-Rules.html#Other-Features-of-Rewrite-Rules" rel="prev" title="Other Features of Rewrite Rules">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Composing Patterns in Rewrite
+  Rules</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Composing Patterns in Rewrite Rules" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Composing Patterns in Rewrite Rules" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Rewrite-Rules.html#Rewrite-Rules" rel="up" title=
+  "Rewrite Rules" />
+  <link href=
+  "Nested-Formulas-with-Rewrite-Rules.html#Nested-Formulas-with-Rewrite-Rules"
+  rel="next" title="Nested Formulas with Rewrite Rules" />
+  <link href=
+  "Other-Features-of-Rewrite-Rules.html#Other-Features-of-Rewrite-Rules"
+  rel="prev" title="Other Features of Rewrite Rules" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Composing-Patterns-in-Rewrite-Rules"></a>
-<div class="header">
-<p>
-Next: <a href="Nested-Formulas-with-Rewrite-Rules.html#Nested-Formulas-with-Rewrite-Rules" accesskey="n" rel="next">Nested Formulas with Rewrite Rules</a>, Previous: <a href="Other-Features-of-Rewrite-Rules.html#Other-Features-of-Rewrite-Rules" accesskey="p" rel="prev">Other Features of Rewrite Rules</a>, Up: <a href="Rewrite-Rules.html#Rewrite-Rules" accesskey="u" rel="up">Rewrite Rules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Composing-Patterns-in-Rewrite-Rules-1"></a>
-<h4 class="subsection">10.11.6 Composing Patterns in Rewrite Rules</h4>
+<body lang="en" xml:lang="en">
+  <a name="Composing-Patterns-in-Rewrite-Rules" id=
+  "Composing-Patterns-in-Rewrite-Rules"></a>
 
-<p>There are three operators, &lsquo;<samp>&amp;&amp;&amp;</samp>&rsquo;, &lsquo;<samp>|||</samp>&rsquo;, and &lsquo;<samp>!!!</samp>&rsquo;,
-that combine rewrite patterns to make larger patterns.  The
-combinations are &ldquo;and,&rdquo; &ldquo;or,&rdquo; and &ldquo;not,&rdquo; respectively, and
-these operators are the pattern equivalents of &lsquo;<samp>&amp;&amp;</samp>&rsquo;, &lsquo;<samp>||</samp>&rsquo;
-and &lsquo;<samp>!</samp>&rsquo; (which operate on zero-or-nonzero logical values).
-</p>
-<p>Note that &lsquo;<samp>&amp;&amp;&amp;</samp>&rsquo;, &lsquo;<samp>|||</samp>&rsquo;, and &lsquo;<samp>!!!</samp>&rsquo; are left in symbolic
-form by all regular Calc features; they have special meaning only in
-the context of rewrite rule patterns.
-</p>
-<p>The pattern &lsquo;<samp><var>p1</var> &amp;&amp;&amp; <var>p2</var></samp>&rsquo; matches anything that
-matches both <var>p1</var> and <var>p2</var>.  One especially useful case is
-when one of <var>p1</var> or <var>p2</var> is a meta-variable.  For example,
-here is a rule that operates on error forms:
-</p>
-<div class="example">
-<pre class="example">f(x &amp;&amp;&amp; a +/- b, x)  :=  g(x)
-</pre></div>
+  <div class="header">
+    <p>Next: <a href=
+    "Nested-Formulas-with-Rewrite-Rules.html#Nested-Formulas-with-Rewrite-Rules"
+    accesskey="n" rel="next">Nested Formulas with Rewrite
+    Rules</a>, Previous: <a href=
+    "Other-Features-of-Rewrite-Rules.html#Other-Features-of-Rewrite-Rules"
+    accesskey="p" rel="prev">Other Features of Rewrite Rules</a>,
+    Up: <a href="Rewrite-Rules.html#Rewrite-Rules" accesskey="u"
+    rel="up">Rewrite Rules</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Composing-Patterns-in-Rewrite-Rules-1" id=
+  "Composing-Patterns-in-Rewrite-Rules-1"></a>
 
-<p>This does the same thing, but is arguably simpler than, the rule
-</p>
-<div class="example">
-<pre class="example">f(a +/- b, a +/- b)  :=  g(a +/- b)
-</pre></div>
+  <h4 class="subsection">10.11.6 Composing Patterns in Rewrite
+  Rules</h4>
 
-<a name="index-ends"></a>
-<p>Here&rsquo;s another interesting example:
-</p>
-<div class="example">
-<pre class="example">ends(cons(a, x) &amp;&amp;&amp; rcons(y, b))  :=  [a, b]
-</pre></div>
+  <p>There are three operators,
+  &lsquo;<samp>&amp;&amp;&amp;</samp>&rsquo;,
+  &lsquo;<samp>|||</samp>&rsquo;, and
+  &lsquo;<samp>!!!</samp>&rsquo;, that combine rewrite patterns to
+  make larger patterns. The combinations are &ldquo;and,&rdquo;
+  &ldquo;or,&rdquo; and &ldquo;not,&rdquo; respectively, and these
+  operators are the pattern equivalents of
+  &lsquo;<samp>&amp;&amp;</samp>&rsquo;,
+  &lsquo;<samp>||</samp>&rsquo; and &lsquo;<samp>!</samp>&rsquo;
+  (which operate on zero-or-nonzero logical values).</p>
 
-<p>which effectively clips out the middle of a vector leaving just
-the first and last elements.  This rule will change a one-element
-vector &lsquo;<samp>[a]</samp>&rsquo; to &lsquo;<samp>[a, a]</samp>&rsquo;.  The similar rule
-</p>
-<div class="example">
-<pre class="example">ends(cons(a, rcons(y, b)))  :=  [a, b]
-</pre></div>
+  <p>Note that &lsquo;<samp>&amp;&amp;&amp;</samp>&rsquo;,
+  &lsquo;<samp>|||</samp>&rsquo;, and
+  &lsquo;<samp>!!!</samp>&rsquo; are left in symbolic form by all
+  regular Calc features; they have special meaning only in the
+  context of rewrite rule patterns.</p>
 
-<p>would do the same thing except that it would fail to match a
-one-element vector.
-</p>
+  <p>The pattern &lsquo;<samp><var>p1</var> &amp;&amp;&amp;
+  <var>p2</var></samp>&rsquo; matches anything that matches both
+  <var>p1</var> and <var>p2</var>. One especially useful case is
+  when one of <var>p1</var> or <var>p2</var> is a meta-variable.
+  For example, here is a rule that operates on error forms:</p>
 
-<p>The pattern &lsquo;<samp><var>p1</var> ||| <var>p2</var></samp>&rsquo; matches anything that
-matches either <var>p1</var> or <var>p2</var>.  Calc first tries matching
-against <var>p1</var>; if that fails, it goes on to try <var>p2</var>.
-</p>
-<a name="index-curve"></a>
-<p>A simple example of &lsquo;<samp>|||</samp>&rsquo; is
-</p>
-<div class="example">
-<pre class="example">curve(inf ||| -inf)  :=  0
-</pre></div>
+  <div class="example">
+    <pre class="example">
+f(x &amp;&amp;&amp; a +/- b, x)  :=  g(x)
+</pre>
+  </div>
 
-<p>which converts both &lsquo;<samp>curve(inf)</samp>&rsquo; and &lsquo;<samp>curve(-inf)</samp>&rsquo; to zero.
-</p>
-<p>Here is a larger example:
-</p>
-<div class="example">
-<pre class="example">log(a, b) ||| (ln(a) :: let(b := e))  :=  mylog(a, b)
-</pre></div>
+  <p>This does the same thing, but is arguably simpler than, the
+  rule</p>
 
-<p>This matches both generalized and natural logarithms in a single rule.
-Note that the &lsquo;<samp>::</samp>&rsquo; term must be enclosed in parentheses because
-that operator has lower precedence than &lsquo;<samp>|||</samp>&rsquo; or &lsquo;<samp>:=</samp>&rsquo;.
-</p>
-<p>(In practice this rule would probably include a third alternative,
-omitted here for brevity, to take care of <code>log10</code>.)
-</p>
-<p>While Calc generally treats interior conditions exactly the same as
-conditions on the outside of a rule, it does guarantee that if all the
-variables in the condition are special names like <code>e</code>, or already
-bound in the pattern to which the condition is attached (say, if
-&lsquo;<samp>a</samp>&rsquo; had appeared in this condition), then Calc will process this
-condition right after matching the pattern to the left of the &lsquo;<samp>::</samp>&rsquo;.
-Thus, we know that &lsquo;<samp>b</samp>&rsquo; will be bound to &lsquo;<samp>e</samp>&rsquo; only if the
-<code>ln</code> branch of the &lsquo;<samp>|||</samp>&rsquo; was taken.
-</p>
-<p>Note that this rule was careful to bind the same set of meta-variables
-on both sides of the &lsquo;<samp>|||</samp>&rsquo;.  Calc does not check this, but if
-you bind a certain meta-variable only in one branch and then use that
-meta-variable elsewhere in the rule, results are unpredictable:
-</p>
-<div class="example">
-<pre class="example">f(a,b) ||| g(b)  :=  h(a,b)
-</pre></div>
+  <div class="example">
+    <pre class="example">
+f(a +/- b, a +/- b)  :=  g(a +/- b)
+</pre>
+  </div><a name="index-ends" id="index-ends"></a>
 
-<p>Here if the pattern matches &lsquo;<samp>g(17)</samp>&rsquo;, Calc makes no promises about
-the value that will be substituted for &lsquo;<samp>a</samp>&rsquo; on the righthand side.
-</p>
+  <p>Here&rsquo;s another interesting example:</p>
 
-<p>The pattern &lsquo;<samp>!!! <var>pat</var></samp>&rsquo; matches anything that does not
-match <var>pat</var>.  Any meta-variables that are bound while matching
-<var>pat</var> remain unbound outside of <var>pat</var>.
-</p>
-<p>For example,
-</p>
-<div class="example">
-<pre class="example">f(x &amp;&amp;&amp; !!! a +/- b, !!![])  :=  g(x)
-</pre></div>
+  <div class="example">
+    <pre class="example">
+ends(cons(a, x) &amp;&amp;&amp; rcons(y, b))  :=  [a, b]
+</pre>
+  </div>
 
-<p>converts <code>f</code> whose first argument is anything <em>except</em> an
-error form, and whose second argument is not the empty vector, into
-a similar call to <code>g</code> (but without the second argument).
-</p>
-<p>If we know that the second argument will be a vector (empty or not),
-then an equivalent rule would be:
-</p>
-<div class="example">
-<pre class="example">f(x, y)  :=  g(x)  :: typeof(x) != 7 :: vlen(y) &gt; 0
-</pre></div>
+  <p>which effectively clips out the middle of a vector leaving
+  just the first and last elements. This rule will change a
+  one-element vector &lsquo;<samp>[a]</samp>&rsquo; to
+  &lsquo;<samp>[a, a]</samp>&rsquo;. The similar rule</p>
 
-<p>where of course 7 is the <code>typeof</code> code for error forms.
-Another final condition, that works for any kind of &lsquo;<samp>y</samp>&rsquo;,
-would be &lsquo;<samp>!istrue(y == [])</samp>&rsquo;.  (The <code>istrue</code> function
-returns an explicit 0 if its argument was left in symbolic form;
-plain &lsquo;<samp>!(y == [])</samp>&rsquo; or &lsquo;<samp>y != []</samp>&rsquo; would not work to replace
-&lsquo;<samp>!!![]</samp>&rsquo; since these would be left unsimplified, and thus cause
-the rule to fail, if &lsquo;<samp>y</samp>&rsquo; was something like a variable name.)
-</p>
-<p>It is possible for a &lsquo;<samp>!!!</samp>&rsquo; to refer to meta-variables bound
-elsewhere in the pattern.  For example,
-</p>
-<div class="example">
-<pre class="example">f(a, !!!a)  :=  g(a)
-</pre></div>
+  <div class="example">
+    <pre class="example">
+ends(cons(a, rcons(y, b)))  :=  [a, b]
+</pre>
+  </div>
 
-<p>matches any call to <code>f</code> with different arguments, changing
-this to <code>g</code> with only the first argument.
-</p>
-<p>If a function call is to be matched and one of the argument patterns
-contains a &lsquo;<samp>!!!</samp>&rsquo; somewhere inside it, that argument will be
-matched last.  Thus
-</p>
-<div class="example">
-<pre class="example">f(!!!a, a)  :=  g(a)
-</pre></div>
+  <p>would do the same thing except that it would fail to match a
+  one-element vector.</p>
 
-<p>will be careful to bind &lsquo;<samp>a</samp>&rsquo; to the second argument of <code>f</code>
-before testing the first argument.  If Calc had tried to match the
-first argument of <code>f</code> first, the results would have been
-disastrous: since <code>a</code> was unbound so far, the pattern &lsquo;<samp>a</samp>&rsquo;
-would have matched anything at all, and the pattern &lsquo;<samp>!!!a</samp>&rsquo;
-therefore would <em>not</em> have matched anything at all!
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Nested-Formulas-with-Rewrite-Rules.html#Nested-Formulas-with-Rewrite-Rules" accesskey="n" rel="next">Nested Formulas with Rewrite Rules</a>, Previous: <a href="Other-Features-of-Rewrite-Rules.html#Other-Features-of-Rewrite-Rules" accesskey="p" rel="prev">Other Features of Rewrite Rules</a>, Up: <a href="Rewrite-Rules.html#Rewrite-Rules" accesskey="u" rel="up">Rewrite Rules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>The pattern &lsquo;<samp><var>p1</var> |||
+  <var>p2</var></samp>&rsquo; matches anything that matches either
+  <var>p1</var> or <var>p2</var>. Calc first tries matching against
+  <var>p1</var>; if that fails, it goes on to try
+  <var>p2</var>.</p><a name="index-curve" id="index-curve"></a>
 
+  <p>A simple example of &lsquo;<samp>|||</samp>&rsquo; is</p>
 
+  <div class="example">
+    <pre class="example">
+curve(inf ||| -inf)  :=  0
+</pre>
+  </div>
 
+  <p>which converts both &lsquo;<samp>curve(inf)</samp>&rsquo; and
+  &lsquo;<samp>curve(-inf)</samp>&rsquo; to zero.</p>
+
+  <p>Here is a larger example:</p>
+
+  <div class="example">
+    <pre class="example">
+log(a, b) ||| (ln(a) :: let(b := e))  :=  mylog(a, b)
+</pre>
+  </div>
+
+  <p>This matches both generalized and natural logarithms in a
+  single rule. Note that the &lsquo;<samp>::</samp>&rsquo; term
+  must be enclosed in parentheses because that operator has lower
+  precedence than &lsquo;<samp>|||</samp>&rsquo; or
+  &lsquo;<samp>:=</samp>&rsquo;.</p>
+
+  <p>(In practice this rule would probably include a third
+  alternative, omitted here for brevity, to take care of
+  <code>log10</code>.)</p>
+
+  <p>While Calc generally treats interior conditions exactly the
+  same as conditions on the outside of a rule, it does guarantee
+  that if all the variables in the condition are special names like
+  <code>e</code>, or already bound in the pattern to which the
+  condition is attached (say, if &lsquo;<samp>a</samp>&rsquo; had
+  appeared in this condition), then Calc will process this
+  condition right after matching the pattern to the left of the
+  &lsquo;<samp>::</samp>&rsquo;. Thus, we know that
+  &lsquo;<samp>b</samp>&rsquo; will be bound to
+  &lsquo;<samp>e</samp>&rsquo; only if the <code>ln</code> branch
+  of the &lsquo;<samp>|||</samp>&rsquo; was taken.</p>
+
+  <p>Note that this rule was careful to bind the same set of
+  meta-variables on both sides of the
+  &lsquo;<samp>|||</samp>&rsquo;. Calc does not check this, but if
+  you bind a certain meta-variable only in one branch and then use
+  that meta-variable elsewhere in the rule, results are
+  unpredictable:</p>
+
+  <div class="example">
+    <pre class="example">
+f(a,b) ||| g(b)  :=  h(a,b)
+</pre>
+  </div>
+
+  <p>Here if the pattern matches &lsquo;<samp>g(17)</samp>&rsquo;,
+  Calc makes no promises about the value that will be substituted
+  for &lsquo;<samp>a</samp>&rsquo; on the righthand side.</p>
+
+  <p>The pattern &lsquo;<samp>!!! <var>pat</var></samp>&rsquo;
+  matches anything that does not match <var>pat</var>. Any
+  meta-variables that are bound while matching <var>pat</var>
+  remain unbound outside of <var>pat</var>.</p>
+
+  <p>For example,</p>
+
+  <div class="example">
+    <pre class="example">
+f(x &amp;&amp;&amp; !!! a +/- b, !!![])  :=  g(x)
+</pre>
+  </div>
+
+  <p>converts <code>f</code> whose first argument is anything
+  <em>except</em> an error form, and whose second argument is not
+  the empty vector, into a similar call to <code>g</code> (but
+  without the second argument).</p>
+
+  <p>If we know that the second argument will be a vector (empty or
+  not), then an equivalent rule would be:</p>
+
+  <div class="example">
+    <pre class="example">
+f(x, y)  :=  g(x)  :: typeof(x) != 7 :: vlen(y) &gt; 0
+</pre>
+  </div>
+
+  <p>where of course 7 is the <code>typeof</code> code for error
+  forms. Another final condition, that works for any kind of
+  &lsquo;<samp>y</samp>&rsquo;, would be &lsquo;<samp>!istrue(y ==
+  [])</samp>&rsquo;. (The <code>istrue</code> function returns an
+  explicit 0 if its argument was left in symbolic form; plain
+  &lsquo;<samp>!(y == [])</samp>&rsquo; or &lsquo;<samp>y !=
+  []</samp>&rsquo; would not work to replace
+  &lsquo;<samp>!!![]</samp>&rsquo; since these would be left
+  unsimplified, and thus cause the rule to fail, if
+  &lsquo;<samp>y</samp>&rsquo; was something like a variable
+  name.)</p>
+
+  <p>It is possible for a &lsquo;<samp>!!!</samp>&rsquo; to refer
+  to meta-variables bound elsewhere in the pattern. For
+  example,</p>
+
+  <div class="example">
+    <pre class="example">
+f(a, !!!a)  :=  g(a)
+</pre>
+  </div>
+
+  <p>matches any call to <code>f</code> with different arguments,
+  changing this to <code>g</code> with only the first argument.</p>
+
+  <p>If a function call is to be matched and one of the argument
+  patterns contains a &lsquo;<samp>!!!</samp>&rsquo; somewhere
+  inside it, that argument will be matched last. Thus</p>
+
+  <div class="example">
+    <pre class="example">
+f(!!!a, a)  :=  g(a)
+</pre>
+  </div>
+
+  <p>will be careful to bind &lsquo;<samp>a</samp>&rsquo; to the
+  second argument of <code>f</code> before testing the first
+  argument. If Calc had tried to match the first argument of
+  <code>f</code> first, the results would have been disastrous:
+  since <code>a</code> was unbound so far, the pattern
+  &lsquo;<samp>a</samp>&rsquo; would have matched anything at all,
+  and the pattern &lsquo;<samp>!!!a</samp>&rsquo; therefore would
+  <em>not</em> have matched anything at all!</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Nested-Formulas-with-Rewrite-Rules.html#Nested-Formulas-with-Rewrite-Rules"
+    accesskey="n" rel="next">Nested Formulas with Rewrite
+    Rules</a>, Previous: <a href=
+    "Other-Features-of-Rewrite-Rules.html#Other-Features-of-Rewrite-Rules"
+    accesskey="p" rel="prev">Other Features of Rewrite Rules</a>,
+    Up: <a href="Rewrite-Rules.html#Rewrite-Rules" accesskey="u"
+    rel="up">Rewrite Rules</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents EIEIO, an object framework for Emacs Lisp.
 
 Copyright (C) 2007-2016 Free Software Foundation, Inc.
@@ -14,194 +16,354 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Enhanced Implementation of Emacs Interpreted Objects: Predicates</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Enhanced Implementation of Emacs Interpreted Objects: Predicates">
-<meta name="keywords" content="Enhanced Implementation of Emacs Interpreted Objects: Predicates">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="Function-Index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Association-Lists.html#Association-Lists" rel="next" title="Association Lists">
-<link href="Method-Invocation.html#Method-Invocation" rel="prev" title="Method Invocation">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Enhanced Implementation of Emacs Interpreted Objects:
+  Predicates</title>
+  <meta name="description" content=
+  "Enhanced Implementation of Emacs Interpreted Objects: Predicates" />
+  <meta name="keywords" content=
+  "Enhanced Implementation of Emacs Interpreted Objects: Predicates" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="Function-Index.html#SEC_Contents" rel="contents"
+  title="Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Association-Lists.html#Association-Lists" rel="next"
+  title="Association Lists" />
+  <link href="Method-Invocation.html#Method-Invocation" rel="prev"
+  title="Method Invocation" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Predicates"></a>
-<div class="header">
-<p>
-Next: <a href="Association-Lists.html#Association-Lists" accesskey="n" rel="next">Association Lists</a>, Previous: <a href="Method-Invocation.html#Method-Invocation" accesskey="p" rel="prev">Method Invocation</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Function-Index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Predicates-and-Utilities"></a>
-<h2 class="chapter">8 Predicates and Utilities</h2>
+<body lang="en" xml:lang="en">
+  <a name="Predicates" id="Predicates"></a>
 
-<p>Now that we know how to create classes, access slots, and define
-methods, it might be useful to verify that everything is doing ok.  To
-help with this a plethora of predicates have been created.
-</p>
-<dl>
-<dt><a name="index-find_002dclass"></a>Function: <strong>find-class</strong> <em>symbol &amp;optional errorp</em></dt>
-<dd><a name="find_002dclass"></a><p>Return the class that <var>symbol</var> represents.
-If there is no class, <code>nil</code> is returned if <var>errorp</var> is <code>nil</code>.
-If <var>errorp</var> is non-<code>nil</code>, <code>wrong-argument-type</code> is signaled.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href="Association-Lists.html#Association-Lists"
+    accesskey="n" rel="next">Association Lists</a>, Previous:
+    <a href="Method-Invocation.html#Method-Invocation" accesskey=
+    "p" rel="prev">Method Invocation</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="Function-Index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Predicates-and-Utilities" id=
+  "Predicates-and-Utilities"></a>
 
-<dl>
-<dt><a name="index-class_002dp"></a>Function: <strong>class-p</strong> <em>class</em></dt>
-<dd><a name="class_002dp"></a><p>Return <code>t</code> if <var>class</var> is a valid class vector.
-<var>class</var> is a symbol.
-</p></dd></dl>
+  <h2 class="chapter">8 Predicates and Utilities</h2>
 
-<dl>
-<dt><a name="index-slot_002dexists_002dp"></a>Function: <strong>slot-exists-p</strong> <em>object-or-class slot</em></dt>
-<dd><a name="slot_002dexists_002dp"></a><p>Non-<code>nil</code> if <var>object-or-class</var> has <var>slot</var>.
-</p></dd></dl>
+  <p>Now that we know how to create classes, access slots, and
+  define methods, it might be useful to verify that everything is
+  doing ok. To help with this a plethora of predicates have been
+  created.</p>
 
-<dl>
-<dt><a name="index-slot_002dboundp"></a>Function: <strong>slot-boundp</strong> <em>object slot</em></dt>
-<dd><a name="slot_002dboundp"></a><p>Non-<code>nil</code> if OBJECT&rsquo;s <var>slot</var> is bound.
-Setting a slot&rsquo;s value makes it bound.  Calling <em>slot-makeunbound</em> will
-make a slot unbound.
-<var>object</var> can be an instance or a class.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-find_002dclass" id=
+    "index-find_002dclass"></a>Function:
+    <strong>find-class</strong> <em>symbol &amp;optional
+    errorp</em></dt>
 
-<dl>
-<dt><a name="index-eieio_002dclass_002dname"></a>Function: <strong>eieio-class-name</strong> <em>class</em></dt>
-<dd><p>Return a string of the form &lsquo;<samp>#&lt;class myclassname&gt;</samp>&rsquo; which should look
-similar to other Lisp objects like buffers and processes.  Printing a
-class results only in a symbol.
-</p></dd></dl>
+    <dd>
+      <a name="find_002dclass" id="find_002dclass"></a>
 
-<dl>
-<dt><a name="index-class_002doption"></a>Function: <strong>class-option</strong> <em>class option</em></dt>
-<dd><p>Return the value in <var>CLASS</var> of a given <var>OPTION</var>.
-For example:
-</p>
-<div class="example">
-<pre class="example">(class-option eieio-default-superclass :documentation)
-</pre></div>
+      <p>Return the class that <var>symbol</var> represents. If
+      there is no class, <code>nil</code> is returned if
+      <var>errorp</var> is <code>nil</code>. If <var>errorp</var>
+      is non-<code>nil</code>, <code>wrong-argument-type</code> is
+      signaled.</p>
+    </dd>
+  </dl>
 
-<p>Will fetch the documentation string for <code>eieio-default-superclass</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-class_002dp" id=
+    "index-class_002dp"></a>Function: <strong>class-p</strong>
+    <em>class</em></dt>
 
-<dl>
-<dt><a name="index-eieio_002dobject_002dname"></a>Function: <strong>eieio-object-name</strong> <em>obj</em></dt>
-<dd><p>Return a string of the form &lsquo;<samp>#&lt;object-class myobjname&gt;</samp>&rsquo; for <var>obj</var>.
-This should look like Lisp symbols from other parts of Emacs such as
-buffers and processes, and is shorter and cleaner than printing the
-object&rsquo;s vector.  It is more useful to use <code>object-print</code> to get
-and object&rsquo;s print form, as this allows the object to add extra display
-information into the symbol.
-</p></dd></dl>
+    <dd>
+      <a name="class_002dp" id="class_002dp"></a>
 
-<dl>
-<dt><a name="index-eieio_002dobject_002dclass"></a>Function: <strong>eieio-object-class</strong> <em>obj</em></dt>
-<dd><p>Returns the class symbol from <var>obj</var>.
-</p></dd></dl>
+      <p>Return <code>t</code> if <var>class</var> is a valid class
+      vector. <var>class</var> is a symbol.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-eieio_002dobject_002dclass_002dname"></a>Function: <strong>eieio-object-class-name</strong> <em>obj</em></dt>
-<dd><p>Returns the symbol of <var>obj</var>&rsquo;s class.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-slot_002dexists_002dp" id=
+    "index-slot_002dexists_002dp"></a>Function:
+    <strong>slot-exists-p</strong> <em>object-or-class
+    slot</em></dt>
 
-<dl>
-<dt><a name="index-eieio_002dclass_002dparents"></a>Function: <strong>eieio-class-parents</strong> <em>class</em></dt>
-<dd><p>Returns the direct parents class of <var>class</var>.  Returns <code>nil</code> if
-it is a superclass.
-</p></dd></dl>
+    <dd>
+      <a name="slot_002dexists_002dp" id=
+      "slot_002dexists_002dp"></a>
 
-<dl>
-<dt><a name="index-eieio_002dclass_002dparents_002dfast"></a>Function: <strong>eieio-class-parents-fast</strong> <em>class</em></dt>
-<dd><p>Just like <code>eieio-class-parents</code> except it is a macro and no type checking
-is performed.
-</p></dd></dl>
+      <p>Non-<code>nil</code> if <var>object-or-class</var> has
+      <var>slot</var>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-eieio_002dclass_002dparent"></a>Function: <strong>eieio-class-parent</strong> <em>class</em></dt>
-<dd><p>Deprecated function which returns the first parent of <var>class</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-slot_002dboundp" id=
+    "index-slot_002dboundp"></a>Function:
+    <strong>slot-boundp</strong> <em>object slot</em></dt>
 
-<dl>
-<dt><a name="index-eieio_002dclass_002dchildren"></a>Function: <strong>eieio-class-children</strong> <em>class</em></dt>
-<dd><p>Return the list of classes inheriting from <var>class</var>.
-</p></dd></dl>
+    <dd>
+      <a name="slot_002dboundp" id="slot_002dboundp"></a>
 
-<dl>
-<dt><a name="index-eieio_002dclass_002dchildren_002dfast"></a>Function: <strong>eieio-class-children-fast</strong> <em>class</em></dt>
-<dd><p>Just like <code>eieio-class-children</code>, but with no checks.
-</p></dd></dl>
+      <p>Non-<code>nil</code> if OBJECT&rsquo;s <var>slot</var> is
+      bound. Setting a slot&rsquo;s value makes it bound. Calling
+      <em>slot-makeunbound</em> will make a slot unbound.
+      <var>object</var> can be an instance or a class.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-same_002dclass_002dp"></a>Function: <strong>same-class-p</strong> <em>obj class</em></dt>
-<dd><p>Returns <code>t</code> if <var>obj</var>&rsquo;s class is the same as <var>class</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-eieio_002dclass_002dname" id=
+    "index-eieio_002dclass_002dname"></a>Function:
+    <strong>eieio-class-name</strong> <em>class</em></dt>
 
-<dl>
-<dt><a name="index-same_002dclass_002dfast_002dp"></a>Function: <strong>same-class-fast-p</strong> <em>obj class</em></dt>
-<dd><p>Same as <code>same-class-p</code> except this is a macro and no type checking
-is performed.
-</p></dd></dl>
+    <dd>
+      <p>Return a string of the form &lsquo;<samp>#&lt;class
+      myclassname&gt;</samp>&rsquo; which should look similar to
+      other Lisp objects like buffers and processes. Printing a
+      class results only in a symbol.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-object_002dof_002dclass_002dp"></a>Function: <strong>object-of-class-p</strong> <em>obj class</em></dt>
-<dd><p>Returns <code>t</code> if <var>obj</var> inherits anything from <var>class</var>.  This
-is different from <code>same-class-p</code> because it checks for inheritance.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-class_002doption" id=
+    "index-class_002doption"></a>Function:
+    <strong>class-option</strong> <em>class option</em></dt>
 
-<dl>
-<dt><a name="index-child_002dof_002dclass_002dp"></a>Function: <strong>child-of-class-p</strong> <em>child class</em></dt>
-<dd><p>Returns <code>t</code> if <var>child</var> is a subclass of <var>class</var>.
-</p></dd></dl>
+    <dd>
+      <p>Return the value in <var>CLASS</var> of a given
+      <var>OPTION</var>. For example:</p>
 
-<dl>
-<dt><a name="index-generic_002dp"></a>Function: <strong>generic-p</strong> <em>method-symbol</em></dt>
-<dd><p>Returns <code>t</code> if <code>method-symbol</code> is a generic function, as
-opposed to a regular Emacs Lisp function.
-</p></dd></dl>
+      <div class="example">
+        <pre class="example">
+(class-option eieio-default-superclass :documentation)
+</pre>
+      </div>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Association-Lists.html#Association-Lists" accesskey="n" rel="next">Association Lists</a>, Previous: <a href="Method-Invocation.html#Method-Invocation" accesskey="p" rel="prev">Method Invocation</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Function-Index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>Will fetch the documentation string for
+      <code>eieio-default-superclass</code>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-eieio_002dobject_002dname" id=
+    "index-eieio_002dobject_002dname"></a>Function:
+    <strong>eieio-object-name</strong> <em>obj</em></dt>
 
+    <dd>
+      <p>Return a string of the form &lsquo;<samp>#&lt;object-class
+      myobjname&gt;</samp>&rsquo; for <var>obj</var>. This should
+      look like Lisp symbols from other parts of Emacs such as
+      buffers and processes, and is shorter and cleaner than
+      printing the object&rsquo;s vector. It is more useful to use
+      <code>object-print</code> to get and object&rsquo;s print
+      form, as this allows the object to add extra display
+      information into the symbol.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-eieio_002dobject_002dclass" id=
+    "index-eieio_002dobject_002dclass"></a>Function:
+    <strong>eieio-object-class</strong> <em>obj</em></dt>
+
+    <dd>
+      <p>Returns the class symbol from <var>obj</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-eieio_002dobject_002dclass_002dname" id=
+    "index-eieio_002dobject_002dclass_002dname"></a>Function:
+    <strong>eieio-object-class-name</strong> <em>obj</em></dt>
+
+    <dd>
+      <p>Returns the symbol of <var>obj</var>&rsquo;s class.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-eieio_002dclass_002dparents" id=
+    "index-eieio_002dclass_002dparents"></a>Function:
+    <strong>eieio-class-parents</strong> <em>class</em></dt>
+
+    <dd>
+      <p>Returns the direct parents class of <var>class</var>.
+      Returns <code>nil</code> if it is a superclass.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-eieio_002dclass_002dparents_002dfast" id=
+    "index-eieio_002dclass_002dparents_002dfast"></a>Function:
+    <strong>eieio-class-parents-fast</strong> <em>class</em></dt>
+
+    <dd>
+      <p>Just like <code>eieio-class-parents</code> except it is a
+      macro and no type checking is performed.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-eieio_002dclass_002dparent" id=
+    "index-eieio_002dclass_002dparent"></a>Function:
+    <strong>eieio-class-parent</strong> <em>class</em></dt>
+
+    <dd>
+      <p>Deprecated function which returns the first parent of
+      <var>class</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-eieio_002dclass_002dchildren" id=
+    "index-eieio_002dclass_002dchildren"></a>Function:
+    <strong>eieio-class-children</strong> <em>class</em></dt>
+
+    <dd>
+      <p>Return the list of classes inheriting from
+      <var>class</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-eieio_002dclass_002dchildren_002dfast" id=
+    "index-eieio_002dclass_002dchildren_002dfast"></a>Function:
+    <strong>eieio-class-children-fast</strong> <em>class</em></dt>
+
+    <dd>
+      <p>Just like <code>eieio-class-children</code>, but with no
+      checks.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-same_002dclass_002dp" id=
+    "index-same_002dclass_002dp"></a>Function:
+    <strong>same-class-p</strong> <em>obj class</em></dt>
+
+    <dd>
+      <p>Returns <code>t</code> if <var>obj</var>&rsquo;s class is
+      the same as <var>class</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-same_002dclass_002dfast_002dp" id=
+    "index-same_002dclass_002dfast_002dp"></a>Function:
+    <strong>same-class-fast-p</strong> <em>obj class</em></dt>
+
+    <dd>
+      <p>Same as <code>same-class-p</code> except this is a macro
+      and no type checking is performed.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-object_002dof_002dclass_002dp" id=
+    "index-object_002dof_002dclass_002dp"></a>Function:
+    <strong>object-of-class-p</strong> <em>obj class</em></dt>
+
+    <dd>
+      <p>Returns <code>t</code> if <var>obj</var> inherits anything
+      from <var>class</var>. This is different from
+      <code>same-class-p</code> because it checks for
+      inheritance.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-child_002dof_002dclass_002dp" id=
+    "index-child_002dof_002dclass_002dp"></a>Function:
+    <strong>child-of-class-p</strong> <em>child class</em></dt>
+
+    <dd>
+      <p>Returns <code>t</code> if <var>child</var> is a subclass
+      of <var>class</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-generic_002dp" id=
+    "index-generic_002dp"></a>Function: <strong>generic-p</strong>
+    <em>method-symbol</em></dt>
+
+    <dd>
+      <p>Returns <code>t</code> if <code>method-symbol</code> is a
+      generic function, as opposed to a regular Emacs Lisp
+      function.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Association-Lists.html#Association-Lists"
+    accesskey="n" rel="next">Association Lists</a>, Previous:
+    <a href="Method-Invocation.html#Method-Invocation" accesskey=
+    "p" rel="prev">Method Invocation</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="Function-Index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

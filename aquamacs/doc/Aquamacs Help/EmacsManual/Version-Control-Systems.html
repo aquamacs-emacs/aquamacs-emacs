@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,138 +20,180 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Version Control Systems</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Version Control Systems">
-<meta name="keywords" content="GNU Emacs Manual: Version Control Systems">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Introduction-to-VC.html#Introduction-to-VC" rel="up" title="Introduction to VC">
-<link href="VCS-Concepts.html#VCS-Concepts" rel="next" title="VCS Concepts">
-<link href="Why-Version-Control_003f.html#Why-Version-Control_003f" rel="prev" title="Why Version Control?">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Version Control Systems</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Version Control Systems" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Version Control Systems" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Introduction-to-VC.html#Introduction-to-VC" rel="up"
+  title="Introduction to VC" />
+  <link href="VCS-Concepts.html#VCS-Concepts" rel="next" title=
+  "VCS Concepts" />
+  <link href=
+  "Why-Version-Control_003f.html#Why-Version-Control_003f" rel=
+  "prev" title="Why Version Control?" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Version-Control-Systems" id=
+  "Version-Control-Systems"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="VCS-Concepts.html#VCS-Concepts" accesskey="n"
+    rel="next">VCS Concepts</a>, Previous: <a href=
+    "Why-Version-Control_003f.html#Why-Version-Control_003f"
+    accesskey="p" rel="prev">Why Version Control?</a>, Up: <a href=
+    "Introduction-to-VC.html#Introduction-to-VC" accesskey="u" rel=
+    "up">Introduction to VC</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Supported-Version-Control-Systems" id=
+  "Supported-Version-Control-Systems"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Version-Control-Systems"></a>
-<div class="header">
-<p>
-Next: <a href="VCS-Concepts.html#VCS-Concepts" accesskey="n" rel="next">VCS Concepts</a>, Previous: <a href="Why-Version-Control_003f.html#Why-Version-Control_003f" accesskey="p" rel="prev">Why Version Control?</a>, Up: <a href="Introduction-to-VC.html#Introduction-to-VC" accesskey="u" rel="up">Introduction to VC</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Supported-Version-Control-Systems"></a>
-<h4 class="subsubsection">28.1.1.2 Supported Version Control Systems</h4>
+  <h4 class="subsubsection">28.1.1.2 Supported Version Control
+  Systems</h4><a name="index-back-end-_0028version-control_0029"
+  id="index-back-end-_0028version-control_0029"></a>
 
-<a name="index-back-end-_0028version-control_0029"></a>
-<p>VC currently works with many different version control systems,
-which it refers to as <em>back ends</em>:
-</p>
-<ul>
-<li> <a name="index-SCCS"></a>
-SCCS was the first version control system ever built, and was long ago
-superseded by more advanced ones.  VC compensates for certain features
-missing in SCCS (e.g., tag names for releases) by implementing them
-itself.  Other VC features, such as multiple branches, are simply
-unavailable.  Since SCCS is non-free, we recommend avoiding it.
+  <p>VC currently works with many different version control
+  systems, which it refers to as <em>back ends</em>:</p>
 
-</li><li> <a name="index-CSSC"></a>
-CSSC is a free replacement for SCCS.  You should use CSSC only if, for
-some reason, you cannot use a more recent and better-designed version
-control system.
+  <ul>
+    <li><a name="index-SCCS" id="index-SCCS"></a> SCCS was the
+    first version control system ever built, and was long ago
+    superseded by more advanced ones. VC compensates for certain
+    features missing in SCCS (e.g., tag names for releases) by
+    implementing them itself. Other VC features, such as multiple
+    branches, are simply unavailable. Since SCCS is non-free, we
+    recommend avoiding it.</li>
 
-</li><li> <a name="index-RCS"></a>
-RCS is the free version control system around which VC was initially
-built.  It is relatively primitive: it cannot be used over the
-network, and works at the level of individual files.  Almost
-everything you can do with RCS can be done through VC.
+    <li><a name="index-CSSC" id="index-CSSC"></a> CSSC is a free
+    replacement for SCCS. You should use CSSC only if, for some
+    reason, you cannot use a more recent and better-designed
+    version control system.</li>
 
-</li><li> <a name="index-CVS"></a>
-CVS is the free version control system that was, until recently (circa
-2008), used by the majority of free software projects.  Nowadays, it
-is slowly being superseded by newer systems.  CVS allows concurrent
-multi-user development either locally or over the network.  Unlike
-newer systems, it lacks support for atomic commits and file
-moving/renaming.  VC supports all basic editing operations under CVS.
+    <li><a name="index-RCS" id="index-RCS"></a> RCS is the free
+    version control system around which VC was initially built. It
+    is relatively primitive: it cannot be used over the network,
+    and works at the level of individual files. Almost everything
+    you can do with RCS can be done through VC.</li>
 
-</li><li> <a name="index-SVN"></a>
-<a name="index-Subversion"></a>
-Subversion (svn) is a free version control system designed to be
-similar to CVS but without its problems (e.g., it supports atomic
-commits of filesets, and versioning of directories, symbolic links,
-meta-data, renames, copies, and deletes).
+    <li><a name="index-CVS" id="index-CVS"></a> CVS is the free
+    version control system that was, until recently (circa 2008),
+    used by the majority of free software projects. Nowadays, it is
+    slowly being superseded by newer systems. CVS allows concurrent
+    multi-user development either locally or over the network.
+    Unlike newer systems, it lacks support for atomic commits and
+    file moving/renaming. VC supports all basic editing operations
+    under CVS.</li>
 
-</li><li> <a name="index-git"></a>
-Git is a decentralized version control system originally invented by
-Linus Torvalds to support development of Linux (his kernel).  VC
-supports many common Git operations, but others, such as repository
-syncing, must be done from the command line.
+    <li><a name="index-SVN" id="index-SVN"></a> <a name=
+    "index-Subversion" id="index-Subversion"></a> Subversion (svn)
+    is a free version control system designed to be similar to CVS
+    but without its problems (e.g., it supports atomic commits of
+    filesets, and versioning of directories, symbolic links,
+    meta-data, renames, copies, and deletes).</li>
 
-</li><li> <a name="index-hg"></a>
-<a name="index-Mercurial"></a>
-Mercurial (hg) is a decentralized version control system broadly
-resembling Git.  VC supports most Mercurial commands, with the
-exception of repository sync operations.
+    <li><a name="index-git" id="index-git"></a> Git is a
+    decentralized version control system originally invented by
+    Linus Torvalds to support development of Linux (his kernel). VC
+    supports many common Git operations, but others, such as
+    repository syncing, must be done from the command line.</li>
 
-</li><li> <a name="index-bzr"></a>
-<a name="index-Bazaar"></a>
-Bazaar (bzr) is a decentralized version control system that supports
-both repository-based and decentralized versioning.  VC supports most
-basic editing operations under Bazaar.
+    <li><a name="index-hg" id="index-hg"></a> <a name=
+    "index-Mercurial" id="index-Mercurial"></a> Mercurial (hg) is a
+    decentralized version control system broadly resembling Git. VC
+    supports most Mercurial commands, with the exception of
+    repository sync operations.</li>
 
-</li><li> <a name="index-SRC"></a>
-<a name="index-src"></a>
-SRC (src) is RCS, reloaded - a specialized version-control system
-designed for single-file projects worked on by only one person.  It
-allows multiple files with independent version-control histories to
-exist in one directory, and is thus particularly well suited for
-maintaining small documents, scripts, and dotfiles.  While it uses RCS
-for revision storage, it presents a modern user interface featuring
-lockless operation and integer sequential version numbers.  VC
-supports almost all SRC operations.
-</li></ul>
+    <li><a name="index-bzr" id="index-bzr"></a> <a name=
+    "index-Bazaar" id="index-Bazaar"></a> Bazaar (bzr) is a
+    decentralized version control system that supports both
+    repository-based and decentralized versioning. VC supports most
+    basic editing operations under Bazaar.</li>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="VCS-Concepts.html#VCS-Concepts" accesskey="n" rel="next">VCS Concepts</a>, Previous: <a href="Why-Version-Control_003f.html#Why-Version-Control_003f" accesskey="p" rel="prev">Why Version Control?</a>, Up: <a href="Introduction-to-VC.html#Introduction-to-VC" accesskey="u" rel="up">Introduction to VC</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <li><a name="index-SRC" id="index-SRC"></a> <a name="index-src"
+    id="index-src"></a> SRC (src) is RCS, reloaded - a specialized
+    version-control system designed for single-file projects worked
+    on by only one person. It allows multiple files with
+    independent version-control histories to exist in one
+    directory, and is thus particularly well suited for maintaining
+    small documents, scripts, and dotfiles. While it uses RCS for
+    revision storage, it presents a modern user interface featuring
+    lockless operation and integer sequential version numbers. VC
+    supports almost all SRC operations.</li>
+  </ul>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Next: <a href="VCS-Concepts.html#VCS-Concepts" accesskey="n"
+    rel="next">VCS Concepts</a>, Previous: <a href=
+    "Why-Version-Control_003f.html#Why-Version-Control_003f"
+    accesskey="p" rel="prev">Why Version Control?</a>, Up: <a href=
+    "Introduction-to-VC.html#Introduction-to-VC" accesskey="u" rel=
+    "up">Introduction to VC</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

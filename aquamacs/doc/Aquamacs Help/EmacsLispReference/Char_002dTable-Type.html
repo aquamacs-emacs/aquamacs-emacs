@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,98 +19,139 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Char-Table Type</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Char-Table Type">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Char-Table Type">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Programming-Types.html#Programming-Types" rel="up" title="Programming Types">
-<link href="Bool_002dVector-Type.html#Bool_002dVector-Type" rel="next" title="Bool-Vector Type">
-<link href="Vector-Type.html#Vector-Type" rel="prev" title="Vector Type">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Char-Table Type</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Char-Table Type" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Char-Table Type" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Programming-Types.html#Programming-Types" rel="up"
+  title="Programming Types" />
+  <link href="Bool_002dVector-Type.html#Bool_002dVector-Type" rel=
+  "next" title="Bool-Vector Type" />
+  <link href="Vector-Type.html#Vector-Type" rel="prev" title=
+  "Vector Type" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Char_002dTable-Type" id="Char_002dTable-Type"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Bool_002dVector-Type.html#Bool_002dVector-Type" accesskey="n"
+    rel="next">Bool-Vector Type</a>, Previous: <a href=
+    "Vector-Type.html#Vector-Type" accesskey="p" rel="prev">Vector
+    Type</a>, Up: <a href=
+    "Programming-Types.html#Programming-Types" accesskey="u" rel=
+    "up">Programming Types</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Char_002dTable-Type-1" id="Char_002dTable-Type-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Char_002dTable-Type"></a>
-<div class="header">
-<p>
-Next: <a href="Bool_002dVector-Type.html#Bool_002dVector-Type" accesskey="n" rel="next">Bool-Vector Type</a>, Previous: <a href="Vector-Type.html#Vector-Type" accesskey="p" rel="prev">Vector Type</a>, Up: <a href="Programming-Types.html#Programming-Types" accesskey="u" rel="up">Programming Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Char_002dTable-Type-1"></a>
-<h4 class="subsection">2.3.10 Char-Table Type</h4>
+  <h4 class="subsection">2.3.10 Char-Table Type</h4>
 
-<p>A <em>char-table</em> is a one-dimensional array of elements of any type,
-indexed by character codes.  Char-tables have certain extra features to
-make them more useful for many jobs that involve assigning information
-to character codes&mdash;for example, a char-table can have a parent to
-inherit from, a default value, and a small number of extra slots to use for
-special purposes.  A char-table can also specify a single value for
-a whole character set.
-</p>
-<a name="index-_0023_005e-read-syntax"></a>
-<p>The printed representation of a char-table is like a vector
-except that there is an extra &lsquo;<samp>#^</samp>&rsquo; at the beginning.<a name="DOCF1" href="#FOOT1"><sup>1</sup></a>
-</p>
-<p>See <a href="Char_002dTables.html#Char_002dTables">Char-Tables</a>, for special functions to operate on char-tables.
-Uses of char-tables include:
-</p>
-<ul>
-<li> Case tables (see <a href="Case-Tables.html#Case-Tables">Case Tables</a>).
+  <p>A <em>char-table</em> is a one-dimensional array of elements
+  of any type, indexed by character codes. Char-tables have certain
+  extra features to make them more useful for many jobs that
+  involve assigning information to character codes&mdash;for
+  example, a char-table can have a parent to inherit from, a
+  default value, and a small number of extra slots to use for
+  special purposes. A char-table can also specify a single value
+  for a whole character set.</p><a name=
+  "index-_0023_005e-read-syntax" id=
+  "index-_0023_005e-read-syntax"></a>
 
-</li><li> Character category tables (see <a href="Categories.html#Categories">Categories</a>).
+  <p>The printed representation of a char-table is like a vector
+  except that there is an extra &lsquo;<samp>#^</samp>&rsquo; at
+  the beginning.<a name="DOCF1" href="#FOOT1" id=
+  "DOCF1"><sup>1</sup></a></p>
 
-</li><li> Display tables (see <a href="Display-Tables.html#Display-Tables">Display Tables</a>).
+  <p>See <a href=
+  "Char_002dTables.html#Char_002dTables">Char-Tables</a>, for
+  special functions to operate on char-tables. Uses of char-tables
+  include:</p>
 
-</li><li> Syntax tables (see <a href="Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>).
-</li></ul>
+  <ul>
+    <li>Case tables (see <a href=
+    "Case-Tables.html#Case-Tables">Case Tables</a>).</li>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+    <li>Character category tables (see <a href=
+    "Categories.html#Categories">Categories</a>).</li>
 
-<h3><a name="FOOT1" href="#DOCF1">(1)</a></h3>
-<p>You
-may also encounter &lsquo;<samp>#^^</samp>&rsquo;, used for sub-char-tables.</p>
-</div>
+    <li>Display tables (see <a href=
+    "Display-Tables.html#Display-Tables">Display Tables</a>).</li>
 
+    <li>Syntax tables (see <a href=
+    "Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>).</li>
+  </ul>
 
+  <div class="footnote">
+    <hr />
 
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT1" href="#DOCF1" id="FOOT1">(1)</a></h3>
+
+    <p>You may also encounter &lsquo;<samp>#^^</samp>&rsquo;, used
+    for sub-char-tables.</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001-2016 Free Software Foundation, Inc.
@@ -14,270 +16,376 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Common Lisp Extensions: Obsolete Setf Customization</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Common Lisp Extensions: Obsolete Setf Customization">
-<meta name="keywords" content="Common Lisp Extensions: Obsolete Setf Customization">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Obsolete-Features.html#Obsolete-Features" rel="up" title="Obsolete Features">
-<link href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License" rel="next" title="GNU Free Documentation License">
-<link href="Obsolete-Macros.html#Obsolete-Macros" rel="prev" title="Obsolete Macros">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Common Lisp Extensions: Obsolete Setf
+  Customization</title>
+  <meta name="description" content=
+  "Common Lisp Extensions: Obsolete Setf Customization" />
+  <meta name="keywords" content=
+  "Common Lisp Extensions: Obsolete Setf Customization" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Obsolete-Features.html#Obsolete-Features" rel="up"
+  title="Obsolete Features" />
+  <link href=
+  "GNU-Free-Documentation-License.html#GNU-Free-Documentation-License"
+  rel="next" title="GNU Free Documentation License" />
+  <link href="Obsolete-Macros.html#Obsolete-Macros" rel="prev"
+  title="Obsolete Macros" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Obsolete-Setf-Customization"></a>
-<div class="header">
-<p>
-Previous: <a href="Obsolete-Macros.html#Obsolete-Macros" accesskey="p" rel="prev">Obsolete Macros</a>, Up: <a href="Obsolete-Features.html#Obsolete-Features" accesskey="u" rel="up">Obsolete Features</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Obsolete-Ways-to-Customize-Setf"></a>
-<h3 class="appendixsec">D.3 Obsolete Ways to Customize Setf</h3>
+<body lang="en" xml:lang="en">
+  <a name="Obsolete-Setf-Customization" id=
+  "Obsolete-Setf-Customization"></a>
 
-<p>Common Lisp defines three macros, <code>define-modify-macro</code>,
-<code>defsetf</code>, and <code>define-setf-method</code>, that allow the
-user to extend generalized variables in various ways.
-In Emacs, these are obsolete, replaced by various features of
-<samp>gv.el</samp> in Emacs 24.3.
-See <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Adding-Generalized-Variables.html#Adding-Generalized-Variables">Adding Generalized Variables</a> in <cite>GNU Emacs Lisp Reference Manual</cite>.
-</p>
+  <div class="header">
+    <p>Previous: <a href="Obsolete-Macros.html#Obsolete-Macros"
+    accesskey="p" rel="prev">Obsolete Macros</a>, Up: <a href=
+    "Obsolete-Features.html#Obsolete-Features" accesskey="u" rel=
+    "up">Obsolete Features</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Obsolete-Ways-to-Customize-Setf" id=
+  "Obsolete-Ways-to-Customize-Setf"></a>
 
-<dl>
-<dt><a name="index-define_002dmodify_002dmacro"></a>Macro: <strong>define-modify-macro</strong> <em>name arglist function [doc-string]</em></dt>
-<dd><p>This macro defines a &ldquo;read-modify-write&rdquo; macro similar to
-<code>cl-incf</code> and <code>cl-decf</code>.  You can replace this macro
-with <code>gv-letplace</code>.
-</p>
-<p>The macro <var>name</var> is defined to take a <var>place</var> argument
-followed by additional arguments described by <var>arglist</var>.  The call
-</p>
-<div class="example">
-<pre class="example">(<var>name</var> <var>place</var> <var>args</var>&hellip;)
-</pre></div>
+  <h3 class="appendixsec">D.3 Obsolete Ways to Customize Setf</h3>
 
-<p>will be expanded to
-</p>
-<div class="example">
-<pre class="example">(cl-callf <var>func</var> <var>place</var> <var>args</var>&hellip;)
-</pre></div>
+  <p>Common Lisp defines three macros,
+  <code>define-modify-macro</code>, <code>defsetf</code>, and
+  <code>define-setf-method</code>, that allow the user to extend
+  generalized variables in various ways. In Emacs, these are
+  obsolete, replaced by various features of <samp>gv.el</samp> in
+  Emacs 24.3. See <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/elisp/Adding-Generalized-Variables.html#Adding-Generalized-Variables">
+  Adding Generalized Variables</a> in <cite>GNU Emacs Lisp
+  Reference Manual</cite>.</p>
 
-<p>which in turn is roughly equivalent to
-</p>
-<div class="example">
-<pre class="example">(setf <var>place</var> (<var>func</var> <var>place</var> <var>args</var>&hellip;))
-</pre></div>
+  <dl>
+    <dt><a name="index-define_002dmodify_002dmacro" id=
+    "index-define_002dmodify_002dmacro"></a>Macro:
+    <strong>define-modify-macro</strong> <em>name arglist function
+    [doc-string]</em></dt>
 
-<p>For example:
-</p>
-<div class="example">
-<pre class="example">(define-modify-macro incf (&amp;optional (n 1)) +)
+    <dd>
+      <p>This macro defines a &ldquo;read-modify-write&rdquo; macro
+      similar to <code>cl-incf</code> and <code>cl-decf</code>. You
+      can replace this macro with <code>gv-letplace</code>.</p>
+
+      <p>The macro <var>name</var> is defined to take a
+      <var>place</var> argument followed by additional arguments
+      described by <var>arglist</var>. The call</p>
+
+      <div class="example">
+        <pre class="example">
+(<var>name</var> <var>place</var> <var>args</var>&hellip;)
+</pre>
+      </div>
+
+      <p>will be expanded to</p>
+
+      <div class="example">
+        <pre class="example">
+(cl-callf <var>func</var> <var>place</var> <var>args</var>&hellip;)
+</pre>
+      </div>
+
+      <p>which in turn is roughly equivalent to</p>
+
+      <div class="example">
+        <pre class="example">
+(setf <var>place</var> (<var>func</var> <var>place</var> <var>args</var>&hellip;))
+</pre>
+      </div>
+
+      <p>For example:</p>
+
+      <div class="example">
+        <pre class="example">
+(define-modify-macro incf (&amp;optional (n 1)) +)
 (define-modify-macro concatf (&amp;rest args) concat)
-</pre></div>
+</pre>
+      </div>
 
-<p>Note that <code>&amp;key</code> is not allowed in <var>arglist</var>, but
-<code>&amp;rest</code> is sufficient to pass keywords on to the function.
-</p>
-<p>Most of the modify macros defined by Common Lisp do not exactly
-follow the pattern of <code>define-modify-macro</code>.  For example,
-<code>push</code> takes its arguments in the wrong order, and <code>pop</code>
-is completely irregular.
-</p>
-<p>The above <code>incf</code> example could be written using
-<code>gv-letplace</code> as:
-</p><div class="example">
-<pre class="example">(defmacro incf (place &amp;optional n)
+      <p>Note that <code>&amp;key</code> is not allowed in
+      <var>arglist</var>, but <code>&amp;rest</code> is sufficient
+      to pass keywords on to the function.</p>
+
+      <p>Most of the modify macros defined by Common Lisp do not
+      exactly follow the pattern of
+      <code>define-modify-macro</code>. For example,
+      <code>push</code> takes its arguments in the wrong order, and
+      <code>pop</code> is completely irregular.</p>
+
+      <p>The above <code>incf</code> example could be written using
+      <code>gv-letplace</code> as:</p>
+
+      <div class="example">
+        <pre class="example">
+(defmacro incf (place &amp;optional n)
   (gv-letplace (getter setter) place
     (macroexp-let2 nil v (or n 1)
       (funcall setter `(+ ,v ,getter)))))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-defsetf"></a>Macro: <strong>defsetf</strong> <em>access-fn update-fn</em></dt>
-<dd><p>This is the simpler of two <code>defsetf</code> forms, and is
-replaced by <code>gv-define-simple-setter</code>.
-</p>
-<p>With <var>access-fn</var> the name of a function that accesses a place,
-this declares <var>update-fn</var> to be the corresponding store function.
-From now on,
-</p>
-<div class="example">
-<pre class="example">(setf (<var>access-fn</var> <var>arg1</var> <var>arg2</var> <var>arg3</var>) <var>value</var>)
-</pre></div>
+  <dl>
+    <dt><a name="index-defsetf" id="index-defsetf"></a>Macro:
+    <strong>defsetf</strong> <em>access-fn update-fn</em></dt>
 
-<p>will be expanded to
-</p>
-<div class="example">
-<pre class="example">(<var>update-fn</var> <var>arg1</var> <var>arg2</var> <var>arg3</var> <var>value</var>)
-</pre></div>
+    <dd>
+      <p>This is the simpler of two <code>defsetf</code> forms, and
+      is replaced by <code>gv-define-simple-setter</code>.</p>
 
-<p>The <var>update-fn</var> is required to be either a true function, or
-a macro that evaluates its arguments in a function-like way.  Also,
-the <var>update-fn</var> is expected to return <var>value</var> as its result.
-Otherwise, the above expansion would not obey the rules for the way
-<code>setf</code> is supposed to behave.
-</p>
-<p>As a special (non-Common-Lisp) extension, a third argument of <code>t</code>
-to <code>defsetf</code> says that the return value of <code>update-fn</code> is
-not suitable, so that the above <code>setf</code> should be expanded to
-something more like
-</p>
-<div class="example">
-<pre class="example">(let ((temp <var>value</var>))
+      <p>With <var>access-fn</var> the name of a function that
+      accesses a place, this declares <var>update-fn</var> to be
+      the corresponding store function. From now on,</p>
+
+      <div class="example">
+        <pre class="example">
+(setf (<var>access-fn</var> <var>arg1</var> <var>arg2</var> <var>arg3</var>) <var>value</var>)
+</pre>
+      </div>
+
+      <p>will be expanded to</p>
+
+      <div class="example">
+        <pre class="example">
+(<var>update-fn</var> <var>arg1</var> <var>arg2</var> <var>arg3</var> <var>value</var>)
+</pre>
+      </div>
+
+      <p>The <var>update-fn</var> is required to be either a true
+      function, or a macro that evaluates its arguments in a
+      function-like way. Also, the <var>update-fn</var> is expected
+      to return <var>value</var> as its result. Otherwise, the
+      above expansion would not obey the rules for the way
+      <code>setf</code> is supposed to behave.</p>
+
+      <p>As a special (non-Common-Lisp) extension, a third argument
+      of <code>t</code> to <code>defsetf</code> says that the
+      return value of <code>update-fn</code> is not suitable, so
+      that the above <code>setf</code> should be expanded to
+      something more like</p>
+
+      <div class="example">
+        <pre class="example">
+(let ((temp <var>value</var>))
   (<var>update-fn</var> <var>arg1</var> <var>arg2</var> <var>arg3</var> temp)
   temp)
-</pre></div>
+</pre>
+      </div>
 
-<p>Some examples are:
-</p>
-<div class="example">
-<pre class="example">(defsetf car setcar)
+      <p>Some examples are:</p>
+
+      <div class="example">
+        <pre class="example">
+(defsetf car setcar)
 (defsetf buffer-name rename-buffer t)
-</pre></div>
+</pre>
+      </div>
 
-<p>These translate directly to <code>gv-define-simple-setter</code>:
-</p>
-<div class="example">
-<pre class="example">(gv-define-simple-setter car setcar)
+      <p>These translate directly to
+      <code>gv-define-simple-setter</code>:</p>
+
+      <div class="example">
+        <pre class="example">
+(gv-define-simple-setter car setcar)
 (gv-define-simple-setter buffer-name rename-buffer t)
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-defsetf-1"></a>Macro: <strong>defsetf</strong> <em>access-fn arglist (store-var) forms&hellip;</em></dt>
-<dd><p>This is the second, more complex, form of <code>defsetf</code>.
-It can be replaced by <code>gv-define-setter</code>.
-</p>
-<p>This form of <code>defsetf</code> is rather like <code>defmacro</code> except for
-the additional <var>store-var</var> argument.  The <var>forms</var> should
-return a Lisp form that stores the value of <var>store-var</var> into the
-generalized variable formed by a call to <var>access-fn</var> with
-arguments described by <var>arglist</var>.  The <var>forms</var> may begin with
-a string which documents the <code>setf</code> method (analogous to the doc
-string that appears at the front of a function).
-</p>
-<p>For example, the simple form of <code>defsetf</code> is shorthand for
-</p>
-<div class="example">
-<pre class="example">(defsetf <var>access-fn</var> (&amp;rest args) (store)
+  <dl>
+    <dt><a name="index-defsetf-1" id="index-defsetf-1"></a>Macro:
+    <strong>defsetf</strong> <em>access-fn arglist (store-var)
+    forms&hellip;</em></dt>
+
+    <dd>
+      <p>This is the second, more complex, form of
+      <code>defsetf</code>. It can be replaced by
+      <code>gv-define-setter</code>.</p>
+
+      <p>This form of <code>defsetf</code> is rather like
+      <code>defmacro</code> except for the additional
+      <var>store-var</var> argument. The <var>forms</var> should
+      return a Lisp form that stores the value of
+      <var>store-var</var> into the generalized variable formed by
+      a call to <var>access-fn</var> with arguments described by
+      <var>arglist</var>. The <var>forms</var> may begin with a
+      string which documents the <code>setf</code> method
+      (analogous to the doc string that appears at the front of a
+      function).</p>
+
+      <p>For example, the simple form of <code>defsetf</code> is
+      shorthand for</p>
+
+      <div class="example">
+        <pre class="example">
+(defsetf <var>access-fn</var> (&amp;rest args) (store)
   (append '(<var>update-fn</var>) args (list store)))
-</pre></div>
+</pre>
+      </div>
 
-<p>The Lisp form that is returned can access the arguments from
-<var>arglist</var> and <var>store-var</var> in an unrestricted fashion;
-macros like <code>cl-incf</code> that invoke this
-setf-method will insert temporary variables as needed to make
-sure the apparent order of evaluation is preserved.
-</p>
-<p>Another standard example:
-</p>
-<div class="example">
-<pre class="example">(defsetf nth (n x) (store)
+      <p>The Lisp form that is returned can access the arguments
+      from <var>arglist</var> and <var>store-var</var> in an
+      unrestricted fashion; macros like <code>cl-incf</code> that
+      invoke this setf-method will insert temporary variables as
+      needed to make sure the apparent order of evaluation is
+      preserved.</p>
+
+      <p>Another standard example:</p>
+
+      <div class="example">
+        <pre class="example">
+(defsetf nth (n x) (store)
   `(setcar (nthcdr ,n ,x) ,store))
-</pre></div>
+</pre>
+      </div>
 
-<p>You could write this using <code>gv-define-setter</code> as:
-</p>
-<div class="example">
-<pre class="example">(gv-define-setter nth (store n x)
+      <p>You could write this using <code>gv-define-setter</code>
+      as:</p>
+
+      <div class="example">
+        <pre class="example">
+(gv-define-setter nth (store n x)
   `(setcar (nthcdr ,n ,x) ,store))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-define_002dsetf_002dmethod"></a>Macro: <strong>define-setf-method</strong> <em>access-fn arglist forms&hellip;</em></dt>
-<dd><p>This is the most general way to create new place forms.  You can
-replace this by <code>gv-define-setter</code> or <code>gv-define-expander</code>.
-</p>
-<p>When a <code>setf</code> to <var>access-fn</var> with arguments described by
-<var>arglist</var> is expanded, the <var>forms</var> are evaluated and must
-return a list of five items:
-</p>
-<ol>
-<li> A list of <em>temporary variables</em>.
+  <dl>
+    <dt><a name="index-define_002dsetf_002dmethod" id=
+    "index-define_002dsetf_002dmethod"></a>Macro:
+    <strong>define-setf-method</strong> <em>access-fn arglist
+    forms&hellip;</em></dt>
 
-</li><li> A list of <em>value forms</em> corresponding to the temporary variables
-above.  The temporary variables will be bound to these value forms
-as the first step of any operation on the generalized variable.
+    <dd>
+      <p>This is the most general way to create new place forms.
+      You can replace this by <code>gv-define-setter</code> or
+      <code>gv-define-expander</code>.</p>
 
-</li><li> A list of exactly one <em>store variable</em> (generally obtained
-from a call to <code>gensym</code>).
+      <p>When a <code>setf</code> to <var>access-fn</var> with
+      arguments described by <var>arglist</var> is expanded, the
+      <var>forms</var> are evaluated and must return a list of five
+      items:</p>
 
-</li><li> A Lisp form that stores the contents of the store variable into
-the generalized variable, assuming the temporaries have been
-bound as described above.
+      <ol>
+        <li>A list of <em>temporary variables</em>.</li>
 
-</li><li> A Lisp form that accesses the contents of the generalized variable,
-assuming the temporaries have been bound.
-</li></ol>
+        <li>A list of <em>value forms</em> corresponding to the
+        temporary variables above. The temporary variables will be
+        bound to these value forms as the first step of any
+        operation on the generalized variable.</li>
 
-<p>This is exactly like the Common Lisp macro of the same name,
-except that the method returns a list of five values rather
-than the five values themselves, since Emacs Lisp does not
-support Common Lisp&rsquo;s notion of multiple return values.
-(Note that the <code>setf</code> implementation provided by <samp>gv.el</samp>
-does not use this five item format.  Its use here is only for
-backwards compatibility.)
-</p>
-<p>Once again, the <var>forms</var> may begin with a documentation string.
-</p>
-<p>A setf-method should be maximally conservative with regard to
-temporary variables.  In the setf-methods generated by
-<code>defsetf</code>, the second return value is simply the list of
-arguments in the place form, and the first return value is a
-list of a corresponding number of temporary variables generated
-by <code>cl-gensym</code>.  Macros like <code>cl-incf</code> that
-use this setf-method will optimize away most temporaries that
-turn out to be unnecessary, so there is little reason for the
-setf-method itself to optimize.
-</p></dd></dl>
+        <li>A list of exactly one <em>store variable</em>
+        (generally obtained from a call to
+        <code>gensym</code>).</li>
 
+        <li>A Lisp form that stores the contents of the store
+        variable into the generalized variable, assuming the
+        temporaries have been bound as described above.</li>
 
+        <li>A Lisp form that accesses the contents of the
+        generalized variable, assuming the temporaries have been
+        bound.</li>
+      </ol>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Obsolete-Macros.html#Obsolete-Macros" accesskey="p" rel="prev">Obsolete Macros</a>, Up: <a href="Obsolete-Features.html#Obsolete-Features" accesskey="u" rel="up">Obsolete Features</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>This is exactly like the Common Lisp macro of the same
+      name, except that the method returns a list of five values
+      rather than the five values themselves, since Emacs Lisp does
+      not support Common Lisp&rsquo;s notion of multiple return
+      values. (Note that the <code>setf</code> implementation
+      provided by <samp>gv.el</samp> does not use this five item
+      format. Its use here is only for backwards
+      compatibility.)</p>
 
+      <p>Once again, the <var>forms</var> may begin with a
+      documentation string.</p>
 
+      <p>A setf-method should be maximally conservative with regard
+      to temporary variables. In the setf-methods generated by
+      <code>defsetf</code>, the second return value is simply the
+      list of arguments in the place form, and the first return
+      value is a list of a corresponding number of temporary
+      variables generated by <code>cl-gensym</code>. Macros like
+      <code>cl-incf</code> that use this setf-method will optimize
+      away most temporaries that turn out to be unnecessary, so
+      there is little reason for the setf-method itself to
+      optimize.</p>
+    </dd>
+  </dl>
+  <hr />
 
+  <div class="header">
+    <p>Previous: <a href="Obsolete-Macros.html#Obsolete-Macros"
+    accesskey="p" rel="prev">Obsolete Macros</a>, Up: <a href=
+    "Obsolete-Features.html#Obsolete-Features" accesskey="u" rel=
+    "up">Obsolete Features</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

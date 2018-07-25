@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,248 +20,370 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Query Replace</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Query Replace">
-<meta name="keywords" content="GNU Emacs Manual: Query Replace">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Replace.html#Replace" rel="up" title="Replace">
-<link href="Other-Repeating-Search.html#Other-Repeating-Search" rel="next" title="Other Repeating Search">
-<link href="Replacement-and-Lax-Matches.html#Replacement-and-Lax-Matches" rel="prev" title="Replacement and Lax Matches">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Query Replace</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Query Replace" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Query Replace" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Replace.html#Replace" rel="up" title="Replace" />
+  <link href="Other-Repeating-Search.html#Other-Repeating-Search"
+  rel="next" title="Other Repeating Search" />
+  <link href=
+  "Replacement-and-Lax-Matches.html#Replacement-and-Lax-Matches"
+  rel="prev" title="Replacement and Lax Matches" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Query-Replace" id="Query-Replace"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href=
+    "Replacement-and-Lax-Matches.html#Replacement-and-Lax-Matches"
+    accesskey="p" rel="prev">Replacement and Lax Matches</a>, Up:
+    <a href="Replace.html#Replace" accesskey="u" rel=
+    "up">Replace</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Query-Replace-1" id="Query-Replace-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Query-Replace"></a>
-<div class="header">
-<p>
-Previous: <a href="Replacement-and-Lax-Matches.html#Replacement-and-Lax-Matches" accesskey="p" rel="prev">Replacement and Lax Matches</a>, Up: <a href="Replace.html#Replace" accesskey="u" rel="up">Replace</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Query-Replace-1"></a>
-<h4 class="subsection">15.10.4 Query Replace</h4>
-<a name="index-query-replace"></a>
+  <h4 class="subsection">15.10.4 Query Replace</h4><a name=
+  "index-query-replace" id="index-query-replace"></a>
 
-<dl compact="compact">
-<dt><kbd>M-% <var>string</var> <span class="key">RET</span> <var>newstring</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Replace some occurrences of <var>string</var> with <var>newstring</var>.
-</p></dd>
-<dt><kbd>C-M-% <var>regexp</var> <span class="key">RET</span> <var>newstring</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Replace some matches for <var>regexp</var> with <var>newstring</var>.
-</p></dd>
-</dl>
+  <dl compact="compact">
+    <dt><kbd>M-% <var>string</var> <span class="key">RET</span>
+    <var>newstring</var> <span class="key">RET</span></kbd></dt>
 
-<a name="index-M_002d_0025"></a>
-<a name="index-query_002dreplace"></a>
-<p>If you want to change only some of the occurrences of &lsquo;<samp>foo</samp>&rsquo; to
-&lsquo;<samp>bar</samp>&rsquo;, not all of them, use <kbd>M-%</kbd> (<code>query-replace</code>).
-This command finds occurrences of &lsquo;<samp>foo</samp>&rsquo; one by one, displays each
-occurrence and asks you whether to replace it.  Aside from querying,
-<code>query-replace</code> works just like <code>replace-string</code>
-(see <a href="Unconditional-Replace.html#Unconditional-Replace">Unconditional Replace</a>).  In particular, it preserves case
-provided <code>case-replace</code> is non-<code>nil</code>, as it normally is
-(see <a href="Replacement-and-Lax-Matches.html#Replacement-and-Lax-Matches">Replacement and Lax Matches</a>).  A numeric argument means to
-consider only occurrences that are bounded by word-delimiter
-characters.  A negative prefix argument replaces backward.
-</p>
-<a name="index-C_002dM_002d_0025"></a>
-<a name="index-query_002dreplace_002dregexp"></a>
-<p><kbd>C-M-%</kbd> performs regexp search and replace (<code>query-replace-regexp</code>).
-It works like <code>replace-regexp</code> except that it queries
-like <code>query-replace</code>.
-</p>
-<a name="index-query_002dreplace_002dfrom_002dto_002dseparator"></a>
-<p>You can reuse earlier replacements with these commands.  When
-<code>query-replace</code> or <code>query-replace-regexp</code> prompts for the
-search string, use <kbd>M-p</kbd> and <kbd>M-n</kbd> to show previous
-replacements in the form &lsquo;<samp><var>from</var> -&gt; <var>to</var></samp>&rsquo;, where
-<var>from</var> is the search pattern, <var>to</var> is its replacement, and the
-separator between them is determined by the value of the variable
-<code>query-replace-from-to-separator</code>.  Type <tt class="key">RET</tt> to select the
-desired replacement.
-</p>
-<a name="index-faces-for-highlighting-query-replace"></a>
-<a name="index-query_002dreplace-face"></a>
-<a name="index-lazy_002dhighlight-face_002c-in-replace"></a>
-<a name="index-query_002dreplace_002dhighlight"></a>
-<a name="index-query_002dreplace_002dlazy_002dhighlight"></a>
-<a name="index-query_002dreplace_002dshow_002dreplacement"></a>
-<p>These commands highlight the current match using the face
-<code>query-replace</code>.  You can disable this highlight by setting the
-variable <code>query-replace-highlight</code> to <code>nil</code>.  They highlight
-other matches using <code>lazy-highlight</code> just like incremental search
-(see <a href="Incremental-Search.html#Incremental-Search">Incremental Search</a>); this can be disabled by setting
-<code>query-replace-lazy-highlight</code> to <code>nil</code>.  By default,
-<code>query-replace-regexp</code> will show the substituted replacement
-string for the current match in the minibuffer.  If you want to keep
-special sequences &lsquo;<samp>\&amp;</samp>&rsquo; and &lsquo;<samp>\<var>n</var></samp>&rsquo; unexpanded, customize
-<code>query-replace-show-replacement</code> variable.
-</p>
-<a name="index-query_002dreplace_002dskip_002dread_002donly"></a>
-<p>The variable <code>query-replace-skip-read-only</code>, if set
-non-<code>nil</code>, will cause replacement commands to ignore matches in
-read-only text.  The default is not to ignore them.
-</p>
-<p>The characters you can type when you are shown a match for the string
-or regexp are:
-</p>
+    <dd>
+      <p>Replace some occurrences of <var>string</var> with
+      <var>newstring</var>.</p>
+    </dd>
 
-<dl compact="compact">
-<dt><kbd><span class="key">SPC</span></kbd></dt>
-<dt><kbd>y</kbd></dt>
-<dd><p>to replace the occurrence with <var>newstring</var>.
-</p>
-</dd>
-<dt><kbd><span class="key">DEL</span></kbd></dt>
-<dt><kbd><span class="key">Delete</span></kbd></dt>
-<dt><kbd><span class="key">BACKSPACE</span></kbd></dt>
-<dt><kbd>n</kbd></dt>
-<dd><p>to skip to the next occurrence without replacing this one.
-</p>
-</dd>
-<dt><kbd>, <span class="roman">(Comma)</span></kbd></dt>
-<dd><p>to replace this occurrence and display the result.  You are then asked
-for another input character to say what to do next.  Since the
-replacement has already been made, <tt class="key">DEL</tt> and <tt class="key">SPC</tt> are
-equivalent in this situation; both move to the next occurrence.
-</p>
-<p>You can type <kbd>C-r</kbd> at this point (see below) to alter the replaced
-text.  You can also type <kbd>C-x u</kbd> to undo the replacement; this exits
-the <code>query-replace</code>, so if you want to do further replacement you
-must use <kbd>C-x <span class="key">ESC</span> <span class="key">ESC</span> <span class="key">RET</span></kbd> to restart
-(see <a href="Repetition.html#Repetition">Repetition</a>).
-</p>
-</dd>
-<dt><kbd><span class="key">RET</span></kbd></dt>
-<dt><kbd>q</kbd></dt>
-<dd><p>to exit without doing any more replacements.
-</p>
-</dd>
-<dt><kbd>. <span class="roman">(Period)</span></kbd></dt>
-<dd><p>to replace this occurrence and then exit without searching for more
-occurrences.
-</p>
-</dd>
-<dt><kbd>!</kbd></dt>
-<dd><p>to replace all remaining occurrences without asking again.
-</p>
-</dd>
-<dt><kbd>^</kbd></dt>
-<dd><p>to go back to the position of the previous occurrence (or what used to
-be an occurrence), in case you changed it by mistake or want to
-reexamine it.
-</p>
-</dd>
-<dt><kbd>C-r</kbd></dt>
-<dd><p>to enter a recursive editing level, in case the occurrence needs to be
-edited rather than just replaced with <var>newstring</var>.  When you are
-done, exit the recursive editing level with <kbd>C-M-c</kbd> to proceed to
-the next occurrence.  See <a href="Recursive-Edit.html#Recursive-Edit">Recursive Edit</a>.
-</p>
-</dd>
-<dt><kbd>C-w</kbd></dt>
-<dd><p>to delete the occurrence, and then enter a recursive editing level as in
-<kbd>C-r</kbd>.  Use the recursive edit to insert text to replace the deleted
-occurrence of <var>string</var>.  When done, exit the recursive editing level
-with <kbd>C-M-c</kbd> to proceed to the next occurrence.
-</p>
-</dd>
-<dt><kbd>e</kbd></dt>
-<dd><p>to edit the replacement string in the minibuffer.  When you exit the
-minibuffer by typing <tt class="key">RET</tt>, the minibuffer contents replace the
-current occurrence of the pattern.  They also become the new
-replacement string for any further occurrences.
-</p>
-</dd>
-<dt><kbd>C-l</kbd></dt>
-<dd><p>to redisplay the screen.  Then you must type another character to
-specify what to do with this occurrence.
-</p>
-</dd>
-<dt><kbd>Y <span class="roman">(Upper-case)</span></kbd></dt>
-<dd><p>to replace all remaining occurrences in all remaining buffers in
-multi-buffer replacements (like the Dired <tt class="key">Q</tt> command that performs
-query replace on selected files).  It answers this question and all
-subsequent questions in the series with &ldquo;yes&rdquo;, without further
-user interaction.
-</p>
-</dd>
-<dt><kbd>N <span class="roman">(Upper-case)</span></kbd></dt>
-<dd><p>to skip to the next buffer in multi-buffer replacements without
-replacing remaining occurrences in the current buffer.  It answers
-this question &ldquo;no&rdquo;, gives up on the questions for the current buffer,
-and continues to the next buffer in the sequence.
-</p>
-</dd>
-<dt><kbd>C-h</kbd></dt>
-<dt><kbd>?</kbd></dt>
-<dt><kbd><span class="key">F1</span></kbd></dt>
-<dd><p>to display a message summarizing these options.  Then you must type
-another character to specify what to do with this occurrence.
-</p></dd>
-</dl>
+    <dt><kbd>C-M-% <var>regexp</var> <span class="key">RET</span>
+    <var>newstring</var> <span class="key">RET</span></kbd></dt>
 
-<p>Aside from this, any other character exits the <code>query-replace</code>,
-and is then reread as part of a key sequence.  Thus, if you type
-<kbd>C-k</kbd>, it exits the <code>query-replace</code> and then kills to end of
-line.  In particular, <kbd>C-g</kbd> simply exits the <code>query-replace</code>.
-</p>
-<p>To restart a <code>query-replace</code> once it is exited, use <kbd>C-x
-<span class="key">ESC</span> <span class="key">ESC</span></kbd>, which repeats the <code>query-replace</code> because it
-used the minibuffer to read its arguments.  See <a href="Repetition.html#Repetition">C-x ESC
-ESC</a>.
-</p>
-<a name="index-invisible-text_002c-and-query_002dreplace"></a>
-<p>The option <code>search-invisible</code> determines how <code>query-replace</code>
-treats invisible text.  See <a href="Outline-Visibility.html#Outline-Search">Outline Search</a>.
-</p>
-<p>See <a href="Operating-on-Files.html#Operating-on-Files">Operating on Files</a>, for the Dired <kbd>Q</kbd> command which
-performs query replace on selected files.  See also <a href="Transforming-File-Names.html#Transforming-File-Names">Transforming File Names</a>, for Dired commands to rename, copy, or link files by
-replacing regexp matches in file names.
-</p>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Replacement-and-Lax-Matches.html#Replacement-and-Lax-Matches" accesskey="p" rel="prev">Replacement and Lax Matches</a>, Up: <a href="Replace.html#Replace" accesskey="u" rel="up">Replace</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>Replace some matches for <var>regexp</var> with
+      <var>newstring</var>.</p>
+    </dd>
+  </dl><a name="index-M_002d_0025" id="index-M_002d_0025"></a>
+  <a name="index-query_002dreplace" id=
+  "index-query_002dreplace"></a>
 
+  <p>If you want to change only some of the occurrences of
+  &lsquo;<samp>foo</samp>&rsquo; to &lsquo;<samp>bar</samp>&rsquo;,
+  not all of them, use <kbd>M-%</kbd> (<code>query-replace</code>).
+  This command finds occurrences of &lsquo;<samp>foo</samp>&rsquo;
+  one by one, displays each occurrence and asks you whether to
+  replace it. Aside from querying, <code>query-replace</code> works
+  just like <code>replace-string</code> (see <a href=
+  "Unconditional-Replace.html#Unconditional-Replace">Unconditional
+  Replace</a>). In particular, it preserves case provided
+  <code>case-replace</code> is non-<code>nil</code>, as it normally
+  is (see <a href=
+  "Replacement-and-Lax-Matches.html#Replacement-and-Lax-Matches">Replacement
+  and Lax Matches</a>). A numeric argument means to consider only
+  occurrences that are bounded by word-delimiter characters. A
+  negative prefix argument replaces backward.</p><a name=
+  "index-C_002dM_002d_0025" id="index-C_002dM_002d_0025"></a>
+  <a name="index-query_002dreplace_002dregexp" id=
+  "index-query_002dreplace_002dregexp"></a>
 
+  <p><kbd>C-M-%</kbd> performs regexp search and replace
+  (<code>query-replace-regexp</code>). It works like
+  <code>replace-regexp</code> except that it queries like
+  <code>query-replace</code>.</p><a name=
+  "index-query_002dreplace_002dfrom_002dto_002dseparator" id=
+  "index-query_002dreplace_002dfrom_002dto_002dseparator"></a>
 
+  <p>You can reuse earlier replacements with these commands. When
+  <code>query-replace</code> or <code>query-replace-regexp</code>
+  prompts for the search string, use <kbd>M-p</kbd> and
+  <kbd>M-n</kbd> to show previous replacements in the form
+  &lsquo;<samp><var>from</var> -&gt; <var>to</var></samp>&rsquo;,
+  where <var>from</var> is the search pattern, <var>to</var> is its
+  replacement, and the separator between them is determined by the
+  value of the variable
+  <code>query-replace-from-to-separator</code>. Type <tt class=
+  "key">RET</tt> to select the desired replacement.</p><a name=
+  "index-faces-for-highlighting-query-replace" id=
+  "index-faces-for-highlighting-query-replace"></a> <a name=
+  "index-query_002dreplace-face" id=
+  "index-query_002dreplace-face"></a> <a name=
+  "index-lazy_002dhighlight-face_002c-in-replace" id=
+  "index-lazy_002dhighlight-face_002c-in-replace"></a> <a name=
+  "index-query_002dreplace_002dhighlight" id=
+  "index-query_002dreplace_002dhighlight"></a> <a name=
+  "index-query_002dreplace_002dlazy_002dhighlight" id=
+  "index-query_002dreplace_002dlazy_002dhighlight"></a> <a name=
+  "index-query_002dreplace_002dshow_002dreplacement" id=
+  "index-query_002dreplace_002dshow_002dreplacement"></a>
+
+  <p>These commands highlight the current match using the face
+  <code>query-replace</code>. You can disable this highlight by
+  setting the variable <code>query-replace-highlight</code> to
+  <code>nil</code>. They highlight other matches using
+  <code>lazy-highlight</code> just like incremental search (see
+  <a href="Incremental-Search.html#Incremental-Search">Incremental
+  Search</a>); this can be disabled by setting
+  <code>query-replace-lazy-highlight</code> to <code>nil</code>. By
+  default, <code>query-replace-regexp</code> will show the
+  substituted replacement string for the current match in the
+  minibuffer. If you want to keep special sequences
+  &lsquo;<samp>\&amp;</samp>&rsquo; and
+  &lsquo;<samp>\<var>n</var></samp>&rsquo; unexpanded, customize
+  <code>query-replace-show-replacement</code> variable.</p><a name=
+  "index-query_002dreplace_002dskip_002dread_002donly" id=
+  "index-query_002dreplace_002dskip_002dread_002donly"></a>
+
+  <p>The variable <code>query-replace-skip-read-only</code>, if set
+  non-<code>nil</code>, will cause replacement commands to ignore
+  matches in read-only text. The default is not to ignore them.</p>
+
+  <p>The characters you can type when you are shown a match for the
+  string or regexp are:</p>
+
+  <dl compact="compact">
+    <dt><kbd><span class="key">SPC</span></kbd></dt>
+
+    <dt><kbd>y</kbd></dt>
+
+    <dd>
+      <p>to replace the occurrence with <var>newstring</var>.</p>
+    </dd>
+
+    <dt><kbd><span class="key">DEL</span></kbd></dt>
+
+    <dt><kbd><span class="key">Delete</span></kbd></dt>
+
+    <dt><kbd><span class="key">BACKSPACE</span></kbd></dt>
+
+    <dt><kbd>n</kbd></dt>
+
+    <dd>
+      <p>to skip to the next occurrence without replacing this
+      one.</p>
+    </dd>
+
+    <dt><kbd>, <span class="roman">(Comma)</span></kbd></dt>
+
+    <dd>
+      <p>to replace this occurrence and display the result. You are
+      then asked for another input character to say what to do
+      next. Since the replacement has already been made, <tt class=
+      "key">DEL</tt> and <tt class="key">SPC</tt> are equivalent in
+      this situation; both move to the next occurrence.</p>
+
+      <p>You can type <kbd>C-r</kbd> at this point (see below) to
+      alter the replaced text. You can also type <kbd>C-x u</kbd>
+      to undo the replacement; this exits the
+      <code>query-replace</code>, so if you want to do further
+      replacement you must use <kbd>C-x <span class=
+      "key">ESC</span> <span class="key">ESC</span> <span class=
+      "key">RET</span></kbd> to restart (see <a href=
+      "Repetition.html#Repetition">Repetition</a>).</p>
+    </dd>
+
+    <dt><kbd><span class="key">RET</span></kbd></dt>
+
+    <dt><kbd>q</kbd></dt>
+
+    <dd>
+      <p>to exit without doing any more replacements.</p>
+    </dd>
+
+    <dt><kbd>. <span class="roman">(Period)</span></kbd></dt>
+
+    <dd>
+      <p>to replace this occurrence and then exit without searching
+      for more occurrences.</p>
+    </dd>
+
+    <dt><kbd>!</kbd></dt>
+
+    <dd>
+      <p>to replace all remaining occurrences without asking
+      again.</p>
+    </dd>
+
+    <dt><kbd>^</kbd></dt>
+
+    <dd>
+      <p>to go back to the position of the previous occurrence (or
+      what used to be an occurrence), in case you changed it by
+      mistake or want to reexamine it.</p>
+    </dd>
+
+    <dt><kbd>C-r</kbd></dt>
+
+    <dd>
+      <p>to enter a recursive editing level, in case the occurrence
+      needs to be edited rather than just replaced with
+      <var>newstring</var>. When you are done, exit the recursive
+      editing level with <kbd>C-M-c</kbd> to proceed to the next
+      occurrence. See <a href=
+      "Recursive-Edit.html#Recursive-Edit">Recursive Edit</a>.</p>
+    </dd>
+
+    <dt><kbd>C-w</kbd></dt>
+
+    <dd>
+      <p>to delete the occurrence, and then enter a recursive
+      editing level as in <kbd>C-r</kbd>. Use the recursive edit to
+      insert text to replace the deleted occurrence of
+      <var>string</var>. When done, exit the recursive editing
+      level with <kbd>C-M-c</kbd> to proceed to the next
+      occurrence.</p>
+    </dd>
+
+    <dt><kbd>e</kbd></dt>
+
+    <dd>
+      <p>to edit the replacement string in the minibuffer. When you
+      exit the minibuffer by typing <tt class="key">RET</tt>, the
+      minibuffer contents replace the current occurrence of the
+      pattern. They also become the new replacement string for any
+      further occurrences.</p>
+    </dd>
+
+    <dt><kbd>C-l</kbd></dt>
+
+    <dd>
+      <p>to redisplay the screen. Then you must type another
+      character to specify what to do with this occurrence.</p>
+    </dd>
+
+    <dt><kbd>Y <span class="roman">(Upper-case)</span></kbd></dt>
+
+    <dd>
+      <p>to replace all remaining occurrences in all remaining
+      buffers in multi-buffer replacements (like the Dired
+      <tt class="key">Q</tt> command that performs query replace on
+      selected files). It answers this question and all subsequent
+      questions in the series with &ldquo;yes&rdquo;, without
+      further user interaction.</p>
+    </dd>
+
+    <dt><kbd>N <span class="roman">(Upper-case)</span></kbd></dt>
+
+    <dd>
+      <p>to skip to the next buffer in multi-buffer replacements
+      without replacing remaining occurrences in the current
+      buffer. It answers this question &ldquo;no&rdquo;, gives up
+      on the questions for the current buffer, and continues to the
+      next buffer in the sequence.</p>
+    </dd>
+
+    <dt><kbd>C-h</kbd></dt>
+
+    <dt><kbd>?</kbd></dt>
+
+    <dt><kbd><span class="key">F1</span></kbd></dt>
+
+    <dd>
+      <p>to display a message summarizing these options. Then you
+      must type another character to specify what to do with this
+      occurrence.</p>
+    </dd>
+  </dl>
+
+  <p>Aside from this, any other character exits the
+  <code>query-replace</code>, and is then reread as part of a key
+  sequence. Thus, if you type <kbd>C-k</kbd>, it exits the
+  <code>query-replace</code> and then kills to end of line. In
+  particular, <kbd>C-g</kbd> simply exits the
+  <code>query-replace</code>.</p>
+
+  <p>To restart a <code>query-replace</code> once it is exited, use
+  <kbd>C-x <span class="key">ESC</span> <span class=
+  "key">ESC</span></kbd>, which repeats the
+  <code>query-replace</code> because it used the minibuffer to read
+  its arguments. See <a href="Repetition.html#Repetition">C-x ESC
+  ESC</a>.</p><a name=
+  "index-invisible-text_002c-and-query_002dreplace" id=
+  "index-invisible-text_002c-and-query_002dreplace"></a>
+
+  <p>The option <code>search-invisible</code> determines how
+  <code>query-replace</code> treats invisible text. See <a href=
+  "Outline-Visibility.html#Outline-Search">Outline Search</a>.</p>
+
+  <p>See <a href=
+  "Operating-on-Files.html#Operating-on-Files">Operating on
+  Files</a>, for the Dired <kbd>Q</kbd> command which performs
+  query replace on selected files. See also <a href=
+  "Transforming-File-Names.html#Transforming-File-Names">Transforming
+  File Names</a>, for Dired commands to rename, copy, or link files
+  by replacing regexp matches in file names.</p>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Replacement-and-Lax-Matches.html#Replacement-and-Lax-Matches"
+    accesskey="p" rel="prev">Replacement and Lax Matches</a>, Up:
+    <a href="Replace.html#Replace" accesskey="u" rel=
+    "up">Replace</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

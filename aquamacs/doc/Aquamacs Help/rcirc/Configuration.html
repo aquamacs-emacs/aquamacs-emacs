@@ -1,14 +1,23 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Configuration - rcirc Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="rcirc Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Reference.html#Reference" title="Reference">
-<link rel="prev" href="Useful-IRC-commands.html#Useful-IRC-commands" title="Useful IRC commands">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Configuration - rcirc Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="rcirc Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Reference.html#Reference" title=
+  "Reference" />
+  <link rel="prev" href=
+  "Useful-IRC-commands.html#Useful-IRC-commands" title=
+  "Useful IRC commands" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 2006, 2007, 2008, 2009, 2010
 Free Software Foundation, Inc.
 
@@ -24,8 +33,10 @@ Free Software Foundation, Inc.
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -35,126 +46,239 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Configuration"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Useful-IRC-commands.html#Useful-IRC-commands">Useful IRC commands</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Reference.html#Reference">Reference</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Configuration" id="Configuration"></a>
 
-<h3 class="section">2.3 Configuration</h3>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Useful-IRC-commands.html#Useful-IRC-commands">Useful IRC
+    commands</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Reference.html#Reference">Reference</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-configuring-rcirc-114"></a>
-These are some variables you can change to configure <code>rcirc</code> to your
-liking.
+  <h3 class="section">2.3 Configuration</h3>
 
-     <dl>
-<dt><code>rcirc-server-alist</code><dd><a name="index-rcirc_002dserver_002dalist-115"></a><a name="index-channels_002c-configuration-116"></a><a name="index-initial-channels_002c-configuration-117"></a><a name="index-startup-channels_002c-configuration-118"></a><a name="index-servers_002c-configuration-119"></a><a name="index-initial-servers_002c-configuration-120"></a><a name="index-startup-servers_002c-configuration-121"></a>This variable contains an alist of servers to connect to by default
-and the keywords parameters to use.  The keyword parameters are
-optional.  If you don't provide any, the defaults as documented below
-will be used.
+  <p><a name="index-configuring-rcirc-114" id=
+  "index-configuring-rcirc-114"></a> These are some variables you
+  can change to configure <code>rcirc</code> to your liking.</p>
 
-     <p>The most important parameter is the <code>:channels</code> parameter.  It
-controls which channels you will join by default as soon as you are
-connected to the server.
+  <dl>
+    <dt><code>rcirc-server-alist</code></dt>
 
-     <p>Here's an example of how to set it:
+    <dd>
+      <a name="index-rcirc_002dserver_002dalist-115" id=
+      "index-rcirc_002dserver_002dalist-115"></a><a name=
+      "index-channels_002c-configuration-116" id=
+      "index-channels_002c-configuration-116"></a><a name=
+      "index-initial-channels_002c-configuration-117" id=
+      "index-initial-channels_002c-configuration-117"></a><a name=
+      "index-startup-channels_002c-configuration-118" id=
+      "index-startup-channels_002c-configuration-118"></a><a name=
+      "index-servers_002c-configuration-119" id=
+      "index-servers_002c-configuration-119"></a><a name=
+      "index-initial-servers_002c-configuration-120" id=
+      "index-initial-servers_002c-configuration-120"></a><a name=
+      "index-startup-servers_002c-configuration-121" id=
+      "index-startup-servers_002c-configuration-121"></a>This
+      variable contains an alist of servers to connect to by
+      default and the keywords parameters to use. The keyword
+      parameters are optional. If you don't provide any, the
+      defaults as documented below will be used.
 
-     <pre class="example">          (add-to-list 'rcirc-server-alist
+      <p>The most important parameter is the <code>:channels</code>
+      parameter. It controls which channels you will join by
+      default as soon as you are connected to the server.</p>
+
+      <p>Here's an example of how to set it:</p>
+      <pre class="example">
+          (add-to-list 'rcirc-server-alist
                        '("otherworlders.org"
                          :channels ("#FUDGE" "#game-design")))
 </pre>
-     <p>By default you will be connected to the <code>rcirc</code> support channel:
-<code>#rcirc</code> on <code>irc.freenode.net</code>.
 
-          <dl>
-<dt><code>:nick</code><dd>This overrides <code>rcirc-default-nick</code>.
+      <p>By default you will be connected to the <code>rcirc</code>
+      support channel: <code>#rcirc</code> on
+      <code>irc.freenode.net</code>.</p>
 
-          <br><dt><code>:port</code><dd>This overrides <code>rcirc-default-port</code>.
+      <dl>
+        <dt><code>:nick</code></dt>
 
-          <br><dt><code>:user-name</code><dd>This overrides <code>rcirc-default-user-name</code>.
+        <dd>This overrides
+        <code>rcirc-default-nick</code>.<br /></dd>
 
-          <br><dt><code>:full-name</code><dd>This overrides <code>rcirc-default-full-name</code>.
+        <dt><code>:port</code></dt>
 
-          <br><dt><code>:channels</code><dd>This describes which channels to join when connecting to the server. 
-If absent, no channels will be connected to automatically.
+        <dd>This overrides
+        <code>rcirc-default-port</code>.<br /></dd>
 
-     </dl>
+        <dt><code>:user-name</code></dt>
 
-     <br><dt><code>rcirc-default-nick</code><dd><a name="index-rcirc_002ddefault_002dnick-122"></a>This variable is used for the default nick.  It defaults to the login
-name returned by <code>user-login-name</code>.
+        <dd>This overrides
+        <code>rcirc-default-user-name</code>.<br /></dd>
 
-     <pre class="example">          (setq rcirc-default-nick "kensanata")
-</pre>
-     <br><dt><code>rcirc-default-port</code><dd><a name="index-rcirc_002ddefault_002dport-123"></a><a name="index-port-124"></a>This variable contains the default port to connect to.  It is 6667 by
-default and rarely needs changing.
+        <dt><code>:full-name</code></dt>
 
-     <br><dt><code>rcirc-default-user-name</code><dd><a name="index-rcirc_002ddefault_002duser_002dname-125"></a><a name="index-user-name-126"></a>This variable contains the default user name to report to the server. 
-It defaults to the login name returned by <code>user-login-name</code>, just
-like <code>rcirc-default-nick</code>.
+        <dd>This overrides
+        <code>rcirc-default-full-name</code>.<br /></dd>
 
-     <br><dt><code>rcirc-default-user-full-name</code><dd><a name="index-rcirc_002ddefault_002duser_002dfull_002dname-127"></a><a name="index-full-name-128"></a><a name="index-real-name-129"></a><a name="index-surname-130"></a>This variable is used to set your &ldquo;real name&rdquo; on IRC.  It defaults
-to the name returned by <code>user-full-name</code>.  If you want to hide
-your full name, you might want to set it to some pseudonym.
+        <dt><code>:channels</code></dt>
 
-     <pre class="example">          (setq rcirc-default-user-full-name "Curious Minds Want To Know")
-</pre>
-     <br><dt><code>rcirc-authinfo</code><dd><a name="index-rcirc_002dauthinfo-131"></a><a name="index-authentification-132"></a><a name="index-identification-133"></a><a name="index-nickserv-134"></a><a name="index-login-135"></a>This variable is an alist used to automatically identify yourself on
-networks.  Each sublist starts with a regular expression that is
-compared to the server address you're connecting to.  The second
-element in the list is a symbol representing the method to use,
-followed by the arguments this method requires.
+        <dd>This describes which channels to join when connecting
+        to the server. If absent, no channels will be connected to
+        automatically.</dd>
+      </dl><br />
+    </dd>
 
-     <p>Here is an example to illustrate how you would set it:
+    <dt><code>rcirc-default-nick</code></dt>
 
-     <pre class="example">          (setq rcirc-authinfo
+    <dd>
+      <a name="index-rcirc_002ddefault_002dnick-122" id=
+      "index-rcirc_002ddefault_002dnick-122"></a>This variable is
+      used for the default nick. It defaults to the login name
+      returned by <code>user-login-name</code>.
+      <pre class="example">
+          (setq rcirc-default-nick "kensanata")
+</pre><br />
+    </dd>
+
+    <dt><code>rcirc-default-port</code></dt>
+
+    <dd><a name="index-rcirc_002ddefault_002dport-123" id=
+    "index-rcirc_002ddefault_002dport-123"></a><a name=
+    "index-port-124" id="index-port-124"></a>This variable contains
+    the default port to connect to. It is 6667 by default and
+    rarely needs changing.<br /></dd>
+
+    <dt><code>rcirc-default-user-name</code></dt>
+
+    <dd><a name="index-rcirc_002ddefault_002duser_002dname-125" id=
+    "index-rcirc_002ddefault_002duser_002dname-125"></a><a name=
+    "index-user-name-126" id="index-user-name-126"></a>This
+    variable contains the default user name to report to the
+    server. It defaults to the login name returned by
+    <code>user-login-name</code>, just like
+    <code>rcirc-default-nick</code>.<br /></dd>
+
+    <dt><code>rcirc-default-user-full-name</code></dt>
+
+    <dd>
+      <a name=
+      "index-rcirc_002ddefault_002duser_002dfull_002dname-127" id=
+      "index-rcirc_002ddefault_002duser_002dfull_002dname-127"></a><a name="index-full-name-128"
+      id="index-full-name-128"></a><a name="index-real-name-129"
+      id="index-real-name-129"></a><a name="index-surname-130" id=
+      "index-surname-130"></a>This variable is used to set your
+      &ldquo;real name&rdquo; on IRC. It defaults to the name
+      returned by <code>user-full-name</code>. If you want to hide
+      your full name, you might want to set it to some pseudonym.
+      <pre class="example">
+          (setq rcirc-default-user-full-name "Curious Minds Want To Know")
+</pre><br />
+    </dd>
+
+    <dt><code>rcirc-authinfo</code></dt>
+
+    <dd>
+      <a name="index-rcirc_002dauthinfo-131" id=
+      "index-rcirc_002dauthinfo-131"></a><a name=
+      "index-authentification-132" id=
+      "index-authentification-132"></a><a name=
+      "index-identification-133" id=
+      "index-identification-133"></a><a name="index-nickserv-134"
+      id="index-nickserv-134"></a><a name="index-login-135" id=
+      "index-login-135"></a>This variable is an alist used to
+      automatically identify yourself on networks. Each sublist
+      starts with a regular expression that is compared to the
+      server address you're connecting to. The second element in
+      the list is a symbol representing the method to use, followed
+      by the arguments this method requires.
+
+      <p>Here is an example to illustrate how you would set it:</p>
+      <pre class="example">
+          (setq rcirc-authinfo
                 '(("freenode" nickserv "bob" "p455w0rd")
                   ("freenode" chanserv "bob" "#bobland" "passwd99")
                   ("bitlbee" bitlbee "robert" "sekrit")))
 </pre>
-     <p>And here are the valid method symbols and the arguments they require:
 
-          <dl>
-<dt><code>nickserv</code><dd><a name="index-nickserv-authentification-136"></a>Use this symbol if you need to identify yourself as follows when
-connecting to a network: <code>/msg nickserv identify secret</code>.  The
-necessary arguments are the nickname you want to use this for, and the
-password to use.
+      <p>And here are the valid method symbols and the arguments
+      they require:</p>
 
-          <p>Before you can use this method, you will have to register your nick and
-pick a password for it.  Contact <code>nickserv</code> and check out the
-details.  (Using <code>/msg nickserv help</code>, for example.)
+      <dl>
+        <dt><code>nickserv</code></dt>
 
-          <br><dt><code>chanserv</code><dd><a name="index-chanserv-authentification-137"></a>Use this symbol if you need to identify yourself as follows if you want
-to join a particular channel: <code>/msg chanserv identify #underground
-secret</code>.  The necessary arguments are the nickname and channel you want
-to use this for, and the password to use.
+        <dd>
+          <a name="index-nickserv-authentification-136" id=
+          "index-nickserv-authentification-136"></a>Use this symbol
+          if you need to identify yourself as follows when
+          connecting to a network: <code>/msg nickserv identify
+          secret</code>. The necessary arguments are the nickname
+          you want to use this for, and the password to use.
 
-          <p>Before you can use this method, a channel contact must tell you about
-the password to use.  Contact <code>chanserv</code> and check out the details. 
-(Using <code>/msg chanserv help</code>, for example.)
+          <p>Before you can use this method, you will have to
+          register your nick and pick a password for it. Contact
+          <code>nickserv</code> and check out the details. (Using
+          <code>/msg nickserv help</code>, for example.)<br /></p>
+        </dd>
 
-          <br><dt><code>bitlbee</code><dd><a name="index-bitlbee-authentification-138"></a>Use this symbol if you need to identify yourself in the Bitlbee channel
-as follows: <code>identify secret</code>.  The necessary arguments are the
-nickname you want to use this for, and the password to use.
+        <dt><code>chanserv</code></dt>
 
-          <p><a name="index-gateway-to-other-IM-services-139"></a><a name="index-instant-messaging_002c-other-services-140"></a><a name="index-Jabber-141"></a><a name="index-AIM-142"></a><a name="index-ICQ-143"></a><a name="index-MSN-144"></a><a name="index-Yahoo_0021-145"></a>Bitlbee acts like an IRC server, but in fact it is a gateway to a lot of
-other instant messaging services.  You can either install Bitlbee
-locally or use a public Bitlbee server.  There, you need to create an
-account with a password.  This is the nick and password you need to
-provide for the bitlbee authentification method.
+        <dd>
+          <a name="index-chanserv-authentification-137" id=
+          "index-chanserv-authentification-137"></a>Use this symbol
+          if you need to identify yourself as follows if you want
+          to join a particular channel: <code>/msg chanserv
+          identify #underground secret</code>. The necessary
+          arguments are the nickname and channel you want to use
+          this for, and the password to use.
 
-          <p>Later, you will tell Bitlbee about your accounts and passwords on all
-the other instant messaging services, and Bitlbee will log you in.  All
-<code>rcirc</code> needs to know, is the login to your Bitlbee account.  Don't
-confuse the Bitlbee account with all the other accounts.
+          <p>Before you can use this method, a channel contact must
+          tell you about the password to use. Contact
+          <code>chanserv</code> and check out the details. (Using
+          <code>/msg chanserv help</code>, for example.)<br /></p>
+        </dd>
 
-     </dl>
+        <dt><code>bitlbee</code></dt>
 
-   </dl>
+        <dd>
+          <a name="index-bitlbee-authentification-138" id=
+          "index-bitlbee-authentification-138"></a>Use this symbol
+          if you need to identify yourself in the Bitlbee channel
+          as follows: <code>identify secret</code>. The necessary
+          arguments are the nickname you want to use this for, and
+          the password to use.
 
-   </body></html>
+          <p><a name="index-gateway-to-other-IM-services-139" id=
+          "index-gateway-to-other-IM-services-139"></a><a name=
+          "index-instant-messaging_002c-other-services-140" id=
+          "index-instant-messaging_002c-other-services-140"></a><a name="index-Jabber-141"
+          id="index-Jabber-141"></a><a name="index-AIM-142" id=
+          "index-AIM-142"></a><a name="index-ICQ-143" id=
+          "index-ICQ-143"></a><a name="index-MSN-144" id=
+          "index-MSN-144"></a><a name="index-Yahoo_0021-145" id=
+          "index-Yahoo_0021-145"></a>Bitlbee acts like an IRC
+          server, but in fact it is a gateway to a lot of other
+          instant messaging services. You can either install
+          Bitlbee locally or use a public Bitlbee server. There,
+          you need to create an account with a password. This is
+          the nick and password you need to provide for the bitlbee
+          authentification method.</p>
 
+          <p>Later, you will tell Bitlbee about your accounts and
+          passwords on all the other instant messaging services,
+          and Bitlbee will log you in. All <code>rcirc</code> needs
+          to know, is the login to your Bitlbee account. Don't
+          confuse the Bitlbee account with all the other
+          accounts.</p>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
+</body>
+</html>

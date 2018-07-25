@@ -1,15 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Entering Rewrite Rules - GNU Emacs Calc Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Emacs Calc Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Rewrite-Rules.html#Rewrite-Rules" title="Rewrite Rules">
-<link rel="prev" href="Rewrite-Rules.html#Rewrite-Rules" title="Rewrite Rules">
-<link rel="next" href="Basic-Rewrite-Rules.html#Basic-Rewrite-Rules" title="Basic Rewrite Rules">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Entering Rewrite Rules - GNU Emacs Calc Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Emacs Calc Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Rewrite-Rules.html#Rewrite-Rules" title=
+  "Rewrite Rules" />
+  <link rel="prev" href="Rewrite-Rules.html#Rewrite-Rules" title=
+  "Rewrite Rules" />
+  <link rel="next" href=
+  "Basic-Rewrite-Rules.html#Basic-Rewrite-Rules" title=
+  "Basic Rewrite Rules" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs {No value for `EMACSVER'}.
 
@@ -29,8 +39,10 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -40,76 +52,100 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Entering-Rewrite-Rules"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Basic-Rewrite-Rules.html#Basic-Rewrite-Rules">Basic Rewrite Rules</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Entering-Rewrite-Rules" id=
+    "Entering-Rewrite-Rules"></a>
 
-<h4 class="subsection">11.11.1 Entering Rewrite Rules</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Basic-Rewrite-Rules.html#Basic-Rewrite-Rules">Basic Rewrite
+    Rules</a>, Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a></p>
+    <hr />
+  </div>
 
-<p class="noindent">Rewrite rules normally use the &ldquo;assignment&rdquo; operator
-&lsquo;<samp><var>old</var><span class="samp"> := </span><var>new</var></samp>&rsquo;. 
-This operator is equivalent to the function call &lsquo;<samp><span class="samp">assign(old, new)</span></samp>&rsquo;. 
-The <code>assign</code> function is undefined by itself in Calc, so an
-assignment formula such as a rewrite rule will be left alone by ordinary
-Calc commands.  But certain commands, like the rewrite system, interpret
-assignments in special ways.
+  <h4 class="subsection">11.11.1 Entering Rewrite Rules</h4>
 
-   <p>For example, the rule &lsquo;<samp><span class="samp">sin(x)^2 := 1-cos(x)^2</span></samp>&rsquo; says to replace
-every occurrence of the sine of something, squared, with one minus the
-square of the cosine of that same thing.  All by itself as a formula
-on the stack it does nothing, but when given to the <kbd>a r</kbd> command
-it turns that command into a sine-squared-to-cosine-squared converter.
+  <p class="noindent">Rewrite rules normally use the
+  &ldquo;assignment&rdquo; operator &lsquo;<samp><var>old</var>
+  <span class="samp">:=</span> <var>new</var></samp>&rsquo;. This
+  operator is equivalent to the function call
+  &lsquo;<samp><span class="samp">assign(old,
+  new)</span></samp>&rsquo;. The <code>assign</code> function is
+  undefined by itself in Calc, so an assignment formula such as a
+  rewrite rule will be left alone by ordinary Calc commands. But
+  certain commands, like the rewrite system, interpret assignments
+  in special ways.</p>
 
-   <p>To specify a set of rules to be applied all at once, make a vector of
-rules.
+  <p>For example, the rule &lsquo;<samp><span class="samp">sin(x)^2
+  := 1-cos(x)^2</span></samp>&rsquo; says to replace every
+  occurrence of the sine of something, squared, with one minus the
+  square of the cosine of that same thing. All by itself as a
+  formula on the stack it does nothing, but when given to the
+  <kbd>a r</kbd> command it turns that command into a
+  sine-squared-to-cosine-squared converter.</p>
 
-   <p>When <kbd>a r</kbd> prompts you to enter the rewrite rules, you can answer
-in several ways:
+  <p>To specify a set of rules to be applied all at once, make a
+  vector of rules.</p>
 
-     <ol type=1 start=1>
-<li>With a rule:  <kbd>f(x) := g(x) &lt;RET&gt;</kbd>. 
-<li>With a vector of rules:  <kbd>[f1(x) := g1(x), f2(x) := g2(x)] &lt;RET&gt;</kbd>. 
-(You can omit the enclosing square brackets if you wish.) 
-<li>With the name of a variable that contains the rule or rules vector:
-<kbd>myrules &lt;RET&gt;</kbd>. 
-<li>With any formula except a rule, a vector, or a variable name; this
-will be interpreted as the <var>old</var> half of a rewrite rule,
-and you will be prompted a second time for the <var>new</var> half:
-<kbd>f(x) &lt;RET&gt; g(x) &lt;RET&gt;</kbd>. 
-<li>With a blank line, in which case the rule, rules vector, or variable
-will be taken from the top of the stack (and the formula to be
-rewritten will come from the second-to-top position).
-        </ol>
+  <p>When <kbd>a r</kbd> prompts you to enter the rewrite rules,
+  you can answer in several ways:</p>
 
-   <p>If you enter the rules directly (as opposed to using rules stored
-in a variable), those rules will be put into the Trail so that you
-can retrieve them later.  See <a href="Trail-Commands.html#Trail-Commands">Trail Commands</a>.
+  <ol type="1" start="1">
+    <li>With a rule: <kbd>f(x) := g(x) &lt;RET&gt;</kbd>.</li>
 
-   <p>It is most convenient to store rules you use often in a variable and
-invoke them by giving the variable name.  The <kbd>s e</kbd>
-(<code>calc-edit-variable</code>) command is an easy way to create or edit a
-rule set stored in a variable.  You may also wish to use <kbd>s p</kbd>
-(<code>calc-permanent-variable</code>) to save your rules permanently;
-see <a href="Operations-on-Variables.html#Operations-on-Variables">Operations on Variables</a>.
+    <li>With a vector of rules: <kbd>[f1(x) := g1(x), f2(x) :=
+    g2(x)] &lt;RET&gt;</kbd>. (You can omit the enclosing square
+    brackets if you wish.)</li>
 
-   <p>Rewrite rules are compiled into a special internal form for faster
-matching.  If you enter a rule set directly it must be recompiled
-every time.  If you store the rules in a variable and refer to them
-through that variable, they will be compiled once and saved away
-along with the variable for later reference.  This is another good
-reason to store your rules in a variable.
+    <li>With the name of a variable that contains the rule or rules
+    vector: <kbd>myrules &lt;RET&gt;</kbd>.</li>
 
-   <p>Calc also accepts an obsolete notation for rules, as vectors
-&lsquo;<samp><span class="samp">[</span><var>old</var><span class="samp">, </span><var>new</var><span class="samp">]</span></samp>&rsquo;.  But because it is easily confused with a
-vector of two rules, the use of this notation is no longer recommended.
+    <li>With any formula except a rule, a vector, or a variable
+    name; this will be interpreted as the <var>old</var> half of a
+    rewrite rule, and you will be prompted a second time for the
+    <var>new</var> half: <kbd>f(x) &lt;RET&gt; g(x)
+    &lt;RET&gt;</kbd>.</li>
 
-   </body></html>
+    <li>With a blank line, in which case the rule, rules vector, or
+    variable will be taken from the top of the stack (and the
+    formula to be rewritten will come from the second-to-top
+    position).</li>
+  </ol>
 
+  <p>If you enter the rules directly (as opposed to using rules
+  stored in a variable), those rules will be put into the Trail so
+  that you can retrieve them later. See <a href=
+  "Trail-Commands.html#Trail-Commands">Trail Commands</a>.</p>
+
+  <p>It is most convenient to store rules you use often in a
+  variable and invoke them by giving the variable name. The <kbd>s
+  e</kbd> (<code>calc-edit-variable</code>) command is an easy way
+  to create or edit a rule set stored in a variable. You may also
+  wish to use <kbd>s p</kbd> (<code>calc-permanent-variable</code>)
+  to save your rules permanently; see <a href=
+  "Operations-on-Variables.html#Operations-on-Variables">Operations
+  on Variables</a>.</p>
+
+  <p>Rewrite rules are compiled into a special internal form for
+  faster matching. If you enter a rule set directly it must be
+  recompiled every time. If you store the rules in a variable and
+  refer to them through that variable, they will be compiled once
+  and saved away along with the variable for later reference. This
+  is another good reason to store your rules in a variable.</p>
+
+  <p>Calc also accepts an obsolete notation for rules, as vectors
+  &lsquo;<samp><span class=
+  "samp">[</span><var>old</var><span class="samp">,</span>
+  <var>new</var><span class="samp">]</span></samp>&rsquo;. But
+  because it is easily confused with a vector of two rules, the use
+  of this notation is no longer recommended.</p>
+</body>
+</html>

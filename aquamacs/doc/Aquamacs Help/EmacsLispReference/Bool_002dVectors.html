@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,190 +19,307 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Bool-Vectors</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Bool-Vectors">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Bool-Vectors">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" rel="up" title="Sequences Arrays Vectors">
-<link href="Rings.html#Rings" rel="next" title="Rings">
-<link href="Char_002dTables.html#Char_002dTables" rel="prev" title="Char-Tables">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Bool-Vectors</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Bool-Vectors" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Bool-Vectors" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href=
+  "Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" rel="up"
+  title="Sequences Arrays Vectors" />
+  <link href="Rings.html#Rings" rel="next" title="Rings" />
+  <link href="Char_002dTables.html#Char_002dTables" rel="prev"
+  title="Char-Tables" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Bool_002dVectors" id="Bool_002dVectors"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Rings.html#Rings" accesskey="n" rel=
+    "next">Rings</a>, Previous: <a href=
+    "Char_002dTables.html#Char_002dTables" accesskey="p" rel=
+    "prev">Char-Tables</a>, Up: <a href=
+    "Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors"
+    accesskey="u" rel="up">Sequences Arrays Vectors</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Bool_002dvectors" id="Bool_002dvectors"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Bool_002dVectors"></a>
-<div class="header">
-<p>
-Next: <a href="Rings.html#Rings" accesskey="n" rel="next">Rings</a>, Previous: <a href="Char_002dTables.html#Char_002dTables" accesskey="p" rel="prev">Char-Tables</a>, Up: <a href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" accesskey="u" rel="up">Sequences Arrays Vectors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Bool_002dvectors"></a>
-<h3 class="section">6.7 Bool-vectors</h3>
-<a name="index-Bool_002dvectors"></a>
+  <h3 class="section">6.7 Bool-vectors</h3><a name=
+  "index-Bool_002dvectors" id="index-Bool_002dvectors"></a>
 
-<p>A bool-vector is much like a vector, except that it stores only the
-values <code>t</code> and <code>nil</code>.  If you try to store any non-<code>nil</code>
-value into an element of the bool-vector, the effect is to store
-<code>t</code> there.  As with all arrays, bool-vector indices start from 0,
-and the length cannot be changed once the bool-vector is created.
-Bool-vectors are constants when evaluated.
-</p>
-<p>Several functions work specifically with bool-vectors; aside
-from that, you manipulate them with same functions used for other kinds
-of arrays.
-</p>
-<dl>
-<dt><a name="index-make_002dbool_002dvector"></a>Function: <strong>make-bool-vector</strong> <em>length initial</em></dt>
-<dd><p>Return a new bool-vector of <var>length</var> elements,
-each one initialized to <var>initial</var>.
-</p></dd></dl>
+  <p>A bool-vector is much like a vector, except that it stores
+  only the values <code>t</code> and <code>nil</code>. If you try
+  to store any non-<code>nil</code> value into an element of the
+  bool-vector, the effect is to store <code>t</code> there. As with
+  all arrays, bool-vector indices start from 0, and the length
+  cannot be changed once the bool-vector is created. Bool-vectors
+  are constants when evaluated.</p>
 
-<dl>
-<dt><a name="index-bool_002dvector"></a>Function: <strong>bool-vector</strong> <em>&amp;rest objects</em></dt>
-<dd><p>This function creates and returns a bool-vector whose elements are the
-arguments, <var>objects</var>.
-</p></dd></dl>
+  <p>Several functions work specifically with bool-vectors; aside
+  from that, you manipulate them with same functions used for other
+  kinds of arrays.</p>
 
-<dl>
-<dt><a name="index-bool_002dvector_002dp"></a>Function: <strong>bool-vector-p</strong> <em>object</em></dt>
-<dd><p>This returns <code>t</code> if <var>object</var> is a bool-vector,
-and <code>nil</code> otherwise.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-make_002dbool_002dvector" id=
+    "index-make_002dbool_002dvector"></a>Function:
+    <strong>make-bool-vector</strong> <em>length initial</em></dt>
 
-<p>There are also some bool-vector set operation functions, described below:
-</p>
-<dl>
-<dt><a name="index-bool_002dvector_002dexclusive_002dor"></a>Function: <strong>bool-vector-exclusive-or</strong> <em>a b &amp;optional c</em></dt>
-<dd><p>Return <em>bitwise exclusive or</em> of bool vectors <var>a</var> and <var>b</var>.
-If optional argument <var>c</var> is given, the result of this operation is
-stored into <var>c</var>.  All arguments should be bool vectors of the same length.
-</p></dd></dl>
+    <dd>
+      <p>Return a new bool-vector of <var>length</var> elements,
+      each one initialized to <var>initial</var>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-bool_002dvector_002dunion"></a>Function: <strong>bool-vector-union</strong> <em>a b &amp;optional c</em></dt>
-<dd><p>Return <em>bitwise or</em> of bool vectors <var>a</var> and <var>b</var>.  If
-optional argument <var>c</var> is given, the result of this operation is
-stored into <var>c</var>.  All arguments should be bool vectors of the same length.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-bool_002dvector" id=
+    "index-bool_002dvector"></a>Function:
+    <strong>bool-vector</strong> <em>&amp;rest objects</em></dt>
 
-<dl>
-<dt><a name="index-bool_002dvector_002dintersection"></a>Function: <strong>bool-vector-intersection</strong> <em>a b &amp;optional c</em></dt>
-<dd><p>Return <em>bitwise and</em> of bool vectors <var>a</var> and <var>b</var>.  If
-optional argument <var>c</var> is given, the result of this operation is
-stored into <var>c</var>.  All arguments should be bool vectors of the same length.
-</p></dd></dl>
+    <dd>
+      <p>This function creates and returns a bool-vector whose
+      elements are the arguments, <var>objects</var>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-bool_002dvector_002dset_002ddifference"></a>Function: <strong>bool-vector-set-difference</strong> <em>a b &amp;optional c</em></dt>
-<dd><p>Return <em>set difference</em> of bool vectors <var>a</var> and <var>b</var>.  If
-optional argument <var>c</var> is given, the result of this operation is
-stored into <var>c</var>.  All arguments should be bool vectors of the same length.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-bool_002dvector_002dp" id=
+    "index-bool_002dvector_002dp"></a>Function:
+    <strong>bool-vector-p</strong> <em>object</em></dt>
 
-<dl>
-<dt><a name="index-bool_002dvector_002dnot"></a>Function: <strong>bool-vector-not</strong> <em>a &amp;optional b</em></dt>
-<dd><p>Return <em>set complement</em> of bool vector <var>a</var>.  If optional
-argument <var>b</var> is given, the result of this operation is stored into
-<var>b</var>.  All arguments should be bool vectors of the same length.
-</p></dd></dl>
+    <dd>
+      <p>This returns <code>t</code> if <var>object</var> is a
+      bool-vector, and <code>nil</code> otherwise.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-bool_002dvector_002dsubsetp"></a>Function: <strong>bool-vector-subsetp</strong> <em>a b</em></dt>
-<dd><p>Return <code>t</code> if every <code>t</code> value in <var>a</var> is also t in
-<var>b</var>, <code>nil</code> otherwise.  All arguments should be bool vectors of the
-same length.
-</p></dd></dl>
+  <p>There are also some bool-vector set operation functions,
+  described below:</p>
 
-<dl>
-<dt><a name="index-bool_002dvector_002dcount_002dconsecutive"></a>Function: <strong>bool-vector-count-consecutive</strong> <em>a b i</em></dt>
-<dd><p>Return the number of consecutive elements in <var>a</var> equal <var>b</var>
-starting at <var>i</var>.  <code>a</code> is a bool vector, <var>b</var> is <code>t</code>
-or <code>nil</code>, and <var>i</var> is an index into <code>a</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-bool_002dvector_002dexclusive_002dor" id=
+    "index-bool_002dvector_002dexclusive_002dor"></a>Function:
+    <strong>bool-vector-exclusive-or</strong> <em>a b &amp;optional
+    c</em></dt>
 
-<dl>
-<dt><a name="index-bool_002dvector_002dcount_002dpopulation"></a>Function: <strong>bool-vector-count-population</strong> <em>a</em></dt>
-<dd><p>Return the number of elements that are <code>t</code> in bool vector <var>a</var>.
-</p></dd></dl>
+    <dd>
+      <p>Return <em>bitwise exclusive or</em> of bool vectors
+      <var>a</var> and <var>b</var>. If optional argument
+      <var>c</var> is given, the result of this operation is stored
+      into <var>c</var>. All arguments should be bool vectors of
+      the same length.</p>
+    </dd>
+  </dl>
 
-<p>The printed form represents up to 8 boolean values as a single
-character:
-</p>
-<div class="example">
-<pre class="example">(bool-vector t nil t nil)
-     &rArr; #&amp;4&quot;^E&quot;
+  <dl>
+    <dt><a name="index-bool_002dvector_002dunion" id=
+    "index-bool_002dvector_002dunion"></a>Function:
+    <strong>bool-vector-union</strong> <em>a b &amp;optional
+    c</em></dt>
+
+    <dd>
+      <p>Return <em>bitwise or</em> of bool vectors <var>a</var>
+      and <var>b</var>. If optional argument <var>c</var> is given,
+      the result of this operation is stored into <var>c</var>. All
+      arguments should be bool vectors of the same length.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-bool_002dvector_002dintersection" id=
+    "index-bool_002dvector_002dintersection"></a>Function:
+    <strong>bool-vector-intersection</strong> <em>a b &amp;optional
+    c</em></dt>
+
+    <dd>
+      <p>Return <em>bitwise and</em> of bool vectors <var>a</var>
+      and <var>b</var>. If optional argument <var>c</var> is given,
+      the result of this operation is stored into <var>c</var>. All
+      arguments should be bool vectors of the same length.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-bool_002dvector_002dset_002ddifference" id=
+    "index-bool_002dvector_002dset_002ddifference"></a>Function:
+    <strong>bool-vector-set-difference</strong> <em>a b
+    &amp;optional c</em></dt>
+
+    <dd>
+      <p>Return <em>set difference</em> of bool vectors
+      <var>a</var> and <var>b</var>. If optional argument
+      <var>c</var> is given, the result of this operation is stored
+      into <var>c</var>. All arguments should be bool vectors of
+      the same length.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-bool_002dvector_002dnot" id=
+    "index-bool_002dvector_002dnot"></a>Function:
+    <strong>bool-vector-not</strong> <em>a &amp;optional
+    b</em></dt>
+
+    <dd>
+      <p>Return <em>set complement</em> of bool vector
+      <var>a</var>. If optional argument <var>b</var> is given, the
+      result of this operation is stored into <var>b</var>. All
+      arguments should be bool vectors of the same length.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-bool_002dvector_002dsubsetp" id=
+    "index-bool_002dvector_002dsubsetp"></a>Function:
+    <strong>bool-vector-subsetp</strong> <em>a b</em></dt>
+
+    <dd>
+      <p>Return <code>t</code> if every <code>t</code> value in
+      <var>a</var> is also t in <var>b</var>, <code>nil</code>
+      otherwise. All arguments should be bool vectors of the same
+      length.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-bool_002dvector_002dcount_002dconsecutive"
+    id=
+    "index-bool_002dvector_002dcount_002dconsecutive"></a>Function:
+    <strong>bool-vector-count-consecutive</strong> <em>a b
+    i</em></dt>
+
+    <dd>
+      <p>Return the number of consecutive elements in <var>a</var>
+      equal <var>b</var> starting at <var>i</var>. <code>a</code>
+      is a bool vector, <var>b</var> is <code>t</code> or
+      <code>nil</code>, and <var>i</var> is an index into
+      <code>a</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-bool_002dvector_002dcount_002dpopulation"
+    id="index-bool_002dvector_002dcount_002dpopulation"></a>Function:
+    <strong>bool-vector-count-population</strong> <em>a</em></dt>
+
+    <dd>
+      <p>Return the number of elements that are <code>t</code> in
+      bool vector <var>a</var>.</p>
+    </dd>
+  </dl>
+
+  <p>The printed form represents up to 8 boolean values as a single
+  character:</p>
+
+  <div class="example">
+    <pre class="example">
+(bool-vector t nil t nil)
+     &rArr; #&amp;4"^E"
 (bool-vector)
-     &rArr; #&amp;0&quot;&quot;
-</pre></div>
+     &rArr; #&amp;0""
+</pre>
+  </div>
 
-<p>You can use <code>vconcat</code> to print a bool-vector like other vectors:
-</p>
-<div class="example">
-<pre class="example">(vconcat (bool-vector nil t nil t))
+  <p>You can use <code>vconcat</code> to print a bool-vector like
+  other vectors:</p>
+
+  <div class="example">
+    <pre class="example">
+(vconcat (bool-vector nil t nil t))
      &rArr; [nil t nil t]
-</pre></div>
+</pre>
+  </div>
 
-<p>Here is another example of creating, examining, and updating a
-bool-vector:
-</p>
-<div class="example">
-<pre class="example">(setq bv (make-bool-vector 5 t))
-     &rArr; #&amp;5&quot;^_&quot;
+  <p>Here is another example of creating, examining, and updating a
+  bool-vector:</p>
+
+  <div class="example">
+    <pre class="example">
+(setq bv (make-bool-vector 5 t))
+     &rArr; #&amp;5"^_"
 (aref bv 1)
      &rArr; t
 (aset bv 3 nil)
      &rArr; nil
 bv
-     &rArr; #&amp;5&quot;^W&quot;
-</pre></div>
+     &rArr; #&amp;5"^W"
+</pre>
+  </div>
 
-<p>These results make sense because the binary codes for control-_ and
-control-W are 11111 and 10111, respectively.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Rings.html#Rings" accesskey="n" rel="next">Rings</a>, Previous: <a href="Char_002dTables.html#Char_002dTables" accesskey="p" rel="prev">Char-Tables</a>, Up: <a href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" accesskey="u" rel="up">Sequences Arrays Vectors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>These results make sense because the binary codes for
+  control-_ and control-W are 11111 and 10111, respectively.</p>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Next: <a href="Rings.html#Rings" accesskey="n" rel=
+    "next">Rings</a>, Previous: <a href=
+    "Char_002dTables.html#Char_002dTables" accesskey="p" rel=
+    "prev">Char-Tables</a>, Up: <a href=
+    "Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors"
+    accesskey="u" rel="up">Sequences Arrays Vectors</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

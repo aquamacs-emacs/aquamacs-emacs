@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,113 +19,159 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Splicing into Lists</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Splicing into Lists">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Splicing into Lists">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Customization-Types.html#Customization-Types" rel="up" title="Customization Types">
-<link href="Type-Keywords.html#Type-Keywords" rel="next" title="Type Keywords">
-<link href="Composite-Types.html#Composite-Types" rel="prev" title="Composite Types">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Splicing into
+  Lists</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Splicing into Lists" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Splicing into Lists" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Customization-Types.html#Customization-Types" rel=
+  "up" title="Customization Types" />
+  <link href="Type-Keywords.html#Type-Keywords" rel="next" title=
+  "Type Keywords" />
+  <link href="Composite-Types.html#Composite-Types" rel="prev"
+  title="Composite Types" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Splicing-into-Lists" id="Splicing-into-Lists"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Type-Keywords.html#Type-Keywords" accesskey=
+    "n" rel="next">Type Keywords</a>, Previous: <a href=
+    "Composite-Types.html#Composite-Types" accesskey="p" rel=
+    "prev">Composite Types</a>, Up: <a href=
+    "Customization-Types.html#Customization-Types" accesskey="u"
+    rel="up">Customization Types</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Splicing-into-Lists-1" id="Splicing-into-Lists-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Splicing-into-Lists"></a>
-<div class="header">
-<p>
-Next: <a href="Type-Keywords.html#Type-Keywords" accesskey="n" rel="next">Type Keywords</a>, Previous: <a href="Composite-Types.html#Composite-Types" accesskey="p" rel="prev">Composite Types</a>, Up: <a href="Customization-Types.html#Customization-Types" accesskey="u" rel="up">Customization Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Splicing-into-Lists-1"></a>
-<h4 class="subsection">14.4.3 Splicing into Lists</h4>
+  <h4 class="subsection">14.4.3 Splicing into Lists</h4>
 
-<p>The <code>:inline</code> feature lets you splice a variable number of
-elements into the middle of a <code>list</code> or <code>vector</code>
-customization type.  You use it by adding <code>:inline t</code> to a type
-specification which is contained in a <code>list</code> or <code>vector</code>
-specification.
-</p>
-<p>Normally, each entry in a <code>list</code> or <code>vector</code> type
-specification describes a single element type.  But when an entry
-contains <code>:inline t</code>, the value it matches is merged directly
-into the containing sequence.  For example, if the entry matches a
-list with three elements, those become three elements of the overall
-sequence.  This is analogous to &lsquo;<samp>,@</samp>&rsquo; in a backquote construct
-(see <a href="Backquote.html#Backquote">Backquote</a>).
-</p>
-<p>For example, to specify a list whose first element must be <code>baz</code>
-and whose remaining arguments should be zero or more of <code>foo</code> and
-<code>bar</code>, use this customization type:
-</p>
-<div class="example">
-<pre class="example">(list (const baz) (set :inline t (const foo) (const bar)))
-</pre></div>
+  <p>The <code>:inline</code> feature lets you splice a variable
+  number of elements into the middle of a <code>list</code> or
+  <code>vector</code> customization type. You use it by adding
+  <code>:inline t</code> to a type specification which is contained
+  in a <code>list</code> or <code>vector</code> specification.</p>
 
-<p>This matches values such as <code>(baz)</code>, <code>(baz foo)</code>, <code>(baz bar)</code>
-and <code>(baz foo bar)</code>.
-</p>
-<a name="index-choice_002c-customization-types"></a>
-<p>When the element-type is a <code>choice</code>, you use <code>:inline</code> not
-in the <code>choice</code> itself, but in (some of) the alternatives of the
-<code>choice</code>.  For example, to match a list which must start with a
-file name, followed either by the symbol <code>t</code> or two strings, use
-this customization type:
-</p>
-<div class="example">
-<pre class="example">(list file
+  <p>Normally, each entry in a <code>list</code> or
+  <code>vector</code> type specification describes a single element
+  type. But when an entry contains <code>:inline t</code>, the
+  value it matches is merged directly into the containing sequence.
+  For example, if the entry matches a list with three elements,
+  those become three elements of the overall sequence. This is
+  analogous to &lsquo;<samp>,@</samp>&rsquo; in a backquote
+  construct (see <a href=
+  "Backquote.html#Backquote">Backquote</a>).</p>
+
+  <p>For example, to specify a list whose first element must be
+  <code>baz</code> and whose remaining arguments should be zero or
+  more of <code>foo</code> and <code>bar</code>, use this
+  customization type:</p>
+
+  <div class="example">
+    <pre class="example">
+(list (const baz) (set :inline t (const foo) (const bar)))
+</pre>
+  </div>
+
+  <p>This matches values such as <code>(baz)</code>, <code>(baz
+  foo)</code>, <code>(baz bar)</code> and <code>(baz foo
+  bar)</code>.</p><a name="index-choice_002c-customization-types"
+  id="index-choice_002c-customization-types"></a>
+
+  <p>When the element-type is a <code>choice</code>, you use
+  <code>:inline</code> not in the <code>choice</code> itself, but
+  in (some of) the alternatives of the <code>choice</code>. For
+  example, to match a list which must start with a file name,
+  followed either by the symbol <code>t</code> or two strings, use
+  this customization type:</p>
+
+  <div class="example">
+    <pre class="example">
+(list file
       (choice (const t)
               (list :inline t string string)))
-</pre></div>
+</pre>
+  </div>
 
-<p>If the user chooses the first alternative in the choice, then the
-overall list has two elements and the second element is <code>t</code>.  If
-the user chooses the second alternative, then the overall list has three
-elements and the second and third must be strings.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Type-Keywords.html#Type-Keywords" accesskey="n" rel="next">Type Keywords</a>, Previous: <a href="Composite-Types.html#Composite-Types" accesskey="p" rel="prev">Composite Types</a>, Up: <a href="Customization-Types.html#Customization-Types" accesskey="u" rel="up">Customization Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>If the user chooses the first alternative in the choice, then
+  the overall list has two elements and the second element is
+  <code>t</code>. If the user chooses the second alternative, then
+  the overall list has three elements and the second and third must
+  be strings.</p>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Next: <a href="Type-Keywords.html#Type-Keywords" accesskey=
+    "n" rel="next">Type Keywords</a>, Previous: <a href=
+    "Composite-Types.html#Composite-Types" accesskey="p" rel=
+    "prev">Composite Types</a>, Up: <a href=
+    "Customization-Types.html#Customization-Types" accesskey="u"
+    rel="up">Customization Types</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

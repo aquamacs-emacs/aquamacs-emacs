@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,193 +19,289 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Event Input Misc</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Event Input Misc">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Event Input Misc">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Reading-Input.html#Reading-Input" rel="up" title="Reading Input">
-<link href="Special-Events.html#Special-Events" rel="next" title="Special Events">
-<link href="Quoted-Character-Input.html#Quoted-Character-Input" rel="prev" title="Quoted Character Input">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Event Input Misc</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Event Input Misc" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Event Input Misc" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Reading-Input.html#Reading-Input" rel="up" title=
+  "Reading Input" />
+  <link href="Special-Events.html#Special-Events" rel="next" title=
+  "Special Events" />
+  <link href="Quoted-Character-Input.html#Quoted-Character-Input"
+  rel="prev" title="Quoted Character Input" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Event-Input-Misc" id="Event-Input-Misc"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href=
+    "Quoted-Character-Input.html#Quoted-Character-Input" accesskey=
+    "p" rel="prev">Quoted Character Input</a>, Up: <a href=
+    "Reading-Input.html#Reading-Input" accesskey="u" rel=
+    "up">Reading Input</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Miscellaneous-Event-Input-Features" id=
+  "Miscellaneous-Event-Input-Features"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Event-Input-Misc"></a>
-<div class="header">
-<p>
-Previous: <a href="Quoted-Character-Input.html#Quoted-Character-Input" accesskey="p" rel="prev">Quoted Character Input</a>, Up: <a href="Reading-Input.html#Reading-Input" accesskey="u" rel="up">Reading Input</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Miscellaneous-Event-Input-Features"></a>
-<h4 class="subsection">20.8.6 Miscellaneous Event Input Features</h4>
+  <h4 class="subsection">20.8.6 Miscellaneous Event Input
+  Features</h4>
 
-<p>This section describes how to peek ahead at events without using
-them up, how to check for pending input, and how to discard pending
-input.  See also the function <code>read-passwd</code> (see <a href="Reading-a-Password.html#Reading-a-Password">Reading a Password</a>).
-</p>
-<dl>
-<dt><a name="index-unread_002dcommand_002devents"></a>Variable: <strong>unread-command-events</strong></dt>
-<dd><a name="index-next-input"></a>
-<a name="index-peeking-at-input"></a>
-<p>This variable holds a list of events waiting to be read as command
-input.  The events are used in the order they appear in the list, and
-removed one by one as they are used.
-</p>
-<p>The variable is needed because in some cases a function reads an event
-and then decides not to use it.  Storing the event in this variable
-causes it to be processed normally, by the command loop or by the
-functions to read command input.
-</p>
-<a name="index-prefix-argument-unreading"></a>
-<p>For example, the function that implements numeric prefix arguments reads
-any number of digits.  When it finds a non-digit event, it must unread
-the event so that it can be read normally by the command loop.
-Likewise, incremental search uses this feature to unread events with no
-special meaning in a search, because these events should exit the search
-and then execute normally.
-</p>
-<p>The reliable and easy way to extract events from a key sequence so as
-to put them in <code>unread-command-events</code> is to use
-<code>listify-key-sequence</code> (see below).
-</p>
-<p>Normally you add events to the front of this list, so that the events
-most recently unread will be reread first.
-</p>
-<p>Events read from this list are not normally added to the current
-command&rsquo;s key sequence (as returned by, e.g., <code>this-command-keys</code>),
-as the events will already have been added once as they were read for
-the first time.  An element of the form <code>(t&nbsp;.&nbsp;<var>event</var>)</code><!-- /@w -->
-forces <var>event</var> to be added to the current command&rsquo;s key sequence.
-</p></dd></dl>
+  <p>This section describes how to peek ahead at events without
+  using them up, how to check for pending input, and how to discard
+  pending input. See also the function <code>read-passwd</code>
+  (see <a href="Reading-a-Password.html#Reading-a-Password">Reading
+  a Password</a>).</p>
 
-<dl>
-<dt><a name="index-listify_002dkey_002dsequence"></a>Function: <strong>listify-key-sequence</strong> <em>key</em></dt>
-<dd><p>This function converts the string or vector <var>key</var> to a list of
-individual events, which you can put in <code>unread-command-events</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-unread_002dcommand_002devents" id=
+    "index-unread_002dcommand_002devents"></a>Variable:
+    <strong>unread-command-events</strong></dt>
 
-<dl>
-<dt><a name="index-input_002dpending_002dp"></a>Function: <strong>input-pending-p</strong> <em>&amp;optional check-timers</em></dt>
-<dd><a name="index-waiting-for-command-key-input"></a>
-<p>This function determines whether any command input is currently
-available to be read.  It returns immediately, with value <code>t</code> if
-there is available input, <code>nil</code> otherwise.  On rare occasions it
-may return <code>t</code> when no input is available.
-</p>
-<p>If the optional argument <var>check-timers</var> is non-<code>nil</code>, then if
-no input is available, Emacs runs any timers which are ready.
-See <a href="Timers.html#Timers">Timers</a>.
-</p></dd></dl>
+    <dd>
+      <a name="index-next-input" id="index-next-input"></a>
+      <a name="index-peeking-at-input" id=
+      "index-peeking-at-input"></a>
 
-<dl>
-<dt><a name="index-last_002dinput_002devent"></a>Variable: <strong>last-input-event</strong></dt>
-<dd><p>This variable records the last terminal input event read, whether
-as part of a command or explicitly by a Lisp program.
-</p>
-<p>In the example below, the Lisp program reads the character <kbd>1</kbd>,
-<acronym>ASCII</acronym> code 49.  It becomes the value of <code>last-input-event</code>,
-while <kbd>C-e</kbd> (we assume <kbd>C-x C-e</kbd> command is used to evaluate
-this expression) remains the value of <code>last-command-event</code>.
-</p>
-<div class="example">
-<pre class="example">(progn (print (read-char))
+      <p>This variable holds a list of events waiting to be read as
+      command input. The events are used in the order they appear
+      in the list, and removed one by one as they are used.</p>
+
+      <p>The variable is needed because in some cases a function
+      reads an event and then decides not to use it. Storing the
+      event in this variable causes it to be processed normally, by
+      the command loop or by the functions to read command
+      input.</p><a name="index-prefix-argument-unreading" id=
+      "index-prefix-argument-unreading"></a>
+
+      <p>For example, the function that implements numeric prefix
+      arguments reads any number of digits. When it finds a
+      non-digit event, it must unread the event so that it can be
+      read normally by the command loop. Likewise, incremental
+      search uses this feature to unread events with no special
+      meaning in a search, because these events should exit the
+      search and then execute normally.</p>
+
+      <p>The reliable and easy way to extract events from a key
+      sequence so as to put them in
+      <code>unread-command-events</code> is to use
+      <code>listify-key-sequence</code> (see below).</p>
+
+      <p>Normally you add events to the front of this list, so that
+      the events most recently unread will be reread first.</p>
+
+      <p>Events read from this list are not normally added to the
+      current command&rsquo;s key sequence (as returned by, e.g.,
+      <code>this-command-keys</code>), as the events will already
+      have been added once as they were read for the first time. An
+      element of the form
+      <code>(t&nbsp;.&nbsp;<var>event</var>)</code><!-- /@w -->
+      forces <var>event</var> to be added to the current
+      command&rsquo;s key sequence.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-listify_002dkey_002dsequence" id=
+    "index-listify_002dkey_002dsequence"></a>Function:
+    <strong>listify-key-sequence</strong> <em>key</em></dt>
+
+    <dd>
+      <p>This function converts the string or vector <var>key</var>
+      to a list of individual events, which you can put in
+      <code>unread-command-events</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-input_002dpending_002dp" id=
+    "index-input_002dpending_002dp"></a>Function:
+    <strong>input-pending-p</strong> <em>&amp;optional
+    check-timers</em></dt>
+
+    <dd>
+      <a name="index-waiting-for-command-key-input" id=
+      "index-waiting-for-command-key-input"></a>
+
+      <p>This function determines whether any command input is
+      currently available to be read. It returns immediately, with
+      value <code>t</code> if there is available input,
+      <code>nil</code> otherwise. On rare occasions it may return
+      <code>t</code> when no input is available.</p>
+
+      <p>If the optional argument <var>check-timers</var> is
+      non-<code>nil</code>, then if no input is available, Emacs
+      runs any timers which are ready. See <a href=
+      "Timers.html#Timers">Timers</a>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-last_002dinput_002devent" id=
+    "index-last_002dinput_002devent"></a>Variable:
+    <strong>last-input-event</strong></dt>
+
+    <dd>
+      <p>This variable records the last terminal input event read,
+      whether as part of a command or explicitly by a Lisp
+      program.</p>
+
+      <p>In the example below, the Lisp program reads the character
+      <kbd>1</kbd>, <acronym>ASCII</acronym> code 49. It becomes
+      the value of <code>last-input-event</code>, while
+      <kbd>C-e</kbd> (we assume <kbd>C-x C-e</kbd> command is used
+      to evaluate this expression) remains the value of
+      <code>last-command-event</code>.</p>
+
+      <div class="example">
+        <pre class="example">
+(progn (print (read-char))
        (print last-command-event)
        last-input-event)
-     ⊣ 49
-     ⊣ 5
+     &acirc;&Scaron;&pound; 49
+     &acirc;&Scaron;&pound; 5
      &rArr; 49
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-while_002dno_002dinput"></a>Macro: <strong>while-no-input</strong> <em>body&hellip;</em></dt>
-<dd><p>This construct runs the <var>body</var> forms and returns the value of the
-last one&mdash;but only if no input arrives.  If any input arrives during
-the execution of the <var>body</var> forms, it aborts them (working much
-like a quit).  The <code>while-no-input</code> form returns <code>nil</code> if
-aborted by a real quit, and returns <code>t</code> if aborted by arrival of
-other input.
-</p>
-<p>If a part of <var>body</var> binds <code>inhibit-quit</code> to non-<code>nil</code>,
-arrival of input during those parts won&rsquo;t cause an abort until
-the end of that part.
-</p>
-<p>If you want to be able to distinguish all possible values computed
-by <var>body</var> from both kinds of abort conditions, write the code
-like this:
-</p>
-<div class="example">
-<pre class="example">(while-no-input
+  <dl>
+    <dt><a name="index-while_002dno_002dinput" id=
+    "index-while_002dno_002dinput"></a>Macro:
+    <strong>while-no-input</strong> <em>body&hellip;</em></dt>
+
+    <dd>
+      <p>This construct runs the <var>body</var> forms and returns
+      the value of the last one&mdash;but only if no input arrives.
+      If any input arrives during the execution of the
+      <var>body</var> forms, it aborts them (working much like a
+      quit). The <code>while-no-input</code> form returns
+      <code>nil</code> if aborted by a real quit, and returns
+      <code>t</code> if aborted by arrival of other input.</p>
+
+      <p>If a part of <var>body</var> binds
+      <code>inhibit-quit</code> to non-<code>nil</code>, arrival of
+      input during those parts won&rsquo;t cause an abort until the
+      end of that part.</p>
+
+      <p>If you want to be able to distinguish all possible values
+      computed by <var>body</var> from both kinds of abort
+      conditions, write the code like this:</p>
+
+      <div class="example">
+        <pre class="example">
+(while-no-input
   (list
     (progn . <var>body</var>)))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-discard_002dinput"></a>Function: <strong>discard-input</strong></dt>
-<dd><a name="index-flushing-input"></a>
-<a name="index-discarding-input"></a>
-<a name="index-keyboard-macro_002c-terminating"></a>
-<p>This function discards the contents of the terminal input buffer and
-cancels any keyboard macro that might be in the process of definition.
-It returns <code>nil</code>.
-</p>
-<p>In the following example, the user may type a number of characters right
-after starting the evaluation of the form.  After the <code>sleep-for</code>
-finishes sleeping, <code>discard-input</code> discards any characters typed
-during the sleep.
-</p>
-<div class="example">
-<pre class="example">(progn (sleep-for 2)
+  <dl>
+    <dt><a name="index-discard_002dinput" id=
+    "index-discard_002dinput"></a>Function:
+    <strong>discard-input</strong></dt>
+
+    <dd>
+      <a name="index-flushing-input" id="index-flushing-input"></a>
+      <a name="index-discarding-input" id=
+      "index-discarding-input"></a> <a name=
+      "index-keyboard-macro_002c-terminating" id=
+      "index-keyboard-macro_002c-terminating"></a>
+
+      <p>This function discards the contents of the terminal input
+      buffer and cancels any keyboard macro that might be in the
+      process of definition. It returns <code>nil</code>.</p>
+
+      <p>In the following example, the user may type a number of
+      characters right after starting the evaluation of the form.
+      After the <code>sleep-for</code> finishes sleeping,
+      <code>discard-input</code> discards any characters typed
+      during the sleep.</p>
+
+      <div class="example">
+        <pre class="example">
+(progn (sleep-for 2)
        (discard-input))
      &rArr; nil
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Quoted-Character-Input.html#Quoted-Character-Input" accesskey="p" rel="prev">Quoted Character Input</a>, Up: <a href="Reading-Input.html#Reading-Input" accesskey="u" rel="up">Reading Input</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Previous: <a href=
+    "Quoted-Character-Input.html#Quoted-Character-Input" accesskey=
+    "p" rel="prev">Quoted Character Input</a>, Up: <a href=
+    "Reading-Input.html#Reading-Input" accesskey="u" rel=
+    "up">Reading Input</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

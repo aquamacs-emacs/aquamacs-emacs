@@ -1,14 +1,22 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Equality Predicates - Common Lisp Extensions</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Common Lisp Extensions">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Predicates.html#Predicates" title="Predicates">
-<link rel="prev" href="Type-Predicates.html#Type-Predicates" title="Type Predicates">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Equality Predicates - Common Lisp Extensions</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Common Lisp Extensions" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Predicates.html#Predicates" title=
+  "Predicates" />
+  <link rel="prev" href="Type-Predicates.html#Type-Predicates"
+  title="Type Predicates" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
@@ -26,8 +34,10 @@ Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -37,43 +47,55 @@ Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Equality-Predicates"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Type-Predicates.html#Type-Predicates">Type Predicates</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Predicates.html#Predicates">Predicates</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Equality-Predicates" id="Equality-Predicates"></a>
 
-<h3 class="section">4.2 Equality Predicates</h3>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Type-Predicates.html#Type-Predicates">Type Predicates</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Predicates.html#Predicates">Predicates</a></p>
+    <hr />
+  </div>
 
-<p class="noindent">This package defines the Common Lisp predicate <code>equalp</code>.
+  <h3 class="section">4.2 Equality Predicates</h3>
 
-<div class="defun">
-&mdash; Function: <b>equalp</b><var> a b<a name="index-equalp-11"></a></var><br>
-<blockquote><p>This function is a more flexible version of <code>equal</code>.  In
-particular, it compares strings case-insensitively, and it compares
-numbers without regard to type (so that <code>(equalp 3 3.0)</code> is
-true).  Vectors and conses are compared recursively.  All other
-objects are compared as if by <code>equal</code>.
+  <p class="noindent">This package defines the Common Lisp
+  predicate <code>equalp</code>.</p>
 
-        <p>This function differs from Common Lisp <code>equalp</code> in several
-respects.  First, Common Lisp's <code>equalp</code> also compares
-<em>characters</em> case-insensitively, which would be impractical
-in this package since Emacs does not distinguish between integers
-and characters.  In keeping with the idea that strings are less
-vector-like in Emacs Lisp, this package's <code>equalp</code> also will
-not compare strings against vectors of integers. 
-</p></blockquote></div>
+  <div class="defun">
+    &mdash; Function: <b>equalp</b> <var>a b<a name=
+    "index-equalp-11" id="index-equalp-11"></a></var><br />
 
-   <p>Also note that the Common Lisp functions <code>member</code> and <code>assoc</code>
-use <code>eql</code> to compare elements, whereas Emacs Lisp follows the
-MacLisp tradition and uses <code>equal</code> for these two functions. 
-In Emacs, use <code>member*</code> and <code>assoc*</code> to get functions
-which use <code>eql</code> for comparisons.
+    <blockquote>
+      <p>This function is a more flexible version of
+      <code>equal</code>. In particular, it compares strings
+      case-insensitively, and it compares numbers without regard to
+      type (so that <code>(equalp 3 3.0)</code> is true). Vectors
+      and conses are compared recursively. All other objects are
+      compared as if by <code>equal</code>.</p>
 
-   </body></html>
+      <p>This function differs from Common Lisp <code>equalp</code>
+      in several respects. First, Common Lisp's <code>equalp</code>
+      also compares <em>characters</em> case-insensitively, which
+      would be impractical in this package since Emacs does not
+      distinguish between integers and characters. In keeping with
+      the idea that strings are less vector-like in Emacs Lisp,
+      this package's <code>equalp</code> also will not compare
+      strings against vectors of integers.</p>
+    </blockquote>
+  </div>
 
+  <p>Also note that the Common Lisp functions <code>member</code>
+  and <code>assoc</code> use <code>eql</code> to compare elements,
+  whereas Emacs Lisp follows the MacLisp tradition and uses
+  <code>equal</code> for these two functions. In Emacs, use
+  <code>member*</code> and <code>assoc*</code> to get functions
+  which use <code>eql</code> for comparisons.</p>
+</body>
+</html>

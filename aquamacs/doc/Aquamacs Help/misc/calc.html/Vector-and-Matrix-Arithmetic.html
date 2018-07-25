@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,176 +18,231 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Vector and Matrix Arithmetic</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Vector and Matrix Arithmetic">
-<meta name="keywords" content="GNU Emacs Calc Manual: Vector and Matrix Arithmetic">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Matrix-Functions.html#Matrix-Functions" rel="up" title="Matrix Functions">
-<link href="Set-Operations.html#Set-Operations" rel="next" title="Set Operations">
-<link href="Manipulating-Vectors.html#Manipulating-Vectors" rel="prev" title="Manipulating Vectors">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Vector and Matrix
+  Arithmetic</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Vector and Matrix Arithmetic" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Vector and Matrix Arithmetic" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Matrix-Functions.html#Matrix-Functions" rel="up"
+  title="Matrix Functions" />
+  <link href="Set-Operations.html#Set-Operations" rel="next" title=
+  "Set Operations" />
+  <link href="Manipulating-Vectors.html#Manipulating-Vectors" rel=
+  "prev" title="Manipulating Vectors" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Vector-and-Matrix-Arithmetic"></a>
-<div class="header">
-<p>
-Next: <a href="Set-Operations.html#Set-Operations" accesskey="n" rel="next">Set Operations</a>, Previous: <a href="Manipulating-Vectors.html#Manipulating-Vectors" accesskey="p" rel="prev">Manipulating Vectors</a>, Up: <a href="Matrix-Functions.html#Matrix-Functions" accesskey="u" rel="up">Matrix Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Vector-and-Matrix-Arithmetic-1"></a>
-<h3 class="section">9.5 Vector and Matrix Arithmetic</h3>
+<body lang="en" xml:lang="en">
+  <a name="Vector-and-Matrix-Arithmetic" id=
+  "Vector-and-Matrix-Arithmetic"></a>
 
-<p>Basic arithmetic operations like addition and multiplication are defined
-for vectors and matrices as well as for numbers.  Division of matrices, in
-the sense of multiplying by the inverse, is supported.  (Division by a
-matrix actually uses LU-decomposition for greater accuracy and speed.)
-See <a href="Basic-Arithmetic.html#Basic-Arithmetic">Basic Arithmetic</a>.
-</p>
-<p>The following functions are applied element-wise if their arguments are
-vectors or matrices: <code>change-sign</code>, <code>conj</code>, <code>arg</code>,
-<code>re</code>, <code>im</code>, <code>polar</code>, <code>rect</code>, <code>clean</code>,
-<code>float</code>, <code>frac</code>.  See <a href="Function-Index.html#Function-Index">Function Index</a>.
-</p>
-<a name="index-v-J"></a>
-<a name="index-V-J"></a>
-<a name="index-calc_002dconj_002dtranspose"></a>
-<a name="index-ctrn"></a>
-<p>The <kbd>V J</kbd> (<code>calc-conj-transpose</code>) [<code>ctrn</code>] command computes
-the conjugate transpose of its argument, i.e., &lsquo;<samp>conj(trn(x))</samp>&rsquo;.
-</p>
-<a name="index-A-_0028vectors_0029"></a>
-<a name="index-calc_002dabs-_0028vectors_0029"></a>
-<a name="index-abs-_0028vectors_0029"></a>
-<p>The <kbd>A</kbd> (<code>calc-abs</code>) [<code>abs</code>] command computes the
-Frobenius norm of a vector or matrix argument.  This is the square
-root of the sum of the squares of the absolute values of the
-elements of the vector or matrix.  If the vector is interpreted as
-a point in two- or three-dimensional space, this is the distance
-from that point to the origin.
-</p>
-<a name="index-v-n"></a>
-<a name="index-V-n"></a>
-<a name="index-calc_002drnorm"></a>
-<a name="index-rnorm"></a>
-<p>The <kbd>v n</kbd> (<code>calc-rnorm</code>) [<code>rnorm</code>] command computes the
-infinity-norm of a vector, or the row norm of a matrix.  For a plain
-vector, this is the maximum of the absolute values of the elements.  For
-a matrix, this is the maximum of the row-absolute-value-sums, i.e., of
-the sums of the absolute values of the elements along the various rows.
-</p>
-<a name="index-v-N"></a>
-<a name="index-V-N"></a>
-<a name="index-calc_002dcnorm"></a>
-<a name="index-cnorm"></a>
-<p>The <kbd>V N</kbd> (<code>calc-cnorm</code>) [<code>cnorm</code>] command computes
-the one-norm of a vector, or column norm of a matrix.  For a plain
-vector, this is the sum of the absolute values of the elements.
-For a matrix, this is the maximum of the column-absolute-value-sums.
-General &lsquo;<samp>k</samp>&rsquo;-norms for &lsquo;<samp>k</samp>&rsquo; other than one or infinity are
-not provided.  However, the 2-norm (or Frobenius norm) is provided for
-vectors by the <kbd>A</kbd> (<code>calc-abs</code>) command.
-</p>
-<a name="index-v-C"></a>
-<a name="index-V-C"></a>
-<a name="index-calc_002dcross"></a>
-<a name="index-cross"></a>
-<p>The <kbd>V C</kbd> (<code>calc-cross</code>) [<code>cross</code>] command computes the
-right-handed cross product of two vectors, each of which must have
-exactly three elements.
-</p>
-<a name="index-_0026-_0028matrices_0029"></a>
-<a name="index-calc_002dinv-_0028matrices_0029"></a>
-<a name="index-inv-_0028matrices_0029"></a>
-<p>The <kbd>&amp;</kbd> (<code>calc-inv</code>) [<code>inv</code>] command computes the
-inverse of a square matrix.  If the matrix is singular, the inverse
-operation is left in symbolic form.  Matrix inverses are recorded so
-that once an inverse (or determinant) of a particular matrix has been
-computed, the inverse and determinant of the matrix can be recomputed
-quickly in the future.
-</p>
-<p>If the argument to <kbd>&amp;</kbd> is a plain number &lsquo;<samp>x</samp>&rsquo;, this
-command simply computes &lsquo;<samp>1/x</samp>&rsquo;.  This is okay, because the
-&lsquo;<samp>/</samp>&rsquo; operator also does a matrix inversion when dividing one
-by a matrix.
-</p>
-<a name="index-v-D"></a>
-<a name="index-V-D"></a>
-<a name="index-calc_002dmdet"></a>
-<a name="index-det"></a>
-<p>The <kbd>V D</kbd> (<code>calc-mdet</code>) [<code>det</code>] command computes the
-determinant of a square matrix.
-</p>
-<a name="index-v-L"></a>
-<a name="index-V-L"></a>
-<a name="index-calc_002dmlud"></a>
-<a name="index-lud"></a>
-<p>The <kbd>V L</kbd> (<code>calc-mlud</code>) [<code>lud</code>] command computes the
-LU decomposition of a matrix.  The result is a list of three matrices
-which, when multiplied together left-to-right, form the original matrix.
-The first is a permutation matrix that arises from pivoting in the
-algorithm, the second is lower-triangular with ones on the diagonal,
-and the third is upper-triangular.
-</p>
-<a name="index-v-T"></a>
-<a name="index-V-T"></a>
-<a name="index-calc_002dmtrace"></a>
-<a name="index-tr"></a>
-<p>The <kbd>V T</kbd> (<code>calc-mtrace</code>) [<code>tr</code>] command computes the
-trace of a square matrix.  This is defined as the sum of the diagonal
-elements of the matrix.
-</p>
-<a name="index-v-K"></a>
-<a name="index-V-K"></a>
-<a name="index-calc_002dkron"></a>
-<a name="index-kron"></a>
-<p>The <kbd>V K</kbd> (<code>calc-kron</code>) [<code>kron</code>] command computes
-the Kronecker product of two matrices.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Set-Operations.html#Set-Operations" accesskey="n" rel="next">Set Operations</a>, Previous: <a href="Manipulating-Vectors.html#Manipulating-Vectors" accesskey="p" rel="prev">Manipulating Vectors</a>, Up: <a href="Matrix-Functions.html#Matrix-Functions" accesskey="u" rel="up">Matrix Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href="Set-Operations.html#Set-Operations"
+    accesskey="n" rel="next">Set Operations</a>, Previous: <a href=
+    "Manipulating-Vectors.html#Manipulating-Vectors" accesskey="p"
+    rel="prev">Manipulating Vectors</a>, Up: <a href=
+    "Matrix-Functions.html#Matrix-Functions" accesskey="u" rel=
+    "up">Matrix Functions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Vector-and-Matrix-Arithmetic-1" id=
+  "Vector-and-Matrix-Arithmetic-1"></a>
 
+  <h3 class="section">9.5 Vector and Matrix Arithmetic</h3>
 
+  <p>Basic arithmetic operations like addition and multiplication
+  are defined for vectors and matrices as well as for numbers.
+  Division of matrices, in the sense of multiplying by the inverse,
+  is supported. (Division by a matrix actually uses
+  LU-decomposition for greater accuracy and speed.) See <a href=
+  "Basic-Arithmetic.html#Basic-Arithmetic">Basic
+  Arithmetic</a>.</p>
 
+  <p>The following functions are applied element-wise if their
+  arguments are vectors or matrices: <code>change-sign</code>,
+  <code>conj</code>, <code>arg</code>, <code>re</code>,
+  <code>im</code>, <code>polar</code>, <code>rect</code>,
+  <code>clean</code>, <code>float</code>, <code>frac</code>. See
+  <a href="Function-Index.html#Function-Index">Function
+  Index</a>.</p><a name="index-v-J" id="index-v-J"></a> <a name=
+  "index-V-J" id="index-V-J"></a> <a name=
+  "index-calc_002dconj_002dtranspose" id=
+  "index-calc_002dconj_002dtranspose"></a> <a name="index-ctrn" id=
+  "index-ctrn"></a>
+
+  <p>The <kbd>V J</kbd> (<code>calc-conj-transpose</code>)
+  [<code>ctrn</code>] command computes the conjugate transpose of
+  its argument, i.e.,
+  &lsquo;<samp>conj(trn(x))</samp>&rsquo;.</p><a name=
+  "index-A-_0028vectors_0029" id="index-A-_0028vectors_0029"></a>
+  <a name="index-calc_002dabs-_0028vectors_0029" id=
+  "index-calc_002dabs-_0028vectors_0029"></a> <a name=
+  "index-abs-_0028vectors_0029" id=
+  "index-abs-_0028vectors_0029"></a>
+
+  <p>The <kbd>A</kbd> (<code>calc-abs</code>) [<code>abs</code>]
+  command computes the Frobenius norm of a vector or matrix
+  argument. This is the square root of the sum of the squares of
+  the absolute values of the elements of the vector or matrix. If
+  the vector is interpreted as a point in two- or three-dimensional
+  space, this is the distance from that point to the
+  origin.</p><a name="index-v-n" id="index-v-n"></a> <a name=
+  "index-V-n" id="index-V-n"></a> <a name="index-calc_002drnorm"
+  id="index-calc_002drnorm"></a> <a name="index-rnorm" id=
+  "index-rnorm"></a>
+
+  <p>The <kbd>v n</kbd> (<code>calc-rnorm</code>)
+  [<code>rnorm</code>] command computes the infinity-norm of a
+  vector, or the row norm of a matrix. For a plain vector, this is
+  the maximum of the absolute values of the elements. For a matrix,
+  this is the maximum of the row-absolute-value-sums, i.e., of the
+  sums of the absolute values of the elements along the various
+  rows.</p><a name="index-v-N" id="index-v-N"></a> <a name=
+  "index-V-N" id="index-V-N"></a> <a name="index-calc_002dcnorm"
+  id="index-calc_002dcnorm"></a> <a name="index-cnorm" id=
+  "index-cnorm"></a>
+
+  <p>The <kbd>V N</kbd> (<code>calc-cnorm</code>)
+  [<code>cnorm</code>] command computes the one-norm of a vector,
+  or column norm of a matrix. For a plain vector, this is the sum
+  of the absolute values of the elements. For a matrix, this is the
+  maximum of the column-absolute-value-sums. General
+  &lsquo;<samp>k</samp>&rsquo;-norms for
+  &lsquo;<samp>k</samp>&rsquo; other than one or infinity are not
+  provided. However, the 2-norm (or Frobenius norm) is provided for
+  vectors by the <kbd>A</kbd> (<code>calc-abs</code>)
+  command.</p><a name="index-v-C" id="index-v-C"></a> <a name=
+  "index-V-C" id="index-V-C"></a> <a name="index-calc_002dcross"
+  id="index-calc_002dcross"></a> <a name="index-cross" id=
+  "index-cross"></a>
+
+  <p>The <kbd>V C</kbd> (<code>calc-cross</code>)
+  [<code>cross</code>] command computes the right-handed cross
+  product of two vectors, each of which must have exactly three
+  elements.</p><a name="index-_0026-_0028matrices_0029" id=
+  "index-_0026-_0028matrices_0029"></a> <a name=
+  "index-calc_002dinv-_0028matrices_0029" id=
+  "index-calc_002dinv-_0028matrices_0029"></a> <a name=
+  "index-inv-_0028matrices_0029" id=
+  "index-inv-_0028matrices_0029"></a>
+
+  <p>The <kbd>&amp;</kbd> (<code>calc-inv</code>)
+  [<code>inv</code>] command computes the inverse of a square
+  matrix. If the matrix is singular, the inverse operation is left
+  in symbolic form. Matrix inverses are recorded so that once an
+  inverse (or determinant) of a particular matrix has been
+  computed, the inverse and determinant of the matrix can be
+  recomputed quickly in the future.</p>
+
+  <p>If the argument to <kbd>&amp;</kbd> is a plain number
+  &lsquo;<samp>x</samp>&rsquo;, this command simply computes
+  &lsquo;<samp>1/x</samp>&rsquo;. This is okay, because the
+  &lsquo;<samp>/</samp>&rsquo; operator also does a matrix
+  inversion when dividing one by a matrix.</p><a name="index-v-D"
+  id="index-v-D"></a> <a name="index-V-D" id="index-V-D"></a>
+  <a name="index-calc_002dmdet" id="index-calc_002dmdet"></a>
+  <a name="index-det" id="index-det"></a>
+
+  <p>The <kbd>V D</kbd> (<code>calc-mdet</code>) [<code>det</code>]
+  command computes the determinant of a square matrix.</p><a name=
+  "index-v-L" id="index-v-L"></a> <a name="index-V-L" id=
+  "index-V-L"></a> <a name="index-calc_002dmlud" id=
+  "index-calc_002dmlud"></a> <a name="index-lud" id=
+  "index-lud"></a>
+
+  <p>The <kbd>V L</kbd> (<code>calc-mlud</code>) [<code>lud</code>]
+  command computes the LU decomposition of a matrix. The result is
+  a list of three matrices which, when multiplied together
+  left-to-right, form the original matrix. The first is a
+  permutation matrix that arises from pivoting in the algorithm,
+  the second is lower-triangular with ones on the diagonal, and the
+  third is upper-triangular.</p><a name="index-v-T" id=
+  "index-v-T"></a> <a name="index-V-T" id="index-V-T"></a> <a name=
+  "index-calc_002dmtrace" id="index-calc_002dmtrace"></a> <a name=
+  "index-tr" id="index-tr"></a>
+
+  <p>The <kbd>V T</kbd> (<code>calc-mtrace</code>)
+  [<code>tr</code>] command computes the trace of a square matrix.
+  This is defined as the sum of the diagonal elements of the
+  matrix.</p><a name="index-v-K" id="index-v-K"></a> <a name=
+  "index-V-K" id="index-V-K"></a> <a name="index-calc_002dkron" id=
+  "index-calc_002dkron"></a> <a name="index-kron" id=
+  "index-kron"></a>
+
+  <p>The <kbd>V K</kbd> (<code>calc-kron</code>)
+  [<code>kron</code>] command computes the Kronecker product of two
+  matrices.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Set-Operations.html#Set-Operations"
+    accesskey="n" rel="next">Set Operations</a>, Previous: <a href=
+    "Manipulating-Vectors.html#Manipulating-Vectors" accesskey="p"
+    rel="prev">Manipulating Vectors</a>, Up: <a href=
+    "Matrix-Functions.html#Matrix-Functions" accesskey="u" rel=
+    "up">Matrix Functions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

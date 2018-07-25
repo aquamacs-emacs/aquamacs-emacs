@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,316 +19,480 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Generic Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Generic Functions">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Generic Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Functions.html#Functions" rel="up" title="Functions">
-<link href="Function-Cells.html#Function-Cells" rel="next" title="Function Cells">
-<link href="Anonymous-Functions.html#Anonymous-Functions" rel="prev" title="Anonymous Functions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Generic Functions</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Generic Functions" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Generic Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Functions.html#Functions" rel="up" title=
+  "Functions" />
+  <link href="Function-Cells.html#Function-Cells" rel="next" title=
+  "Function Cells" />
+  <link href="Anonymous-Functions.html#Anonymous-Functions" rel=
+  "prev" title="Anonymous Functions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Generic-Functions" id="Generic-Functions"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Function-Cells.html#Function-Cells"
+    accesskey="n" rel="next">Function Cells</a>, Previous: <a href=
+    "Anonymous-Functions.html#Anonymous-Functions" accesskey="p"
+    rel="prev">Anonymous Functions</a>, Up: <a href=
+    "Functions.html#Functions" accesskey="u" rel="up">Functions</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Generic-Functions-1" id="Generic-Functions-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Generic-Functions"></a>
-<div class="header">
-<p>
-Next: <a href="Function-Cells.html#Function-Cells" accesskey="n" rel="next">Function Cells</a>, Previous: <a href="Anonymous-Functions.html#Anonymous-Functions" accesskey="p" rel="prev">Anonymous Functions</a>, Up: <a href="Functions.html#Functions" accesskey="u" rel="up">Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Generic-Functions-1"></a>
-<h3 class="section">12.8 Generic Functions</h3>
-<a name="index-generic-functions"></a>
-<a name="index-polymorphism"></a>
+  <h3 class="section">12.8 Generic Functions</h3><a name=
+  "index-generic-functions" id="index-generic-functions"></a>
+  <a name="index-polymorphism" id="index-polymorphism"></a>
 
-<p>Functions defined using <code>defun</code> have a hard-coded set of
-assumptions about the types and expected values of their arguments.
-For example, a function that was designed to handle values of its
-argument that are either numbers or lists of numbers will fail or
-signal an error if called with a value of any other type, such as a
-vector or a string.  This happens because the implementation of the
-function is not prepared to deal with types other than those assumed
-during the design.
-</p>
-<p>By contrast, object-oriented programs use <em>polymorphic
-functions</em>: a set of specialized functions having the same name, each
-one of which was written for a certain specific set of argument types.
-Which of the functions is actually called is decided at run time based
-on the types of the actual arguments.
-</p>
-<a name="index-CLOS"></a>
-<p>Emacs provides support for polymorphism.  Like other Lisp
-environments, notably Common Lisp and its Common Lisp Object System
-(<acronym>CLOS</acronym>), this support is based on <em>generic functions</em>.
-The Emacs generic functions closely follow <acronym>CLOS</acronym>, including
-use of similar names, so if you have experience with <acronym>CLOS</acronym>,
-the rest of this section will sound very familiar.
-</p>
-<p>A generic function specifies an abstract operation, by defining its
-name and list of arguments, but (usually) no implementation.  The
-actual implementation for several specific classes of arguments is
-provided by <em>methods</em>, which should be defined separately.  Each
-method that implements a generic function has the same name as the
-generic function, but the method&rsquo;s definition indicates what kinds of
-arguments it can handle by <em>specializing</em> the arguments defined by
-the generic function.  These <em>argument specializers</em> can be more
-or less specific; for example, a <code>string</code> type is more specific
-than a more general type, such as <code>sequence</code>.
-</p>
-<p>Note that, unlike in message-based OO languages, such as C<tt>++</tt> and
-Simula, methods that implement generic functions don&rsquo;t belong to a
-class, they belong to the generic function they implement.
-</p>
-<p>When a generic function is invoked, it selects the applicable
-methods by comparing the actual arguments passed by the caller with
-the argument specializers of each method.  A method is applicable if
-the actual arguments of the call are compatible with the method&rsquo;s
-specializers.  If more than one method is applicable, they are
-combined using certain rules, described below, and the combination
-then handles the call.
-</p>
-<dl>
-<dt><a name="index-cl_002ddefgeneric"></a>Macro: <strong>cl-defgeneric</strong> <em>name arguments [documentation] [options-and-methods&hellip;] &amp;rest body</em></dt>
-<dd><p>This macro defines a generic function with the specified <var>name</var>
-and <var>arguments</var>.  If <var>body</var> is present, it provides the
-default implementation.  If <var>documentation</var> is present (it should
-always be), it specifies the documentation string for the generic
-function, in the form <code>(:documentation <var>docstring</var>)</code>.  The
-optional <var>options-and-methods</var> can be one of the following forms:
-</p>
-<dl compact="compact">
-<dt><code>(declare <var>declarations</var>)</code></dt>
-<dd><p>A declare form, as described in <a href="Declare-Form.html#Declare-Form">Declare Form</a>.
-</p></dd>
-<dt><code>(:argument-precedence-order &amp;rest <var>args</var>)</code></dt>
-<dd><p>This form affects the sorting order for combining applicable methods.
-Normally, when two methods are compared during combination, method
-arguments are examined left to right, and the first method whose
-argument specializer is more specific will come before the other one.
-The order defined by this form overrides that, and the arguments are
-examined according to their order in this form, and not left to right.
-</p></dd>
-<dt><code>(:method [<var>qualifiers</var>&hellip;] args &amp;rest body)</code></dt>
-<dd><p>This form defines a method like <code>cl-defmethod</code> does.
-</p></dd>
-</dl>
-</dd></dl>
+  <p>Functions defined using <code>defun</code> have a hard-coded
+  set of assumptions about the types and expected values of their
+  arguments. For example, a function that was designed to handle
+  values of its argument that are either numbers or lists of
+  numbers will fail or signal an error if called with a value of
+  any other type, such as a vector or a string. This happens
+  because the implementation of the function is not prepared to
+  deal with types other than those assumed during the design.</p>
 
-<dl>
-<dt><a name="index-cl_002ddefmethod"></a>Macro: <strong>cl-defmethod</strong> <em>name [qualifier] arguments &amp;rest [docstring] body</em></dt>
-<dd><p>This macro defines a particular implementation for the generic
-function called <var>name</var>.  The implementation code is given by
-<var>body</var>.  If present, <var>docstring</var> is the documentation string
-for the method.  The <var>arguments</var> list, which must be identical in
-all the methods that implement a generic function, and must match the
-argument list of that function, provides argument specializers of the
-form <code>(<var>arg</var> <var>spec</var>)</code>, where <var>arg</var> is the argument
-name as specified in the <code>cl-defgeneric</code> call, and <var>spec</var> is
-one of the following specializer forms:
-</p>
-<dl compact="compact">
-<dt><code><var>type</var></code></dt>
-<dd><p>This specializer requires the argument to be of the given <var>type</var>,
-one of the types from the type hierarchy described below.
-</p></dd>
-<dt><code>(eql <var>object</var>)</code></dt>
-<dd><p>This specializer requires the argument be <code>eql</code> to the given
-<var>object</var>.
-</p></dd>
-<dt><code>(head <var>object</var>)</code></dt>
-<dd><p>The argument must be a cons cell whose <code>car</code> is <code>eql</code> to
-<var>object</var>.
-</p></dd>
-<dt><code><var>struct-tag</var></code></dt>
-<dd><p>The argument must be an instance of a class named <var>struct-tag</var>
-defined with <code>cl-defstruct</code> (see <a href="http://www.gnu.org/software/emacs/manual/html_node/cl/Structures.html#Structures">Structures</a> in <cite>Common Lisp
-Extensions for GNU Emacs Lisp</cite>), or of one of its parent classes.
-</p></dd>
-</dl>
+  <p>By contrast, object-oriented programs use <em>polymorphic
+  functions</em>: a set of specialized functions having the same
+  name, each one of which was written for a certain specific set of
+  argument types. Which of the functions is actually called is
+  decided at run time based on the types of the actual
+  arguments.</p><a name="index-CLOS" id="index-CLOS"></a>
 
-<p>Alternatively, the argument specializer can be of the form
-<code>&amp;context (<var>expr</var> <var>spec</var>)</code>, in which case the value of
-<var>expr</var> must be compatible with the specializer provided by
-<var>spec</var>; <var>spec</var> can be any of the forms described above.  In
-other words, this form of specializer uses the value of <var>expr</var>
-instead of arguments for the decision whether the method is
-applicable.  For example, <code>&amp;context (overwrite-mode (eql t))</code>
-will make the method compatible only when <code>overwrite-mode</code> is
-turned on.
-</p>
-<p>The type specializer, <code>(<var>arg</var> <var>type</var>)</code>, can specify one
-of the <em>system types</em> in the following list.  When a parent type
-is specified, an argument whose type is any of its more specific child
-types, as well as grand-children, grand-grand-children, etc. will also
-be compatible.
-</p>
-<dl compact="compact">
-<dt><code>integer</code></dt>
-<dd><p>Parent type: <code>number</code>.
-</p></dd>
-<dt><code>number</code></dt>
-<dt><code>null</code></dt>
-<dd><p>Parent type: <code>symbol</code>
-</p></dd>
-<dt><code>symbol</code></dt>
-<dt><code>string</code></dt>
-<dd><p>Parent type: <code>array</code>.
-</p></dd>
-<dt><code>array</code></dt>
-<dd><p>Parent type: <code>sequence</code>.
-</p></dd>
-<dt><code>cons</code></dt>
-<dd><p>Parent type: <code>list</code>.
-</p></dd>
-<dt><code>list</code></dt>
-<dd><p>Parent type: <code>sequence</code>.
-</p></dd>
-<dt><code>marker</code></dt>
-<dt><code>overlay</code></dt>
-<dt><code>float</code></dt>
-<dd><p>Parent type: <code>number</code>.
-</p></dd>
-<dt><code>window-configuration</code></dt>
-<dt><code>process</code></dt>
-<dt><code>window</code></dt>
-<dt><code>subr</code></dt>
-<dt><code>compiled-function</code></dt>
-<dt><code>buffer</code></dt>
-<dt><code>char-table</code></dt>
-<dd><p>Parent type: <code>array</code>.
-</p></dd>
-<dt><code>bool-vector</code></dt>
-<dd><p>Parent type: <code>array</code>.
-</p></dd>
-<dt><code>vector</code></dt>
-<dd><p>Parent type: <code>array</code>.
-</p></dd>
-<dt><code>frame</code></dt>
-<dt><code>hash-table</code></dt>
-<dt><code>font-spec</code></dt>
-<dt><code>font-entity</code></dt>
-<dt><code>font-object</code></dt>
-</dl>
+  <p>Emacs provides support for polymorphism. Like other Lisp
+  environments, notably Common Lisp and its Common Lisp Object
+  System (<acronym>CLOS</acronym>), this support is based on
+  <em>generic functions</em>. The Emacs generic functions closely
+  follow <acronym>CLOS</acronym>, including use of similar names,
+  so if you have experience with <acronym>CLOS</acronym>, the rest
+  of this section will sound very familiar.</p>
 
-<p>The optional <var>qualifier</var> allows combining several applicable
-methods.  If it is not present, the defined method is a <em>primary</em>
-method, responsible for providing the primary implementation of the
-generic function for the specialized arguments.  You can also define
-<em>auxiliary methods</em>, by using one of the following values as
-<var>qualifier</var>:
-</p>
-<dl compact="compact">
-<dt><code>:before</code></dt>
-<dd><p>This auxiliary method will run before the primary method.  More
-accurately, all the <code>:before</code> methods will run before the
-primary, in the most-specific-first order.
-</p></dd>
-<dt><code>:after</code></dt>
-<dd><p>This auxiliary method will run after the primary method.  More
-accurately, all such methods will run after the primary, in the
-most-specific-last order.
-</p></dd>
-<dt><code>:around</code></dt>
-<dd><p>This auxiliary method will run <em>instead</em> of the primary method.
-The most specific of such methods will be run before any other method.
-Such methods normally use <code>cl-call-next-method</code>, described below,
-to invoke the other auxiliary or primary methods.
-</p></dd>
-<dt><code>:extra <var>string</var></code></dt>
-<dd><p>This allows you to add more methods, distinguished by <var>string</var>,
-for the same specializers and qualifiers.
-</p></dd>
-</dl>
-</dd></dl>
+  <p>A generic function specifies an abstract operation, by
+  defining its name and list of arguments, but (usually) no
+  implementation. The actual implementation for several specific
+  classes of arguments is provided by <em>methods</em>, which
+  should be defined separately. Each method that implements a
+  generic function has the same name as the generic function, but
+  the method&rsquo;s definition indicates what kinds of arguments
+  it can handle by <em>specializing</em> the arguments defined by
+  the generic function. These <em>argument specializers</em> can be
+  more or less specific; for example, a <code>string</code> type is
+  more specific than a more general type, such as
+  <code>sequence</code>.</p>
 
-<a name="index-dispatch-of-methods-for-generic-function"></a>
-<a name="index-multiple_002ddispatch-methods"></a>
-<p>Each time a generic function is called, it builds the <em>effective
-method</em> which will handle this invocation by combining the applicable
-methods defined for the function.  The process of finding the
-applicable methods and producing the effective method is called
-<em>dispatch</em>.  The applicable methods are those all of whose
-specializers are compatible with the actual arguments of the call.
-Since all of the arguments must be compatible with the specializers,
-they all determine whether a method is applicable.  Methods that
-explicitly specialize more than one argument are called
-<em>multiple-dispatch methods</em>.
-</p>
-<p>The applicable methods are sorted into the order in which they will be
-combined.  The method whose left-most argument specializer is the most
-specific one will come first in the order.  (Specifying
-<code>:argument-precedence-order</code> as part of <code>cl-defmethod</code>
-overrides that, as described above.)  If the method body calls
-<code>cl-call-next-method</code>, the next most-specific method will run.
-If there are applicable <code>:around</code> methods, the most-specific of
-them will run first; it should call <code>cl-call-next-method</code> to run
-any of the less specific <code>:around</code> methods.  Next, the
-<code>:before</code> methods run in the order of their specificity, followed
-by the primary method, and lastly the <code>:after</code> methods in the
-reverse order of their specificity.
-</p>
-<dl>
-<dt><a name="index-cl_002dcall_002dnext_002dmethod"></a>Function: <strong>cl-call-next-method</strong> <em>&amp;rest args</em></dt>
-<dd><p>When invoked from within the lexical body of a primary or an
-<code>:around</code> auxiliary method, call the next applicable method for
-the same generic function.  Normally, it is called with no arguments,
-which means to call the next applicable method with the same arguments
-that the calling method was invoked.  Otherwise, the specified
-arguments are used instead.
-</p></dd></dl>
+  <p>Note that, unlike in message-based OO languages, such as
+  C<tt>++</tt> and Simula, methods that implement generic functions
+  don&rsquo;t belong to a class, they belong to the generic
+  function they implement.</p>
 
-<dl>
-<dt><a name="index-cl_002dnext_002dmethod_002dp"></a>Function: <strong>cl-next-method-p</strong></dt>
-<dd><p>This function, when called from within the lexical body of a primary
-or an <code>:around</code> auxiliary method, returns non-<code>nil</code> if there
-is a next method to call.
-</p></dd></dl>
+  <p>When a generic function is invoked, it selects the applicable
+  methods by comparing the actual arguments passed by the caller
+  with the argument specializers of each method. A method is
+  applicable if the actual arguments of the call are compatible
+  with the method&rsquo;s specializers. If more than one method is
+  applicable, they are combined using certain rules, described
+  below, and the combination then handles the call.</p>
 
+  <dl>
+    <dt><a name="index-cl_002ddefgeneric" id=
+    "index-cl_002ddefgeneric"></a>Macro:
+    <strong>cl-defgeneric</strong> <em>name arguments
+    [documentation] [options-and-methods&hellip;] &amp;rest
+    body</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Function-Cells.html#Function-Cells" accesskey="n" rel="next">Function Cells</a>, Previous: <a href="Anonymous-Functions.html#Anonymous-Functions" accesskey="p" rel="prev">Anonymous Functions</a>, Up: <a href="Functions.html#Functions" accesskey="u" rel="up">Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This macro defines a generic function with the specified
+      <var>name</var> and <var>arguments</var>. If <var>body</var>
+      is present, it provides the default implementation. If
+      <var>documentation</var> is present (it should always be), it
+      specifies the documentation string for the generic function,
+      in the form <code>(:documentation
+      <var>docstring</var>)</code>. The optional
+      <var>options-and-methods</var> can be one of the following
+      forms:</p>
 
+      <dl compact="compact">
+        <dt><code>(declare <var>declarations</var>)</code></dt>
 
+        <dd>
+          <p>A declare form, as described in <a href=
+          "Declare-Form.html#Declare-Form">Declare Form</a>.</p>
+        </dd>
 
+        <dt><code>(:argument-precedence-order &amp;rest
+        <var>args</var>)</code></dt>
+
+        <dd>
+          <p>This form affects the sorting order for combining
+          applicable methods. Normally, when two methods are
+          compared during combination, method arguments are
+          examined left to right, and the first method whose
+          argument specializer is more specific will come before
+          the other one. The order defined by this form overrides
+          that, and the arguments are examined according to their
+          order in this form, and not left to right.</p>
+        </dd>
+
+        <dt><code>(:method [<var>qualifiers</var>&hellip;] args
+        &amp;rest body)</code></dt>
+
+        <dd>
+          <p>This form defines a method like
+          <code>cl-defmethod</code> does.</p>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002ddefmethod" id=
+    "index-cl_002ddefmethod"></a>Macro:
+    <strong>cl-defmethod</strong> <em>name [qualifier] arguments
+    &amp;rest [docstring] body</em></dt>
+
+    <dd>
+      <p>This macro defines a particular implementation for the
+      generic function called <var>name</var>. The implementation
+      code is given by <var>body</var>. If present,
+      <var>docstring</var> is the documentation string for the
+      method. The <var>arguments</var> list, which must be
+      identical in all the methods that implement a generic
+      function, and must match the argument list of that function,
+      provides argument specializers of the form
+      <code>(<var>arg</var> <var>spec</var>)</code>, where
+      <var>arg</var> is the argument name as specified in the
+      <code>cl-defgeneric</code> call, and <var>spec</var> is one
+      of the following specializer forms:</p>
+
+      <dl compact="compact">
+        <dt><code><var>type</var></code></dt>
+
+        <dd>
+          <p>This specializer requires the argument to be of the
+          given <var>type</var>, one of the types from the type
+          hierarchy described below.</p>
+        </dd>
+
+        <dt><code>(eql <var>object</var>)</code></dt>
+
+        <dd>
+          <p>This specializer requires the argument be
+          <code>eql</code> to the given <var>object</var>.</p>
+        </dd>
+
+        <dt><code>(head <var>object</var>)</code></dt>
+
+        <dd>
+          <p>The argument must be a cons cell whose
+          <code>car</code> is <code>eql</code> to
+          <var>object</var>.</p>
+        </dd>
+
+        <dt><code><var>struct-tag</var></code></dt>
+
+        <dd>
+          <p>The argument must be an instance of a class named
+          <var>struct-tag</var> defined with
+          <code>cl-defstruct</code> (see <a href=
+          "http://www.gnu.org/software/emacs/manual/html_node/cl/Structures.html#Structures">
+          Structures</a> in <cite>Common Lisp Extensions for GNU
+          Emacs Lisp</cite>), or of one of its parent classes.</p>
+        </dd>
+      </dl>
+
+      <p>Alternatively, the argument specializer can be of the form
+      <code>&amp;context (<var>expr</var> <var>spec</var>)</code>,
+      in which case the value of <var>expr</var> must be compatible
+      with the specializer provided by <var>spec</var>;
+      <var>spec</var> can be any of the forms described above. In
+      other words, this form of specializer uses the value of
+      <var>expr</var> instead of arguments for the decision whether
+      the method is applicable. For example, <code>&amp;context
+      (overwrite-mode (eql t))</code> will make the method
+      compatible only when <code>overwrite-mode</code> is turned
+      on.</p>
+
+      <p>The type specializer, <code>(<var>arg</var>
+      <var>type</var>)</code>, can specify one of the <em>system
+      types</em> in the following list. When a parent type is
+      specified, an argument whose type is any of its more specific
+      child types, as well as grand-children, grand-grand-children,
+      etc. will also be compatible.</p>
+
+      <dl compact="compact">
+        <dt><code>integer</code></dt>
+
+        <dd>
+          <p>Parent type: <code>number</code>.</p>
+        </dd>
+
+        <dt><code>number</code></dt>
+
+        <dt><code>null</code></dt>
+
+        <dd>
+          <p>Parent type: <code>symbol</code></p>
+        </dd>
+
+        <dt><code>symbol</code></dt>
+
+        <dt><code>string</code></dt>
+
+        <dd>
+          <p>Parent type: <code>array</code>.</p>
+        </dd>
+
+        <dt><code>array</code></dt>
+
+        <dd>
+          <p>Parent type: <code>sequence</code>.</p>
+        </dd>
+
+        <dt><code>cons</code></dt>
+
+        <dd>
+          <p>Parent type: <code>list</code>.</p>
+        </dd>
+
+        <dt><code>list</code></dt>
+
+        <dd>
+          <p>Parent type: <code>sequence</code>.</p>
+        </dd>
+
+        <dt><code>marker</code></dt>
+
+        <dt><code>overlay</code></dt>
+
+        <dt><code>float</code></dt>
+
+        <dd>
+          <p>Parent type: <code>number</code>.</p>
+        </dd>
+
+        <dt><code>window-configuration</code></dt>
+
+        <dt><code>process</code></dt>
+
+        <dt><code>window</code></dt>
+
+        <dt><code>subr</code></dt>
+
+        <dt><code>compiled-function</code></dt>
+
+        <dt><code>buffer</code></dt>
+
+        <dt><code>char-table</code></dt>
+
+        <dd>
+          <p>Parent type: <code>array</code>.</p>
+        </dd>
+
+        <dt><code>bool-vector</code></dt>
+
+        <dd>
+          <p>Parent type: <code>array</code>.</p>
+        </dd>
+
+        <dt><code>vector</code></dt>
+
+        <dd>
+          <p>Parent type: <code>array</code>.</p>
+        </dd>
+
+        <dt><code>frame</code></dt>
+
+        <dt><code>hash-table</code></dt>
+
+        <dt><code>font-spec</code></dt>
+
+        <dt><code>font-entity</code></dt>
+
+        <dt><code>font-object</code></dt>
+      </dl>
+
+      <p>The optional <var>qualifier</var> allows combining several
+      applicable methods. If it is not present, the defined method
+      is a <em>primary</em> method, responsible for providing the
+      primary implementation of the generic function for the
+      specialized arguments. You can also define <em>auxiliary
+      methods</em>, by using one of the following values as
+      <var>qualifier</var>:</p>
+
+      <dl compact="compact">
+        <dt><code>:before</code></dt>
+
+        <dd>
+          <p>This auxiliary method will run before the primary
+          method. More accurately, all the <code>:before</code>
+          methods will run before the primary, in the
+          most-specific-first order.</p>
+        </dd>
+
+        <dt><code>:after</code></dt>
+
+        <dd>
+          <p>This auxiliary method will run after the primary
+          method. More accurately, all such methods will run after
+          the primary, in the most-specific-last order.</p>
+        </dd>
+
+        <dt><code>:around</code></dt>
+
+        <dd>
+          <p>This auxiliary method will run <em>instead</em> of the
+          primary method. The most specific of such methods will be
+          run before any other method. Such methods normally use
+          <code>cl-call-next-method</code>, described below, to
+          invoke the other auxiliary or primary methods.</p>
+        </dd>
+
+        <dt><code>:extra <var>string</var></code></dt>
+
+        <dd>
+          <p>This allows you to add more methods, distinguished by
+          <var>string</var>, for the same specializers and
+          qualifiers.</p>
+        </dd>
+      </dl>
+    </dd>
+  </dl><a name="index-dispatch-of-methods-for-generic-function" id=
+  "index-dispatch-of-methods-for-generic-function"></a> <a name=
+  "index-multiple_002ddispatch-methods" id=
+  "index-multiple_002ddispatch-methods"></a>
+
+  <p>Each time a generic function is called, it builds the
+  <em>effective method</em> which will handle this invocation by
+  combining the applicable methods defined for the function. The
+  process of finding the applicable methods and producing the
+  effective method is called <em>dispatch</em>. The applicable
+  methods are those all of whose specializers are compatible with
+  the actual arguments of the call. Since all of the arguments must
+  be compatible with the specializers, they all determine whether a
+  method is applicable. Methods that explicitly specialize more
+  than one argument are called <em>multiple-dispatch
+  methods</em>.</p>
+
+  <p>The applicable methods are sorted into the order in which they
+  will be combined. The method whose left-most argument specializer
+  is the most specific one will come first in the order.
+  (Specifying <code>:argument-precedence-order</code> as part of
+  <code>cl-defmethod</code> overrides that, as described above.) If
+  the method body calls <code>cl-call-next-method</code>, the next
+  most-specific method will run. If there are applicable
+  <code>:around</code> methods, the most-specific of them will run
+  first; it should call <code>cl-call-next-method</code> to run any
+  of the less specific <code>:around</code> methods. Next, the
+  <code>:before</code> methods run in the order of their
+  specificity, followed by the primary method, and lastly the
+  <code>:after</code> methods in the reverse order of their
+  specificity.</p>
+
+  <dl>
+    <dt><a name="index-cl_002dcall_002dnext_002dmethod" id=
+    "index-cl_002dcall_002dnext_002dmethod"></a>Function:
+    <strong>cl-call-next-method</strong> <em>&amp;rest
+    args</em></dt>
+
+    <dd>
+      <p>When invoked from within the lexical body of a primary or
+      an <code>:around</code> auxiliary method, call the next
+      applicable method for the same generic function. Normally, it
+      is called with no arguments, which means to call the next
+      applicable method with the same arguments that the calling
+      method was invoked. Otherwise, the specified arguments are
+      used instead.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dnext_002dmethod_002dp" id=
+    "index-cl_002dnext_002dmethod_002dp"></a>Function:
+    <strong>cl-next-method-p</strong></dt>
+
+    <dd>
+      <p>This function, when called from within the lexical body of
+      a primary or an <code>:around</code> auxiliary method,
+      returns non-<code>nil</code> if there is a next method to
+      call.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Function-Cells.html#Function-Cells"
+    accesskey="n" rel="next">Function Cells</a>, Previous: <a href=
+    "Anonymous-Functions.html#Anonymous-Functions" accesskey="p"
+    rel="prev">Anonymous Functions</a>, Up: <a href=
+    "Functions.html#Functions" accesskey="u" rel="up">Functions</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

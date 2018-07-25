@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001-2016 Free Software Foundation, Inc.
@@ -14,140 +16,223 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Common Lisp Extensions: Searching Sequences</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Common Lisp Extensions: Searching Sequences">
-<meta name="keywords" content="Common Lisp Extensions: Searching Sequences">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Sequences.html#Sequences" rel="up" title="Sequences">
-<link href="Sorting-Sequences.html#Sorting-Sequences" rel="next" title="Sorting Sequences">
-<link href="Sequence-Functions.html#Sequence-Functions" rel="prev" title="Sequence Functions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Common Lisp Extensions: Searching Sequences</title>
+  <meta name="description" content=
+  "Common Lisp Extensions: Searching Sequences" />
+  <meta name="keywords" content=
+  "Common Lisp Extensions: Searching Sequences" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Sequences.html#Sequences" rel="up" title=
+  "Sequences" />
+  <link href="Sorting-Sequences.html#Sorting-Sequences" rel="next"
+  title="Sorting Sequences" />
+  <link href="Sequence-Functions.html#Sequence-Functions" rel=
+  "prev" title="Sequence Functions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Searching-Sequences"></a>
-<div class="header">
-<p>
-Next: <a href="Sorting-Sequences.html#Sorting-Sequences" accesskey="n" rel="next">Sorting Sequences</a>, Previous: <a href="Sequence-Functions.html#Sequence-Functions" accesskey="p" rel="prev">Sequence Functions</a>, Up: <a href="Sequences.html#Sequences" accesskey="u" rel="up">Sequences</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Searching-Sequences-1"></a>
-<h3 class="section">9.4 Searching Sequences</h3>
+<body lang="en" xml:lang="en">
+  <a name="Searching-Sequences" id="Searching-Sequences"></a>
 
-<p>These functions search for elements or subsequences in a sequence.
-(See also <code>cl-member</code> and <code>cl-assoc</code>; see <a href="Lists.html#Lists">Lists</a>.)
-</p>
-<dl>
-<dt><a name="index-cl_002dfind"></a>Function: <strong>cl-find</strong> <em>item seq <tt>&amp;key :test :test-not :key :start :end :from-end</tt></em></dt>
-<dd><p>This function searches <var>seq</var> for an element matching <var>item</var>.
-If it finds a match, it returns the matching element.  Otherwise,
-it returns <code>nil</code>.  It returns the leftmost match, unless
-<code>:from-end</code> is true, in which case it returns the rightmost
-match.  The <code>:start</code> and <code>:end</code> arguments may be used to
-limit the range of elements that are searched.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href="Sorting-Sequences.html#Sorting-Sequences"
+    accesskey="n" rel="next">Sorting Sequences</a>, Previous:
+    <a href="Sequence-Functions.html#Sequence-Functions" accesskey=
+    "p" rel="prev">Sequence Functions</a>, Up: <a href=
+    "Sequences.html#Sequences" accesskey="u" rel="up">Sequences</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Searching-Sequences-1" id="Searching-Sequences-1"></a>
 
-<dl>
-<dt><a name="index-cl_002dposition"></a>Function: <strong>cl-position</strong> <em>item seq <tt>&amp;key :test :test-not :key :start :end :from-end</tt></em></dt>
-<dd><p>This function is like <code>cl-find</code>, except that it returns the
-integer position in the sequence of the matching item rather than
-the item itself.  The position is relative to the start of the
-sequence as a whole, even if <code>:start</code> is non-zero.  The function
-returns <code>nil</code> if no matching element was found.
-</p></dd></dl>
+  <h3 class="section">9.4 Searching Sequences</h3>
 
-<dl>
-<dt><a name="index-cl_002dcount"></a>Function: <strong>cl-count</strong> <em>item seq <tt>&amp;key :test :test-not :key :start :end</tt></em></dt>
-<dd><p>This function returns the number of elements of <var>seq</var> which
-match <var>item</var>.  The result is always a nonnegative integer.
-</p></dd></dl>
+  <p>These functions search for elements or subsequences in a
+  sequence. (See also <code>cl-member</code> and
+  <code>cl-assoc</code>; see <a href=
+  "Lists.html#Lists">Lists</a>.)</p>
 
-<a name="index-cl_002dfind_002dif"></a>
-<a name="index-cl_002dfind_002dif_002dnot"></a>
-<a name="index-cl_002dposition_002dif"></a>
-<a name="index-cl_002dposition_002dif_002dnot"></a>
-<a name="index-cl_002dcount_002dif"></a>
-<a name="index-cl_002dcount_002dif_002dnot"></a>
-<p>The <code>cl-find-if</code>, <code>cl-find-if-not</code>, <code>cl-position-if</code>,
-<code>cl-position-if-not</code>, <code>cl-count-if</code>, and <code>cl-count-if-not</code>
-functions are defined similarly.
-</p>
-<dl>
-<dt><a name="index-cl_002dmismatch"></a>Function: <strong>cl-mismatch</strong> <em>seq1 seq2 <tt>&amp;key :test :test-not :key :start1 :end1 :start2 :end2 :from-end</tt></em></dt>
-<dd><p>This function compares the specified parts of <var>seq1</var> and
-<var>seq2</var>.  If they are the same length and the corresponding
-elements match (according to <code>:test</code>, <code>:test-not</code>,
-and <code>:key</code>), the function returns <code>nil</code>.  If there is
-a mismatch, the function returns the index (relative to <var>seq1</var>)
-of the first mismatching element.  This will be the leftmost pair of
-elements that do not match, or the position at which the shorter of
-the two otherwise-matching sequences runs out.
-</p>
-<p>If <code>:from-end</code> is true, then the elements are compared from right
-to left starting at <code>(1- <var>end1</var>)</code> and <code>(1- <var>end2</var>)</code>.
-If the sequences differ, then one plus the index of the rightmost
-difference (relative to <var>seq1</var>) is returned.
-</p>
-<p>An interesting example is <code>(cl-mismatch str1 str2 :key 'upcase)</code>,
-which compares two strings case-insensitively.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-cl_002dfind" id=
+    "index-cl_002dfind"></a>Function: <strong>cl-find</strong>
+    <em>item seq <tt>&amp;key :test :test-not :key :start :end
+    :from-end</tt></em></dt>
 
-<dl>
-<dt><a name="index-cl_002dsearch"></a>Function: <strong>cl-search</strong> <em>seq1 seq2 <tt>&amp;key :test :test-not :key :from-end :start1 :end1 :start2 :end2</tt></em></dt>
-<dd><p>This function searches <var>seq2</var> for a subsequence that matches
-<var>seq1</var> (or part of it specified by <code>:start1</code> and
-<code>:end1</code>).  Only matches that fall entirely within the region
-defined by <code>:start2</code> and <code>:end2</code> will be considered.
-The return value is the index of the leftmost element of the
-leftmost match, relative to the start of <var>seq2</var>, or <code>nil</code>
-if no matches were found.  If <code>:from-end</code> is true, the
-function finds the <em>rightmost</em> matching subsequence.
-</p></dd></dl>
+    <dd>
+      <p>This function searches <var>seq</var> for an element
+      matching <var>item</var>. If it finds a match, it returns the
+      matching element. Otherwise, it returns <code>nil</code>. It
+      returns the leftmost match, unless <code>:from-end</code> is
+      true, in which case it returns the rightmost match. The
+      <code>:start</code> and <code>:end</code> arguments may be
+      used to limit the range of elements that are searched.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Sorting-Sequences.html#Sorting-Sequences" accesskey="n" rel="next">Sorting Sequences</a>, Previous: <a href="Sequence-Functions.html#Sequence-Functions" accesskey="p" rel="prev">Sequence Functions</a>, Up: <a href="Sequences.html#Sequences" accesskey="u" rel="up">Sequences</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-cl_002dposition" id=
+    "index-cl_002dposition"></a>Function:
+    <strong>cl-position</strong> <em>item seq <tt>&amp;key :test
+    :test-not :key :start :end :from-end</tt></em></dt>
 
+    <dd>
+      <p>This function is like <code>cl-find</code>, except that it
+      returns the integer position in the sequence of the matching
+      item rather than the item itself. The position is relative to
+      the start of the sequence as a whole, even if
+      <code>:start</code> is non-zero. The function returns
+      <code>nil</code> if no matching element was found.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-cl_002dcount" id=
+    "index-cl_002dcount"></a>Function: <strong>cl-count</strong>
+    <em>item seq <tt>&amp;key :test :test-not :key :start
+    :end</tt></em></dt>
 
+    <dd>
+      <p>This function returns the number of elements of
+      <var>seq</var> which match <var>item</var>. The result is
+      always a nonnegative integer.</p>
+    </dd>
+  </dl><a name="index-cl_002dfind_002dif" id=
+  "index-cl_002dfind_002dif"></a> <a name=
+  "index-cl_002dfind_002dif_002dnot" id=
+  "index-cl_002dfind_002dif_002dnot"></a> <a name=
+  "index-cl_002dposition_002dif" id=
+  "index-cl_002dposition_002dif"></a> <a name=
+  "index-cl_002dposition_002dif_002dnot" id=
+  "index-cl_002dposition_002dif_002dnot"></a> <a name=
+  "index-cl_002dcount_002dif" id="index-cl_002dcount_002dif"></a>
+  <a name="index-cl_002dcount_002dif_002dnot" id=
+  "index-cl_002dcount_002dif_002dnot"></a>
+
+  <p>The <code>cl-find-if</code>, <code>cl-find-if-not</code>,
+  <code>cl-position-if</code>, <code>cl-position-if-not</code>,
+  <code>cl-count-if</code>, and <code>cl-count-if-not</code>
+  functions are defined similarly.</p>
+
+  <dl>
+    <dt><a name="index-cl_002dmismatch" id=
+    "index-cl_002dmismatch"></a>Function:
+    <strong>cl-mismatch</strong> <em>seq1 seq2 <tt>&amp;key :test
+    :test-not :key :start1 :end1 :start2 :end2
+    :from-end</tt></em></dt>
+
+    <dd>
+      <p>This function compares the specified parts of
+      <var>seq1</var> and <var>seq2</var>. If they are the same
+      length and the corresponding elements match (according to
+      <code>:test</code>, <code>:test-not</code>, and
+      <code>:key</code>), the function returns <code>nil</code>. If
+      there is a mismatch, the function returns the index (relative
+      to <var>seq1</var>) of the first mismatching element. This
+      will be the leftmost pair of elements that do not match, or
+      the position at which the shorter of the two
+      otherwise-matching sequences runs out.</p>
+
+      <p>If <code>:from-end</code> is true, then the elements are
+      compared from right to left starting at <code>(1-
+      <var>end1</var>)</code> and <code>(1-
+      <var>end2</var>)</code>. If the sequences differ, then one
+      plus the index of the rightmost difference (relative to
+      <var>seq1</var>) is returned.</p>
+
+      <p>An interesting example is <code>(cl-mismatch str1 str2
+      :key 'upcase)</code>, which compares two strings
+      case-insensitively.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dsearch" id=
+    "index-cl_002dsearch"></a>Function: <strong>cl-search</strong>
+    <em>seq1 seq2 <tt>&amp;key :test :test-not :key :from-end
+    :start1 :end1 :start2 :end2</tt></em></dt>
+
+    <dd>
+      <p>This function searches <var>seq2</var> for a subsequence
+      that matches <var>seq1</var> (or part of it specified by
+      <code>:start1</code> and <code>:end1</code>). Only matches
+      that fall entirely within the region defined by
+      <code>:start2</code> and <code>:end2</code> will be
+      considered. The return value is the index of the leftmost
+      element of the leftmost match, relative to the start of
+      <var>seq2</var>, or <code>nil</code> if no matches were
+      found. If <code>:from-end</code> is true, the function finds
+      the <em>rightmost</em> matching subsequence.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Sorting-Sequences.html#Sorting-Sequences"
+    accesskey="n" rel="next">Sorting Sequences</a>, Previous:
+    <a href="Sequence-Functions.html#Sequence-Functions" accesskey=
+    "p" rel="prev">Sequence Functions</a>, Up: <a href=
+    "Sequences.html#Sequences" accesskey="u" rel="up">Sequences</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

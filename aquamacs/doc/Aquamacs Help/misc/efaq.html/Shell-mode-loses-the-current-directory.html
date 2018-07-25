@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2001-2016 Free Software Foundation, Inc.
 
 Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000
@@ -27,80 +29,124 @@ itself allows free copying and redistribution.
 [This version has been heavily edited since it was included in the Emacs
 distribution.] -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs FAQ: Shell mode loses the current directory</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs FAQ: Shell mode loses the current directory">
-<meta name="keywords" content="GNU Emacs FAQ: Shell mode loses the current directory">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Concept-index.html#Concept-index" rel="index" title="Concept index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Bugs-and-problems.html#Bugs-and-problems" rel="up" title="Bugs and problems">
-<link href="Security-risks-with-Emacs.html#Security-risks-with-Emacs" rel="next" title="Security risks with Emacs">
-<link href="Editing-files-with-_0024-in-the-name.html#Editing-files-with-_0024-in-the-name" rel="prev" title="Editing files with $ in the name">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs FAQ: Shell mode loses the current
+  directory</title>
+  <meta name="description" content=
+  "GNU Emacs FAQ: Shell mode loses the current directory" />
+  <meta name="keywords" content=
+  "GNU Emacs FAQ: Shell mode loses the current directory" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Concept-index.html#Concept-index" rel="index" title=
+  "Concept index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Bugs-and-problems.html#Bugs-and-problems" rel="up"
+  title="Bugs and problems" />
+  <link href=
+  "Security-risks-with-Emacs.html#Security-risks-with-Emacs" rel=
+  "next" title="Security risks with Emacs" />
+  <link href=
+  "Editing-files-with-_0024-in-the-name.html#Editing-files-with-_0024-in-the-name"
+  rel="prev" title="Editing files with $ in the name" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Shell-mode-loses-the-current-directory"></a>
-<div class="header">
-<p>
-Next: <a href="Security-risks-with-Emacs.html#Security-risks-with-Emacs" accesskey="n" rel="next">Security risks with Emacs</a>, Previous: <a href="Editing-files-with-_0024-in-the-name.html#Editing-files-with-_0024-in-the-name" accesskey="p" rel="prev">Editing files with $ in the name</a>, Up: <a href="Bugs-and-problems.html#Bugs-and-problems" accesskey="u" rel="up">Bugs and problems</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Why-does-shell-mode-lose-track-of-the-shell_0027s-current-directory_003f"></a>
-<h3 class="section">6.9 Why does shell mode lose track of the shell&rsquo;s current directory?</h3>
-<a name="index-Current-directory-and-shell_002dmode"></a>
-<a name="index-shell_002dmode-and-current-directory"></a>
-<a name="index-Directory_002c-current-in-shell_002dmode"></a>
+<body lang="en" xml:lang="en">
+  <a name="Shell-mode-loses-the-current-directory" id=
+  "Shell-mode-loses-the-current-directory"></a>
 
-<p>Emacs has no way of knowing when the shell actually changes its
-directory.  This is an intrinsic limitation of Unix.  So it tries to
-guess by recognizing &lsquo;<samp>cd</samp>&rsquo; commands.  If you type <kbd>cd</kbd> followed
-by a directory name with a variable reference (<kbd>cd $HOME/bin</kbd>) or
-with a shell metacharacter (<kbd>cd ../lib*</kbd>), Emacs will fail to
-correctly guess the shell&rsquo;s new current directory.  A huge variety of
-fixes and enhancements to shell mode for this problem have been written
-to handle this problem (see <a href="Finding-a-package-with-particular-functionality.html#Finding-a-package-with-particular-functionality">Finding a package with particular functionality</a>).
-</p>
-<p>You can tell Emacs the shell&rsquo;s current directory with the command
-<kbd>M-x dirs</kbd>.
-</p>
+  <div class="header">
+    <p>Next: <a href=
+    "Security-risks-with-Emacs.html#Security-risks-with-Emacs"
+    accesskey="n" rel="next">Security risks with Emacs</a>,
+    Previous: <a href=
+    "Editing-files-with-_0024-in-the-name.html#Editing-files-with-_0024-in-the-name"
+    accesskey="p" rel="prev">Editing files with $ in the name</a>,
+    Up: <a href="Bugs-and-problems.html#Bugs-and-problems"
+    accesskey="u" rel="up">Bugs and problems</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Concept-index.html#Concept-index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name=
+  "Why-does-shell-mode-lose-track-of-the-shell_0027s-current-directory_003f"
+  id=
+  "Why-does-shell-mode-lose-track-of-the-shell_0027s-current-directory_003f"></a>
 
+  <h3 class="section">6.9 Why does shell mode lose track of the
+  shell&rsquo;s current directory?</h3><a name=
+  "index-Current-directory-and-shell_002dmode" id=
+  "index-Current-directory-and-shell_002dmode"></a> <a name=
+  "index-shell_002dmode-and-current-directory" id=
+  "index-shell_002dmode-and-current-directory"></a> <a name=
+  "index-Directory_002c-current-in-shell_002dmode" id=
+  "index-Directory_002c-current-in-shell_002dmode"></a>
 
+  <p>Emacs has no way of knowing when the shell actually changes
+  its directory. This is an intrinsic limitation of Unix. So it
+  tries to guess by recognizing &lsquo;<samp>cd</samp>&rsquo;
+  commands. If you type <kbd>cd</kbd> followed by a directory name
+  with a variable reference (<kbd>cd $HOME/bin</kbd>) or with a
+  shell metacharacter (<kbd>cd ../lib*</kbd>), Emacs will fail to
+  correctly guess the shell&rsquo;s new current directory. A huge
+  variety of fixes and enhancements to shell mode for this problem
+  have been written to handle this problem (see <a href=
+  "Finding-a-package-with-particular-functionality.html#Finding-a-package-with-particular-functionality">
+  Finding a package with particular functionality</a>).</p>
 
+  <p>You can tell Emacs the shell&rsquo;s current directory with
+  the command <kbd>M-x dirs</kbd>.</p>
 </body>
 </html>

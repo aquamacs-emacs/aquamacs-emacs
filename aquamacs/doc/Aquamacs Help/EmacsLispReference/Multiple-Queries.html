@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,160 +19,232 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Multiple Queries</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Multiple Queries">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Multiple Queries">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Minibuffers.html#Minibuffers" rel="up" title="Minibuffers">
-<link href="Reading-a-Password.html#Reading-a-Password" rel="next" title="Reading a Password">
-<link href="Yes_002dor_002dNo-Queries.html#Yes_002dor_002dNo-Queries" rel="prev" title="Yes-or-No Queries">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Multiple Queries</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Multiple Queries" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Multiple Queries" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Minibuffers.html#Minibuffers" rel="up" title=
+  "Minibuffers" />
+  <link href="Reading-a-Password.html#Reading-a-Password" rel=
+  "next" title="Reading a Password" />
+  <link href=
+  "Yes_002dor_002dNo-Queries.html#Yes_002dor_002dNo-Queries" rel=
+  "prev" title="Yes-or-No Queries" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Multiple-Queries" id="Multiple-Queries"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Reading-a-Password.html#Reading-a-Password"
+    accesskey="n" rel="next">Reading a Password</a>, Previous:
+    <a href=
+    "Yes_002dor_002dNo-Queries.html#Yes_002dor_002dNo-Queries"
+    accesskey="p" rel="prev">Yes-or-No Queries</a>, Up: <a href=
+    "Minibuffers.html#Minibuffers" accesskey="u" rel=
+    "up">Minibuffers</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Asking-Multiple-Y_002dor_002dN-Questions" id=
+  "Asking-Multiple-Y_002dor_002dN-Questions"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Multiple-Queries"></a>
-<div class="header">
-<p>
-Next: <a href="Reading-a-Password.html#Reading-a-Password" accesskey="n" rel="next">Reading a Password</a>, Previous: <a href="Yes_002dor_002dNo-Queries.html#Yes_002dor_002dNo-Queries" accesskey="p" rel="prev">Yes-or-No Queries</a>, Up: <a href="Minibuffers.html#Minibuffers" accesskey="u" rel="up">Minibuffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Asking-Multiple-Y_002dor_002dN-Questions"></a>
-<h3 class="section">19.8 Asking Multiple Y-or-N Questions</h3>
-<a name="index-multiple-yes_002dor_002dno-questions"></a>
+  <h3 class="section">19.8 Asking Multiple Y-or-N
+  Questions</h3><a name=
+  "index-multiple-yes_002dor_002dno-questions" id=
+  "index-multiple-yes_002dor_002dno-questions"></a>
 
-<p>When you have a series of similar questions to ask, such as &ldquo;Do you
-want to save this buffer?&rdquo; for each buffer in turn, you should use
-<code>map-y-or-n-p</code> to ask the collection of questions, rather than
-asking each question individually.  This gives the user certain
-convenient facilities such as the ability to answer the whole series at
-once.
-</p>
-<dl>
-<dt><a name="index-map_002dy_002dor_002dn_002dp"></a>Function: <strong>map-y-or-n-p</strong> <em>prompter actor list &amp;optional help action-alist no-cursor-in-echo-area</em></dt>
-<dd><p>This function asks the user a series of questions, reading a
-single-character answer in the echo area for each one.
-</p>
-<p>The value of <var>list</var> specifies the objects to ask questions about.
-It should be either a list of objects or a generator function.  If it is
-a function, it should expect no arguments, and should return either the
-next object to ask about, or <code>nil</code>, meaning to stop asking questions.
-</p>
-<p>The argument <var>prompter</var> specifies how to ask each question.  If
-<var>prompter</var> is a string, the question text is computed like this:
-</p>
-<div class="example">
-<pre class="example">(format <var>prompter</var> <var>object</var>)
-</pre></div>
+  <p>When you have a series of similar questions to ask, such as
+  &ldquo;Do you want to save this buffer?&rdquo; for each buffer in
+  turn, you should use <code>map-y-or-n-p</code> to ask the
+  collection of questions, rather than asking each question
+  individually. This gives the user certain convenient facilities
+  such as the ability to answer the whole series at once.</p>
 
-<p>where <var>object</var> is the next object to ask about (as obtained from
-<var>list</var>).
-</p>
-<p>If not a string, <var>prompter</var> should be a function of one argument
-(the next object to ask about) and should return the question text.  If
-the value is a string, that is the question to ask the user.  The
-function can also return <code>t</code>, meaning do act on this object (and
-don&rsquo;t ask the user), or <code>nil</code>, meaning ignore this object (and don&rsquo;t
-ask the user).
-</p>
-<p>The argument <var>actor</var> says how to act on the answers that the user
-gives.  It should be a function of one argument, and it is called with
-each object that the user says yes for.  Its argument is always an
-object obtained from <var>list</var>.
-</p>
-<p>If the argument <var>help</var> is given, it should be a list of this form:
-</p>
-<div class="example">
-<pre class="example">(<var>singular</var> <var>plural</var> <var>action</var>)
-</pre></div>
+  <dl>
+    <dt><a name="index-map_002dy_002dor_002dn_002dp" id=
+    "index-map_002dy_002dor_002dn_002dp"></a>Function:
+    <strong>map-y-or-n-p</strong> <em>prompter actor list
+    &amp;optional help action-alist
+    no-cursor-in-echo-area</em></dt>
 
-<p>where <var>singular</var> is a string containing a singular noun that
-describes the objects conceptually being acted on, <var>plural</var> is the
-corresponding plural noun, and <var>action</var> is a transitive verb
-describing what <var>actor</var> does.
-</p>
-<p>If you don&rsquo;t specify <var>help</var>, the default is <code>(&quot;object&quot;
-&quot;objects&quot; &quot;act on&quot;)</code>.
-</p>
-<p>Each time a question is asked, the user may enter <kbd>y</kbd>, <kbd>Y</kbd>, or
-<tt class="key">SPC</tt> to act on that object; <kbd>n</kbd>, <kbd>N</kbd>, or <tt class="key">DEL</tt> to skip
-that object; <kbd>!</kbd> to act on all following objects; <tt class="key">ESC</tt> or
-<kbd>q</kbd> to exit (skip all following objects); <kbd>.</kbd> (period) to act on
-the current object and then exit; or <kbd>C-h</kbd> to get help.  These are
-the same answers that <code>query-replace</code> accepts.  The keymap
-<code>query-replace-map</code> defines their meaning for <code>map-y-or-n-p</code>
-as well as for <code>query-replace</code>; see <a href="Search-and-Replace.html#Search-and-Replace">Search and Replace</a>.
-</p>
-<p>You can use <var>action-alist</var> to specify additional possible answers
-and what they mean.  It is an alist of elements of the form
-<code>(<var>char</var> <var>function</var> <var>help</var>)</code>, each of which defines one
-additional answer.  In this element, <var>char</var> is a character (the
-answer); <var>function</var> is a function of one argument (an object from
-<var>list</var>); <var>help</var> is a string.
-</p>
-<p>When the user responds with <var>char</var>, <code>map-y-or-n-p</code> calls
-<var>function</var>.  If it returns non-<code>nil</code>, the object is considered
-acted upon, and <code>map-y-or-n-p</code> advances to the next object in
-<var>list</var>.  If it returns <code>nil</code>, the prompt is repeated for the
-same object.
-</p>
-<p>Normally, <code>map-y-or-n-p</code> binds <code>cursor-in-echo-area</code> while
-prompting.  But if <var>no-cursor-in-echo-area</var> is non-<code>nil</code>, it
-does not do that.
-</p>
-<p>If <code>map-y-or-n-p</code> is called in a command that was invoked using the
-mouse&mdash;more precisely, if <code>last-nonmenu-event</code> (see <a href="Command-Loop-Info.html#Command-Loop-Info">Command Loop Info</a>) is either <code>nil</code> or a list&mdash;then it uses a dialog box
-or pop-up menu to ask the question.  In this case, it does not use
-keyboard input or the echo area.  You can force use either of the mouse or
-of keyboard input by binding <code>last-nonmenu-event</code> to a suitable
-value around the call.
-</p>
-<p>The return value of <code>map-y-or-n-p</code> is the number of objects acted on.
-</p></dd></dl>
+    <dd>
+      <p>This function asks the user a series of questions, reading
+      a single-character answer in the echo area for each one.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Reading-a-Password.html#Reading-a-Password" accesskey="n" rel="next">Reading a Password</a>, Previous: <a href="Yes_002dor_002dNo-Queries.html#Yes_002dor_002dNo-Queries" accesskey="p" rel="prev">Yes-or-No Queries</a>, Up: <a href="Minibuffers.html#Minibuffers" accesskey="u" rel="up">Minibuffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>The value of <var>list</var> specifies the objects to ask
+      questions about. It should be either a list of objects or a
+      generator function. If it is a function, it should expect no
+      arguments, and should return either the next object to ask
+      about, or <code>nil</code>, meaning to stop asking
+      questions.</p>
 
+      <p>The argument <var>prompter</var> specifies how to ask each
+      question. If <var>prompter</var> is a string, the question
+      text is computed like this:</p>
 
+      <div class="example">
+        <pre class="example">
+(format <var>prompter</var> <var>object</var>)
+</pre>
+      </div>
 
+      <p>where <var>object</var> is the next object to ask about
+      (as obtained from <var>list</var>).</p>
+
+      <p>If not a string, <var>prompter</var> should be a function
+      of one argument (the next object to ask about) and should
+      return the question text. If the value is a string, that is
+      the question to ask the user. The function can also return
+      <code>t</code>, meaning do act on this object (and
+      don&rsquo;t ask the user), or <code>nil</code>, meaning
+      ignore this object (and don&rsquo;t ask the user).</p>
+
+      <p>The argument <var>actor</var> says how to act on the
+      answers that the user gives. It should be a function of one
+      argument, and it is called with each object that the user
+      says yes for. Its argument is always an object obtained from
+      <var>list</var>.</p>
+
+      <p>If the argument <var>help</var> is given, it should be a
+      list of this form:</p>
+
+      <div class="example">
+        <pre class="example">
+(<var>singular</var> <var>plural</var> <var>action</var>)
+</pre>
+      </div>
+
+      <p>where <var>singular</var> is a string containing a
+      singular noun that describes the objects conceptually being
+      acted on, <var>plural</var> is the corresponding plural noun,
+      and <var>action</var> is a transitive verb describing what
+      <var>actor</var> does.</p>
+
+      <p>If you don&rsquo;t specify <var>help</var>, the default is
+      <code>("object" "objects" "act on")</code>.</p>
+
+      <p>Each time a question is asked, the user may enter
+      <kbd>y</kbd>, <kbd>Y</kbd>, or <tt class="key">SPC</tt> to
+      act on that object; <kbd>n</kbd>, <kbd>N</kbd>, or <tt class=
+      "key">DEL</tt> to skip that object; <kbd>!</kbd> to act on
+      all following objects; <tt class="key">ESC</tt> or
+      <kbd>q</kbd> to exit (skip all following objects);
+      <kbd>.</kbd> (period) to act on the current object and then
+      exit; or <kbd>C-h</kbd> to get help. These are the same
+      answers that <code>query-replace</code> accepts. The keymap
+      <code>query-replace-map</code> defines their meaning for
+      <code>map-y-or-n-p</code> as well as for
+      <code>query-replace</code>; see <a href=
+      "Search-and-Replace.html#Search-and-Replace">Search and
+      Replace</a>.</p>
+
+      <p>You can use <var>action-alist</var> to specify additional
+      possible answers and what they mean. It is an alist of
+      elements of the form <code>(<var>char</var>
+      <var>function</var> <var>help</var>)</code>, each of which
+      defines one additional answer. In this element,
+      <var>char</var> is a character (the answer);
+      <var>function</var> is a function of one argument (an object
+      from <var>list</var>); <var>help</var> is a string.</p>
+
+      <p>When the user responds with <var>char</var>,
+      <code>map-y-or-n-p</code> calls <var>function</var>. If it
+      returns non-<code>nil</code>, the object is considered acted
+      upon, and <code>map-y-or-n-p</code> advances to the next
+      object in <var>list</var>. If it returns <code>nil</code>,
+      the prompt is repeated for the same object.</p>
+
+      <p>Normally, <code>map-y-or-n-p</code> binds
+      <code>cursor-in-echo-area</code> while prompting. But if
+      <var>no-cursor-in-echo-area</var> is non-<code>nil</code>, it
+      does not do that.</p>
+
+      <p>If <code>map-y-or-n-p</code> is called in a command that
+      was invoked using the mouse&mdash;more precisely, if
+      <code>last-nonmenu-event</code> (see <a href=
+      "Command-Loop-Info.html#Command-Loop-Info">Command Loop
+      Info</a>) is either <code>nil</code> or a list&mdash;then it
+      uses a dialog box or pop-up menu to ask the question. In this
+      case, it does not use keyboard input or the echo area. You
+      can force use either of the mouse or of keyboard input by
+      binding <code>last-nonmenu-event</code> to a suitable value
+      around the call.</p>
+
+      <p>The return value of <code>map-y-or-n-p</code> is the
+      number of objects acted on.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Reading-a-Password.html#Reading-a-Password"
+    accesskey="n" rel="next">Reading a Password</a>, Previous:
+    <a href=
+    "Yes_002dor_002dNo-Queries.html#Yes_002dor_002dNo-Queries"
+    accesskey="p" rel="prev">Yes-or-No Queries</a>, Up: <a href=
+    "Minibuffers.html#Minibuffers" accesskey="u" rel=
+    "up">Minibuffers</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

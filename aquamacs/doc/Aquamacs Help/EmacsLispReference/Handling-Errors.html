@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,319 +19,444 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Handling Errors</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Handling Errors">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Handling Errors">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Errors.html#Errors" rel="up" title="Errors">
-<link href="Error-Symbols.html#Error-Symbols" rel="next" title="Error Symbols">
-<link href="Processing-of-Errors.html#Processing-of-Errors" rel="prev" title="Processing of Errors">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Handling Errors</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Handling Errors" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Handling Errors" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Errors.html#Errors" rel="up" title="Errors" />
+  <link href="Error-Symbols.html#Error-Symbols" rel="next" title=
+  "Error Symbols" />
+  <link href="Processing-of-Errors.html#Processing-of-Errors" rel=
+  "prev" title="Processing of Errors" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Handling-Errors" id="Handling-Errors"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Error-Symbols.html#Error-Symbols" accesskey=
+    "n" rel="next">Error Symbols</a>, Previous: <a href=
+    "Processing-of-Errors.html#Processing-of-Errors" accesskey="p"
+    rel="prev">Processing of Errors</a>, Up: <a href=
+    "Errors.html#Errors" accesskey="u" rel="up">Errors</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Writing-Code-to-Handle-Errors" id=
+  "Writing-Code-to-Handle-Errors"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Handling-Errors"></a>
-<div class="header">
-<p>
-Next: <a href="Error-Symbols.html#Error-Symbols" accesskey="n" rel="next">Error Symbols</a>, Previous: <a href="Processing-of-Errors.html#Processing-of-Errors" accesskey="p" rel="prev">Processing of Errors</a>, Up: <a href="Errors.html#Errors" accesskey="u" rel="up">Errors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Writing-Code-to-Handle-Errors"></a>
-<h4 class="subsubsection">10.6.3.3 Writing Code to Handle Errors</h4>
-<a name="index-error-handler"></a>
-<a name="index-handling-errors"></a>
+  <h4 class="subsubsection">10.6.3.3 Writing Code to Handle
+  Errors</h4><a name="index-error-handler" id=
+  "index-error-handler"></a> <a name="index-handling-errors" id=
+  "index-handling-errors"></a>
 
-<p>The usual effect of signaling an error is to terminate the command
-that is running and return immediately to the Emacs editor command loop.
-You can arrange to trap errors occurring in a part of your program by
-establishing an error handler, with the special form
-<code>condition-case</code>.  A simple example looks like this:
-</p>
-<div class="example">
-<pre class="example">(condition-case nil
+  <p>The usual effect of signaling an error is to terminate the
+  command that is running and return immediately to the Emacs
+  editor command loop. You can arrange to trap errors occurring in
+  a part of your program by establishing an error handler, with the
+  special form <code>condition-case</code>. A simple example looks
+  like this:</p>
+
+  <div class="example">
+    <pre class="example">
+(condition-case nil
     (delete-file filename)
   (error nil))
-</pre></div>
+</pre>
+  </div>
 
-<p>This deletes the file named <var>filename</var>, catching any error and
-returning <code>nil</code> if an error occurs.  (You can use the macro
-<code>ignore-errors</code> for a simple case like this; see below.)
-</p>
-<p>The <code>condition-case</code> construct is often used to trap errors that
-are predictable, such as failure to open a file in a call to
-<code>insert-file-contents</code>.  It is also used to trap errors that are
-totally unpredictable, such as when the program evaluates an expression
-read from the user.
-</p>
-<p>The second argument of <code>condition-case</code> is called the
-<em>protected form</em>.  (In the example above, the protected form is a
-call to <code>delete-file</code>.)  The error handlers go into effect when
-this form begins execution and are deactivated when this form returns.
-They remain in effect for all the intervening time.  In particular, they
-are in effect during the execution of functions called by this form, in
-their subroutines, and so on.  This is a good thing, since, strictly
-speaking, errors can be signaled only by Lisp primitives (including
-<code>signal</code> and <code>error</code>) called by the protected form, not by the
-protected form itself.
-</p>
-<p>The arguments after the protected form are handlers.  Each handler
-lists one or more <em>condition names</em> (which are symbols) to specify
-which errors it will handle.  The error symbol specified when an error
-is signaled also defines a list of condition names.  A handler applies
-to an error if they have any condition names in common.  In the example
-above, there is one handler, and it specifies one condition name,
-<code>error</code>, which covers all errors.
-</p>
-<p>The search for an applicable handler checks all the established handlers
-starting with the most recently established one.  Thus, if two nested
-<code>condition-case</code> forms offer to handle the same error, the inner of
-the two gets to handle it.
-</p>
-<p>If an error is handled by some <code>condition-case</code> form, this
-ordinarily prevents the debugger from being run, even if
-<code>debug-on-error</code> says this error should invoke the debugger.
-</p>
-<p>If you want to be able to debug errors that are caught by a
-<code>condition-case</code>, set the variable <code>debug-on-signal</code> to a
-non-<code>nil</code> value.  You can also specify that a particular handler
-should let the debugger run first, by writing <code>debug</code> among the
-conditions, like this:
-</p>
-<div class="example">
-<pre class="example">(condition-case nil
+  <p>This deletes the file named <var>filename</var>, catching any
+  error and returning <code>nil</code> if an error occurs. (You can
+  use the macro <code>ignore-errors</code> for a simple case like
+  this; see below.)</p>
+
+  <p>The <code>condition-case</code> construct is often used to
+  trap errors that are predictable, such as failure to open a file
+  in a call to <code>insert-file-contents</code>. It is also used
+  to trap errors that are totally unpredictable, such as when the
+  program evaluates an expression read from the user.</p>
+
+  <p>The second argument of <code>condition-case</code> is called
+  the <em>protected form</em>. (In the example above, the protected
+  form is a call to <code>delete-file</code>.) The error handlers
+  go into effect when this form begins execution and are
+  deactivated when this form returns. They remain in effect for all
+  the intervening time. In particular, they are in effect during
+  the execution of functions called by this form, in their
+  subroutines, and so on. This is a good thing, since, strictly
+  speaking, errors can be signaled only by Lisp primitives
+  (including <code>signal</code> and <code>error</code>) called by
+  the protected form, not by the protected form itself.</p>
+
+  <p>The arguments after the protected form are handlers. Each
+  handler lists one or more <em>condition names</em> (which are
+  symbols) to specify which errors it will handle. The error symbol
+  specified when an error is signaled also defines a list of
+  condition names. A handler applies to an error if they have any
+  condition names in common. In the example above, there is one
+  handler, and it specifies one condition name, <code>error</code>,
+  which covers all errors.</p>
+
+  <p>The search for an applicable handler checks all the
+  established handlers starting with the most recently established
+  one. Thus, if two nested <code>condition-case</code> forms offer
+  to handle the same error, the inner of the two gets to handle
+  it.</p>
+
+  <p>If an error is handled by some <code>condition-case</code>
+  form, this ordinarily prevents the debugger from being run, even
+  if <code>debug-on-error</code> says this error should invoke the
+  debugger.</p>
+
+  <p>If you want to be able to debug errors that are caught by a
+  <code>condition-case</code>, set the variable
+  <code>debug-on-signal</code> to a non-<code>nil</code> value. You
+  can also specify that a particular handler should let the
+  debugger run first, by writing <code>debug</code> among the
+  conditions, like this:</p>
+
+  <div class="example">
+    <pre class="example">
+(condition-case nil
     (delete-file filename)
   ((debug error) nil))
-</pre></div>
+</pre>
+  </div>
 
-<p>The effect of <code>debug</code> here is only to prevent
-<code>condition-case</code> from suppressing the call to the debugger.  Any
-given error will invoke the debugger only if <code>debug-on-error</code> and
-the other usual filtering mechanisms say it should.  See <a href="Error-Debugging.html#Error-Debugging">Error Debugging</a>.
-</p>
-<dl>
-<dt><a name="index-condition_002dcase_002dunless_002ddebug"></a>Macro: <strong>condition-case-unless-debug</strong> <em>var protected-form handlers&hellip;</em></dt>
-<dd><p>The macro <code>condition-case-unless-debug</code> provides another way to
-handle debugging of such forms.  It behaves exactly like
-<code>condition-case</code>, unless the variable <code>debug-on-error</code> is
-non-<code>nil</code>, in which case it does not handle any errors at all.
-</p></dd></dl>
+  <p>The effect of <code>debug</code> here is only to prevent
+  <code>condition-case</code> from suppressing the call to the
+  debugger. Any given error will invoke the debugger only if
+  <code>debug-on-error</code> and the other usual filtering
+  mechanisms say it should. See <a href=
+  "Error-Debugging.html#Error-Debugging">Error Debugging</a>.</p>
 
-<p>Once Emacs decides that a certain handler handles the error, it
-returns control to that handler.  To do so, Emacs unbinds all variable
-bindings made by binding constructs that are being exited, and
-executes the cleanups of all <code>unwind-protect</code> forms that are
-being exited.  Once control arrives at the handler, the body of the
-handler executes normally.
-</p>
-<p>After execution of the handler body, execution returns from the
-<code>condition-case</code> form.  Because the protected form is exited
-completely before execution of the handler, the handler cannot resume
-execution at the point of the error, nor can it examine variable
-bindings that were made within the protected form.  All it can do is
-clean up and proceed.
-</p>
-<p>Error signaling and handling have some resemblance to <code>throw</code> and
-<code>catch</code> (see <a href="Catch-and-Throw.html#Catch-and-Throw">Catch and Throw</a>), but they are entirely separate
-facilities.  An error cannot be caught by a <code>catch</code>, and a
-<code>throw</code> cannot be handled by an error handler (though using
-<code>throw</code> when there is no suitable <code>catch</code> signals an error
-that can be handled).
-</p>
-<dl>
-<dt><a name="index-condition_002dcase"></a>Special Form: <strong>condition-case</strong> <em>var protected-form handlers&hellip;</em></dt>
-<dd><p>This special form establishes the error handlers <var>handlers</var> around
-the execution of <var>protected-form</var>.  If <var>protected-form</var> executes
-without error, the value it returns becomes the value of the
-<code>condition-case</code> form; in this case, the <code>condition-case</code> has
-no effect.  The <code>condition-case</code> form makes a difference when an
-error occurs during <var>protected-form</var>.
-</p>
-<p>Each of the <var>handlers</var> is a list of the form <code>(<var>conditions</var>
-<var>body</var>&hellip;)</code>.  Here <var>conditions</var> is an error condition name
-to be handled, or a list of condition names (which can include <code>debug</code>
-to allow the debugger to run before the handler); <var>body</var> is one or more
-Lisp expressions to be executed when this handler handles an error.
-Here are examples of handlers:
-</p>
-<div class="example">
-<pre class="example">(error nil)
+  <dl>
+    <dt><a name="index-condition_002dcase_002dunless_002ddebug" id=
+    "index-condition_002dcase_002dunless_002ddebug"></a>Macro:
+    <strong>condition-case-unless-debug</strong> <em>var
+    protected-form handlers&hellip;</em></dt>
 
-(arith-error (message &quot;Division by zero&quot;))
+    <dd>
+      <p>The macro <code>condition-case-unless-debug</code>
+      provides another way to handle debugging of such forms. It
+      behaves exactly like <code>condition-case</code>, unless the
+      variable <code>debug-on-error</code> is non-<code>nil</code>,
+      in which case it does not handle any errors at all.</p>
+    </dd>
+  </dl>
+
+  <p>Once Emacs decides that a certain handler handles the error,
+  it returns control to that handler. To do so, Emacs unbinds all
+  variable bindings made by binding constructs that are being
+  exited, and executes the cleanups of all
+  <code>unwind-protect</code> forms that are being exited. Once
+  control arrives at the handler, the body of the handler executes
+  normally.</p>
+
+  <p>After execution of the handler body, execution returns from
+  the <code>condition-case</code> form. Because the protected form
+  is exited completely before execution of the handler, the handler
+  cannot resume execution at the point of the error, nor can it
+  examine variable bindings that were made within the protected
+  form. All it can do is clean up and proceed.</p>
+
+  <p>Error signaling and handling have some resemblance to
+  <code>throw</code> and <code>catch</code> (see <a href=
+  "Catch-and-Throw.html#Catch-and-Throw">Catch and Throw</a>), but
+  they are entirely separate facilities. An error cannot be caught
+  by a <code>catch</code>, and a <code>throw</code> cannot be
+  handled by an error handler (though using <code>throw</code> when
+  there is no suitable <code>catch</code> signals an error that can
+  be handled).</p>
+
+  <dl>
+    <dt><a name="index-condition_002dcase" id=
+    "index-condition_002dcase"></a>Special Form:
+    <strong>condition-case</strong> <em>var protected-form
+    handlers&hellip;</em></dt>
+
+    <dd>
+      <p>This special form establishes the error handlers
+      <var>handlers</var> around the execution of
+      <var>protected-form</var>. If <var>protected-form</var>
+      executes without error, the value it returns becomes the
+      value of the <code>condition-case</code> form; in this case,
+      the <code>condition-case</code> has no effect. The
+      <code>condition-case</code> form makes a difference when an
+      error occurs during <var>protected-form</var>.</p>
+
+      <p>Each of the <var>handlers</var> is a list of the form
+      <code>(<var>conditions</var> <var>body</var>&hellip;)</code>.
+      Here <var>conditions</var> is an error condition name to be
+      handled, or a list of condition names (which can include
+      <code>debug</code> to allow the debugger to run before the
+      handler); <var>body</var> is one or more Lisp expressions to
+      be executed when this handler handles an error. Here are
+      examples of handlers:</p>
+
+      <div class="example">
+        <pre class="example">
+(error nil)
+
+(arith-error (message "Division by zero"))
 
 ((arith-error file-error)
  (message
-  &quot;Either division by zero or failure to open a file&quot;))
-</pre></div>
+  "Either division by zero or failure to open a file"))
+</pre>
+      </div>
 
-<p>Each error that occurs has an <em>error symbol</em> that describes what
-kind of error it is, and which describes also a list of condition names
-(see <a href="Error-Symbols.html#Error-Symbols">Error Symbols</a>).  Emacs
-searches all the active <code>condition-case</code> forms for a handler that
-specifies one or more of these condition names; the innermost matching
-<code>condition-case</code> handles the error.  Within this
-<code>condition-case</code>, the first applicable handler handles the error.
-</p>
-<p>After executing the body of the handler, the <code>condition-case</code>
-returns normally, using the value of the last form in the handler body
-as the overall value.
-</p>
-<a name="index-error-description"></a>
-<p>The argument <var>var</var> is a variable.  <code>condition-case</code> does not
-bind this variable when executing the <var>protected-form</var>, only when it
-handles an error.  At that time, it binds <var>var</var> locally to an
-<em>error description</em>, which is a list giving the particulars of the
-error.  The error description has the form <code>(<var>error-symbol</var>
-. <var>data</var>)</code>.  The handler can refer to this list to decide what to
-do.  For example, if the error is for failure opening a file, the file
-name is the second element of <var>data</var>&mdash;the third element of the
-error description.
-</p>
-<p>If <var>var</var> is <code>nil</code>, that means no variable is bound.  Then the
-error symbol and associated data are not available to the handler.
-</p>
-<a name="index-rethrow-a-signal"></a>
-<p>Sometimes it is necessary to re-throw a signal caught by
-<code>condition-case</code>, for some outer-level handler to catch.  Here&rsquo;s
-how to do that:
-</p>
-<div class="example">
-<pre class="example">  (signal (car err) (cdr err))
-</pre></div>
+      <p>Each error that occurs has an <em>error symbol</em> that
+      describes what kind of error it is, and which describes also
+      a list of condition names (see <a href=
+      "Error-Symbols.html#Error-Symbols">Error Symbols</a>). Emacs
+      searches all the active <code>condition-case</code> forms for
+      a handler that specifies one or more of these condition
+      names; the innermost matching <code>condition-case</code>
+      handles the error. Within this <code>condition-case</code>,
+      the first applicable handler handles the error.</p>
 
-<p>where <code>err</code> is the error description variable, the first argument
-to <code>condition-case</code> whose error condition you want to re-throw.
-See <a href="Signaling-Errors.html#Definition-of-signal">Definition of signal</a>.
-</p></dd></dl>
+      <p>After executing the body of the handler, the
+      <code>condition-case</code> returns normally, using the value
+      of the last form in the handler body as the overall
+      value.</p><a name="index-error-description" id=
+      "index-error-description"></a>
 
-<dl>
-<dt><a name="index-error_002dmessage_002dstring"></a>Function: <strong>error-message-string</strong> <em>error-descriptor</em></dt>
-<dd><p>This function returns the error message string for a given error
-descriptor.  It is useful if you want to handle an error by printing the
-usual error message for that error.  See <a href="Signaling-Errors.html#Definition-of-signal">Definition of signal</a>.
-</p></dd></dl>
+      <p>The argument <var>var</var> is a variable.
+      <code>condition-case</code> does not bind this variable when
+      executing the <var>protected-form</var>, only when it handles
+      an error. At that time, it binds <var>var</var> locally to an
+      <em>error description</em>, which is a list giving the
+      particulars of the error. The error description has the form
+      <code>(<var>error-symbol</var> . <var>data</var>)</code>. The
+      handler can refer to this list to decide what to do. For
+      example, if the error is for failure opening a file, the file
+      name is the second element of <var>data</var>&mdash;the third
+      element of the error description.</p>
 
-<a name="index-arith_002derror-example"></a>
-<p>Here is an example of using <code>condition-case</code> to handle the error
-that results from dividing by zero.  The handler displays the error
-message (but without a beep), then returns a very large number.
-</p>
-<div class="example">
-<pre class="example">(defun safe-divide (dividend divisor)
+      <p>If <var>var</var> is <code>nil</code>, that means no
+      variable is bound. Then the error symbol and associated data
+      are not available to the handler.</p><a name=
+      "index-rethrow-a-signal" id="index-rethrow-a-signal"></a>
+
+      <p>Sometimes it is necessary to re-throw a signal caught by
+      <code>condition-case</code>, for some outer-level handler to
+      catch. Here&rsquo;s how to do that:</p>
+
+      <div class="example">
+        <pre class="example">
+  (signal (car err) (cdr err))
+</pre>
+      </div>
+
+      <p>where <code>err</code> is the error description variable,
+      the first argument to <code>condition-case</code> whose error
+      condition you want to re-throw. See <a href=
+      "Signaling-Errors.html#Definition-of-signal">Definition of
+      signal</a>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-error_002dmessage_002dstring" id=
+    "index-error_002dmessage_002dstring"></a>Function:
+    <strong>error-message-string</strong>
+    <em>error-descriptor</em></dt>
+
+    <dd>
+      <p>This function returns the error message string for a given
+      error descriptor. It is useful if you want to handle an error
+      by printing the usual error message for that error. See
+      <a href=
+      "Signaling-Errors.html#Definition-of-signal">Definition of
+      signal</a>.</p>
+    </dd>
+  </dl><a name="index-arith_002derror-example" id=
+  "index-arith_002derror-example"></a>
+
+  <p>Here is an example of using <code>condition-case</code> to
+  handle the error that results from dividing by zero. The handler
+  displays the error message (but without a beep), then returns a
+  very large number.</p>
+
+  <div class="example">
+    <pre class="example">
+(defun safe-divide (dividend divisor)
   (condition-case err
       ;; <span class="roman">Protected form.</span>
       (/ dividend divisor)
-</pre><pre class="example">    ;; <span class="roman">The handler.</span>
-    (arith-error                        ; <span class="roman">Condition.</span>
-     ;; <span class="roman">Display the usual message for this error.</span>
-     (message &quot;%s&quot; (error-message-string err))
+</pre>
+    <pre class="example">
+    ;; <span class="roman">The handler.</span>
+    (arith-error                        ; <span class=
+"roman">Condition.</span>
+     ;; <span class=
+"roman">Display the usual message for this error.</span>
+     (message "%s" (error-message-string err))
      1000000)))
 &rArr; safe-divide
-</pre><pre class="example">
-</pre><pre class="example">(safe-divide 5 0)
-     ⊣ Arithmetic error: (arith-error)
+</pre>
+    <pre class="example">
+</pre>
+    <pre class="example">
+(safe-divide 5 0)
+     &acirc;&Scaron;&pound; Arithmetic error: (arith-error)
 &rArr; 1000000
-</pre></div>
+</pre>
+  </div>
 
-<p>The handler specifies condition name <code>arith-error</code> so that it
-will handle only division-by-zero errors.  Other kinds of errors will
-not be handled (by this <code>condition-case</code>).  Thus:
-</p>
-<div class="example">
-<pre class="example">(safe-divide nil 3)
+  <p>The handler specifies condition name <code>arith-error</code>
+  so that it will handle only division-by-zero errors. Other kinds
+  of errors will not be handled (by this
+  <code>condition-case</code>). Thus:</p>
+
+  <div class="example">
+    <pre class="example">
+(safe-divide nil 3)
      error&rarr; Wrong type argument: number-or-marker-p, nil
-</pre></div>
+</pre>
+  </div>
 
-<p>Here is a <code>condition-case</code> that catches all kinds of errors,
-including those from <code>error</code>:
-</p>
-<div class="example">
-<pre class="example">(setq baz 34)
+  <p>Here is a <code>condition-case</code> that catches all kinds
+  of errors, including those from <code>error</code>:</p>
+
+  <div class="example">
+    <pre class="example">
+(setq baz 34)
      &rArr; 34
-</pre><pre class="example">
-</pre><pre class="example">(condition-case err
+</pre>
+    <pre class="example">
+</pre>
+    <pre class="example">
+(condition-case err
     (if (eq baz 35)
         t
-      ;; <span class="roman">This is a call to the function <code>error</code>.</span>
-      (error &quot;Rats!  The variable %s was %s, not 35&quot; 'baz baz))
-  ;; <span class="roman">This is the handler; it is not a form.</span>
-  (error (princ (format &quot;The error was: %s&quot; err))
+      ;; <span class=
+"roman">This is a call to the function <code>error</code>.</span>
+      (error "Rats!  The variable %s was %s, not 35" 'baz baz))
+  ;; <span class=
+"roman">This is the handler; it is not a form.</span>
+  (error (princ (format "The error was: %s" err))
          2))
-⊣ The error was: (error &quot;Rats!  The variable baz was 34, not 35&quot;)
+&acirc;&Scaron;&pound; The error was: (error "Rats!  The variable baz was 34, not 35")
 &rArr; 2
-</pre></div>
+</pre>
+  </div>
 
-<dl>
-<dt><a name="index-ignore_002derrors"></a>Macro: <strong>ignore-errors</strong> <em>body&hellip;</em></dt>
-<dd><p>This construct executes <var>body</var>, ignoring any errors that occur
-during its execution.  If the execution is without error,
-<code>ignore-errors</code> returns the value of the last form in <var>body</var>;
-otherwise, it returns <code>nil</code>.
-</p>
-<p>Here&rsquo;s the example at the beginning of this subsection rewritten using
-<code>ignore-errors</code>:
-</p>
-<div class="example">
-<pre class="example">  (ignore-errors
+  <dl>
+    <dt><a name="index-ignore_002derrors" id=
+    "index-ignore_002derrors"></a>Macro:
+    <strong>ignore-errors</strong> <em>body&hellip;</em></dt>
+
+    <dd>
+      <p>This construct executes <var>body</var>, ignoring any
+      errors that occur during its execution. If the execution is
+      without error, <code>ignore-errors</code> returns the value
+      of the last form in <var>body</var>; otherwise, it returns
+      <code>nil</code>.</p>
+
+      <p>Here&rsquo;s the example at the beginning of this
+      subsection rewritten using <code>ignore-errors</code>:</p>
+
+      <div class="example">
+        <pre class="example">
+  (ignore-errors
    (delete-file filename))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-with_002ddemoted_002derrors"></a>Macro: <strong>with-demoted-errors</strong> <em>format body&hellip;</em></dt>
-<dd><p>This macro is like a milder version of <code>ignore-errors</code>.  Rather
-than suppressing errors altogether, it converts them into messages.
-It uses the string <var>format</var> to format the message.
-<var>format</var> should contain a single &lsquo;<samp>%</samp>&rsquo;-sequence; e.g.,
-<code>&quot;Error: %S&quot;</code>.  Use <code>with-demoted-errors</code> around code
-that is not expected to signal errors, but
-should be robust if one does occur.  Note that this macro uses
-<code>condition-case-unless-debug</code> rather than <code>condition-case</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-with_002ddemoted_002derrors" id=
+    "index-with_002ddemoted_002derrors"></a>Macro:
+    <strong>with-demoted-errors</strong> <em>format
+    body&hellip;</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Error-Symbols.html#Error-Symbols" accesskey="n" rel="next">Error Symbols</a>, Previous: <a href="Processing-of-Errors.html#Processing-of-Errors" accesskey="p" rel="prev">Processing of Errors</a>, Up: <a href="Errors.html#Errors" accesskey="u" rel="up">Errors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This macro is like a milder version of
+      <code>ignore-errors</code>. Rather than suppressing errors
+      altogether, it converts them into messages. It uses the
+      string <var>format</var> to format the message.
+      <var>format</var> should contain a single
+      &lsquo;<samp>%</samp>&rsquo;-sequence; e.g., <code>"Error:
+      %S"</code>. Use <code>with-demoted-errors</code> around code
+      that is not expected to signal errors, but should be robust
+      if one does occur. Note that this macro uses
+      <code>condition-case-unless-debug</code> rather than
+      <code>condition-case</code>.</p>
+    </dd>
+  </dl>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Next: <a href="Error-Symbols.html#Error-Symbols" accesskey=
+    "n" rel="next">Error Symbols</a>, Previous: <a href=
+    "Processing-of-Errors.html#Processing-of-Errors" accesskey="p"
+    rel="prev">Processing of Errors</a>, Up: <a href=
+    "Errors.html#Errors" accesskey="u" rel="up">Errors</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

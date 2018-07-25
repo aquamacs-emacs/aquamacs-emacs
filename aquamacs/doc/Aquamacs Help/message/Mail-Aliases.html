@@ -1,15 +1,22 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Mail Aliases - Message Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Message Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Commands.html#Commands" title="Commands">
-<link rel="prev" href="Sending.html#Sending" title="Sending">
-<link rel="next" href="Spelling.html#Spelling" title="Spelling">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Mail Aliases - Message Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Message Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Commands.html#Commands" title="Commands" />
+  <link rel="prev" href="Sending.html#Sending" title="Sending" />
+  <link rel="next" href="Spelling.html#Spelling" title=
+  "Spelling" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Message, the Emacs message composition mode.
 
 Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003,
@@ -27,8 +34,10 @@ Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -38,47 +47,66 @@ Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Mail-Aliases"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Spelling.html#Spelling">Spelling</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Sending.html#Sending">Sending</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Commands.html#Commands">Commands</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Mail-Aliases" id="Mail-Aliases"></a>
 
-<h3 class="section">2.10 Mail Aliases</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Spelling.html#Spelling">Spelling</a>, Previous:&nbsp;<a rel=
+    "previous" accesskey="p" href=
+    "Sending.html#Sending">Sending</a>, Up:&nbsp;<a rel="up"
+    accesskey="u" href="Commands.html#Commands">Commands</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-mail-aliases-192"></a><a name="index-aliases-193"></a><a name="index-completion-194"></a><a name="index-ecomplete-195"></a>
-<a name="index-message_002dmail_002dalias_002dtype-196"></a>The <code>message-mail-alias-type</code> variable controls what type of mail
-alias expansion to use.  Currently two forms are supported:
-<code>mailabbrev</code> and <code>ecomplete</code>.  If this variable is
-<code>nil</code>, no mail alias expansion will be performed.
+  <h3 class="section">2.10 Mail Aliases</h3>
 
-   <p><code>mailabbrev</code> works by parsing the <samp><span class="file">/etc/mailrc</span></samp> and
-<samp><span class="file">~/.mailrc</span></samp> files.  These files look like:
+  <p><a name="index-mail-aliases-192" id=
+  "index-mail-aliases-192"></a><a name="index-aliases-193" id=
+  "index-aliases-193"></a><a name="index-completion-194" id=
+  "index-completion-194"></a><a name="index-ecomplete-195" id=
+  "index-ecomplete-195"></a> <a name=
+  "index-message_002dmail_002dalias_002dtype-196" id=
+  "index-message_002dmail_002dalias_002dtype-196"></a>The
+  <code>message-mail-alias-type</code> variable controls what type
+  of mail alias expansion to use. Currently two forms are
+  supported: <code>mailabbrev</code> and <code>ecomplete</code>. If
+  this variable is <code>nil</code>, no mail alias expansion will
+  be performed.</p>
 
-<pre class="example">     alias lmi "Lars Magne Ingebrigtsen &lt;larsi@ifi.uio.no&gt;"
+  <p><code>mailabbrev</code> works by parsing the
+  <samp><span class="file">/etc/mailrc</span></samp> and
+  <samp><span class="file">~/.mailrc</span></samp> files. These
+  files look like:</p>
+  <pre class="example">
+     alias lmi "Lars Magne Ingebrigtsen &lt;larsi@ifi.uio.no&gt;"
      alias ding "ding@ifi.uio.no (ding mailing list)"
 </pre>
-   <p>After adding lines like this to your <samp><span class="file">~/.mailrc</span></samp> file, you should
-be able to just write &lsquo;<samp><span class="samp">lmi</span></samp>&rsquo; in the <code>To</code> or <code>Cc</code> (and so
-on) headers and press <kbd>SPC</kbd> to expand the alias.
 
-   <p>No expansion will be performed upon sending of the message&mdash;all
-expansions have to be done explicitly.
+  <p>After adding lines like this to your <samp><span class=
+  "file">~/.mailrc</span></samp> file, you should be able to just
+  write &lsquo;<samp><span class="samp">lmi</span></samp>&rsquo; in
+  the <code>To</code> or <code>Cc</code> (and so on) headers and
+  press <kbd>SPC</kbd> to expand the alias.</p>
 
-   <p>If you're using <code>ecomplete</code>, all addresses from <code>To</code> and
-<code>Cc</code> headers will automatically be put into the
-<samp><span class="file">~/.ecompleterc</span></samp> file.  When you enter text in the <code>To</code> and
-<code>Cc</code> headers, <code>ecomplete</code> will check out the values stored
-there and &ldquo;electrically&rdquo; say what completions are possible.  To
-choose one of these completions, use the <kbd>M-n</kbd> command to move
-down to the list.  Use <kbd>M-n</kbd> and <kbd>M-p</kbd> to move down and up the
-list, and <kbd>RET</kbd> to choose a completion.
+  <p>No expansion will be performed upon sending of the
+  message&mdash;all expansions have to be done explicitly.</p>
 
-   </body></html>
-
+  <p>If you're using <code>ecomplete</code>, all addresses from
+  <code>To</code> and <code>Cc</code> headers will automatically be
+  put into the <samp><span class=
+  "file">~/.ecompleterc</span></samp> file. When you enter text in
+  the <code>To</code> and <code>Cc</code> headers,
+  <code>ecomplete</code> will check out the values stored there and
+  &ldquo;electrically&rdquo; say what completions are possible. To
+  choose one of these completions, use the <kbd>M-n</kbd> command
+  to move down to the list. Use <kbd>M-n</kbd> and <kbd>M-p</kbd>
+  to move down and up the list, and <kbd>RET</kbd> to choose a
+  completion.</p>
+</body>
+</html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,142 +19,219 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Cons Cell Type</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Cons Cell Type">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Cons Cell Type">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Programming-Types.html#Programming-Types" rel="up" title="Programming Types">
-<link href="Box-Diagrams.html#Box-Diagrams" rel="next" title="Box Diagrams">
-<link href="Sequence-Type.html#Sequence-Type" rel="prev" title="Sequence Type">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Cons Cell Type</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Cons Cell Type" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Cons Cell Type" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Programming-Types.html#Programming-Types" rel="up"
+  title="Programming Types" />
+  <link href="Box-Diagrams.html#Box-Diagrams" rel="next" title=
+  "Box Diagrams" />
+  <link href="Sequence-Type.html#Sequence-Type" rel="prev" title=
+  "Sequence Type" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Cons-Cell-Type" id="Cons-Cell-Type"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Array-Type.html#Array-Type" accesskey="n"
+    rel="next">Array Type</a>, Previous: <a href=
+    "Sequence-Type.html#Sequence-Type" accesskey="p" rel=
+    "prev">Sequence Type</a>, Up: <a href=
+    "Programming-Types.html#Programming-Types" accesskey="u" rel=
+    "up">Programming Types</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Cons-Cell-and-List-Types" id=
+  "Cons-Cell-and-List-Types"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Cons-Cell-Type"></a>
-<div class="header">
-<p>
-Next: <a href="Array-Type.html#Array-Type" accesskey="n" rel="next">Array Type</a>, Previous: <a href="Sequence-Type.html#Sequence-Type" accesskey="p" rel="prev">Sequence Type</a>, Up: <a href="Programming-Types.html#Programming-Types" accesskey="u" rel="up">Programming Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Cons-Cell-and-List-Types"></a>
-<h4 class="subsection">2.3.6 Cons Cell and List Types</h4>
-<a name="index-address-field-of-register"></a>
-<a name="index-decrement-field-of-register"></a>
-<a name="index-pointers"></a>
+  <h4 class="subsection">2.3.6 Cons Cell and List
+  Types</h4><a name="index-address-field-of-register" id=
+  "index-address-field-of-register"></a> <a name=
+  "index-decrement-field-of-register" id=
+  "index-decrement-field-of-register"></a> <a name="index-pointers"
+  id="index-pointers"></a>
 
-<p>A <em>cons cell</em> is an object that consists of two slots, called
-the <small>CAR</small> slot and the <small>CDR</small> slot.  Each slot can <em>hold</em> any
-Lisp object.  We also say that the <small>CAR</small> of this cons cell is
-whatever object its <small>CAR</small> slot currently holds, and likewise for
-the <small>CDR</small>.
-</p>
-<a name="index-list-structure"></a>
-<p>A <em>list</em> is a series of cons cells, linked together so that the
-<small>CDR</small> slot of each cons cell holds either the next cons cell or the
-empty list.  The empty list is actually the symbol <code>nil</code>.
-See <a href="Lists.html#Lists">Lists</a>, for details.  Because most cons cells are used as part
-of lists, we refer to any structure made out of cons cells as a
-<em>list structure</em>.
-</p>
-<a name="index-linked-list"></a>
-<blockquote>
-<p>A note to C programmers: a Lisp list thus works as a <em>linked list</em>
-built up of cons cells.  Because pointers in Lisp are implicit, we do
-not distinguish between a cons cell slot holding a value versus
-pointing to the value.
-</p></blockquote>
+  <p>A <em>cons cell</em> is an object that consists of two slots,
+  called the <small>CAR</small> slot and the <small>CDR</small>
+  slot. Each slot can <em>hold</em> any Lisp object. We also say
+  that the <small>CAR</small> of this cons cell is whatever object
+  its <small>CAR</small> slot currently holds, and likewise for the
+  <small>CDR</small>.</p><a name="index-list-structure" id=
+  "index-list-structure"></a>
 
-<a name="index-atoms"></a>
-<p>Because cons cells are so central to Lisp, we also have a word for
-an object which is not a cons cell.  These objects are called
-<em>atoms</em>.
-</p>
-<a name="index-parenthesis"></a>
-<a name="index-_0028_2026_0029-in-lists"></a>
-<p>The read syntax and printed representation for lists are identical, and
-consist of a left parenthesis, an arbitrary number of elements, and a
-right parenthesis.  Here are examples of lists:
-</p>
-<div class="example">
-<pre class="example">(A 2 &quot;A&quot;)            ; <span class="roman">A list of three elements.</span>
-()                   ; <span class="roman">A list of no elements (the empty list).</span>
-nil                  ; <span class="roman">A list of no elements (the empty list).</span>
-(&quot;A ()&quot;)             ; <span class="roman">A list of one element: the string <code>&quot;A ()&quot;</code>.</span>
-(A ())               ; <span class="roman">A list of two elements: <code>A</code> and the empty list.</span>
-(A nil)              ; <span class="roman">Equivalent to the previous.</span>
-((A B C))            ; <span class="roman">A list of one element</span>
-                     ;   <span class="roman">(which is a list of three elements).</span>
-</pre></div>
+  <p>A <em>list</em> is a series of cons cells, linked together so
+  that the <small>CDR</small> slot of each cons cell holds either
+  the next cons cell or the empty list. The empty list is actually
+  the symbol <code>nil</code>. See <a href=
+  "Lists.html#Lists">Lists</a>, for details. Because most cons
+  cells are used as part of lists, we refer to any structure made
+  out of cons cells as a <em>list structure</em>.</p><a name=
+  "index-linked-list" id="index-linked-list"></a>
 
-<p>Upon reading, each object inside the parentheses becomes an element
-of the list.  That is, a cons cell is made for each element.  The
-<small>CAR</small> slot of the cons cell holds the element, and its <small>CDR</small>
-slot refers to the next cons cell of the list, which holds the next
-element in the list.  The <small>CDR</small> slot of the last cons cell is set to
-hold <code>nil</code>.
-</p>
-<p>The names <small>CAR</small> and <small>CDR</small> derive from the history of Lisp.  The
-original Lisp implementation ran on an IBM&nbsp;704<!-- /@w --> computer which
-divided words into two parts, the address and the
-decrement; <small>CAR</small> was an instruction to extract the contents of
-the address part of a register, and <small>CDR</small> an instruction to extract
-the contents of the decrement.  By contrast, cons cells are named
-for the function <code>cons</code> that creates them, which in turn was named
-for its purpose, the construction of cells.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Box-Diagrams.html#Box-Diagrams" accesskey="1">Box Diagrams</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Drawing pictures of lists.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Dotted-Pair-Notation.html#Dotted-Pair-Notation" accesskey="2">Dotted Pair Notation</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A general syntax for cons cells.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Association-List-Type.html#Association-List-Type" accesskey="3">Association List Type</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A specially constructed list.
-</td></tr>
-</table>
+  <blockquote>
+    <p>A note to C programmers: a Lisp list thus works as a
+    <em>linked list</em> built up of cons cells. Because pointers
+    in Lisp are implicit, we do not distinguish between a cons cell
+    slot holding a value versus pointing to the value.</p>
+  </blockquote><a name="index-atoms" id="index-atoms"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Array-Type.html#Array-Type" accesskey="n" rel="next">Array Type</a>, Previous: <a href="Sequence-Type.html#Sequence-Type" accesskey="p" rel="prev">Sequence Type</a>, Up: <a href="Programming-Types.html#Programming-Types" accesskey="u" rel="up">Programming Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Because cons cells are so central to Lisp, we also have a word
+  for an object which is not a cons cell. These objects are called
+  <em>atoms</em>.</p><a name="index-parenthesis" id=
+  "index-parenthesis"></a> <a name="index-_0028_2026_0029-in-lists"
+  id="index-_0028_2026_0029-in-lists"></a>
 
+  <p>The read syntax and printed representation for lists are
+  identical, and consist of a left parenthesis, an arbitrary number
+  of elements, and a right parenthesis. Here are examples of
+  lists:</p>
 
+  <div class="example">
+    <pre class="example">
+(A 2 "A")            ; <span class=
+"roman">A list of three elements.</span>
+()                   ; <span class=
+"roman">A list of no elements (the empty list).</span>
+nil                  ; <span class=
+"roman">A list of no elements (the empty list).</span>
+("A ()")             ; <span class=
+"roman">A list of one element: the string <code>"A ()"</code>.</span>
+(A ())               ; <span class=
+"roman">A list of two elements: <code>A</code> and the empty list.</span>
+(A nil)              ; <span class=
+"roman">Equivalent to the previous.</span>
+((A B C))            ; <span class=
+"roman">A list of one element</span>
+                     ;   <span class=
+"roman">(which is a list of three elements).</span>
+</pre>
+  </div>
 
+  <p>Upon reading, each object inside the parentheses becomes an
+  element of the list. That is, a cons cell is made for each
+  element. The <small>CAR</small> slot of the cons cell holds the
+  element, and its <small>CDR</small> slot refers to the next cons
+  cell of the list, which holds the next element in the list. The
+  <small>CDR</small> slot of the last cons cell is set to hold
+  <code>nil</code>.</p>
+
+  <p>The names <small>CAR</small> and <small>CDR</small> derive
+  from the history of Lisp. The original Lisp implementation ran on
+  an IBM&nbsp;704<!-- /@w --> computer which divided words into two
+  parts, the address and the decrement; <small>CAR</small> was an
+  instruction to extract the contents of the address part of a
+  register, and <small>CDR</small> an instruction to extract the
+  contents of the decrement. By contrast, cons cells are named for
+  the function <code>cons</code> that creates them, which in turn
+  was named for its purpose, the construction of cells.</p>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Box-Diagrams.html#Box-Diagrams" accesskey="1">Box
+      Diagrams</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Drawing pictures of lists.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Dotted-Pair-Notation.html#Dotted-Pair-Notation" accesskey=
+      "2">Dotted Pair Notation</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">A general syntax for cons
+      cells.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Association-List-Type.html#Association-List-Type" accesskey=
+      "3">Association List Type</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">A specially constructed
+      list.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Array-Type.html#Array-Type" accesskey="n"
+    rel="next">Array Type</a>, Previous: <a href=
+    "Sequence-Type.html#Sequence-Type" accesskey="p" rel=
+    "prev">Sequence Type</a>, Up: <a href=
+    "Programming-Types.html#Programming-Types" accesskey="u" rel=
+    "up">Programming Types</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

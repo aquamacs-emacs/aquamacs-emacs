@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001-2016 Free Software Foundation, Inc.
@@ -14,126 +16,172 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Common Lisp Extensions: Loop Basics</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Common Lisp Extensions: Loop Basics">
-<meta name="keywords" content="Common Lisp Extensions: Loop Basics">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Loop-Facility.html#Loop-Facility" rel="up" title="Loop Facility">
-<link href="Loop-Examples.html#Loop-Examples" rel="next" title="Loop Examples">
-<link href="Loop-Facility.html#Loop-Facility" rel="prev" title="Loop Facility">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Common Lisp Extensions: Loop Basics</title>
+  <meta name="description" content=
+  "Common Lisp Extensions: Loop Basics" />
+  <meta name="keywords" content=
+  "Common Lisp Extensions: Loop Basics" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Loop-Facility.html#Loop-Facility" rel="up" title=
+  "Loop Facility" />
+  <link href="Loop-Examples.html#Loop-Examples" rel="next" title=
+  "Loop Examples" />
+  <link href="Loop-Facility.html#Loop-Facility" rel="prev" title=
+  "Loop Facility" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Loop-Basics"></a>
-<div class="header">
-<p>
-Next: <a href="Loop-Examples.html#Loop-Examples" accesskey="n" rel="next">Loop Examples</a>, Up: <a href="Loop-Facility.html#Loop-Facility" accesskey="u" rel="up">Loop Facility</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Loop-Basics-1"></a>
-<h4 class="subsection">4.7.1 Loop Basics</h4>
+<body lang="en" xml:lang="en">
+  <a name="Loop-Basics" id="Loop-Basics"></a>
 
-<p>The <code>cl-loop</code> macro essentially creates a mini-language within
-Lisp that is specially tailored for describing loops.  While this
-language is a little strange-looking by the standards of regular Lisp,
-it turns out to be very easy to learn and well-suited to its purpose.
-</p>
-<p>Since <code>cl-loop</code> is a macro, all parsing of the loop language
-takes place at byte-compile time; compiled <code>cl-loop</code>s are just
-as efficient as the equivalent <code>while</code> loops written longhand.
-</p>
-<dl>
-<dt><a name="index-cl_002dloop-1"></a>Macro: <strong>cl-loop</strong> <em>clauses&hellip;</em></dt>
-<dd><p>A loop construct consists of a series of <var>clause</var>s, each
-introduced by a symbol like <code>for</code> or <code>do</code>.  Clauses
-are simply strung together in the argument list of <code>cl-loop</code>,
-with minimal extra parentheses.  The various types of clauses
-specify initializations, such as the binding of temporary
-variables, actions to be taken in the loop, stepping actions,
-and final cleanup.
-</p>
-<p>Common Lisp specifies a certain general order of clauses in a
-loop:
-</p>
-<div class="example">
-<pre class="example">(loop <var>name-clause</var>
+  <div class="header">
+    <p>Next: <a href="Loop-Examples.html#Loop-Examples" accesskey=
+    "n" rel="next">Loop Examples</a>, Up: <a href=
+    "Loop-Facility.html#Loop-Facility" accesskey="u" rel="up">Loop
+    Facility</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Loop-Basics-1" id="Loop-Basics-1"></a>
+
+  <h4 class="subsection">4.7.1 Loop Basics</h4>
+
+  <p>The <code>cl-loop</code> macro essentially creates a
+  mini-language within Lisp that is specially tailored for
+  describing loops. While this language is a little strange-looking
+  by the standards of regular Lisp, it turns out to be very easy to
+  learn and well-suited to its purpose.</p>
+
+  <p>Since <code>cl-loop</code> is a macro, all parsing of the loop
+  language takes place at byte-compile time; compiled
+  <code>cl-loop</code>s are just as efficient as the equivalent
+  <code>while</code> loops written longhand.</p>
+
+  <dl>
+    <dt><a name="index-cl_002dloop-1" id=
+    "index-cl_002dloop-1"></a>Macro: <strong>cl-loop</strong>
+    <em>clauses&hellip;</em></dt>
+
+    <dd>
+      <p>A loop construct consists of a series of
+      <var>clause</var>s, each introduced by a symbol like
+      <code>for</code> or <code>do</code>. Clauses are simply
+      strung together in the argument list of <code>cl-loop</code>,
+      with minimal extra parentheses. The various types of clauses
+      specify initializations, such as the binding of temporary
+      variables, actions to be taken in the loop, stepping actions,
+      and final cleanup.</p>
+
+      <p>Common Lisp specifies a certain general order of clauses
+      in a loop:</p>
+
+      <div class="example">
+        <pre class="example">
+(loop <var>name-clause</var>
       <var>var-clauses</var>&hellip;
       <var>action-clauses</var>&hellip;)
-</pre></div>
+</pre>
+      </div>
 
-<p>The <var>name-clause</var> optionally gives a name to the implicit
-block that surrounds the loop.  By default, the implicit block
-is named <code>nil</code>.  The <var>var-clauses</var> specify what
-variables should be bound during the loop, and how they should
-be modified or iterated throughout the course of the loop.  The
-<var>action-clauses</var> are things to be done during the loop, such
-as computing, collecting, and returning values.
-</p>
-<p>The Emacs version of the <code>cl-loop</code> macro is less restrictive about
-the order of clauses, but things will behave most predictably if
-you put the variable-binding clauses <code>with</code>, <code>for</code>, and
-<code>repeat</code> before the action clauses.  As in Common Lisp,
-<code>initially</code> and <code>finally</code> clauses can go anywhere.
-</p>
-<p>Loops generally return <code>nil</code> by default, but you can cause
-them to return a value by using an accumulation clause like
-<code>collect</code>, an end-test clause like <code>always</code>, or an
-explicit <code>return</code> clause to jump out of the implicit block.
-(Because the loop body is enclosed in an implicit block, you can
-also use regular Lisp <code>cl-return</code> or <code>cl-return-from</code> to
-break out of the loop.)
-</p></dd></dl>
+      <p>The <var>name-clause</var> optionally gives a name to the
+      implicit block that surrounds the loop. By default, the
+      implicit block is named <code>nil</code>. The
+      <var>var-clauses</var> specify what variables should be bound
+      during the loop, and how they should be modified or iterated
+      throughout the course of the loop. The
+      <var>action-clauses</var> are things to be done during the
+      loop, such as computing, collecting, and returning
+      values.</p>
 
-<p>The following sections give some examples of the loop macro in
-action, and describe the particular loop clauses in great detail.
-Consult the second edition of Steele for additional discussion
-and examples.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Loop-Examples.html#Loop-Examples" accesskey="n" rel="next">Loop Examples</a>, Up: <a href="Loop-Facility.html#Loop-Facility" accesskey="u" rel="up">Loop Facility</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>The Emacs version of the <code>cl-loop</code> macro is
+      less restrictive about the order of clauses, but things will
+      behave most predictably if you put the variable-binding
+      clauses <code>with</code>, <code>for</code>, and
+      <code>repeat</code> before the action clauses. As in Common
+      Lisp, <code>initially</code> and <code>finally</code> clauses
+      can go anywhere.</p>
 
+      <p>Loops generally return <code>nil</code> by default, but
+      you can cause them to return a value by using an accumulation
+      clause like <code>collect</code>, an end-test clause like
+      <code>always</code>, or an explicit <code>return</code>
+      clause to jump out of the implicit block. (Because the loop
+      body is enclosed in an implicit block, you can also use
+      regular Lisp <code>cl-return</code> or
+      <code>cl-return-from</code> to break out of the loop.)</p>
+    </dd>
+  </dl>
 
+  <p>The following sections give some examples of the loop macro in
+  action, and describe the particular loop clauses in great detail.
+  Consult the second edition of Steele for additional discussion
+  and examples.</p>
+  <hr />
 
+  <div class="header">
+    <p>Next: <a href="Loop-Examples.html#Loop-Examples" accesskey=
+    "n" rel="next">Loop Examples</a>, Up: <a href=
+    "Loop-Facility.html#Loop-Facility" accesskey="u" rel="up">Loop
+    Facility</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

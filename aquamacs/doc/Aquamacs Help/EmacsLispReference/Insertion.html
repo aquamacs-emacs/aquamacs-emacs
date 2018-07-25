@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,181 +19,280 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Insertion</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Insertion">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Insertion">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Text.html#Text" rel="up" title="Text">
-<link href="Commands-for-Insertion.html#Commands-for-Insertion" rel="next" title="Commands for Insertion">
-<link href="Comparing-Text.html#Comparing-Text" rel="prev" title="Comparing Text">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Insertion</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Insertion" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Insertion" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Text.html#Text" rel="up" title="Text" />
+  <link href="Commands-for-Insertion.html#Commands-for-Insertion"
+  rel="next" title="Commands for Insertion" />
+  <link href="Comparing-Text.html#Comparing-Text" rel="prev" title=
+  "Comparing Text" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Insertion" id="Insertion"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Commands-for-Insertion.html#Commands-for-Insertion" accesskey=
+    "n" rel="next">Commands for Insertion</a>, Previous: <a href=
+    "Comparing-Text.html#Comparing-Text" accesskey="p" rel=
+    "prev">Comparing Text</a>, Up: <a href="Text.html#Text"
+    accesskey="u" rel="up">Text</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Inserting-Text" id="Inserting-Text"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Insertion"></a>
-<div class="header">
-<p>
-Next: <a href="Commands-for-Insertion.html#Commands-for-Insertion" accesskey="n" rel="next">Commands for Insertion</a>, Previous: <a href="Comparing-Text.html#Comparing-Text" accesskey="p" rel="prev">Comparing Text</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Inserting-Text"></a>
-<h3 class="section">31.4 Inserting Text</h3>
-<a name="index-insertion-of-text"></a>
-<a name="index-text-insertion"></a>
+  <h3 class="section">31.4 Inserting Text</h3><a name=
+  "index-insertion-of-text" id="index-insertion-of-text"></a>
+  <a name="index-text-insertion" id="index-text-insertion"></a>
+  <a name="index-insertion-before-point" id=
+  "index-insertion-before-point"></a> <a name=
+  "index-before-point_002c-insertion" id=
+  "index-before-point_002c-insertion"></a>
 
-<a name="index-insertion-before-point"></a>
-<a name="index-before-point_002c-insertion"></a>
-<p><em>Insertion</em> means adding new text to a buffer.  The inserted text
-goes at point&mdash;between the character before point and the character
-after point.  Some insertion functions leave point before the inserted
-text, while other functions leave it after.  We call the former
-insertion <em>after point</em> and the latter insertion <em>before point</em>.
-</p>
-<p>Insertion moves markers located at positions after the insertion
-point, so that they stay with the surrounding text (see <a href="Markers.html#Markers">Markers</a>).
-When a marker points at the place of insertion, insertion may or may
-not relocate the marker, depending on the marker&rsquo;s insertion type
-(see <a href="Marker-Insertion-Types.html#Marker-Insertion-Types">Marker Insertion Types</a>).  Certain special functions such as
-<code>insert-before-markers</code> relocate all such markers to point after
-the inserted text, regardless of the markers&rsquo; insertion type.
-</p>
-<p>Insertion functions signal an error if the current buffer is
-read-only (see <a href="Read-Only-Buffers.html#Read-Only-Buffers">Read Only Buffers</a>) or if they insert within
-read-only text (see <a href="Special-Properties.html#Special-Properties">Special Properties</a>).
-</p>
-<p>These functions copy text characters from strings and buffers along
-with their properties.  The inserted characters have exactly the same
-properties as the characters they were copied from.  By contrast,
-characters specified as separate arguments, not part of a string or
-buffer, inherit their text properties from the neighboring text.
-</p>
-<p>The insertion functions convert text from unibyte to multibyte in
-order to insert in a multibyte buffer, and vice versa&mdash;if the text
-comes from a string or from a buffer.  However, they do not convert
-unibyte character codes 128 through 255 to multibyte characters, not
-even if the current buffer is a multibyte buffer.  See <a href="Converting-Representations.html#Converting-Representations">Converting Representations</a>.
-</p>
-<dl>
-<dt><a name="index-insert"></a>Function: <strong>insert</strong> <em>&amp;rest args</em></dt>
-<dd><p>This function inserts the strings and/or characters <var>args</var> into the
-current buffer, at point, moving point forward.  In other words, it
-inserts the text before point.  An error is signaled unless all
-<var>args</var> are either strings or characters.  The value is <code>nil</code>.
-</p></dd></dl>
+  <p><em>Insertion</em> means adding new text to a buffer. The
+  inserted text goes at point&mdash;between the character before
+  point and the character after point. Some insertion functions
+  leave point before the inserted text, while other functions leave
+  it after. We call the former insertion <em>after point</em> and
+  the latter insertion <em>before point</em>.</p>
 
-<dl>
-<dt><a name="index-insert_002dbefore_002dmarkers"></a>Function: <strong>insert-before-markers</strong> <em>&amp;rest args</em></dt>
-<dd><p>This function inserts the strings and/or characters <var>args</var> into the
-current buffer, at point, moving point forward.  An error is signaled
-unless all <var>args</var> are either strings or characters.  The value is
-<code>nil</code>.
-</p>
-<p>This function is unlike the other insertion functions in that it
-relocates markers initially pointing at the insertion point, to point
-after the inserted text.  If an overlay begins at the insertion point,
-the inserted text falls outside the overlay; if a nonempty overlay
-ends at the insertion point, the inserted text falls inside that
-overlay.
-</p></dd></dl>
+  <p>Insertion moves markers located at positions after the
+  insertion point, so that they stay with the surrounding text (see
+  <a href="Markers.html#Markers">Markers</a>). When a marker points
+  at the place of insertion, insertion may or may not relocate the
+  marker, depending on the marker&rsquo;s insertion type (see
+  <a href=
+  "Marker-Insertion-Types.html#Marker-Insertion-Types">Marker
+  Insertion Types</a>). Certain special functions such as
+  <code>insert-before-markers</code> relocate all such markers to
+  point after the inserted text, regardless of the markers&rsquo;
+  insertion type.</p>
 
-<dl>
-<dt><a name="index-insert_002dchar"></a>Command: <strong>insert-char</strong> <em>character &amp;optional count inherit</em></dt>
-<dd><p>This command inserts <var>count</var> instances of <var>character</var> into the
-current buffer before point.  The argument <var>count</var> must be an
-integer, and <var>character</var> must be a character.
-</p>
-<p>If called interactively, this command prompts for <var>character</var>
-using its Unicode name or its code point.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Inserting-Text.html#Inserting-Text">Inserting Text</a> in <cite>The GNU Emacs Manual</cite>.
-</p>
-<p>This function does not convert unibyte character codes 128 through 255
-to multibyte characters, not even if the current buffer is a multibyte
-buffer.  See <a href="Converting-Representations.html#Converting-Representations">Converting Representations</a>.
-</p>
-<p>If <var>inherit</var> is non-<code>nil</code>, the inserted characters inherit
-sticky text properties from the two characters before and after the
-insertion point.  See <a href="Sticky-Properties.html#Sticky-Properties">Sticky Properties</a>.
-</p></dd></dl>
+  <p>Insertion functions signal an error if the current buffer is
+  read-only (see <a href=
+  "Read-Only-Buffers.html#Read-Only-Buffers">Read Only Buffers</a>)
+  or if they insert within read-only text (see <a href=
+  "Special-Properties.html#Special-Properties">Special
+  Properties</a>).</p>
 
-<dl>
-<dt><a name="index-insert_002dbuffer_002dsubstring"></a>Function: <strong>insert-buffer-substring</strong> <em>from-buffer-or-name &amp;optional start end</em></dt>
-<dd><p>This function inserts a portion of buffer <var>from-buffer-or-name</var>
-into the current buffer before point.  The text inserted is the region
-between <var>start</var> (inclusive) and <var>end</var> (exclusive).  (These
-arguments default to the beginning and end of the accessible portion
-of that buffer.)  This function returns <code>nil</code>.
-</p>
-<p>In this example, the form is executed with buffer &lsquo;<samp>bar</samp>&rsquo; as the
-current buffer.  We assume that buffer &lsquo;<samp>bar</samp>&rsquo; is initially empty.
-</p>
-<div class="example">
-<pre class="example">---------- Buffer: foo ----------
+  <p>These functions copy text characters from strings and buffers
+  along with their properties. The inserted characters have exactly
+  the same properties as the characters they were copied from. By
+  contrast, characters specified as separate arguments, not part of
+  a string or buffer, inherit their text properties from the
+  neighboring text.</p>
+
+  <p>The insertion functions convert text from unibyte to multibyte
+  in order to insert in a multibyte buffer, and vice versa&mdash;if
+  the text comes from a string or from a buffer. However, they do
+  not convert unibyte character codes 128 through 255 to multibyte
+  characters, not even if the current buffer is a multibyte buffer.
+  See <a href=
+  "Converting-Representations.html#Converting-Representations">Converting
+  Representations</a>.</p>
+
+  <dl>
+    <dt><a name="index-insert" id="index-insert"></a>Function:
+    <strong>insert</strong> <em>&amp;rest args</em></dt>
+
+    <dd>
+      <p>This function inserts the strings and/or characters
+      <var>args</var> into the current buffer, at point, moving
+      point forward. In other words, it inserts the text before
+      point. An error is signaled unless all <var>args</var> are
+      either strings or characters. The value is
+      <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-insert_002dbefore_002dmarkers" id=
+    "index-insert_002dbefore_002dmarkers"></a>Function:
+    <strong>insert-before-markers</strong> <em>&amp;rest
+    args</em></dt>
+
+    <dd>
+      <p>This function inserts the strings and/or characters
+      <var>args</var> into the current buffer, at point, moving
+      point forward. An error is signaled unless all
+      <var>args</var> are either strings or characters. The value
+      is <code>nil</code>.</p>
+
+      <p>This function is unlike the other insertion functions in
+      that it relocates markers initially pointing at the insertion
+      point, to point after the inserted text. If an overlay begins
+      at the insertion point, the inserted text falls outside the
+      overlay; if a nonempty overlay ends at the insertion point,
+      the inserted text falls inside that overlay.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-insert_002dchar" id=
+    "index-insert_002dchar"></a>Command:
+    <strong>insert-char</strong> <em>character &amp;optional count
+    inherit</em></dt>
+
+    <dd>
+      <p>This command inserts <var>count</var> instances of
+      <var>character</var> into the current buffer before point.
+      The argument <var>count</var> must be an integer, and
+      <var>character</var> must be a character.</p>
+
+      <p>If called interactively, this command prompts for
+      <var>character</var> using its Unicode name or its code
+      point. See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Inserting-Text.html#Inserting-Text">
+      Inserting Text</a> in <cite>The GNU Emacs Manual</cite>.</p>
+
+      <p>This function does not convert unibyte character codes 128
+      through 255 to multibyte characters, not even if the current
+      buffer is a multibyte buffer. See <a href=
+      "Converting-Representations.html#Converting-Representations">Converting
+      Representations</a>.</p>
+
+      <p>If <var>inherit</var> is non-<code>nil</code>, the
+      inserted characters inherit sticky text properties from the
+      two characters before and after the insertion point. See
+      <a href="Sticky-Properties.html#Sticky-Properties">Sticky
+      Properties</a>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-insert_002dbuffer_002dsubstring" id=
+    "index-insert_002dbuffer_002dsubstring"></a>Function:
+    <strong>insert-buffer-substring</strong>
+    <em>from-buffer-or-name &amp;optional start end</em></dt>
+
+    <dd>
+      <p>This function inserts a portion of buffer
+      <var>from-buffer-or-name</var> into the current buffer before
+      point. The text inserted is the region between
+      <var>start</var> (inclusive) and <var>end</var> (exclusive).
+      (These arguments default to the beginning and end of the
+      accessible portion of that buffer.) This function returns
+      <code>nil</code>.</p>
+
+      <p>In this example, the form is executed with buffer
+      &lsquo;<samp>bar</samp>&rsquo; as the current buffer. We
+      assume that buffer &lsquo;<samp>bar</samp>&rsquo; is
+      initially empty.</p>
+
+      <div class="example">
+        <pre class="example">
+---------- Buffer: foo ----------
 We hold these truths to be self-evident, that all
 ---------- Buffer: foo ----------
-</pre><pre class="example">
-</pre><pre class="example">(insert-buffer-substring &quot;foo&quot; 1 20)
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(insert-buffer-substring "foo" 1 20)
      &rArr; nil
 
 ---------- Buffer: bar ----------
 We hold these truth&lowast;
 ---------- Buffer: bar ----------
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-insert_002dbuffer_002dsubstring_002dno_002dproperties"></a>Function: <strong>insert-buffer-substring-no-properties</strong> <em>from-buffer-or-name &amp;optional start end</em></dt>
-<dd><p>This is like <code>insert-buffer-substring</code> except that it does not
-copy any text properties.
-</p></dd></dl>
+  <dl>
+    <dt><a name=
+    "index-insert_002dbuffer_002dsubstring_002dno_002dproperties"
+    id=
+    "index-insert_002dbuffer_002dsubstring_002dno_002dproperties"></a>Function:
+    <strong>insert-buffer-substring-no-properties</strong>
+    <em>from-buffer-or-name &amp;optional start end</em></dt>
 
-<p>See <a href="Sticky-Properties.html#Sticky-Properties">Sticky Properties</a>, for other insertion functions that inherit
-text properties from the nearby text in addition to inserting it.
-Whitespace inserted by indentation functions also inherits text
-properties.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Commands-for-Insertion.html#Commands-for-Insertion" accesskey="n" rel="next">Commands for Insertion</a>, Previous: <a href="Comparing-Text.html#Comparing-Text" accesskey="p" rel="prev">Comparing Text</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This is like <code>insert-buffer-substring</code> except
+      that it does not copy any text properties.</p>
+    </dd>
+  </dl>
 
+  <p>See <a href="Sticky-Properties.html#Sticky-Properties">Sticky
+  Properties</a>, for other insertion functions that inherit text
+  properties from the nearby text in addition to inserting it.
+  Whitespace inserted by indentation functions also inherits text
+  properties.</p>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href=
+    "Commands-for-Insertion.html#Commands-for-Insertion" accesskey=
+    "n" rel="next">Commands for Insertion</a>, Previous: <a href=
+    "Comparing-Text.html#Comparing-Text" accesskey="p" rel=
+    "prev">Comparing Text</a>, Up: <a href="Text.html#Text"
+    accesskey="u" rel="up">Text</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,457 +14,765 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Article Washing</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Article Washing">
-<meta name="keywords" content="Gnus Manual: Article Washing">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Article-Treatment.html#Article-Treatment" rel="up" title="Article Treatment">
-<link href="Article-Header.html#Article-Header" rel="next" title="Article Header">
-<link href="Article-Hiding.html#Article-Hiding" rel="prev" title="Article Hiding">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Article Washing</title>
+  <meta name="description" content=
+  "Gnus Manual: Article Washing" />
+  <meta name="keywords" content="Gnus Manual: Article Washing" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Article-Treatment.html#Article-Treatment" rel="up"
+  title="Article Treatment" />
+  <link href="Article-Header.html#Article-Header" rel="next" title=
+  "Article Header" />
+  <link href="Article-Hiding.html#Article-Hiding" rel="prev" title=
+  "Article Hiding" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Article-Washing"></a>
-<div class="header">
-<p>
-Next: <a href="Article-Header.html#Article-Header" accesskey="n" rel="next">Article Header</a>, Previous: <a href="Article-Hiding.html#Article-Hiding" accesskey="p" rel="prev">Article Hiding</a>, Up: <a href="Article-Treatment.html#Article-Treatment" accesskey="u" rel="up">Article Treatment</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Article-Washing-1"></a>
-<h4 class="subsection">3.18.4 Article Washing</h4>
-<a name="index-washing"></a>
-<a name="index-article-washing"></a>
+<body lang="en" xml:lang="en">
+  <a name="Article-Washing" id="Article-Washing"></a>
 
-<p>We call this &ldquo;article washing&rdquo; for a really good reason.  Namely, the
-<kbd>A</kbd> key was taken, so we had to use the <kbd>W</kbd> key instead.
-</p>
-<p><em>Washing</em> is defined by us as &ldquo;changing something from something to
-something else&rdquo;, but normally results in something looking better.
-Cleaner, perhaps.
-</p>
-<p>See <a href="Customizing-Articles.html#Customizing-Articles">Customizing Articles</a>, if you want to change how Gnus displays
-articles by default.
-</p>
-<dl compact="compact">
-<dt><kbd>C-u g</kbd></dt>
-<dd><p>This is not really washing, it&rsquo;s sort of the opposite of washing.  If
-you type this, you see the article exactly as it exists on disk or on
-the server.
-</p>
-</dd>
-<dt><kbd>g</kbd></dt>
-<dd><p>Force redisplaying of the current article
-(<code>gnus-summary-show-article</code>).  This is also not really washing.
-If you type this, you see the article without any previously applied
-interactive Washing functions but with all default treatments
-(see <a href="Customizing-Articles.html#Customizing-Articles">Customizing Articles</a>).
-</p>
-</dd>
-<dt><kbd>W l</kbd></dt>
-<dd><a name="index-W-l-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dstop_002dpage_002dbreaking"></a>
-<p>Remove page breaks from the current article
-(<code>gnus-summary-stop-page-breaking</code>).  See <a href="Misc-Article.html#Misc-Article">Misc Article</a>, for page
-delimiters.
-</p>
-</dd>
-<dt><kbd>W r</kbd></dt>
-<dd><a name="index-W-r-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dcaesar_002dmessage"></a>
-<p>Do a Caesar rotate (rot13) on the article buffer
-(<code>gnus-summary-caesar-message</code>).
-Unreadable articles that tell you to read them with Caesar rotate or rot13.
-(Typically offensive jokes and such.)
-</p>
-<p>It&rsquo;s commonly called &ldquo;rot13&rdquo; because each letter is rotated 13
-positions in the alphabet, e.g., &lsquo;<samp>B</samp>&rsquo; (letter #2) -&gt; &lsquo;<samp>O</samp>&rsquo; (letter
-#15).  It is sometimes referred to as &ldquo;Caesar rotate&rdquo; because Caesar
-is rumored to have employed this form of, uh, somewhat weak encryption.
-</p>
-</dd>
-<dt><kbd>W m</kbd></dt>
-<dd><a name="index-W-m-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dmorse_002dmessage"></a>
-<p>Morse decode the article buffer (<code>gnus-summary-morse-message</code>).
-</p>
-</dd>
-<dt><kbd>W i</kbd></dt>
-<dd><a name="index-W-i-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002didna_002dmessage"></a>
-<p>Decode IDNA encoded domain names in the current articles.  IDNA
-encoded domain names looks like &lsquo;<samp>xn--bar</samp>&rsquo;.  If a string remain
-unencoded after running invoking this, it is likely an invalid IDNA
-string (&lsquo;<samp>xn--bar</samp>&rsquo; is invalid).  You must have GNU Libidn
-(<a href="http://www.gnu.org/software/libidn/">http://www.gnu.org/software/libidn/</a>) installed for this command
-to work.
-</p>
-</dd>
-<dt><kbd>W t</kbd></dt>
-<dt><kbd>t</kbd></dt>
-<dd><a name="index-W-t-_0028Summary_0029"></a>
-<a name="index-t-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dtoggle_002dheader"></a>
-<p>Toggle whether to display all headers in the article buffer
-(<code>gnus-summary-toggle-header</code>).
-</p>
-</dd>
-<dt><kbd>W v</kbd></dt>
-<dd><a name="index-W-v-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dverbose_002dheaders"></a>
-<p>Toggle whether to display all headers in the article buffer permanently
-(<code>gnus-summary-verbose-headers</code>).
-</p>
-</dd>
-<dt><kbd>W o</kbd></dt>
-<dd><a name="index-W-o-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dtreat_002doverstrike"></a>
-<p>Treat overstrike (<code>gnus-article-treat-overstrike</code>).
-</p>
-</dd>
-<dt><kbd>W d</kbd></dt>
-<dd><a name="index-W-d-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dtreat_002ddumbquotes"></a>
-<a name="index-gnus_002darticle_002ddumbquotes_002dmap"></a>
-<a name="index-Smartquotes"></a>
-<a name="index-M_002a_002a_002a_002as_002a_002a_002a-sm_002artq_002a_002at_002as"></a>
-<a name="index-Latin-1"></a>
-<p>Treat M****s*** sm*rtq**t*s according to
-<code>gnus-article-dumbquotes-map</code>
-(<code>gnus-article-treat-dumbquotes</code>).  Note that this function guesses
-whether a character is a sm*rtq**t* or not, so it should only be used
-interactively.
-</p>
-<p>Sm*rtq**t*s are M****s***&rsquo;s unilateral extension to the character map in
-an attempt to provide more quoting characters.  If you see something
-like <code>\222</code> or <code>\264</code> where you&rsquo;re expecting some kind of
-apostrophe or quotation mark, then try this wash.
-</p>
-</dd>
-<dt><kbd>W U</kbd></dt>
-<dd><a name="index-W-U-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dtreat_002dnon_002dascii"></a>
-<a name="index-Unicode"></a>
-<a name="index-Non_002dASCII"></a>
-<p>Translate many non-<acronym>ASCII</acronym> characters into their
-<acronym>ASCII</acronym> equivalents (<code>gnus-article-treat-non-ascii</code>).
-This is mostly useful if you&rsquo;re on a terminal that has a limited font
-and doesn&rsquo;t show accented characters, &ldquo;advanced&rdquo; punctuation, and the
-like.  For instance, &lsquo;<samp>»</samp>&rsquo; is translated into &lsquo;<samp>&gt;&gt;</samp>&rsquo;, and so on.
-</p>
-</dd>
-<dt><kbd>W Y f</kbd></dt>
-<dd><a name="index-W-Y-f-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002doutlook_002ddeuglify_002darticle"></a>
-<a name="index-Outlook-Express"></a>
-<p>Full deuglify of broken Outlook (Express) articles: Treat dumbquotes,
-unwrap lines, repair attribution and rearrange citation.
-(<code>gnus-article-outlook-deuglify-article</code>).
-</p>
-</dd>
-<dt><kbd>W Y u</kbd></dt>
-<dd><a name="index-W-Y-u-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002doutlook_002dunwrap_002dlines"></a>
-<a name="index-gnus_002doutlook_002ddeuglify_002dunwrap_002dmin"></a>
-<a name="index-gnus_002doutlook_002ddeuglify_002dunwrap_002dmax"></a>
-<p>Unwrap lines that appear to be wrapped citation lines.  You can control
-what lines will be unwrapped by frobbing
-<code>gnus-outlook-deuglify-unwrap-min</code> and
-<code>gnus-outlook-deuglify-unwrap-max</code>, indicating the minimum and
-maximum length of an unwrapped citation line.
-(<code>gnus-article-outlook-unwrap-lines</code>).
-</p>
-</dd>
-<dt><kbd>W Y a</kbd></dt>
-<dd><a name="index-W-Y-a-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002doutlook_002drepair_002dattribution"></a>
-<p>Repair a broken attribution line.<br>
-(<code>gnus-article-outlook-repair-attribution</code>).
-</p>
-</dd>
-<dt><kbd>W Y c</kbd></dt>
-<dd><a name="index-W-Y-c-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002doutlook_002drearrange_002dcitation"></a>
-<p>Repair broken citations by rearranging the text.
-(<code>gnus-article-outlook-rearrange-citation</code>).
-</p>
-</dd>
-<dt><kbd>W w</kbd></dt>
-<dd><a name="index-W-w-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dfill_002dcited_002darticle"></a>
-<p>Do word wrap (<code>gnus-article-fill-cited-article</code>).
-</p>
-<p>You can give the command a numerical prefix to specify the width to use
-when filling.
-</p>
-</dd>
-<dt><kbd>W Q</kbd></dt>
-<dd><a name="index-W-Q-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dfill_002dlong_002dlines"></a>
-<p>Fill long lines (<code>gnus-article-fill-long-lines</code>).
-</p>
-</dd>
-<dt><kbd>W C</kbd></dt>
-<dd><a name="index-W-C-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dcapitalize_002dsentences"></a>
-<p>Capitalize the first word in each sentence
-(<code>gnus-article-capitalize-sentences</code>).
-</p>
-</dd>
-<dt><kbd>W c</kbd></dt>
-<dd><a name="index-W-c-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dremove_002dcr"></a>
-<p>Translate CRLF pairs (i.e., &lsquo;<samp>^M</samp>&rsquo;s on the end of the lines) into LF
-(this takes care of DOS line endings), and then translate any remaining
-CRs into LF (this takes care of Mac line endings)
-(<code>gnus-article-remove-cr</code>).
-</p>
-</dd>
-<dt><kbd>W q</kbd></dt>
-<dd><a name="index-W-q-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dde_002dquoted_002dunreadable"></a>
-<p>Treat quoted-printable (<code>gnus-article-de-quoted-unreadable</code>).
-Quoted-Printable is one common <acronym>MIME</acronym> encoding employed when
-sending non-<acronym>ASCII</acronym> (i.e., 8-bit) articles.  It typically
-makes strings like &lsquo;<samp>déjà vu</samp>&rsquo; look like &lsquo;<samp>d=E9j=E0 vu</samp>&rsquo;,
-which doesn&rsquo;t look very readable to me.  Note that this is usually
-done automatically by Gnus if the message in question has a
-<code>Content-Transfer-Encoding</code> header that says that this encoding
-has been done.  If a prefix is given, a charset will be asked for.
-</p>
-</dd>
-<dt><kbd>W 6</kbd></dt>
-<dd><a name="index-W-6-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dde_002dbase64_002dunreadable"></a>
-<p>Treat base64 (<code>gnus-article-de-base64-unreadable</code>).  Base64 is
-one common <acronym>MIME</acronym> encoding employed when sending
-non-<acronym>ASCII</acronym> (i.e., 8-bit) articles.  Note that this is
-usually done automatically by Gnus if the message in question has a
-<code>Content-Transfer-Encoding</code> header that says that this encoding
-has been done.  If a prefix is given, a charset will be asked for.
-</p>
-</dd>
-<dt><kbd>W Z</kbd></dt>
-<dd><a name="index-W-Z-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002ddecode_002dHZ"></a>
-<p>Treat HZ or HZP (<code>gnus-article-decode-HZ</code>).  HZ (or HZP) is one
-common encoding employed when sending Chinese articles.  It typically
-makes strings look like &lsquo;<samp>~{&lt;:Ky2;S{#,NpJ)l6HK!#~}</samp>&rsquo;.
-</p>
-</dd>
-<dt><kbd>W A</kbd></dt>
-<dd><a name="index-W-A-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dtreat_002dansi_002dsequences"></a>
-<a name="index-ANSI-control-sequences"></a>
-<p>Translate <acronym>ANSI</acronym> SGR control sequences into overlays or
-extents (<code>gnus-article-treat-ansi-sequences</code>).  <acronym>ANSI</acronym>
-sequences are used in some Chinese hierarchies for highlighting.
-</p>
-</dd>
-<dt><kbd>W u</kbd></dt>
-<dd><a name="index-W-u-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dunsplit_002durls"></a>
-<p>Remove newlines from within URLs.  Some mailers insert newlines into
-outgoing email messages to keep lines short.  This reformatting can
-split long URLs onto multiple lines.  Repair those URLs by removing
-the newlines (<code>gnus-article-unsplit-urls</code>).
-</p>
-</dd>
-<dt><kbd>W h</kbd></dt>
-<dd><a name="index-W-h-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dwash_002dhtml"></a>
-<p>Treat <acronym>HTML</acronym> (<code>gnus-article-wash-html</code>).  Note that this is
-usually done automatically by Gnus if the message in question has a
-<code>Content-Type</code> header that says that the message is <acronym>HTML</acronym>.
-</p>
-<p>If a prefix is given, a charset will be asked for.  If it is a number,
-the charset defined in <code>gnus-summary-show-article-charset-alist</code>
-(see <a href="Paging-the-Article.html#Paging-the-Article">Paging the Article</a>) will be used.
-</p>
-<p>The default is to use the function specified by
-<code>mm-text-html-renderer</code> (see <a href="../emacs-mime/Display-Customization.html#Display-Customization">Display
-Customization</a> in <cite>The Emacs MIME Manual</cite>) to convert the
-<acronym>HTML</acronym>.  Pre-defined functions you can use include:
-</p>
-<dl compact="compact">
-<dt><code>shr</code></dt>
-<dd><p>Use Gnus simple html renderer.
-</p>
-</dd>
-<dt><code>gnus-w3m</code></dt>
-<dd><p>Use Gnus rendered based on w3m.
-</p>
-</dd>
-<dt><code>w3m</code></dt>
-<dd><p>Use <a href="http://emacs-w3m.namazu.org/">emacs-w3m</a>.
-</p>
-</dd>
-<dt><code>w3m-standalone</code></dt>
-<dd><p>Use <a href="http://w3m.sourceforge.net/">w3m</a>.
-</p>
-</dd>
-<dt><code>links</code></dt>
-<dd><p>Use <a href="http://links.sf.net/">Links</a>.
-</p>
-</dd>
-<dt><code>lynx</code></dt>
-<dd><p>Use <a href="http://lynx.isc.org/">Lynx</a>.
-</p>
-</dd>
-<dt><code>html2text</code></dt>
-<dd><p>Use html2text&mdash;a simple <acronym>HTML</acronym> converter included with Gnus.
-</p>
-</dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Article-Header.html#Article-Header"
+    accesskey="n" rel="next">Article Header</a>, Previous: <a href=
+    "Article-Hiding.html#Article-Hiding" accesskey="p" rel=
+    "prev">Article Hiding</a>, Up: <a href=
+    "Article-Treatment.html#Article-Treatment" accesskey="u" rel=
+    "up">Article Treatment</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Article-Washing-1" id="Article-Washing-1"></a>
 
-</dd>
-<dt><kbd>W b</kbd></dt>
-<dd><a name="index-W-b-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dadd_002dbuttons"></a>
-<p>Add clickable buttons to the article (<code>gnus-article-add-buttons</code>).
-See <a href="Article-Buttons.html#Article-Buttons">Article Buttons</a>.
-</p>
-</dd>
-<dt><kbd>W B</kbd></dt>
-<dd><a name="index-W-B-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dadd_002dbuttons_002dto_002dhead"></a>
-<p>Add clickable buttons to the article headers
-(<code>gnus-article-add-buttons-to-head</code>).
-</p>
-</dd>
-<dt><kbd>W p</kbd></dt>
-<dd><a name="index-W-p-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dverify_002dx_002dpgp_002dsig"></a>
-<p>Verify a signed control message
-(<code>gnus-article-verify-x-pgp-sig</code>).  Control messages such as
-<code>newgroup</code> and <code>checkgroups</code> are usually signed by the
-hierarchy maintainer.  You need to add the <acronym>PGP</acronym> public key of
-the maintainer to your keyring to verify the
-message.<a name="DOCF1" href="#FOOT1"><sup>1</sup></a>
-</p>
-</dd>
-<dt><kbd>W s</kbd></dt>
-<dd><a name="index-W-s-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dforce_002dverify_002dand_002ddecrypt"></a>
-<p>Verify a signed (<acronym>PGP</acronym>, <acronym>PGP/MIME</acronym> or
-<acronym>S/MIME</acronym>) message
-(<code>gnus-summary-force-verify-and-decrypt</code>). See <a href="Security.html#Security">Security</a>.
-</p>
-</dd>
-<dt><kbd>W a</kbd></dt>
-<dd><a name="index-W-a-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dstrip_002dheaders_002din_002dbody"></a>
-<p>Strip headers like the <code>X-No-Archive</code> header from the beginning of
-article bodies (<code>gnus-article-strip-headers-in-body</code>).
-</p>
-</dd>
-<dt><kbd>W E l</kbd></dt>
-<dd><a name="index-W-E-l-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dstrip_002dleading_002dblank_002dlines"></a>
-<p>Remove all blank lines from the beginning of the article
-(<code>gnus-article-strip-leading-blank-lines</code>).
-</p>
-</dd>
-<dt><kbd>W E m</kbd></dt>
-<dd><a name="index-W-E-m-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dstrip_002dmultiple_002dblank_002dlines"></a>
-<p>Replace all blank lines with empty lines and then all multiple empty
-lines with a single empty line.
-(<code>gnus-article-strip-multiple-blank-lines</code>).
-</p>
-</dd>
-<dt><kbd>W E t</kbd></dt>
-<dd><a name="index-W-E-t-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dremove_002dtrailing_002dblank_002dlines"></a>
-<p>Remove all blank lines at the end of the article
-(<code>gnus-article-remove-trailing-blank-lines</code>).
-</p>
-</dd>
-<dt><kbd>W E a</kbd></dt>
-<dd><a name="index-W-E-a-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dstrip_002dblank_002dlines"></a>
-<p>Do all the three commands above
-(<code>gnus-article-strip-blank-lines</code>).
-</p>
-</dd>
-<dt><kbd>W E A</kbd></dt>
-<dd><a name="index-W-E-A-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dstrip_002dall_002dblank_002dlines"></a>
-<p>Remove all blank lines
-(<code>gnus-article-strip-all-blank-lines</code>).
-</p>
-</dd>
-<dt><kbd>W E s</kbd></dt>
-<dd><a name="index-W-E-s-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dstrip_002dleading_002dspace"></a>
-<p>Remove all white space from the beginning of all lines of the article
-body (<code>gnus-article-strip-leading-space</code>).
-</p>
-</dd>
-<dt><kbd>W E e</kbd></dt>
-<dd><a name="index-W-E-e-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dstrip_002dtrailing_002dspace"></a>
-<p>Remove all white space from the end of all lines of the article
-body (<code>gnus-article-strip-trailing-space</code>).
-</p>
-</dd>
-</dl>
+  <h4 class="subsection">3.18.4 Article Washing</h4><a name=
+  "index-washing" id="index-washing"></a> <a name=
+  "index-article-washing" id="index-article-washing"></a>
 
-<p>See <a href="Customizing-Articles.html#Customizing-Articles">Customizing Articles</a>, for how to wash articles automatically.
-</p>
+  <p>We call this &ldquo;article washing&rdquo; for a really good
+  reason. Namely, the <kbd>A</kbd> key was taken, so we had to use
+  the <kbd>W</kbd> key instead.</p>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <p><em>Washing</em> is defined by us as &ldquo;changing something
+  from something to something else&rdquo;, but normally results in
+  something looking better. Cleaner, perhaps.</p>
 
-<h3><a name="FOOT1" href="#DOCF1">(1)</a></h3>
-<p><acronym>PGP</acronym> keys for many hierarchies are
-available at <a href="ftp://ftp.isc.org/pub/pgpcontrol/README.html">ftp://ftp.isc.org/pub/pgpcontrol/README.html</a></p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Article-Header.html#Article-Header" accesskey="n" rel="next">Article Header</a>, Previous: <a href="Article-Hiding.html#Article-Hiding" accesskey="p" rel="prev">Article Hiding</a>, Up: <a href="Article-Treatment.html#Article-Treatment" accesskey="u" rel="up">Article Treatment</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>See <a href=
+  "Customizing-Articles.html#Customizing-Articles">Customizing
+  Articles</a>, if you want to change how Gnus displays articles by
+  default.</p>
 
+  <dl compact="compact">
+    <dt><kbd>C-u g</kbd></dt>
 
+    <dd>
+      <p>This is not really washing, it&rsquo;s sort of the
+      opposite of washing. If you type this, you see the article
+      exactly as it exists on disk or on the server.</p>
+    </dd>
 
+    <dt><kbd>g</kbd></dt>
+
+    <dd>
+      <p>Force redisplaying of the current article
+      (<code>gnus-summary-show-article</code>). This is also not
+      really washing. If you type this, you see the article without
+      any previously applied interactive Washing functions but with
+      all default treatments (see <a href=
+      "Customizing-Articles.html#Customizing-Articles">Customizing
+      Articles</a>).</p>
+    </dd>
+
+    <dt><kbd>W l</kbd></dt>
+
+    <dd>
+      <a name="index-W-l-_0028Summary_0029" id=
+      "index-W-l-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dstop_002dpage_002dbreaking" id=
+      "index-gnus_002dsummary_002dstop_002dpage_002dbreaking"></a>
+
+      <p>Remove page breaks from the current article
+      (<code>gnus-summary-stop-page-breaking</code>). See <a href=
+      "Misc-Article.html#Misc-Article">Misc Article</a>, for page
+      delimiters.</p>
+    </dd>
+
+    <dt><kbd>W r</kbd></dt>
+
+    <dd>
+      <a name="index-W-r-_0028Summary_0029" id=
+      "index-W-r-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dcaesar_002dmessage" id=
+      "index-gnus_002dsummary_002dcaesar_002dmessage"></a>
+
+      <p>Do a Caesar rotate (rot13) on the article buffer
+      (<code>gnus-summary-caesar-message</code>). Unreadable
+      articles that tell you to read them with Caesar rotate or
+      rot13. (Typically offensive jokes and such.)</p>
+
+      <p>It&rsquo;s commonly called &ldquo;rot13&rdquo; because
+      each letter is rotated 13 positions in the alphabet, e.g.,
+      &lsquo;<samp>B</samp>&rsquo; (letter #2) -&gt;
+      &lsquo;<samp>O</samp>&rsquo; (letter #15). It is sometimes
+      referred to as &ldquo;Caesar rotate&rdquo; because Caesar is
+      rumored to have employed this form of, uh, somewhat weak
+      encryption.</p>
+    </dd>
+
+    <dt><kbd>W m</kbd></dt>
+
+    <dd>
+      <a name="index-W-m-_0028Summary_0029" id=
+      "index-W-m-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dmorse_002dmessage" id=
+      "index-gnus_002dsummary_002dmorse_002dmessage"></a>
+
+      <p>Morse decode the article buffer
+      (<code>gnus-summary-morse-message</code>).</p>
+    </dd>
+
+    <dt><kbd>W i</kbd></dt>
+
+    <dd>
+      <a name="index-W-i-_0028Summary_0029" id=
+      "index-W-i-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002didna_002dmessage" id=
+      "index-gnus_002dsummary_002didna_002dmessage"></a>
+
+      <p>Decode IDNA encoded domain names in the current articles.
+      IDNA encoded domain names looks like
+      &lsquo;<samp>xn--bar</samp>&rsquo;. If a string remain
+      unencoded after running invoking this, it is likely an
+      invalid IDNA string (&lsquo;<samp>xn--bar</samp>&rsquo; is
+      invalid). You must have GNU Libidn (<a href=
+      "http://www.gnu.org/software/libidn/">http://www.gnu.org/software/libidn/</a>)
+      installed for this command to work.</p>
+    </dd>
+
+    <dt><kbd>W t</kbd></dt>
+
+    <dt><kbd>t</kbd></dt>
+
+    <dd>
+      <a name="index-W-t-_0028Summary_0029" id=
+      "index-W-t-_0028Summary_0029"></a> <a name=
+      "index-t-_0028Summary_0029" id=
+      "index-t-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dtoggle_002dheader" id=
+      "index-gnus_002dsummary_002dtoggle_002dheader"></a>
+
+      <p>Toggle whether to display all headers in the article
+      buffer (<code>gnus-summary-toggle-header</code>).</p>
+    </dd>
+
+    <dt><kbd>W v</kbd></dt>
+
+    <dd>
+      <a name="index-W-v-_0028Summary_0029" id=
+      "index-W-v-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dverbose_002dheaders" id=
+      "index-gnus_002dsummary_002dverbose_002dheaders"></a>
+
+      <p>Toggle whether to display all headers in the article
+      buffer permanently
+      (<code>gnus-summary-verbose-headers</code>).</p>
+    </dd>
+
+    <dt><kbd>W o</kbd></dt>
+
+    <dd>
+      <a name="index-W-o-_0028Summary_0029" id=
+      "index-W-o-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dtreat_002doverstrike" id=
+      "index-gnus_002darticle_002dtreat_002doverstrike"></a>
+
+      <p>Treat overstrike
+      (<code>gnus-article-treat-overstrike</code>).</p>
+    </dd>
+
+    <dt><kbd>W d</kbd></dt>
+
+    <dd>
+      <a name="index-W-d-_0028Summary_0029" id=
+      "index-W-d-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dtreat_002ddumbquotes" id=
+      "index-gnus_002darticle_002dtreat_002ddumbquotes"></a>
+      <a name="index-gnus_002darticle_002ddumbquotes_002dmap" id=
+      "index-gnus_002darticle_002ddumbquotes_002dmap"></a> <a name=
+      "index-Smartquotes" id="index-Smartquotes"></a> <a name=
+      "index-M_002a_002a_002a_002as_002a_002a_002a-sm_002artq_002a_002at_002as"
+      id=
+      "index-M_002a_002a_002a_002as_002a_002a_002a-sm_002artq_002a_002at_002as">
+      </a> <a name="index-Latin-1" id="index-Latin-1"></a>
+
+      <p>Treat M****s*** sm*rtq**t*s according to
+      <code>gnus-article-dumbquotes-map</code>
+      (<code>gnus-article-treat-dumbquotes</code>). Note that this
+      function guesses whether a character is a sm*rtq**t* or not,
+      so it should only be used interactively.</p>
+
+      <p>Sm*rtq**t*s are M****s***&rsquo;s unilateral extension to
+      the character map in an attempt to provide more quoting
+      characters. If you see something like <code>\222</code> or
+      <code>\264</code> where you&rsquo;re expecting some kind of
+      apostrophe or quotation mark, then try this wash.</p>
+    </dd>
+
+    <dt><kbd>W U</kbd></dt>
+
+    <dd>
+      <a name="index-W-U-_0028Summary_0029" id=
+      "index-W-U-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dtreat_002dnon_002dascii" id=
+      "index-gnus_002darticle_002dtreat_002dnon_002dascii"></a>
+      <a name="index-Unicode" id="index-Unicode"></a> <a name=
+      "index-Non_002dASCII" id="index-Non_002dASCII"></a>
+
+      <p>Translate many non-<acronym>ASCII</acronym> characters
+      into their <acronym>ASCII</acronym> equivalents
+      (<code>gnus-article-treat-non-ascii</code>). This is mostly
+      useful if you&rsquo;re on a terminal that has a limited font
+      and doesn&rsquo;t show accented characters,
+      &ldquo;advanced&rdquo; punctuation, and the like. For
+      instance, &lsquo;<samp>&Acirc;&raquo;</samp>&rsquo; is
+      translated into &lsquo;<samp>&gt;&gt;</samp>&rsquo;, and so
+      on.</p>
+    </dd>
+
+    <dt><kbd>W Y f</kbd></dt>
+
+    <dd>
+      <a name="index-W-Y-f-_0028Summary_0029" id=
+      "index-W-Y-f-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002doutlook_002ddeuglify_002darticle"
+      id=
+      "index-gnus_002darticle_002doutlook_002ddeuglify_002darticle">
+      </a> <a name="index-Outlook-Express" id=
+      "index-Outlook-Express"></a>
+
+      <p>Full deuglify of broken Outlook (Express) articles: Treat
+      dumbquotes, unwrap lines, repair attribution and rearrange
+      citation.
+      (<code>gnus-article-outlook-deuglify-article</code>).</p>
+    </dd>
+
+    <dt><kbd>W Y u</kbd></dt>
+
+    <dd>
+      <a name="index-W-Y-u-_0028Summary_0029" id=
+      "index-W-Y-u-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002doutlook_002dunwrap_002dlines" id=
+      "index-gnus_002darticle_002doutlook_002dunwrap_002dlines"></a>
+      <a name=
+      "index-gnus_002doutlook_002ddeuglify_002dunwrap_002dmin" id=
+      "index-gnus_002doutlook_002ddeuglify_002dunwrap_002dmin"></a>
+      <a name=
+      "index-gnus_002doutlook_002ddeuglify_002dunwrap_002dmax" id=
+      "index-gnus_002doutlook_002ddeuglify_002dunwrap_002dmax"></a>
+
+      <p>Unwrap lines that appear to be wrapped citation lines. You
+      can control what lines will be unwrapped by frobbing
+      <code>gnus-outlook-deuglify-unwrap-min</code> and
+      <code>gnus-outlook-deuglify-unwrap-max</code>, indicating the
+      minimum and maximum length of an unwrapped citation line.
+      (<code>gnus-article-outlook-unwrap-lines</code>).</p>
+    </dd>
+
+    <dt><kbd>W Y a</kbd></dt>
+
+    <dd>
+      <a name="index-W-Y-a-_0028Summary_0029" id=
+      "index-W-Y-a-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002doutlook_002drepair_002dattribution"
+      id=
+      "index-gnus_002darticle_002doutlook_002drepair_002dattribution">
+      </a>
+
+      <p>Repair a broken attribution line.<br />
+      (<code>gnus-article-outlook-repair-attribution</code>).</p>
+    </dd>
+
+    <dt><kbd>W Y c</kbd></dt>
+
+    <dd>
+      <a name="index-W-Y-c-_0028Summary_0029" id=
+      "index-W-Y-c-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002doutlook_002drearrange_002dcitation"
+      id=
+      "index-gnus_002darticle_002doutlook_002drearrange_002dcitation">
+      </a>
+
+      <p>Repair broken citations by rearranging the text.
+      (<code>gnus-article-outlook-rearrange-citation</code>).</p>
+    </dd>
+
+    <dt><kbd>W w</kbd></dt>
+
+    <dd>
+      <a name="index-W-w-_0028Summary_0029" id=
+      "index-W-w-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dfill_002dcited_002darticle" id=
+      "index-gnus_002darticle_002dfill_002dcited_002darticle"></a>
+
+      <p>Do word wrap
+      (<code>gnus-article-fill-cited-article</code>).</p>
+
+      <p>You can give the command a numerical prefix to specify the
+      width to use when filling.</p>
+    </dd>
+
+    <dt><kbd>W Q</kbd></dt>
+
+    <dd>
+      <a name="index-W-Q-_0028Summary_0029" id=
+      "index-W-Q-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dfill_002dlong_002dlines" id=
+      "index-gnus_002darticle_002dfill_002dlong_002dlines"></a>
+
+      <p>Fill long lines
+      (<code>gnus-article-fill-long-lines</code>).</p>
+    </dd>
+
+    <dt><kbd>W C</kbd></dt>
+
+    <dd>
+      <a name="index-W-C-_0028Summary_0029" id=
+      "index-W-C-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dcapitalize_002dsentences" id=
+      "index-gnus_002darticle_002dcapitalize_002dsentences"></a>
+
+      <p>Capitalize the first word in each sentence
+      (<code>gnus-article-capitalize-sentences</code>).</p>
+    </dd>
+
+    <dt><kbd>W c</kbd></dt>
+
+    <dd>
+      <a name="index-W-c-_0028Summary_0029" id=
+      "index-W-c-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dremove_002dcr" id=
+      "index-gnus_002darticle_002dremove_002dcr"></a>
+
+      <p>Translate CRLF pairs (i.e., &lsquo;<samp>^M</samp>&rsquo;s
+      on the end of the lines) into LF (this takes care of DOS line
+      endings), and then translate any remaining CRs into LF (this
+      takes care of Mac line endings)
+      (<code>gnus-article-remove-cr</code>).</p>
+    </dd>
+
+    <dt><kbd>W q</kbd></dt>
+
+    <dd>
+      <a name="index-W-q-_0028Summary_0029" id=
+      "index-W-q-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dde_002dquoted_002dunreadable" id=
+      "index-gnus_002darticle_002dde_002dquoted_002dunreadable"></a>
+
+      <p>Treat quoted-printable
+      (<code>gnus-article-de-quoted-unreadable</code>).
+      Quoted-Printable is one common <acronym>MIME</acronym>
+      encoding employed when sending non-<acronym>ASCII</acronym>
+      (i.e., 8-bit) articles. It typically makes strings like
+      &lsquo;<samp>d&Atilde;&copy;j&Atilde;&nbsp; vu</samp>&rsquo;
+      look like &lsquo;<samp>d=E9j=E0 vu</samp>&rsquo;, which
+      doesn&rsquo;t look very readable to me. Note that this is
+      usually done automatically by Gnus if the message in question
+      has a <code>Content-Transfer-Encoding</code> header that says
+      that this encoding has been done. If a prefix is given, a
+      charset will be asked for.</p>
+    </dd>
+
+    <dt><kbd>W 6</kbd></dt>
+
+    <dd>
+      <a name="index-W-6-_0028Summary_0029" id=
+      "index-W-6-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dde_002dbase64_002dunreadable" id=
+      "index-gnus_002darticle_002dde_002dbase64_002dunreadable"></a>
+
+      <p>Treat base64
+      (<code>gnus-article-de-base64-unreadable</code>). Base64 is
+      one common <acronym>MIME</acronym> encoding employed when
+      sending non-<acronym>ASCII</acronym> (i.e., 8-bit) articles.
+      Note that this is usually done automatically by Gnus if the
+      message in question has a
+      <code>Content-Transfer-Encoding</code> header that says that
+      this encoding has been done. If a prefix is given, a charset
+      will be asked for.</p>
+    </dd>
+
+    <dt><kbd>W Z</kbd></dt>
+
+    <dd>
+      <a name="index-W-Z-_0028Summary_0029" id=
+      "index-W-Z-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002ddecode_002dHZ" id=
+      "index-gnus_002darticle_002ddecode_002dHZ"></a>
+
+      <p>Treat HZ or HZP (<code>gnus-article-decode-HZ</code>). HZ
+      (or HZP) is one common encoding employed when sending Chinese
+      articles. It typically makes strings look like
+      &lsquo;<samp>~{&lt;:Ky2;S{#,NpJ)l6HK!#~}</samp>&rsquo;.</p>
+    </dd>
+
+    <dt><kbd>W A</kbd></dt>
+
+    <dd>
+      <a name="index-W-A-_0028Summary_0029" id=
+      "index-W-A-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dtreat_002dansi_002dsequences" id=
+      "index-gnus_002darticle_002dtreat_002dansi_002dsequences"></a>
+      <a name="index-ANSI-control-sequences" id=
+      "index-ANSI-control-sequences"></a>
+
+      <p>Translate <acronym>ANSI</acronym> SGR control sequences
+      into overlays or extents
+      (<code>gnus-article-treat-ansi-sequences</code>).
+      <acronym>ANSI</acronym> sequences are used in some Chinese
+      hierarchies for highlighting.</p>
+    </dd>
+
+    <dt><kbd>W u</kbd></dt>
+
+    <dd>
+      <a name="index-W-u-_0028Summary_0029" id=
+      "index-W-u-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dunsplit_002durls" id=
+      "index-gnus_002darticle_002dunsplit_002durls"></a>
+
+      <p>Remove newlines from within URLs. Some mailers insert
+      newlines into outgoing email messages to keep lines short.
+      This reformatting can split long URLs onto multiple lines.
+      Repair those URLs by removing the newlines
+      (<code>gnus-article-unsplit-urls</code>).</p>
+    </dd>
+
+    <dt><kbd>W h</kbd></dt>
+
+    <dd>
+      <a name="index-W-h-_0028Summary_0029" id=
+      "index-W-h-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dwash_002dhtml" id=
+      "index-gnus_002darticle_002dwash_002dhtml"></a>
+
+      <p>Treat <acronym>HTML</acronym>
+      (<code>gnus-article-wash-html</code>). Note that this is
+      usually done automatically by Gnus if the message in question
+      has a <code>Content-Type</code> header that says that the
+      message is <acronym>HTML</acronym>.</p>
+
+      <p>If a prefix is given, a charset will be asked for. If it
+      is a number, the charset defined in
+      <code>gnus-summary-show-article-charset-alist</code> (see
+      <a href="Paging-the-Article.html#Paging-the-Article">Paging
+      the Article</a>) will be used.</p>
+
+      <p>The default is to use the function specified by
+      <code>mm-text-html-renderer</code> (see <a href=
+      "../emacs-mime/Display-Customization.html#Display-Customization">
+      Display Customization</a> in <cite>The Emacs MIME
+      Manual</cite>) to convert the <acronym>HTML</acronym>.
+      Pre-defined functions you can use include:</p>
+
+      <dl compact="compact">
+        <dt><code>shr</code></dt>
+
+        <dd>
+          <p>Use Gnus simple html renderer.</p>
+        </dd>
+
+        <dt><code>gnus-w3m</code></dt>
+
+        <dd>
+          <p>Use Gnus rendered based on w3m.</p>
+        </dd>
+
+        <dt><code>w3m</code></dt>
+
+        <dd>
+          <p>Use <a href=
+          "http://emacs-w3m.namazu.org/">emacs-w3m</a>.</p>
+        </dd>
+
+        <dt><code>w3m-standalone</code></dt>
+
+        <dd>
+          <p>Use <a href="http://w3m.sourceforge.net/">w3m</a>.</p>
+        </dd>
+
+        <dt><code>links</code></dt>
+
+        <dd>
+          <p>Use <a href="http://links.sf.net/">Links</a>.</p>
+        </dd>
+
+        <dt><code>lynx</code></dt>
+
+        <dd>
+          <p>Use <a href="http://lynx.isc.org/">Lynx</a>.</p>
+        </dd>
+
+        <dt><code>html2text</code></dt>
+
+        <dd>
+          <p>Use html2text&mdash;a simple <acronym>HTML</acronym>
+          converter included with Gnus.</p>
+        </dd>
+      </dl>
+    </dd>
+
+    <dt><kbd>W b</kbd></dt>
+
+    <dd>
+      <a name="index-W-b-_0028Summary_0029" id=
+      "index-W-b-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dadd_002dbuttons" id=
+      "index-gnus_002darticle_002dadd_002dbuttons"></a>
+
+      <p>Add clickable buttons to the article
+      (<code>gnus-article-add-buttons</code>). See <a href=
+      "Article-Buttons.html#Article-Buttons">Article
+      Buttons</a>.</p>
+    </dd>
+
+    <dt><kbd>W B</kbd></dt>
+
+    <dd>
+      <a name="index-W-B-_0028Summary_0029" id=
+      "index-W-B-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dadd_002dbuttons_002dto_002dhead"
+      id=
+      "index-gnus_002darticle_002dadd_002dbuttons_002dto_002dhead"></a>
+
+      <p>Add clickable buttons to the article headers
+      (<code>gnus-article-add-buttons-to-head</code>).</p>
+    </dd>
+
+    <dt><kbd>W p</kbd></dt>
+
+    <dd>
+      <a name="index-W-p-_0028Summary_0029" id=
+      "index-W-p-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dverify_002dx_002dpgp_002dsig" id=
+      "index-gnus_002darticle_002dverify_002dx_002dpgp_002dsig"></a>
+
+      <p>Verify a signed control message
+      (<code>gnus-article-verify-x-pgp-sig</code>). Control
+      messages such as <code>newgroup</code> and
+      <code>checkgroups</code> are usually signed by the hierarchy
+      maintainer. You need to add the <acronym>PGP</acronym> public
+      key of the maintainer to your keyring to verify the
+      message.<a name="DOCF1" href="#FOOT1" id=
+      "DOCF1"><sup>1</sup></a></p>
+    </dd>
+
+    <dt><kbd>W s</kbd></dt>
+
+    <dd>
+      <a name="index-W-s-_0028Summary_0029" id=
+      "index-W-s-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dforce_002dverify_002dand_002ddecrypt"
+      id=
+      "index-gnus_002dsummary_002dforce_002dverify_002dand_002ddecrypt">
+      </a>
+
+      <p>Verify a signed (<acronym>PGP</acronym>,
+      <acronym>PGP/MIME</acronym> or <acronym>S/MIME</acronym>)
+      message (<code>gnus-summary-force-verify-and-decrypt</code>).
+      See <a href="Security.html#Security">Security</a>.</p>
+    </dd>
+
+    <dt><kbd>W a</kbd></dt>
+
+    <dd>
+      <a name="index-W-a-_0028Summary_0029" id=
+      "index-W-a-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dstrip_002dheaders_002din_002dbody"
+      id=
+      "index-gnus_002darticle_002dstrip_002dheaders_002din_002dbody">
+      </a>
+
+      <p>Strip headers like the <code>X-No-Archive</code> header
+      from the beginning of article bodies
+      (<code>gnus-article-strip-headers-in-body</code>).</p>
+    </dd>
+
+    <dt><kbd>W E l</kbd></dt>
+
+    <dd>
+      <a name="index-W-E-l-_0028Summary_0029" id=
+      "index-W-E-l-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dstrip_002dleading_002dblank_002dlines"
+      id=
+      "index-gnus_002darticle_002dstrip_002dleading_002dblank_002dlines">
+      </a>
+
+      <p>Remove all blank lines from the beginning of the article
+      (<code>gnus-article-strip-leading-blank-lines</code>).</p>
+    </dd>
+
+    <dt><kbd>W E m</kbd></dt>
+
+    <dd>
+      <a name="index-W-E-m-_0028Summary_0029" id=
+      "index-W-E-m-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dstrip_002dmultiple_002dblank_002dlines"
+      id=
+      "index-gnus_002darticle_002dstrip_002dmultiple_002dblank_002dlines">
+      </a>
+
+      <p>Replace all blank lines with empty lines and then all
+      multiple empty lines with a single empty line.
+      (<code>gnus-article-strip-multiple-blank-lines</code>).</p>
+    </dd>
+
+    <dt><kbd>W E t</kbd></dt>
+
+    <dd>
+      <a name="index-W-E-t-_0028Summary_0029" id=
+      "index-W-E-t-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dremove_002dtrailing_002dblank_002dlines"
+      id=
+      "index-gnus_002darticle_002dremove_002dtrailing_002dblank_002dlines">
+      </a>
+
+      <p>Remove all blank lines at the end of the article
+      (<code>gnus-article-remove-trailing-blank-lines</code>).</p>
+    </dd>
+
+    <dt><kbd>W E a</kbd></dt>
+
+    <dd>
+      <a name="index-W-E-a-_0028Summary_0029" id=
+      "index-W-E-a-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dstrip_002dblank_002dlines" id=
+      "index-gnus_002darticle_002dstrip_002dblank_002dlines"></a>
+
+      <p>Do all the three commands above
+      (<code>gnus-article-strip-blank-lines</code>).</p>
+    </dd>
+
+    <dt><kbd>W E A</kbd></dt>
+
+    <dd>
+      <a name="index-W-E-A-_0028Summary_0029" id=
+      "index-W-E-A-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dstrip_002dall_002dblank_002dlines"
+      id=
+      "index-gnus_002darticle_002dstrip_002dall_002dblank_002dlines">
+      </a>
+
+      <p>Remove all blank lines
+      (<code>gnus-article-strip-all-blank-lines</code>).</p>
+    </dd>
+
+    <dt><kbd>W E s</kbd></dt>
+
+    <dd>
+      <a name="index-W-E-s-_0028Summary_0029" id=
+      "index-W-E-s-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dstrip_002dleading_002dspace" id=
+      "index-gnus_002darticle_002dstrip_002dleading_002dspace"></a>
+
+      <p>Remove all white space from the beginning of all lines of
+      the article body
+      (<code>gnus-article-strip-leading-space</code>).</p>
+    </dd>
+
+    <dt><kbd>W E e</kbd></dt>
+
+    <dd>
+      <a name="index-W-E-e-_0028Summary_0029" id=
+      "index-W-E-e-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dstrip_002dtrailing_002dspace" id=
+      "index-gnus_002darticle_002dstrip_002dtrailing_002dspace"></a>
+
+      <p>Remove all white space from the end of all lines of the
+      article body
+      (<code>gnus-article-strip-trailing-space</code>).</p>
+    </dd>
+  </dl>
+
+  <p>See <a href=
+  "Customizing-Articles.html#Customizing-Articles">Customizing
+  Articles</a>, for how to wash articles automatically.</p>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT1" href="#DOCF1" id="FOOT1">(1)</a></h3>
+
+    <p><acronym>PGP</acronym> keys for many hierarchies are
+    available at <a href=
+    "ftp://ftp.isc.org/pub/pgpcontrol/README.html">ftp://ftp.isc.org/pub/pgpcontrol/README.html</a></p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Article-Header.html#Article-Header"
+    accesskey="n" rel="next">Article Header</a>, Previous: <a href=
+    "Article-Hiding.html#Article-Hiding" accesskey="p" rel=
+    "prev">Article Hiding</a>, Up: <a href=
+    "Article-Treatment.html#Article-Treatment" accesskey="u" rel=
+    "up">Article Treatment</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

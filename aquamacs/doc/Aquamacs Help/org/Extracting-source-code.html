@@ -1,15 +1,27 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Extracting source code - The Org Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="The Org Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Working-With-Source-Code.html#Working-With-Source-Code" title="Working With Source Code">
-<link rel="prev" href="Exporting-code-blocks.html#Exporting-code-blocks" title="Exporting code blocks">
-<link rel="next" href="Evaluating-code-blocks.html#Evaluating-code-blocks" title="Evaluating code blocks">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Extracting source code - The Org Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="The Org Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Working-With-Source-Code.html#Working-With-Source-Code" title=
+  "Working With Source Code" />
+  <link rel="prev" href=
+  "Exporting-code-blocks.html#Exporting-code-blocks" title=
+  "Exporting code blocks" />
+  <link rel="next" href=
+  "Evaluating-code-blocks.html#Evaluating-code-blocks" title=
+  "Evaluating code blocks" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for Org version 7.4.
 
 Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
@@ -33,8 +45,10 @@ Free Software Foundation, Inc.
      copy of the license to the document, as described in section 6 of
      the license.
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -44,53 +58,90 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Extracting-source-code"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Evaluating-code-blocks.html#Evaluating-code-blocks">Evaluating code blocks</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Exporting-code-blocks.html#Exporting-code-blocks">Exporting code blocks</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Working-With-Source-Code.html#Working-With-Source-Code">Working With Source Code</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Extracting-source-code" id=
+    "Extracting-source-code"></a>
 
-<h3 class="section">14.4 Extracting source code</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Evaluating-code-blocks.html#Evaluating-code-blocks">Evaluating
+    code blocks</a>, Previous:&nbsp;<a rel="previous" accesskey="p"
+    href=
+    "Exporting-code-blocks.html#Exporting-code-blocks">Exporting
+    code blocks</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Working-With-Source-Code.html#Working-With-Source-Code">Working
+    With Source Code</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-source-code_002c-extracting-1697"></a><a name="index-code-block_002c-extracting-source-code-1698"></a>
-Creating pure source code files by extracting code from source blocks is
-referred to as &ldquo;tangling&rdquo;&mdash;a term adopted from the literate programming
-community.  During &ldquo;tangling&rdquo; of code blocks their bodies are expanded
-using <code>org-babel-expand-src-block</code> which can expand both variable and
-&ldquo;noweb&rdquo; style references  (see <a href="Noweb-reference-syntax.html#Noweb-reference-syntax">Noweb reference syntax</a>).
+  <h3 class="section">14.4 Extracting source code</h3>
 
-<h5 class="subsubheading">Header arguments</h5>
+  <p><a name="index-source-code_002c-extracting-1697" id=
+  "index-source-code_002c-extracting-1697"></a><a name=
+  "index-code-block_002c-extracting-source-code-1698" id=
+  "index-code-block_002c-extracting-source-code-1698"></a> Creating
+  pure source code files by extracting code from source blocks is
+  referred to as &ldquo;tangling&rdquo;&mdash;a term adopted from
+  the literate programming community. During &ldquo;tangling&rdquo;
+  of code blocks their bodies are expanded using
+  <code>org-babel-expand-src-block</code> which can expand both
+  variable and &ldquo;noweb&rdquo; style references (see <a href=
+  "Noweb-reference-syntax.html#Noweb-reference-syntax">Noweb
+  reference syntax</a>).</p>
 
-     <dl>
-<dt><code>:tangle no</code><dd>The default.  The code block is not included in the tangled output. 
-<br><dt><code>:tangle yes</code><dd>Include the code block in the tangled output. The output file name is the
-name of the org file with the extension &lsquo;<samp><span class="samp">.org</span></samp>&rsquo; replaced by the extension
-for the block language. 
-<br><dt><code>:tangle filename</code><dd>Include the code block in the tangled output to file &lsquo;<samp><span class="samp">filename</span></samp>&rsquo;. 
-</dl>
+  <h5 class="subsubheading">Header arguments</h5>
 
-   <p><a name="index-C_002dc-C_002dv-t-1699"></a>
+  <dl>
+    <dt><code>:tangle no</code></dt>
 
-<h5 class="subsubheading">Functions</h5>
+    <dd>The default. The code block is not included in the tangled
+    output.<br /></dd>
 
-     <dl>
-<dt><code>org-babel-tangle</code><dd>Tangle the current file.  Bound to <kbd>C-c C-v t</kbd>. 
-<br><dt><code>org-babel-tangle-file</code><dd>Choose a file to tangle.   Bound to <kbd>C-c C-v f</kbd>. 
-</dl>
+    <dt><code>:tangle yes</code></dt>
 
-<h5 class="subsubheading">Hooks</h5>
+    <dd>Include the code block in the tangled output. The output
+    file name is the name of the org file with the extension
+    &lsquo;<samp><span class="samp">.org</span></samp>&rsquo;
+    replaced by the extension for the block language.<br /></dd>
 
-     <dl>
-<dt><code>org-babel-post-tangle-hook</code><dd>This hook is run from within code files tangled by <code>org-babel-tangle</code>. 
-Example applications could include post-processing, compilation or evaluation
-of tangled code files. 
-</dl>
+    <dt><code>:tangle filename</code></dt>
 
-   </body></html>
+    <dd>Include the code block in the tangled output to file
+    &lsquo;<samp><span class=
+    "samp">filename</span></samp>&rsquo;.</dd>
+  </dl>
 
+  <p><a name="index-C_002dc-C_002dv-t-1699" id=
+  "index-C_002dc-C_002dv-t-1699"></a></p>
+
+  <h5 class="subsubheading">Functions</h5>
+
+  <dl>
+    <dt><code>org-babel-tangle</code></dt>
+
+    <dd>Tangle the current file. Bound to <kbd>C-c C-v
+    t</kbd>.<br /></dd>
+
+    <dt><code>org-babel-tangle-file</code></dt>
+
+    <dd>Choose a file to tangle. Bound to <kbd>C-c C-v
+    f</kbd>.</dd>
+  </dl>
+
+  <h5 class="subsubheading">Hooks</h5>
+
+  <dl>
+    <dt><code>org-babel-post-tangle-hook</code></dt>
+
+    <dd>This hook is run from within code files tangled by
+    <code>org-babel-tangle</code>. Example applications could
+    include post-processing, compilation or evaluation of tangled
+    code files.</dd>
+  </dl>
+</body>
+</html>

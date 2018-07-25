@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,216 +20,296 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Etags Regexps</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Etags Regexps">
-<meta name="keywords" content="GNU Emacs Manual: Etags Regexps">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Tags-Tables.html#Tags-Tables" rel="up" title="Tags Tables">
-<link href="Select-Tags-Table.html#Select-Tags-Table" rel="next" title="Select Tags Table">
-<link href="Create-Tags-Table.html#Create-Tags-Table" rel="prev" title="Create Tags Table">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Etags Regexps</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Etags Regexps" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Etags Regexps" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Tags-Tables.html#Tags-Tables" rel="up" title=
+  "Tags Tables" />
+  <link href="Select-Tags-Table.html#Select-Tags-Table" rel="next"
+  title="Select Tags Table" />
+  <link href="Create-Tags-Table.html#Create-Tags-Table" rel="prev"
+  title="Create Tags Table" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Etags-Regexps" id="Etags-Regexps"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Create-Tags-Table.html#Create-Tags-Table"
+    accesskey="p" rel="prev">Create Tags Table</a>, Up: <a href=
+    "Tags-Tables.html#Tags-Tables" accesskey="u" rel="up">Tags
+    Tables</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Etags-Regexps-1" id="Etags-Regexps-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Etags-Regexps"></a>
-<div class="header">
-<p>
-Previous: <a href="Create-Tags-Table.html#Create-Tags-Table" accesskey="p" rel="prev">Create Tags Table</a>, Up: <a href="Tags-Tables.html#Tags-Tables" accesskey="u" rel="up">Tags Tables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Etags-Regexps-1"></a>
-<h4 class="subsubsection">28.3.2.3 Etags Regexps</h4>
+  <h4 class="subsubsection">28.3.2.3 Etags Regexps</h4>
 
-<p>The &lsquo;<samp>--regex</samp>&rsquo; option to <code>etags</code> allows tags to be
-recognized by regular expression matching.  You can intermix this
-option with file names; each one applies to the source files that
-follow it.  If you specify multiple &lsquo;<samp>--regex</samp>&rsquo; options, all of
-them are used in parallel.  The syntax is:
-</p>
-<div class="smallexample">
-<pre class="smallexample">--regex=[<var>{language}</var>]/<var>tagregexp</var>/[<var>nameregexp</var>/]<var>modifiers</var>
-</pre></div>
+  <p>The &lsquo;<samp>--regex</samp>&rsquo; option to
+  <code>etags</code> allows tags to be recognized by regular
+  expression matching. You can intermix this option with file
+  names; each one applies to the source files that follow it. If
+  you specify multiple &lsquo;<samp>--regex</samp>&rsquo; options,
+  all of them are used in parallel. The syntax is:</p>
 
-<p>The essential part of the option value is <var>tagregexp</var>, the regexp
-for matching tags.  It is always used anchored, that is, it only
-matches at the beginning of a line.  If you want to allow indented
-tags, use a regexp that matches initial whitespace; start it with
-&lsquo;<samp>[ \t]*</samp>&rsquo;.
-</p>
-<p>In these regular expressions, &lsquo;<samp>\</samp>&rsquo; quotes the next character, and
-all the GCC character escape sequences are supported (&lsquo;<samp>\a</samp>&rsquo; for
-bell, &lsquo;<samp>\b</samp>&rsquo; for back space, &lsquo;<samp>\d</samp>&rsquo; for delete, &lsquo;<samp>\e</samp>&rsquo; for
-escape, &lsquo;<samp>\f</samp>&rsquo; for formfeed, &lsquo;<samp>\n</samp>&rsquo; for newline, &lsquo;<samp>\r</samp>&rsquo; for
-carriage return, &lsquo;<samp>\t</samp>&rsquo; for tab, and &lsquo;<samp>\v</samp>&rsquo; for vertical tab).
-</p>
-<p>Ideally, <var>tagregexp</var> should not match more characters than are
-needed to recognize what you want to tag.  If the syntax requires you
-to write <var>tagregexp</var> so it matches more characters beyond the tag
-itself, you should add a <var>nameregexp</var>, to pick out just the tag.
-This will enable Emacs to find tags more accurately and to do
-completion on tag names more reliably.  You can find some examples
-below.
-</p>
-<p>The <var>modifiers</var> are a sequence of zero or more characters that
-modify the way <code>etags</code> does the matching.  A regexp with no
-modifiers is applied sequentially to each line of the input file, in a
-case-sensitive way.  The modifiers and their meanings are:
-</p>
-<dl compact="compact">
-<dt>&lsquo;<samp>i</samp>&rsquo;</dt>
-<dd><p>Ignore case when matching this regexp.
-</p></dd>
-<dt>&lsquo;<samp>m</samp>&rsquo;</dt>
-<dd><p>Match this regular expression against the whole file, so that
-multi-line matches are possible.
-</p></dd>
-<dt>&lsquo;<samp>s</samp>&rsquo;</dt>
-<dd><p>Match this regular expression against the whole file, and allow
-&lsquo;<samp>.</samp>&rsquo; in <var>tagregexp</var> to match newlines.
-</p></dd>
-</dl>
+  <div class="smallexample">
+    <pre class="smallexample">
+--regex=[<var>{language}</var>]/<var>tagregexp</var>/[<var>nameregexp</var>/]<var>modifiers</var>
+</pre>
+  </div>
 
-<p>The &lsquo;<samp>-R</samp>&rsquo; option cancels all the regexps defined by preceding
-&lsquo;<samp>--regex</samp>&rsquo; options.  It too applies to the file names following
-it.  Here&rsquo;s an example:
-</p>
-<div class="smallexample">
-<pre class="smallexample">etags --regex=/<var>reg1</var>/i voo.doo --regex=/<var>reg2</var>/m \
+  <p>The essential part of the option value is
+  <var>tagregexp</var>, the regexp for matching tags. It is always
+  used anchored, that is, it only matches at the beginning of a
+  line. If you want to allow indented tags, use a regexp that
+  matches initial whitespace; start it with &lsquo;<samp>[
+  \t]*</samp>&rsquo;.</p>
+
+  <p>In these regular expressions, &lsquo;<samp>\</samp>&rsquo;
+  quotes the next character, and all the GCC character escape
+  sequences are supported (&lsquo;<samp>\a</samp>&rsquo; for bell,
+  &lsquo;<samp>\b</samp>&rsquo; for back space,
+  &lsquo;<samp>\d</samp>&rsquo; for delete,
+  &lsquo;<samp>\e</samp>&rsquo; for escape,
+  &lsquo;<samp>\f</samp>&rsquo; for formfeed,
+  &lsquo;<samp>\n</samp>&rsquo; for newline,
+  &lsquo;<samp>\r</samp>&rsquo; for carriage return,
+  &lsquo;<samp>\t</samp>&rsquo; for tab, and
+  &lsquo;<samp>\v</samp>&rsquo; for vertical tab).</p>
+
+  <p>Ideally, <var>tagregexp</var> should not match more characters
+  than are needed to recognize what you want to tag. If the syntax
+  requires you to write <var>tagregexp</var> so it matches more
+  characters beyond the tag itself, you should add a
+  <var>nameregexp</var>, to pick out just the tag. This will enable
+  Emacs to find tags more accurately and to do completion on tag
+  names more reliably. You can find some examples below.</p>
+
+  <p>The <var>modifiers</var> are a sequence of zero or more
+  characters that modify the way <code>etags</code> does the
+  matching. A regexp with no modifiers is applied sequentially to
+  each line of the input file, in a case-sensitive way. The
+  modifiers and their meanings are:</p>
+
+  <dl compact="compact">
+    <dt>&lsquo;<samp>i</samp>&rsquo;</dt>
+
+    <dd>
+      <p>Ignore case when matching this regexp.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>m</samp>&rsquo;</dt>
+
+    <dd>
+      <p>Match this regular expression against the whole file, so
+      that multi-line matches are possible.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>s</samp>&rsquo;</dt>
+
+    <dd>
+      <p>Match this regular expression against the whole file, and
+      allow &lsquo;<samp>.</samp>&rsquo; in <var>tagregexp</var> to
+      match newlines.</p>
+    </dd>
+  </dl>
+
+  <p>The &lsquo;<samp>-R</samp>&rsquo; option cancels all the
+  regexps defined by preceding &lsquo;<samp>--regex</samp>&rsquo;
+  options. It too applies to the file names following it.
+  Here&rsquo;s an example:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+etags --regex=/<var>reg1</var>/i voo.doo --regex=/<var>reg2</var>/m \
     bar.ber -R --lang=lisp los.er
-</pre></div>
+</pre>
+  </div>
 
-<p>Here <code>etags</code> chooses the parsing language for <samp>voo.doo</samp> and
-<samp>bar.ber</samp> according to their contents.  <code>etags</code> also uses
-<var>reg1</var> to recognize additional tags in <samp>voo.doo</samp>, and both
-<var>reg1</var> and <var>reg2</var> to recognize additional tags in
-<samp>bar.ber</samp>.  <var>reg1</var> is checked against each line of
-<samp>voo.doo</samp> and <samp>bar.ber</samp>, in a case-insensitive way, while
-<var>reg2</var> is checked against the whole <samp>bar.ber</samp> file,
-permitting multi-line matches, in a case-sensitive way.  <code>etags</code>
-uses only the Lisp tags rules, with no user-specified regexp matching,
-to recognize tags in <samp>los.er</samp>.
-</p>
-<p>You can restrict a &lsquo;<samp>--regex</samp>&rsquo; option to match only files of a
-given language by using the optional prefix <var>{language}</var>.
-(&lsquo;<samp>etags --help</samp>&rsquo; prints the list of languages recognized by
-<code>etags</code>.)  This is particularly useful when storing many
-predefined regular expressions for <code>etags</code> in a file.  The
-following example tags the <code>DEFVAR</code> macros in the Emacs source
-files, for the C language only:
-</p>
-<div class="smallexample">
-<pre class="smallexample">--regex='{c}/[ \t]*DEFVAR_[A-Z_ \t(]+&quot;\([^&quot;]+\)&quot;/'
-</pre></div>
+  <p>Here <code>etags</code> chooses the parsing language for
+  <samp>voo.doo</samp> and <samp>bar.ber</samp> according to their
+  contents. <code>etags</code> also uses <var>reg1</var> to
+  recognize additional tags in <samp>voo.doo</samp>, and both
+  <var>reg1</var> and <var>reg2</var> to recognize additional tags
+  in <samp>bar.ber</samp>. <var>reg1</var> is checked against each
+  line of <samp>voo.doo</samp> and <samp>bar.ber</samp>, in a
+  case-insensitive way, while <var>reg2</var> is checked against
+  the whole <samp>bar.ber</samp> file, permitting multi-line
+  matches, in a case-sensitive way. <code>etags</code> uses only
+  the Lisp tags rules, with no user-specified regexp matching, to
+  recognize tags in <samp>los.er</samp>.</p>
 
-<p>When you have complex regular expressions, you can store the list of
-them in a file.  The following option syntax instructs <code>etags</code> to
-read two files of regular expressions.  The regular expressions
-contained in the second file are matched without regard to case.
-</p>
-<div class="smallexample">
-<pre class="smallexample">--regex=@<var>case-sensitive-file</var> --ignore-case-regex=@<var>ignore-case-file</var>
-</pre></div>
+  <p>You can restrict a &lsquo;<samp>--regex</samp>&rsquo; option
+  to match only files of a given language by using the optional
+  prefix <var>{language}</var>. (&lsquo;<samp>etags
+  --help</samp>&rsquo; prints the list of languages recognized by
+  <code>etags</code>.) This is particularly useful when storing
+  many predefined regular expressions for <code>etags</code> in a
+  file. The following example tags the <code>DEFVAR</code> macros
+  in the Emacs source files, for the C language only:</p>
 
-<p>A regex file for <code>etags</code> contains one regular expression per
-line.  Empty lines, and lines beginning with space or tab are ignored.
-When the first character in a line is &lsquo;<samp>@</samp>&rsquo;, <code>etags</code> assumes
-that the rest of the line is the name of another file of regular
-expressions; thus, one such file can include another file.  All the
-other lines are taken to be regular expressions.  If the first
-non-whitespace text on the line is &lsquo;<samp>--</samp>&rsquo;, that line is a comment.
-</p>
-<p>For example, we can create a file called &lsquo;<samp>emacs.tags</samp>&rsquo; with the
-following contents:
-</p>
-<div class="smallexample">
-<pre class="smallexample">        -- This is for GNU Emacs C source files
-{c}/[ \t]*DEFVAR_[A-Z_ \t(]+&quot;\([^&quot;]+\)&quot;/\1/
-</pre></div>
+  <div class="smallexample">
+    <pre class="smallexample">
+--regex='{c}/[ \t]*DEFVAR_[A-Z_ \t(]+"\([^"]+\)"/'
+</pre>
+  </div>
 
-<p>and then use it like this:
-</p>
-<div class="smallexample">
-<pre class="smallexample">etags --regex=@emacs.tags *.[ch] */*.[ch]
-</pre></div>
+  <p>When you have complex regular expressions, you can store the
+  list of them in a file. The following option syntax instructs
+  <code>etags</code> to read two files of regular expressions. The
+  regular expressions contained in the second file are matched
+  without regard to case.</p>
 
-<p>Here are some more examples.  The regexps are quoted to protect them
-from shell interpretation.
-</p>
-<ul>
-<li> Tag Octave files:
+  <div class="smallexample">
+    <pre class="smallexample">
+--regex=@<var>case-sensitive-file</var> --ignore-case-regex=@<var>ignore-case-file</var>
+</pre>
+  </div>
 
-<div class="smallexample">
-<pre class="smallexample">etags --language=none \
+  <p>A regex file for <code>etags</code> contains one regular
+  expression per line. Empty lines, and lines beginning with space
+  or tab are ignored. When the first character in a line is
+  &lsquo;<samp>@</samp>&rsquo;, <code>etags</code> assumes that the
+  rest of the line is the name of another file of regular
+  expressions; thus, one such file can include another file. All
+  the other lines are taken to be regular expressions. If the first
+  non-whitespace text on the line is &lsquo;<samp>--</samp>&rsquo;,
+  that line is a comment.</p>
+
+  <p>For example, we can create a file called
+  &lsquo;<samp>emacs.tags</samp>&rsquo; with the following
+  contents:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+        -- This is for GNU Emacs C source files
+{c}/[ \t]*DEFVAR_[A-Z_ \t(]+"\([^"]+\)"/\1/
+</pre>
+  </div>
+
+  <p>and then use it like this:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+etags --regex=@emacs.tags *.[ch] */*.[ch]
+</pre>
+  </div>
+
+  <p>Here are some more examples. The regexps are quoted to protect
+  them from shell interpretation.</p>
+
+  <ul>
+    <li>Tag Octave files:
+
+      <div class="smallexample">
+        <pre class="smallexample">
+etags --language=none \
       --regex='/[ \t]*function.*=[ \t]*\([^ \t]*\)[ \t]*(/\1/' \
       --regex='/###key \(.*\)/\1/' \
       --regex='/[ \t]*global[ \t].*/' \
       *.m
-</pre></div>
+</pre>
+      </div>
 
-<p>Note that tags are not generated for scripts, so that you have to add
-a line by yourself of the form &lsquo;<samp>###key <var>scriptname</var></samp>&rsquo; if you
-want to jump to it.
-</p>
-</li><li> Tag Tcl files:
+      <p>Note that tags are not generated for scripts, so that you
+      have to add a line by yourself of the form
+      &lsquo;<samp>###key <var>scriptname</var></samp>&rsquo; if
+      you want to jump to it.</p>
+    </li>
 
-<div class="smallexample">
-<pre class="smallexample">etags --language=none --regex='/proc[ \t]+\([^ \t]+\)/\1/' *.tcl
-</pre></div>
+    <li>Tag Tcl files:
 
-</li><li> Tag VHDL files:
+      <div class="smallexample">
+        <pre class="smallexample">
+etags --language=none --regex='/proc[ \t]+\([^ \t]+\)/\1/' *.tcl
+</pre>
+      </div>
+    </li>
 
-<div class="smallexample">
-<pre class="smallexample">etags --language=none \
+    <li>Tag VHDL files:
+
+      <div class="smallexample">
+        <pre class="smallexample">
+etags --language=none \
   --regex='/[ \t]*\(ARCHITECTURE\|CONFIGURATION\) +[^ ]* +OF/' \
   --regex='/[ \t]*\(ATTRIBUTE\|ENTITY\|FUNCTION\|PACKAGE\
   \( BODY\)?\|PROCEDURE\|PROCESS\|TYPE\)[ \t]+\([^ \t(]+\)/\3/'
-</pre></div>
-</li></ul>
+</pre>
+      </div>
+    </li>
+  </ul>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Create-Tags-Table.html#Create-Tags-Table" accesskey="p" rel="prev">Create Tags Table</a>, Up: <a href="Tags-Tables.html#Tags-Tables" accesskey="u" rel="up">Tags Tables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Previous: <a href="Create-Tags-Table.html#Create-Tags-Table"
+    accesskey="p" rel="prev">Create Tags Table</a>, Up: <a href=
+    "Tags-Tables.html#Tags-Tables" accesskey="u" rel="up">Tags
+    Tables</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,230 +20,313 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Specifying File Variables</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Specifying File Variables">
-<meta name="keywords" content="GNU Emacs Manual: Specifying File Variables">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="File-Variables.html#File-Variables" rel="up" title="File Variables">
-<link href="Safe-File-Variables.html#Safe-File-Variables" rel="next" title="Safe File Variables">
-<link href="File-Variables.html#File-Variables" rel="prev" title="File Variables">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Specifying File Variables</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Specifying File Variables" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Specifying File Variables" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="File-Variables.html#File-Variables" rel="up" title=
+  "File Variables" />
+  <link href="Safe-File-Variables.html#Safe-File-Variables" rel=
+  "next" title="Safe File Variables" />
+  <link href="File-Variables.html#File-Variables" rel="prev" title=
+  "File Variables" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Specifying-File-Variables" id=
+  "Specifying-File-Variables"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Safe-File-Variables.html#Safe-File-Variables"
+    accesskey="n" rel="next">Safe File Variables</a>, Up: <a href=
+    "File-Variables.html#File-Variables" accesskey="u" rel=
+    "up">File Variables</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Specifying-File-Variables-1" id=
+  "Specifying-File-Variables-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Specifying-File-Variables"></a>
-<div class="header">
-<p>
-Next: <a href="Safe-File-Variables.html#Safe-File-Variables" accesskey="n" rel="next">Safe File Variables</a>, Up: <a href="File-Variables.html#File-Variables" accesskey="u" rel="up">File Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Specifying-File-Variables-1"></a>
-<h4 class="subsubsection">51.2.4.1 Specifying File Variables</h4>
+  <h4 class="subsubsection">51.2.4.1 Specifying File Variables</h4>
 
-<p>There are two ways to specify file local variable values: in the first
-line, or with a local variables list.  Here&rsquo;s how to specify them in the
-first line:
-</p>
-<div class="example">
-<pre class="example">-*- mode: <var>modename</var>; <var>var</var>: <var>value</var>; &hellip; -*-
-</pre></div>
+  <p>There are two ways to specify file local variable values: in
+  the first line, or with a local variables list. Here&rsquo;s how
+  to specify them in the first line:</p>
 
-<p>You can specify any number of variable/value pairs in this way, each
-pair with a colon and semicolon.  The special variable/value pair
-<code>mode: <var>modename</var>;</code>, if present, specifies a major mode.  The
-<var>value</var>s are used literally, and not evaluated.
-</p>
-<a name="index-add_002dfile_002dlocal_002dvariable_002dprop_002dline"></a>
-<a name="index-delete_002dfile_002dlocal_002dvariable_002dprop_002dline"></a>
-<a name="index-copy_002ddir_002dlocals_002dto_002dfile_002dlocals_002dprop_002dline"></a>
-<p>You can use <kbd>M-x add-file-local-variable-prop-line</kbd> instead of
-adding entries by hand.  This command prompts for a variable and
-value, and adds them to the first line in the appropriate way.
-<kbd>M-x delete-file-local-variable-prop-line</kbd> prompts for a variable,
-and deletes its entry from the line.  The command <kbd>M-x
-copy-dir-locals-to-file-locals-prop-line</kbd> copies the current
-directory-local variables to the first line (see <a href="Directory-Variables.html#Directory-Variables">Directory Variables</a>).
-</p>
-<p>Here is an example first line that specifies Lisp mode and sets two
-variables with numeric values:
-</p>
-<div class="smallexample">
-<pre class="smallexample">;; -*- mode: Lisp; fill-column: 75; comment-column: 50; -*-
-</pre></div>
+  <div class="example">
+    <pre class="example">
+-*- mode: <var>modename</var>; <var>var</var>: <var>value</var>; &hellip; -*-
+</pre>
+  </div>
 
-<p>Aside from <code>mode</code>, other keywords that have special meanings as
-file variables are <code>coding</code>, <code>unibyte</code>, and <code>eval</code>.
-These are described below.
-</p>
-<a name="index-shell-scripts_002c-and-local-file-variables"></a>
-<a name="index-man-pages_002c-and-local-file-variables"></a>
-<p>In shell scripts, the first line is used to identify the script
-interpreter, so you cannot put any local variables there.  To
-accommodate this, Emacs looks for local variable specifications in the
-<em>second</em> line if the first line specifies an interpreter.  The
-same is true for man pages which start with the magic string
-&lsquo;<samp>'\&quot;</samp>&rsquo; to specify a list of troff preprocessors (not all do,
-however).
-</p>
-<p>Apart from using a &lsquo;<samp>-*-</samp>&rsquo; line, you can define file local
-variables using a <em>local variables list</em> near the end of the file.
-The start of the local variables list should be no more than 3000
-characters from the end of the file, and must be on the last page if
-the file is divided into pages.
-</p>
-<p>If a file has both a local variables list and a &lsquo;<samp>-*-</samp>&rsquo; line,
-Emacs processes <em>everything</em> in the &lsquo;<samp>-*-</samp>&rsquo; line first, and
-<em>everything</em> in the local variables list afterward.  The exception
-to this is a major mode specification.  Emacs applies this first,
-wherever it appears, since most major modes kill all local variables as
-part of their initialization.
-</p>
-<p>A local variables list starts with a line containing the string
-&lsquo;<samp>Local Variables:</samp>&rsquo;, and ends with a line containing the string
-&lsquo;<samp>End:</samp>&rsquo;.  In between come the variable names and values, one set
-per line, like this:
-</p>
-<div class="example">
-<pre class="example">/* Local Variables:  */
+  <p>You can specify any number of variable/value pairs in this
+  way, each pair with a colon and semicolon. The special
+  variable/value pair <code>mode: <var>modename</var>;</code>, if
+  present, specifies a major mode. The <var>value</var>s are used
+  literally, and not evaluated.</p><a name=
+  "index-add_002dfile_002dlocal_002dvariable_002dprop_002dline" id=
+  "index-add_002dfile_002dlocal_002dvariable_002dprop_002dline"></a>
+  <a name=
+  "index-delete_002dfile_002dlocal_002dvariable_002dprop_002dline"
+  id=
+  "index-delete_002dfile_002dlocal_002dvariable_002dprop_002dline"></a>
+  <a name=
+  "index-copy_002ddir_002dlocals_002dto_002dfile_002dlocals_002dprop_002dline"
+  id=
+  "index-copy_002ddir_002dlocals_002dto_002dfile_002dlocals_002dprop_002dline">
+  </a>
+
+  <p>You can use <kbd>M-x add-file-local-variable-prop-line</kbd>
+  instead of adding entries by hand. This command prompts for a
+  variable and value, and adds them to the first line in the
+  appropriate way. <kbd>M-x
+  delete-file-local-variable-prop-line</kbd> prompts for a
+  variable, and deletes its entry from the line. The command
+  <kbd>M-x copy-dir-locals-to-file-locals-prop-line</kbd> copies
+  the current directory-local variables to the first line (see
+  <a href="Directory-Variables.html#Directory-Variables">Directory
+  Variables</a>).</p>
+
+  <p>Here is an example first line that specifies Lisp mode and
+  sets two variables with numeric values:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+;; -*- mode: Lisp; fill-column: 75; comment-column: 50; -*-
+</pre>
+  </div>
+
+  <p>Aside from <code>mode</code>, other keywords that have special
+  meanings as file variables are <code>coding</code>,
+  <code>unibyte</code>, and <code>eval</code>. These are described
+  below.</p><a name=
+  "index-shell-scripts_002c-and-local-file-variables" id=
+  "index-shell-scripts_002c-and-local-file-variables"></a> <a name=
+  "index-man-pages_002c-and-local-file-variables" id=
+  "index-man-pages_002c-and-local-file-variables"></a>
+
+  <p>In shell scripts, the first line is used to identify the
+  script interpreter, so you cannot put any local variables there.
+  To accommodate this, Emacs looks for local variable
+  specifications in the <em>second</em> line if the first line
+  specifies an interpreter. The same is true for man pages which
+  start with the magic string &lsquo;<samp>'\"</samp>&rsquo; to
+  specify a list of troff preprocessors (not all do, however).</p>
+
+  <p>Apart from using a &lsquo;<samp>-*-</samp>&rsquo; line, you
+  can define file local variables using a <em>local variables
+  list</em> near the end of the file. The start of the local
+  variables list should be no more than 3000 characters from the
+  end of the file, and must be on the last page if the file is
+  divided into pages.</p>
+
+  <p>If a file has both a local variables list and a
+  &lsquo;<samp>-*-</samp>&rsquo; line, Emacs processes
+  <em>everything</em> in the &lsquo;<samp>-*-</samp>&rsquo; line
+  first, and <em>everything</em> in the local variables list
+  afterward. The exception to this is a major mode specification.
+  Emacs applies this first, wherever it appears, since most major
+  modes kill all local variables as part of their
+  initialization.</p>
+
+  <p>A local variables list starts with a line containing the
+  string &lsquo;<samp>Local Variables:</samp>&rsquo;, and ends with
+  a line containing the string &lsquo;<samp>End:</samp>&rsquo;. In
+  between come the variable names and values, one set per line,
+  like this:</p>
+
+  <div class="example">
+    <pre class="example">
+/* Local Variables:  */
 /* mode: c           */
 /* comment-column: 0 */
 /* End:              */
-</pre></div>
+</pre>
+  </div>
 
-<p>In this example, each line starts with the prefix &lsquo;<samp>/*</samp>&rsquo; and ends
-with the suffix &lsquo;<samp>*/</samp>&rsquo;.  Emacs recognizes the prefix and suffix by
-finding them surrounding the magic string &lsquo;<samp>Local Variables:</samp>&rsquo;, on
-the first line of the list; it then automatically discards them from
-the other lines of the list.  The usual reason for using a prefix
-and/or suffix is to embed the local variables list in a comment, so it
-won&rsquo;t confuse other programs that the file is intended for.  The
-example above is for the C programming language, where comments start
-with &lsquo;<samp>/*</samp>&rsquo; and end with &lsquo;<samp>*/</samp>&rsquo;.
-</p>
-<p>If some unrelated text might look to Emacs as a local variables list,
-you can countermand that by inserting a form-feed character (a page
-delimiter, see <a href="Pages.html#Pages">Pages</a>) after that text.  Emacs only looks for
-file-local variables in the last page of a file, after the last page
-delimiter.
-</p>
-<a name="index-add_002dfile_002dlocal_002dvariable"></a>
-<a name="index-delete_002dfile_002dlocal_002dvariable"></a>
-<a name="index-copy_002ddir_002dlocals_002dto_002dfile_002dlocals"></a>
-<p>Instead of typing in the local variables list directly, you can use
-the command <kbd>M-x add-file-local-variable</kbd>.  This prompts for a
-variable and value, and adds them to the list, adding the &lsquo;<samp>Local
-Variables:</samp>&rsquo; string and start and end markers as necessary.  The
-command <kbd>M-x delete-file-local-variable</kbd> deletes a variable from
-the list.  <kbd>M-x copy-dir-locals-to-file-locals</kbd> copies
-directory-local variables to the list (see <a href="Directory-Variables.html#Directory-Variables">Directory Variables</a>).
-</p>
-<p>As with the &lsquo;<samp>-*-</samp>&rsquo; line, the variables in a local variables list
-are used literally, and are not evaluated first.  If you want to split
-a long string value across multiple lines of the file, you can use
-backslash-newline, which is ignored in Lisp string constants; you
-should put the prefix and suffix on each line, even lines that start
-or end within the string, as they will be stripped off when processing
-the list.  Here is an example:
-</p>
-<div class="example">
-<pre class="example"># Local Variables:
-# compile-command: &quot;cc foo.c -Dfoo=bar -Dhack=whatever \
-#   -Dmumble=blaah&quot;
+  <p>In this example, each line starts with the prefix
+  &lsquo;<samp>/*</samp>&rsquo; and ends with the suffix
+  &lsquo;<samp>*/</samp>&rsquo;. Emacs recognizes the prefix and
+  suffix by finding them surrounding the magic string
+  &lsquo;<samp>Local Variables:</samp>&rsquo;, on the first line of
+  the list; it then automatically discards them from the other
+  lines of the list. The usual reason for using a prefix and/or
+  suffix is to embed the local variables list in a comment, so it
+  won&rsquo;t confuse other programs that the file is intended for.
+  The example above is for the C programming language, where
+  comments start with &lsquo;<samp>/*</samp>&rsquo; and end with
+  &lsquo;<samp>*/</samp>&rsquo;.</p>
+
+  <p>If some unrelated text might look to Emacs as a local
+  variables list, you can countermand that by inserting a form-feed
+  character (a page delimiter, see <a href=
+  "Pages.html#Pages">Pages</a>) after that text. Emacs only looks
+  for file-local variables in the last page of a file, after the
+  last page delimiter.</p><a name=
+  "index-add_002dfile_002dlocal_002dvariable" id=
+  "index-add_002dfile_002dlocal_002dvariable"></a> <a name=
+  "index-delete_002dfile_002dlocal_002dvariable" id=
+  "index-delete_002dfile_002dlocal_002dvariable"></a> <a name=
+  "index-copy_002ddir_002dlocals_002dto_002dfile_002dlocals" id=
+  "index-copy_002ddir_002dlocals_002dto_002dfile_002dlocals"></a>
+
+  <p>Instead of typing in the local variables list directly, you
+  can use the command <kbd>M-x add-file-local-variable</kbd>. This
+  prompts for a variable and value, and adds them to the list,
+  adding the &lsquo;<samp>Local Variables:</samp>&rsquo; string and
+  start and end markers as necessary. The command <kbd>M-x
+  delete-file-local-variable</kbd> deletes a variable from the
+  list. <kbd>M-x copy-dir-locals-to-file-locals</kbd> copies
+  directory-local variables to the list (see <a href=
+  "Directory-Variables.html#Directory-Variables">Directory
+  Variables</a>).</p>
+
+  <p>As with the &lsquo;<samp>-*-</samp>&rsquo; line, the variables
+  in a local variables list are used literally, and are not
+  evaluated first. If you want to split a long string value across
+  multiple lines of the file, you can use backslash-newline, which
+  is ignored in Lisp string constants; you should put the prefix
+  and suffix on each line, even lines that start or end within the
+  string, as they will be stripped off when processing the list.
+  Here is an example:</p>
+
+  <div class="example">
+    <pre class="example">
+# Local Variables:
+# compile-command: "cc foo.c -Dfoo=bar -Dhack=whatever \
+#   -Dmumble=blaah"
 # End:
-</pre></div>
+</pre>
+  </div>
 
-<p>Some names have special meanings in a local variables
-list:
-</p>
-<ul>
-<li> <code>mode</code> enables the specified major mode.
+  <p>Some names have special meanings in a local variables
+  list:</p>
 
-</li><li> <code>eval</code> evaluates the specified Lisp expression (the value
-returned by that expression is ignored).
+  <ul>
+    <li><code>mode</code> enables the specified major mode.</li>
 
-</li><li> <code>coding</code> specifies the coding system for character code
-conversion of this file.  See <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>.
+    <li><code>eval</code> evaluates the specified Lisp expression
+    (the value returned by that expression is ignored).</li>
 
-</li><li> <code>unibyte</code> says to load or compile a file of Emacs Lisp in unibyte
-mode, if the value is <code>t</code>.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Disabling-Multibyte.html#Disabling-Multibyte">Disabling Multibyte Characters</a> in <cite>GNU Emacs Lisp Reference
-Manual</cite>.
+    <li><code>coding</code> specifies the coding system for
+    character code conversion of this file. See <a href=
+    "Coding-Systems.html#Coding-Systems">Coding Systems</a>.</li>
 
-</li></ul>
+    <li><code>unibyte</code> says to load or compile a file of
+    Emacs Lisp in unibyte mode, if the value is <code>t</code>. See
+    <a href=
+    "http://www.gnu.org/software/emacs/manual/html_node/elisp/Disabling-Multibyte.html#Disabling-Multibyte">
+    Disabling Multibyte Characters</a> in <cite>GNU Emacs Lisp
+    Reference Manual</cite>.</li>
+  </ul>
 
-<p>These four keywords are not really variables; setting them in any
-other context has no special meaning.
-</p>
-<p>Do not use the <code>mode</code> keyword for minor modes.  To enable or
-disable a minor mode in a local variables list, use the <code>eval</code>
-keyword with a Lisp expression that runs the mode command
-(see <a href="Minor-Modes.html#Minor-Modes">Minor Modes</a>).  For example, the following local variables
-list enables Eldoc mode (see <a href="Lisp-Doc.html#Lisp-Doc">Lisp Doc</a>) by calling
-<code>eldoc-mode</code> with no argument (calling it with an argument of 1
-would do the same), and disables Font Lock mode (see <a href="Font-Lock.html#Font-Lock">Font Lock</a>) by
-calling <code>font-lock-mode</code> with an argument of -1.
-</p>
-<div class="example">
-<pre class="example">;; Local Variables:
+  <p>These four keywords are not really variables; setting them in
+  any other context has no special meaning.</p>
+
+  <p>Do not use the <code>mode</code> keyword for minor modes. To
+  enable or disable a minor mode in a local variables list, use the
+  <code>eval</code> keyword with a Lisp expression that runs the
+  mode command (see <a href="Minor-Modes.html#Minor-Modes">Minor
+  Modes</a>). For example, the following local variables list
+  enables Eldoc mode (see <a href="Lisp-Doc.html#Lisp-Doc">Lisp
+  Doc</a>) by calling <code>eldoc-mode</code> with no argument
+  (calling it with an argument of 1 would do the same), and
+  disables Font Lock mode (see <a href=
+  "Font-Lock.html#Font-Lock">Font Lock</a>) by calling
+  <code>font-lock-mode</code> with an argument of -1.</p>
+
+  <div class="example">
+    <pre class="example">
+;; Local Variables:
 ;; eval: (eldoc-mode)
 ;; eval: (font-lock-mode -1)
 ;; End:
-</pre></div>
+</pre>
+  </div>
 
-<p>Note, however, that it is often a mistake to specify minor modes this
-way.  Minor modes represent individual user preferences, and it may be
-inappropriate to impose your preferences on another user who might
-edit the file.  If you wish to automatically enable or disable a minor
-mode in a situation-dependent way, it is often better to do it in a
-major mode hook (see <a href="Hooks.html#Hooks">Hooks</a>).
-</p>
-<p>Use the command <kbd>M-x normal-mode</kbd> to reset the local variables
-and major mode of a buffer according to the file name and contents,
-including the local variables list if any.  See <a href="Choosing-Modes.html#Choosing-Modes">Choosing Modes</a>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Safe-File-Variables.html#Safe-File-Variables" accesskey="n" rel="next">Safe File Variables</a>, Up: <a href="File-Variables.html#File-Variables" accesskey="u" rel="up">File Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Note, however, that it is often a mistake to specify minor
+  modes this way. Minor modes represent individual user
+  preferences, and it may be inappropriate to impose your
+  preferences on another user who might edit the file. If you wish
+  to automatically enable or disable a minor mode in a
+  situation-dependent way, it is often better to do it in a major
+  mode hook (see <a href="Hooks.html#Hooks">Hooks</a>).</p>
 
+  <p>Use the command <kbd>M-x normal-mode</kbd> to reset the local
+  variables and major mode of a buffer according to the file name
+  and contents, including the local variables list if any. See
+  <a href="Choosing-Modes.html#Choosing-Modes">Choosing
+  Modes</a>.</p>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href="Safe-File-Variables.html#Safe-File-Variables"
+    accesskey="n" rel="next">Safe File Variables</a>, Up: <a href=
+    "File-Variables.html#File-Variables" accesskey="u" rel=
+    "up">File Variables</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

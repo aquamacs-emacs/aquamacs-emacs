@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,211 +14,350 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Setting Process Marks</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Setting Process Marks">
-<meta name="keywords" content="Gnus Manual: Setting Process Marks">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Marking-Articles.html#Marking-Articles" rel="up" title="Marking Articles">
-<link href="Limiting.html#Limiting" rel="next" title="Limiting">
-<link href="Generic-Marking-Commands.html#Generic-Marking-Commands" rel="prev" title="Generic Marking Commands">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Setting Process Marks</title>
+  <meta name="description" content=
+  "Gnus Manual: Setting Process Marks" />
+  <meta name="keywords" content=
+  "Gnus Manual: Setting Process Marks" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Marking-Articles.html#Marking-Articles" rel="up"
+  title="Marking Articles" />
+  <link href="Limiting.html#Limiting" rel="next" title=
+  "Limiting" />
+  <link href=
+  "Generic-Marking-Commands.html#Generic-Marking-Commands" rel=
+  "prev" title="Generic Marking Commands" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Setting-Process-Marks"></a>
-<div class="header">
-<p>
-Previous: <a href="Generic-Marking-Commands.html#Generic-Marking-Commands" accesskey="p" rel="prev">Generic Marking Commands</a>, Up: <a href="Marking-Articles.html#Marking-Articles" accesskey="u" rel="up">Marking Articles</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Setting-Process-Marks-1"></a>
-<h4 class="subsection">3.7.6 Setting Process Marks</h4>
-<a name="index-setting-process-marks"></a>
+<body lang="en" xml:lang="en">
+  <a name="Setting-Process-Marks" id="Setting-Process-Marks"></a>
 
-<p>Process marks are displayed as <code>#</code> in the summary buffer, and are
-used for marking articles in such a way that other commands will
-process these articles.  For instance, if you process mark four
-articles and then use the <kbd>*</kbd> command, Gnus will enter these four
-articles into the cache.  For more information,
-see <a href="Process_002fPrefix.html#Process_002fPrefix">Process/Prefix</a>.
-</p>
-<dl compact="compact">
-<dt><kbd>M P p</kbd></dt>
-<dt><kbd>#</kbd></dt>
-<dd><a name="index-_0023-_0028Summary_0029"></a>
-<a name="index-M-P-p-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dmark_002das_002dprocessable"></a>
-<p>Mark the current article with the process mark
-(<code>gnus-summary-mark-as-processable</code>).
-<a name="index-gnus_002dsummary_002dunmark_002das_002dprocessable"></a>
-</p>
-</dd>
-<dt><kbd>M P u</kbd></dt>
-<dt><kbd>M-#</kbd></dt>
-<dd><a name="index-M-P-u-_0028Summary_0029"></a>
-<a name="index-M_002d_0023-_0028Summary_0029"></a>
-<p>Remove the process mark, if any, from the current article
-(<code>gnus-summary-unmark-as-processable</code>).
-</p>
-</dd>
-<dt><kbd>M P U</kbd></dt>
-<dd><a name="index-M-P-U-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dunmark_002dall_002dprocessable"></a>
-<p>Remove the process mark from all articles
-(<code>gnus-summary-unmark-all-processable</code>).
-</p>
-</dd>
-<dt><kbd>M P i</kbd></dt>
-<dd><a name="index-M-P-i-_0028Summary_0029"></a>
-<a name="index-gnus_002duu_002dinvert_002dprocessable"></a>
-<p>Invert the list of process marked articles
-(<code>gnus-uu-invert-processable</code>).
-</p>
-</dd>
-<dt><kbd>M P R</kbd></dt>
-<dd><a name="index-M-P-R-_0028Summary_0029"></a>
-<a name="index-gnus_002duu_002dmark_002dby_002dregexp"></a>
-<p>Mark articles that have a <code>Subject</code> header that matches a regular
-expression (<code>gnus-uu-mark-by-regexp</code>).
-</p>
-</dd>
-<dt><kbd>M P G</kbd></dt>
-<dd><a name="index-M-P-G-_0028Summary_0029"></a>
-<a name="index-gnus_002duu_002dunmark_002dby_002dregexp"></a>
-<p>Unmark articles that have a <code>Subject</code> header that matches a regular
-expression (<code>gnus-uu-unmark-by-regexp</code>).
-</p>
-</dd>
-<dt><kbd>M P r</kbd></dt>
-<dd><a name="index-M-P-r-_0028Summary_0029"></a>
-<a name="index-gnus_002duu_002dmark_002dregion"></a>
-<p>Mark articles in region (<code>gnus-uu-mark-region</code>).
-</p>
-</dd>
-<dt><kbd>M P g</kbd></dt>
-<dd><a name="index-M-P-g-_0028Summary_0029"></a>
-<a name="index-gnus_002duu_002dunmark_002dregion"></a>
-<p>Unmark articles in region (<code>gnus-uu-unmark-region</code>).
-</p>
-</dd>
-<dt><kbd>M P t</kbd></dt>
-<dd><a name="index-M-P-t-_0028Summary_0029"></a>
-<a name="index-gnus_002duu_002dmark_002dthread"></a>
-<p>Mark all articles in the current (sub)thread
-(<code>gnus-uu-mark-thread</code>).
-</p>
-</dd>
-<dt><kbd>M P T</kbd></dt>
-<dd><a name="index-M-P-T-_0028Summary_0029"></a>
-<a name="index-gnus_002duu_002dunmark_002dthread"></a>
-<p>Unmark all articles in the current (sub)thread
-(<code>gnus-uu-unmark-thread</code>).
-</p>
-</dd>
-<dt><kbd>M P v</kbd></dt>
-<dd><a name="index-M-P-v-_0028Summary_0029"></a>
-<a name="index-gnus_002duu_002dmark_002dover"></a>
-<p>Mark all articles that have a score above the prefix argument
-(<code>gnus-uu-mark-over</code>).
-</p>
-</dd>
-<dt><kbd>M P s</kbd></dt>
-<dd><a name="index-M-P-s-_0028Summary_0029"></a>
-<a name="index-gnus_002duu_002dmark_002dseries"></a>
-<p>Mark all articles in the current series (<code>gnus-uu-mark-series</code>).
-</p>
-</dd>
-<dt><kbd>M P S</kbd></dt>
-<dd><a name="index-M-P-S-_0028Summary_0029"></a>
-<a name="index-gnus_002duu_002dmark_002dsparse"></a>
-<p>Mark all series that have already had some articles marked
-(<code>gnus-uu-mark-sparse</code>).
-</p>
-</dd>
-<dt><kbd>M P a</kbd></dt>
-<dd><a name="index-M-P-a-_0028Summary_0029"></a>
-<a name="index-gnus_002duu_002dmark_002dall"></a>
-<p>Mark all articles in series order (<code>gnus-uu-mark-all</code>).
-</p>
-</dd>
-<dt><kbd>M P b</kbd></dt>
-<dd><a name="index-M-P-b-_0028Summary_0029"></a>
-<a name="index-gnus_002duu_002dmark_002dbuffer"></a>
-<p>Mark all articles in the buffer in the order they appear
-(<code>gnus-uu-mark-buffer</code>).
-</p>
-</dd>
-<dt><kbd>M P k</kbd></dt>
-<dd><a name="index-M-P-k-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dkill_002dprocess_002dmark"></a>
-<p>Push the current process mark set onto the stack and unmark all articles
-(<code>gnus-summary-kill-process-mark</code>).
-</p>
-</dd>
-<dt><kbd>M P y</kbd></dt>
-<dd><a name="index-M-P-y-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dyank_002dprocess_002dmark"></a>
-<p>Pop the previous process mark set from the stack and restore it
-(<code>gnus-summary-yank-process-mark</code>).
-</p>
-</dd>
-<dt><kbd>M P w</kbd></dt>
-<dd><a name="index-M-P-w-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dsave_002dprocess_002dmark"></a>
-<p>Push the current process mark set onto the stack
-(<code>gnus-summary-save-process-mark</code>).
-</p>
-</dd>
-</dl>
+  <div class="header">
+    <p>Previous: <a href=
+    "Generic-Marking-Commands.html#Generic-Marking-Commands"
+    accesskey="p" rel="prev">Generic Marking Commands</a>, Up:
+    <a href="Marking-Articles.html#Marking-Articles" accesskey="u"
+    rel="up">Marking Articles</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Setting-Process-Marks-1" id=
+  "Setting-Process-Marks-1"></a>
 
-<p>Also see the <kbd>&amp;</kbd> command in <a href="Searching-for-Articles.html#Searching-for-Articles">Searching for Articles</a>, for how to
-set process marks based on article body contents.
-</p>
+  <h4 class="subsection">3.7.6 Setting Process Marks</h4><a name=
+  "index-setting-process-marks" id=
+  "index-setting-process-marks"></a>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Generic-Marking-Commands.html#Generic-Marking-Commands" accesskey="p" rel="prev">Generic Marking Commands</a>, Up: <a href="Marking-Articles.html#Marking-Articles" accesskey="u" rel="up">Marking Articles</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Process marks are displayed as <code>#</code> in the summary
+  buffer, and are used for marking articles in such a way that
+  other commands will process these articles. For instance, if you
+  process mark four articles and then use the <kbd>*</kbd> command,
+  Gnus will enter these four articles into the cache. For more
+  information, see <a href=
+  "Process_002fPrefix.html#Process_002fPrefix">Process/Prefix</a>.</p>
 
+  <dl compact="compact">
+    <dt><kbd>M P p</kbd></dt>
 
+    <dt><kbd>#</kbd></dt>
 
+    <dd>
+      <a name="index-_0023-_0028Summary_0029" id=
+      "index-_0023-_0028Summary_0029"></a> <a name=
+      "index-M-P-p-_0028Summary_0029" id=
+      "index-M-P-p-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dmark_002das_002dprocessable" id=
+      "index-gnus_002dsummary_002dmark_002das_002dprocessable"></a>
+
+      <p>Mark the current article with the process mark
+      (<code>gnus-summary-mark-as-processable</code>). <a name=
+      "index-gnus_002dsummary_002dunmark_002das_002dprocessable"
+      id="index-gnus_002dsummary_002dunmark_002das_002dprocessable">
+      </a></p>
+    </dd>
+
+    <dt><kbd>M P u</kbd></dt>
+
+    <dt><kbd>M-#</kbd></dt>
+
+    <dd>
+      <a name="index-M-P-u-_0028Summary_0029" id=
+      "index-M-P-u-_0028Summary_0029"></a> <a name=
+      "index-M_002d_0023-_0028Summary_0029" id=
+      "index-M_002d_0023-_0028Summary_0029"></a>
+
+      <p>Remove the process mark, if any, from the current article
+      (<code>gnus-summary-unmark-as-processable</code>).</p>
+    </dd>
+
+    <dt><kbd>M P U</kbd></dt>
+
+    <dd>
+      <a name="index-M-P-U-_0028Summary_0029" id=
+      "index-M-P-U-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dunmark_002dall_002dprocessable"
+      id=
+      "index-gnus_002dsummary_002dunmark_002dall_002dprocessable"></a>
+
+      <p>Remove the process mark from all articles
+      (<code>gnus-summary-unmark-all-processable</code>).</p>
+    </dd>
+
+    <dt><kbd>M P i</kbd></dt>
+
+    <dd>
+      <a name="index-M-P-i-_0028Summary_0029" id=
+      "index-M-P-i-_0028Summary_0029"></a> <a name=
+      "index-gnus_002duu_002dinvert_002dprocessable" id=
+      "index-gnus_002duu_002dinvert_002dprocessable"></a>
+
+      <p>Invert the list of process marked articles
+      (<code>gnus-uu-invert-processable</code>).</p>
+    </dd>
+
+    <dt><kbd>M P R</kbd></dt>
+
+    <dd>
+      <a name="index-M-P-R-_0028Summary_0029" id=
+      "index-M-P-R-_0028Summary_0029"></a> <a name=
+      "index-gnus_002duu_002dmark_002dby_002dregexp" id=
+      "index-gnus_002duu_002dmark_002dby_002dregexp"></a>
+
+      <p>Mark articles that have a <code>Subject</code> header that
+      matches a regular expression
+      (<code>gnus-uu-mark-by-regexp</code>).</p>
+    </dd>
+
+    <dt><kbd>M P G</kbd></dt>
+
+    <dd>
+      <a name="index-M-P-G-_0028Summary_0029" id=
+      "index-M-P-G-_0028Summary_0029"></a> <a name=
+      "index-gnus_002duu_002dunmark_002dby_002dregexp" id=
+      "index-gnus_002duu_002dunmark_002dby_002dregexp"></a>
+
+      <p>Unmark articles that have a <code>Subject</code> header
+      that matches a regular expression
+      (<code>gnus-uu-unmark-by-regexp</code>).</p>
+    </dd>
+
+    <dt><kbd>M P r</kbd></dt>
+
+    <dd>
+      <a name="index-M-P-r-_0028Summary_0029" id=
+      "index-M-P-r-_0028Summary_0029"></a> <a name=
+      "index-gnus_002duu_002dmark_002dregion" id=
+      "index-gnus_002duu_002dmark_002dregion"></a>
+
+      <p>Mark articles in region
+      (<code>gnus-uu-mark-region</code>).</p>
+    </dd>
+
+    <dt><kbd>M P g</kbd></dt>
+
+    <dd>
+      <a name="index-M-P-g-_0028Summary_0029" id=
+      "index-M-P-g-_0028Summary_0029"></a> <a name=
+      "index-gnus_002duu_002dunmark_002dregion" id=
+      "index-gnus_002duu_002dunmark_002dregion"></a>
+
+      <p>Unmark articles in region
+      (<code>gnus-uu-unmark-region</code>).</p>
+    </dd>
+
+    <dt><kbd>M P t</kbd></dt>
+
+    <dd>
+      <a name="index-M-P-t-_0028Summary_0029" id=
+      "index-M-P-t-_0028Summary_0029"></a> <a name=
+      "index-gnus_002duu_002dmark_002dthread" id=
+      "index-gnus_002duu_002dmark_002dthread"></a>
+
+      <p>Mark all articles in the current (sub)thread
+      (<code>gnus-uu-mark-thread</code>).</p>
+    </dd>
+
+    <dt><kbd>M P T</kbd></dt>
+
+    <dd>
+      <a name="index-M-P-T-_0028Summary_0029" id=
+      "index-M-P-T-_0028Summary_0029"></a> <a name=
+      "index-gnus_002duu_002dunmark_002dthread" id=
+      "index-gnus_002duu_002dunmark_002dthread"></a>
+
+      <p>Unmark all articles in the current (sub)thread
+      (<code>gnus-uu-unmark-thread</code>).</p>
+    </dd>
+
+    <dt><kbd>M P v</kbd></dt>
+
+    <dd>
+      <a name="index-M-P-v-_0028Summary_0029" id=
+      "index-M-P-v-_0028Summary_0029"></a> <a name=
+      "index-gnus_002duu_002dmark_002dover" id=
+      "index-gnus_002duu_002dmark_002dover"></a>
+
+      <p>Mark all articles that have a score above the prefix
+      argument (<code>gnus-uu-mark-over</code>).</p>
+    </dd>
+
+    <dt><kbd>M P s</kbd></dt>
+
+    <dd>
+      <a name="index-M-P-s-_0028Summary_0029" id=
+      "index-M-P-s-_0028Summary_0029"></a> <a name=
+      "index-gnus_002duu_002dmark_002dseries" id=
+      "index-gnus_002duu_002dmark_002dseries"></a>
+
+      <p>Mark all articles in the current series
+      (<code>gnus-uu-mark-series</code>).</p>
+    </dd>
+
+    <dt><kbd>M P S</kbd></dt>
+
+    <dd>
+      <a name="index-M-P-S-_0028Summary_0029" id=
+      "index-M-P-S-_0028Summary_0029"></a> <a name=
+      "index-gnus_002duu_002dmark_002dsparse" id=
+      "index-gnus_002duu_002dmark_002dsparse"></a>
+
+      <p>Mark all series that have already had some articles marked
+      (<code>gnus-uu-mark-sparse</code>).</p>
+    </dd>
+
+    <dt><kbd>M P a</kbd></dt>
+
+    <dd>
+      <a name="index-M-P-a-_0028Summary_0029" id=
+      "index-M-P-a-_0028Summary_0029"></a> <a name=
+      "index-gnus_002duu_002dmark_002dall" id=
+      "index-gnus_002duu_002dmark_002dall"></a>
+
+      <p>Mark all articles in series order
+      (<code>gnus-uu-mark-all</code>).</p>
+    </dd>
+
+    <dt><kbd>M P b</kbd></dt>
+
+    <dd>
+      <a name="index-M-P-b-_0028Summary_0029" id=
+      "index-M-P-b-_0028Summary_0029"></a> <a name=
+      "index-gnus_002duu_002dmark_002dbuffer" id=
+      "index-gnus_002duu_002dmark_002dbuffer"></a>
+
+      <p>Mark all articles in the buffer in the order they appear
+      (<code>gnus-uu-mark-buffer</code>).</p>
+    </dd>
+
+    <dt><kbd>M P k</kbd></dt>
+
+    <dd>
+      <a name="index-M-P-k-_0028Summary_0029" id=
+      "index-M-P-k-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dkill_002dprocess_002dmark" id=
+      "index-gnus_002dsummary_002dkill_002dprocess_002dmark"></a>
+
+      <p>Push the current process mark set onto the stack and
+      unmark all articles
+      (<code>gnus-summary-kill-process-mark</code>).</p>
+    </dd>
+
+    <dt><kbd>M P y</kbd></dt>
+
+    <dd>
+      <a name="index-M-P-y-_0028Summary_0029" id=
+      "index-M-P-y-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dyank_002dprocess_002dmark" id=
+      "index-gnus_002dsummary_002dyank_002dprocess_002dmark"></a>
+
+      <p>Pop the previous process mark set from the stack and
+      restore it (<code>gnus-summary-yank-process-mark</code>).</p>
+    </dd>
+
+    <dt><kbd>M P w</kbd></dt>
+
+    <dd>
+      <a name="index-M-P-w-_0028Summary_0029" id=
+      "index-M-P-w-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dsave_002dprocess_002dmark" id=
+      "index-gnus_002dsummary_002dsave_002dprocess_002dmark"></a>
+
+      <p>Push the current process mark set onto the stack
+      (<code>gnus-summary-save-process-mark</code>).</p>
+    </dd>
+  </dl>
+
+  <p>Also see the <kbd>&amp;</kbd> command in <a href=
+  "Searching-for-Articles.html#Searching-for-Articles">Searching
+  for Articles</a>, for how to set process marks based on article
+  body contents.</p>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Generic-Marking-Commands.html#Generic-Marking-Commands"
+    accesskey="p" rel="prev">Generic Marking Commands</a>, Up:
+    <a href="Marking-Articles.html#Marking-Articles" accesskey="u"
+    rel="up">Marking Articles</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

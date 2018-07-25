@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,176 +19,253 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Regexp Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Regexp Functions">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Regexp Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Regular-Expressions.html#Regular-Expressions" rel="up" title="Regular Expressions">
-<link href="Regexp-Search.html#Regexp-Search" rel="next" title="Regexp Search">
-<link href="Regexp-Example.html#Regexp-Example" rel="prev" title="Regexp Example">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Regexp Functions</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Regexp Functions" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Regexp Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Regular-Expressions.html#Regular-Expressions" rel=
+  "up" title="Regular Expressions" />
+  <link href="Regexp-Search.html#Regexp-Search" rel="next" title=
+  "Regexp Search" />
+  <link href="Regexp-Example.html#Regexp-Example" rel="prev" title=
+  "Regexp Example" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Regexp-Functions" id="Regexp-Functions"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Regexp-Example.html#Regexp-Example"
+    accesskey="p" rel="prev">Regexp Example</a>, Up: <a href=
+    "Regular-Expressions.html#Regular-Expressions" accesskey="u"
+    rel="up">Regular Expressions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Regular-Expression-Functions" id=
+  "Regular-Expression-Functions"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Regexp-Functions"></a>
-<div class="header">
-<p>
-Previous: <a href="Regexp-Example.html#Regexp-Example" accesskey="p" rel="prev">Regexp Example</a>, Up: <a href="Regular-Expressions.html#Regular-Expressions" accesskey="u" rel="up">Regular Expressions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Regular-Expression-Functions"></a>
-<h4 class="subsection">33.3.3 Regular Expression Functions</h4>
+  <h4 class="subsection">33.3.3 Regular Expression Functions</h4>
 
-<p>These functions operate on regular expressions.
-</p>
-<a name="index-quote-special-characters-in-regexp"></a>
-<dl>
-<dt><a name="index-regexp_002dquote"></a>Function: <strong>regexp-quote</strong> <em>string</em></dt>
-<dd><p>This function returns a regular expression whose only exact match is
-<var>string</var>.  Using this regular expression in <code>looking-at</code> will
-succeed only if the next characters in the buffer are <var>string</var>;
-using it in a search function will succeed if the text being searched
-contains <var>string</var>.  See <a href="Regexp-Search.html#Regexp-Search">Regexp Search</a>.
-</p>
-<p>This allows you to request an exact string match or search when calling
-a function that wants a regular expression.
-</p>
-<div class="example">
-<pre class="example">(regexp-quote &quot;^The cat$&quot;)
-     &rArr; &quot;\\^The cat\\$&quot;
-</pre></div>
+  <p>These functions operate on regular expressions.</p><a name=
+  "index-quote-special-characters-in-regexp" id=
+  "index-quote-special-characters-in-regexp"></a>
 
-<p>One use of <code>regexp-quote</code> is to combine an exact string match with
-context described as a regular expression.  For example, this searches
-for the string that is the value of <var>string</var>, surrounded by
-whitespace:
-</p>
-<div class="example">
-<pre class="example">(re-search-forward
- (concat &quot;\\s-&quot; (regexp-quote string) &quot;\\s-&quot;))
-</pre></div>
-</dd></dl>
+  <dl>
+    <dt><a name="index-regexp_002dquote" id=
+    "index-regexp_002dquote"></a>Function:
+    <strong>regexp-quote</strong> <em>string</em></dt>
 
-<a name="index-optimize-regexp"></a>
-<dl>
-<dt><a name="index-regexp_002dopt"></a>Function: <strong>regexp-opt</strong> <em>strings &amp;optional paren</em></dt>
-<dd><p>This function returns an efficient regular expression that will match
-any of the strings in the list <var>strings</var>.  This is useful when you
-need to make matching or searching as fast as possible&mdash;for example,
-for Font Lock mode<a name="DOCF17" href="#FOOT17"><sup>17</sup></a>.
-</p>
-<p>The optional argument <var>paren</var> can be any of the following:
-</p>
-<p>a string
-    the resulting regexp is preceded by <var>paren</var> and followed by
-    &lsquo;<samp>\)</samp>&rsquo;, e.g. use &lsquo;<samp>&quot;\\(?1:&quot;</samp>&rsquo; to produce an explicitly
-    numbered group.
-</p>
-<p><code>words</code>
-    the resulting regexp is surrounded by &lsquo;<samp>\&lt;\(</samp>&rsquo; and &lsquo;<samp>\)\&gt;</samp>&rsquo;.
-</p>
-<p><code>symbols</code>
-    the resulting regexp is surrounded by &lsquo;<samp>\_&lt;\(</samp>&rsquo; and &lsquo;<samp>\)\_&gt;</samp>&rsquo;
-    (this is often appropriate when maching programming-language
-    keywords and the like).
-</p>
-<p>non-<code>nil</code>
-    the resulting regexp is surrounded by &lsquo;<samp>\(</samp>&rsquo; and &lsquo;<samp>\)</samp>&rsquo;.
-</p>
-<p><code>nil</code>
-    the resulting regexp is surrounded by &lsquo;<samp>\(?:</samp>&rsquo; and &lsquo;<samp>\)</samp>&rsquo;,
-    if it is necessary to ensure that a postfix operator appended to
-    it will apply to the whole expression.
-</p>
-<p>The resulting regexp of <code>regexp-opt</code> is equivalent to but usually
-more efficient than that of a simplified version:
-</p>
-<div class="example">
-<pre class="example">(defun simplified-regexp-opt (strings &amp;optional paren)
- (let ((parens (cond ((stringp paren)       (cons paren &quot;\\)&quot;))
-                     ((eq paren 'words)    '(&quot;\\&lt;\\(&quot; . &quot;\\)\\&gt;&quot;))
-                     ((eq paren 'symbols) '(&quot;\\_&lt;\\(&quot; . &quot;\\)\\_&gt;&quot;))
-                     ((null paren)          '(&quot;\\(?:&quot; . &quot;\\)&quot;))
-                     (t                       '(&quot;\\(&quot; . &quot;\\)&quot;)))))
+    <dd>
+      <p>This function returns a regular expression whose only
+      exact match is <var>string</var>. Using this regular
+      expression in <code>looking-at</code> will succeed only if
+      the next characters in the buffer are <var>string</var>;
+      using it in a search function will succeed if the text being
+      searched contains <var>string</var>. See <a href=
+      "Regexp-Search.html#Regexp-Search">Regexp Search</a>.</p>
+
+      <p>This allows you to request an exact string match or search
+      when calling a function that wants a regular expression.</p>
+
+      <div class="example">
+        <pre class="example">
+(regexp-quote "^The cat$")
+     &rArr; "\\^The cat\\$"
+</pre>
+      </div>
+
+      <p>One use of <code>regexp-quote</code> is to combine an
+      exact string match with context described as a regular
+      expression. For example, this searches for the string that is
+      the value of <var>string</var>, surrounded by whitespace:</p>
+
+      <div class="example">
+        <pre class="example">
+(re-search-forward
+ (concat "\\s-" (regexp-quote string) "\\s-"))
+</pre>
+      </div>
+    </dd>
+  </dl><a name="index-optimize-regexp" id=
+  "index-optimize-regexp"></a>
+
+  <dl>
+    <dt><a name="index-regexp_002dopt" id=
+    "index-regexp_002dopt"></a>Function:
+    <strong>regexp-opt</strong> <em>strings &amp;optional
+    paren</em></dt>
+
+    <dd>
+      <p>This function returns an efficient regular expression that
+      will match any of the strings in the list <var>strings</var>.
+      This is useful when you need to make matching or searching as
+      fast as possible&mdash;for example, for Font Lock
+      mode<a name="DOCF17" href="#FOOT17" id=
+      "DOCF17"><sup>17</sup></a>.</p>
+
+      <p>The optional argument <var>paren</var> can be any of the
+      following:</p>
+
+      <p>a string the resulting regexp is preceded by
+      <var>paren</var> and followed by
+      &lsquo;<samp>\)</samp>&rsquo;, e.g. use
+      &lsquo;<samp>"\\(?1:"</samp>&rsquo; to produce an explicitly
+      numbered group.</p>
+
+      <p><code>words</code> the resulting regexp is surrounded by
+      &lsquo;<samp>\&lt;\(</samp>&rsquo; and
+      &lsquo;<samp>\)\&gt;</samp>&rsquo;.</p>
+
+      <p><code>symbols</code> the resulting regexp is surrounded by
+      &lsquo;<samp>\_&lt;\(</samp>&rsquo; and
+      &lsquo;<samp>\)\_&gt;</samp>&rsquo; (this is often
+      appropriate when maching programming-language keywords and
+      the like).</p>
+
+      <p>non-<code>nil</code> the resulting regexp is surrounded by
+      &lsquo;<samp>\(</samp>&rsquo; and
+      &lsquo;<samp>\)</samp>&rsquo;.</p>
+
+      <p><code>nil</code> the resulting regexp is surrounded by
+      &lsquo;<samp>\(?:</samp>&rsquo; and
+      &lsquo;<samp>\)</samp>&rsquo;, if it is necessary to ensure
+      that a postfix operator appended to it will apply to the
+      whole expression.</p>
+
+      <p>The resulting regexp of <code>regexp-opt</code> is
+      equivalent to but usually more efficient than that of a
+      simplified version:</p>
+
+      <div class="example">
+        <pre class="example">
+(defun simplified-regexp-opt (strings &amp;optional paren)
+ (let ((parens (cond ((stringp paren)       (cons paren "\\)"))
+                     ((eq paren 'words)    '("\\&lt;\\(" . "\\)\\&gt;"))
+                     ((eq paren 'symbols) '("\\_&lt;\\(" . "\\)\\_&gt;"))
+                     ((null paren)          '("\\(?:" . "\\)"))
+                     (t                       '("\\(" . "\\)")))))
    (concat (car paren)
-           (mapconcat 'regexp-quote strings &quot;\\|&quot;)
+           (mapconcat 'regexp-quote strings "\\|")
            (cdr paren))))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-regexp_002dopt_002ddepth"></a>Function: <strong>regexp-opt-depth</strong> <em>regexp</em></dt>
-<dd><p>This function returns the total number of grouping constructs
-(parenthesized expressions) in <var>regexp</var>.  This does not include
-shy groups (see <a href="Regexp-Backslash.html#Regexp-Backslash">Regexp Backslash</a>).
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-regexp_002dopt_002ddepth" id=
+    "index-regexp_002dopt_002ddepth"></a>Function:
+    <strong>regexp-opt-depth</strong> <em>regexp</em></dt>
 
-<dl>
-<dt><a name="index-regexp_002dopt_002dcharset"></a>Function: <strong>regexp-opt-charset</strong> <em>chars</em></dt>
-<dd><p>This function returns a regular expression matching a character in the
-list of characters <var>chars</var>.
-</p>
-<div class="example">
-<pre class="example">(regexp-opt-charset '(?a ?b ?c ?d ?e))
-     &rArr; &quot;[a-e]&quot;
-</pre></div>
-</dd></dl>
+    <dd>
+      <p>This function returns the total number of grouping
+      constructs (parenthesized expressions) in <var>regexp</var>.
+      This does not include shy groups (see <a href=
+      "Regexp-Backslash.html#Regexp-Backslash">Regexp
+      Backslash</a>).</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-regexp_002dopt_002dcharset" id=
+    "index-regexp_002dopt_002dcharset"></a>Function:
+    <strong>regexp-opt-charset</strong> <em>chars</em></dt>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+    <dd>
+      <p>This function returns a regular expression matching a
+      character in the list of characters <var>chars</var>.</p>
 
-<h3><a name="FOOT17" href="#DOCF17">(17)</a></h3>
-<p>Note that <code>regexp-opt</code> does not
-guarantee that its result is absolutely the most efficient form
-possible.  A hand-tuned regular expression can sometimes be slightly
-more efficient, but is almost never worth the effort.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Regexp-Example.html#Regexp-Example" accesskey="p" rel="prev">Regexp Example</a>, Up: <a href="Regular-Expressions.html#Regular-Expressions" accesskey="u" rel="up">Regular Expressions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <div class="example">
+        <pre class="example">
+(regexp-opt-charset '(?a ?b ?c ?d ?e))
+     &rArr; "[a-e]"
+</pre>
+      </div>
+    </dd>
+  </dl>
 
+  <div class="footnote">
+    <hr />
 
+    <h4 class="footnotes-heading">Footnotes</h4>
 
+    <h3><a name="FOOT17" href="#DOCF17" id="FOOT17">(17)</a></h3>
+
+    <p>Note that <code>regexp-opt</code> does not guarantee that
+    its result is absolutely the most efficient form possible. A
+    hand-tuned regular expression can sometimes be slightly more
+    efficient, but is almost never worth the effort.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Regexp-Example.html#Regexp-Example"
+    accesskey="p" rel="prev">Regexp Example</a>, Up: <a href=
+    "Regular-Expressions.html#Regular-Expressions" accesskey="u"
+    rel="up">Regular Expressions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

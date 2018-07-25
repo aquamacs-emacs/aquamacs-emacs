@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,100 +20,193 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Abbrevs</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Abbrevs">
-<meta name="keywords" content="GNU Emacs Manual: Abbrevs">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Abbrev-Concepts.html#Abbrev-Concepts" rel="next" title="Abbrev Concepts">
-<link href="Fine-Points-of-Emerge.html#Fine-Points-of-Emerge" rel="prev" title="Fine Points of Emerge">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Abbrevs</title>
+  <meta name="description" content="GNU Emacs Manual: Abbrevs" />
+  <meta name="keywords" content="GNU Emacs Manual: Abbrevs" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Abbrev-Concepts.html#Abbrev-Concepts" rel="next"
+  title="Abbrev Concepts" />
+  <link href="Fine-Points-of-Emerge.html#Fine-Points-of-Emerge"
+  rel="prev" title="Fine Points of Emerge" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Abbrevs" id="Abbrevs"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Dired.html#Dired" accesskey="n" rel=
+    "next">Dired</a>, Previous: <a href=
+    "Maintaining.html#Maintaining" accesskey="p" rel=
+    "prev">Maintaining</a>, Up: <a href="index.html#Top" accesskey=
+    "u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Abbrevs-1" id="Abbrevs-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Abbrevs"></a>
-<div class="header">
-<p>
-Next: <a href="Dired.html#Dired" accesskey="n" rel="next">Dired</a>, Previous: <a href="Maintaining.html#Maintaining" accesskey="p" rel="prev">Maintaining</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Abbrevs-1"></a>
-<h2 class="chapter">29 Abbrevs</h2>
-<a name="index-abbrevs"></a>
-<a name="index-expansion-_0028of-abbrevs_0029"></a>
+  <h2 class="chapter">29 Abbrevs</h2><a name="index-abbrevs" id=
+  "index-abbrevs"></a> <a name=
+  "index-expansion-_0028of-abbrevs_0029" id=
+  "index-expansion-_0028of-abbrevs_0029"></a>
 
-<p>A defined <em>abbrev</em> is a word which <em>expands</em>, if you insert
-it, into some different text.  Abbrevs are defined by the user to expand
-in specific ways.  For example, you might define &lsquo;<samp>foo</samp>&rsquo; as an abbrev
-expanding to &lsquo;<samp>find outer otter</samp>&rsquo;.  Then you could insert
-&lsquo;<samp>find outer otter </samp>&rsquo; into the buffer by typing <kbd>f o o
-<span class="key">SPC</span></kbd>.
-</p>
-<p>A second kind of abbreviation facility is called <em>dynamic abbrev
-expansion</em>.  You use dynamic abbrev expansion with an explicit command
-to expand the letters in the buffer before point by looking for other
-words in the buffer that start with those letters.  See <a href="Dynamic-Abbrevs.html#Dynamic-Abbrevs">Dynamic Abbrevs</a>.
-</p>
-<p>A third kind, <em>hippie expansion</em>, generalizes abbreviation expansion.
-See <a href="http://www.gnu.org/software/emacs/manual/html_node/autotype/Hippie-Expand.html#Hippie-Expand">Hippie Expansion</a> in <cite>Features for
-Automatic Typing</cite>.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Abbrev-Concepts.html#Abbrev-Concepts" accesskey="1">Abbrev Concepts</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Fundamentals of defined abbrevs.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Defining-Abbrevs.html#Defining-Abbrevs" accesskey="2">Defining Abbrevs</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Defining an abbrev, so it will expand when typed.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Expanding-Abbrevs.html#Expanding-Abbrevs" accesskey="3">Expanding Abbrevs</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Controlling expansion: prefixes, canceling expansion.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Editing-Abbrevs.html#Editing-Abbrevs" accesskey="4">Editing Abbrevs</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Viewing or editing the entire list of defined abbrevs.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Saving-Abbrevs.html#Saving-Abbrevs" accesskey="5">Saving Abbrevs</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Saving the entire list of abbrevs for another session.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Dynamic-Abbrevs.html#Dynamic-Abbrevs" accesskey="6">Dynamic Abbrevs</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Abbreviations for words already in the buffer.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Dabbrev-Customization.html#Dabbrev-Customization" accesskey="7">Dabbrev Customization</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">What is a word, for dynamic abbrevs.  Case handling.
-</td></tr>
-</table>
+  <p>A defined <em>abbrev</em> is a word which <em>expands</em>, if
+  you insert it, into some different text. Abbrevs are defined by
+  the user to expand in specific ways. For example, you might
+  define &lsquo;<samp>foo</samp>&rsquo; as an abbrev expanding to
+  &lsquo;<samp>find outer otter</samp>&rsquo;. Then you could
+  insert &lsquo;<samp>find outer otter</samp> &rsquo; into the
+  buffer by typing <kbd>f o o <span class=
+  "key">SPC</span></kbd>.</p>
 
+  <p>A second kind of abbreviation facility is called <em>dynamic
+  abbrev expansion</em>. You use dynamic abbrev expansion with an
+  explicit command to expand the letters in the buffer before point
+  by looking for other words in the buffer that start with those
+  letters. See <a href=
+  "Dynamic-Abbrevs.html#Dynamic-Abbrevs">Dynamic Abbrevs</a>.</p>
 
+  <p>A third kind, <em>hippie expansion</em>, generalizes
+  abbreviation expansion. See <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/autotype/Hippie-Expand.html#Hippie-Expand">
+  Hippie Expansion</a> in <cite>Features for Automatic
+  Typing</cite>.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Abbrev-Concepts.html#Abbrev-Concepts" accesskey="1">Abbrev
+      Concepts</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Fundamentals of defined
+      abbrevs.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Defining-Abbrevs.html#Defining-Abbrevs" accesskey=
+      "2">Defining Abbrevs</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Defining an abbrev, so it will
+      expand when typed.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Expanding-Abbrevs.html#Expanding-Abbrevs" accesskey=
+      "3">Expanding Abbrevs</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Controlling expansion:
+      prefixes, canceling expansion.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Editing-Abbrevs.html#Editing-Abbrevs" accesskey="4">Editing
+      Abbrevs</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Viewing or editing the entire
+      list of defined abbrevs.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Saving-Abbrevs.html#Saving-Abbrevs" accesskey="5">Saving
+      Abbrevs</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Saving the entire list of
+      abbrevs for another session.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Dynamic-Abbrevs.html#Dynamic-Abbrevs" accesskey="6">Dynamic
+      Abbrevs</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Abbreviations for words already
+      in the buffer.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Dabbrev-Customization.html#Dabbrev-Customization" accesskey=
+      "7">Dabbrev Customization</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">What is a word, for dynamic
+      abbrevs. Case handling.</td>
+    </tr>
+  </table>
 </body>
 </html>
