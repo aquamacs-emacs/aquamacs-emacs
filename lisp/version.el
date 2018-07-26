@@ -59,8 +59,8 @@ to the system configuration; look at `system-configuration' instead."
   (interactive "P")
   (let ((version-string
          (format (if (not (called-interactively-p 'interactive))
-		     "%s GNU Emacs %s (%s%s%s%s)\n of %s on %s"
-		   "%s GNU Emacs %s (%s%s%s%s) of %s on %s")
+		     "%s GNU Emacs %s (%s%s%s%s)\ndated %s rev. %s"
+		   "%s GNU Emacs %s (%s%s%s%s) dated %s rev. %s")
                   (if (boundp 'aquamacs-version)
 		     (concat
 		      "Aquamacs "

@@ -1,6 +1,6 @@
 ;;; startup.el --- process Emacs shell arguments  -*- lexical-binding: t -*-
 
-;; Copyright (C) 1985-1986, 1992, 1994-2017 Free Software Foundation,
+;; Copyright (C) 1985-1986, 1992, 1994-2018 Free Software Foundation,
 ;; Inc.
 
 ;; Maintainer: emacs-devel@gnu.org
@@ -1590,37 +1590,34 @@ Each element in the list should be a list of strings or pairs
 		   (list :foreground
 			 (if (eq (frame-parameter nil 'background-mode) 'dark)
 			     "cyan" "darkblue"))))
-       :face '(variable-pitch  :height 130)
+       :face variable-pitch
        "Aquamacs is a distribution of GNU Emacs that is adapted for Mac users.\n"
      "\n"
      ,(lambda () (emacs-version))
      "\n"
-     :face (variable-pitch (:height 0.8))
+     :face variable-pitch
      ,(lambda () emacs-copyright)
      "\n\n"
-     :face (variable-pitch (:height 0.8))
+     :face variable-pitch
      :link ("Authors"
 	    ,(lambda (_button)
 	      (view-file (expand-file-name "AUTHORS" data-directory))
 	      (goto-char (point-min))))
      "            \tMany people have contributed code\n"
-     :link ("Contributing"
+     :link ("Contributing to Aquamacs"
 	    ,(lambda (button) (browse-url "http://aquamacs.org/development.shtml")))
      "\tHow to contribute improvements to Aquamacs\n"
      "\n"
      :link ("GNU and Freedom" ,(lambda (_button) (describe-gnu-project)))
-     "\tWhy we developed GNU Emacs, and the GNU operating system\n"
+     "\tWhy we developed GNU Emacs\n"
      :link ("Aquamacs Manual" (lambda (_button) (aquamacs-user-help)))
      "\tView the Aquamacs manual using Apple Help\n"
      :link ("Emacs Manual" (lambda (_button) (aquamacs-emacs-manual)))
      "\tView the Emacs manual using Apple Help\n"
      :link ("Absence of Warranty" ,(lambda (_button) (describe-no-warranty)))
-     "\tGNU Emacs comes with "
-     :face (variable-pitch (:slant oblique))
-     "ABSOLUTELY NO WARRANTY\n"
-     :face variable-pitch
+     "\tGNU Emacs comes with absolutely no warrany\n"
      :link ("Copying Conditions" ,(lambda (_button) (describe-copying)))
-     "\tConditions for redistributing and changing Aquamacs and Emacs\n"
+     "\tConditions for redistributing and changing Aquamacs\n"
      :link ("Ordering Manuals" ,(lambda (_button) (view-order-manuals)))
      "\tBuying printed Emacs manuals from the FSF\n"
      "\n"
