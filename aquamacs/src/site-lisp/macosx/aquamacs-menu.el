@@ -831,10 +831,10 @@ contains `turn-on-auto-fill', `turn-on-word-wrap' or `auto-detect-wrap'."
   (fringe-mode (cons 4 0)))
 
 (defun aquamacs-menu-bar-showhide-fringe-menu-customize-tiny ()
-  "Display small fringes only on the left of each window."
+  "Display tiny fringes on the left and right of each window."
   (interactive)
   (require 'fringe) 
-  (fringe-mode (cons 1 1)))
+  (fringe-mode '(1)))
 
   ;; Unfortunately, fringe-mode likes to round up fringes.
   ;; Therefore, we set both to 1.
@@ -866,13 +866,13 @@ contains `turn-on-auto-fill', `turn-on-word-wrap' or `auto-detect-wrap'."
 	      aquamacs-menu-bar-showhide-fringe-menu-customize-tiny
 	      :help "Tiny fringes, left and right"
 	      :visible ,(display-graphic-p)
-	      :button (:radio . (equal fringe-mode '(1 . 1)))) 'none)
+	      :button (:radio . (equal fringe-mode '(1)))) 'none)
 
 (define-key menu-bar-showhide-fringe-menu [default]
   '(menu-item "Left and Right" menu-bar-showhide-fringe-menu-customize-reset
 	      :help "Default width fringe on both left and right side"
 	      :visible (display-graphic-p)
-	      :button (:radio . (eq fringe-mode nil))))
+	      :button (:radio . (or (eq fringe-mode nil) (equal fringe-mode '(nil))))))
 
   
 (define-key-after menu-bar-options-menu [file-backups]
