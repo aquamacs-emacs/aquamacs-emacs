@@ -872,7 +872,7 @@ contains `turn-on-auto-fill', `turn-on-word-wrap' or `auto-detect-wrap'."
   '(menu-item "Left and Right" menu-bar-showhide-fringe-menu-customize-reset
 	      :help "Default width fringe on both left and right side"
 	      :visible (display-graphic-p)
-	      :button (:radio . (or (eq fringe-mode nil) (equal fringe-mode '(nil))))))
+	      :button (:radio . (eq fringe-mode nil))))
 
   
 (define-key-after menu-bar-options-menu [file-backups]
