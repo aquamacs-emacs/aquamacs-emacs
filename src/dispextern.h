@@ -1812,13 +1812,20 @@ struct face_cache
   bool_bf menu_face_changed_p : 1;
 };
 
+/* Return a non-null pointer to the cached face with ID on frame F.  */
+
+#define FACE_FROM_ID(F, ID)					\
+  (eassert (UNSIGNED_CMP (ID, <, FRAME_FACE_CACHE (F)->used)),	\
+   FRAME_FACE_CACHE (F)->faces_by_id[ID])
+
 /* Return a pointer to the face with ID on frame F, or null if such a
    face doesn't exist.  */
 
-#define FACE_FROM_ID(F, ID)				\
-     (UNSIGNED_CMP (ID, <, FRAME_FACE_CACHE (F)->used)	\
-      ? FRAME_FACE_CACHE (F)->faces_by_id[ID]		\
-      : NULL)
+#define FACE_FROM_ID_OR_NULL(F, ID)			\
+  (UNSIGNED_CMP (ID, <, FRAME_FACE_CACHE (F)->used)	\
+   ? FRAME_FACE_CACHE (F)->faces_by_id[ID]		\
+   : NULL)
+
 
 #ifdef HAVE_WINDOW_SYSTEM
 
