@@ -144,7 +144,7 @@ after updating this variable.")
 
 (defun aquamacs-left-char ()
   "Move point to the left or the beginning of the region.
- Like `backward-char', but moves point to the beginning of the region
+ Like `left-char', but moves point to the beginning of the region
 provided `cua-mode' and the mark are active."
   (interactive)
   (let ((this-command 'left-char)) ;; maintain compatibility

@@ -68,7 +68,7 @@ even when minimal fringes are used. (Aquamacs)"
 (setq default-indicate-empty-lines t)
 
 (aquamacs-define-the-fringe-bitmap)
-(setq fringe-mode '(1 . 1)) ;; to reflect the default.
+(setq fringe-mode nil) ;; to reflect the default.
 ;; This is a hack because fringe-mode likes to round up stuff.
 
 ;; set default colors

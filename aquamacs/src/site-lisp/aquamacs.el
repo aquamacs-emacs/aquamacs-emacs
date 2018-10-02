@@ -326,7 +326,7 @@ un-Mac-like way when you select text and copy&paste it.")))
    (setq fringe-mode
          (cons (cdr-safe (assq 'left-fringe default-frame-alist))
                (cdr-safe (assq 'right-fringe default-frame-alist))))
-   (if (eq fringe-mode '(nil)) (setq fringe-mode nil))
+   (if (equal fringe-mode '(nil)) (setq fringe-mode nil))
 
    ;; run this after the frames have been established
    ;; via default-frame-alist
