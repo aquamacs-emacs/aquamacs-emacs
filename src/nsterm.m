@@ -283,7 +283,6 @@ Lisp_Object ns_display_name_list;
 
 /* display update */
 static int ns_window_num = 0;
-static BOOL gsaved = NO;
 static BOOL ns_fake_keydown = NO;
 #ifdef NS_IMPL_COCOA
 static BOOL ns_menu_bar_is_hidden = NO;
@@ -1236,7 +1235,6 @@ ns_clip_to_rect (struct frame *f, NSRect *r, int n)
             NSRectClipList (r, 2);
           else
             NSRectClip (*r);
-          gsaved = YES;
 
           return YES;
         }
@@ -1260,11 +1258,7 @@ ns_reset_clipping (struct frame *f)
 {
   NSTRACE_WHEN (NSTRACE_GROUP_FOCUS, "ns_reset_clipping");
 
-  if (gsaved)
-    {
-      [[NSGraphicsContext currentContext] restoreGraphicsState];
-      gsaved = NO;
-    }
+  [[NSGraphicsContext currentContext] restoreGraphicsState];
 }
 
 
@@ -2624,23 +2618,6 @@ ns_clear_frame_area (struct frame *f, int x, int y, int width, int height)
 }
 
 static void
-ns_copy_bits (struct frame *f, NSRect src, NSRect dest)
-{
-  NSTRACE ("ns_copy_bits");
-
-  if (FRAME_NS_VIEW (f))
-    {
-      hide_bell();              // Ensure the bell image isn't scrolled.
-
-      /* FIXME: scrollRect:by: is deprecated in macOS 10.14.  There is
-         no obvious replacement so we may have to come up with our own.  */
-      [FRAME_NS_VIEW (f) scrollRect: src
-                                 by: NSMakeSize (dest.origin.x - src.origin.x,
-                                                 dest.origin.y - src.origin.y)];
-    }
-}
-
-static void
 ns_scroll_run (struct window *w, struct run *run)
 /* --------------------------------------------------------------------------
     External (RIF):  Insert or delete n lines at line vpos
@@ -2689,10 +2666,12 @@ ns_scroll_run (struct window *w, struct run *run)
   x_clear_cursor (w);
 
   {
-    NSRect srcRect = NSMakeRect (x, from_y, width, height);
+    /* We should do this by copying the contents of the NSView,
+       however x_clear_cursor, above, seems to leave detritus since we
+       changed to the mark-dirty/expose method, and simply redrawing
+       the whole thing seems to have no performance issues.  */
     NSRect dstRect = NSMakeRect (x, to_y, width, height);
-
-    ns_copy_bits (f, srcRect , dstRect);
+    [FRAME_NS_VIEW (f) setNeedsDisplayInRect:dstRect];
   }
 
   unblock_input ();
@@ -2746,12 +2725,14 @@ ns_shift_glyphs_for_insert (struct frame *f,
     External (RIF): copy an area horizontally, don't worry about clearing src
    -------------------------------------------------------------------------- */
 {
-  NSRect srcRect = NSMakeRect (x, y, width, height);
+  /* This should be done by copying the contents of the screen,
+     however we can get away with just marking the destination as
+     needing redrawn.  */
   NSRect dstRect = NSMakeRect (x+shift_by, y, width, height);
 
   NSTRACE ("ns_shift_glyphs_for_insert");
 
-  ns_copy_bits (f, srcRect, dstRect);
+  [FRAME_NS_VIEW (f) setNeedsDisplayInRect:dstRect];
 }
 
 
