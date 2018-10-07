@@ -113,5 +113,10 @@ process_dependencies () {
     done
 }
 
+if [ ! -d /usr/local/Homebrew ]; then
+    echo "Homebrew not installed; skipping brewed libraries"
+    exit 0
+fi
+
 [ -d ${DEST_LIB_DIR} ] || mkdir ${DEST_LIB_DIR} || exit 1
 process_dependencies "${APP}" "${DEST_LIB_DIR}"
