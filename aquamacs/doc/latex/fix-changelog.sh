@@ -13,7 +13,7 @@ echo `/usr/bin/grep -m1 -l changelog-top *.html`
 chgfile=$(/usr/bin/grep -m1 -l changelog-top *.html)
 echo "CHGFILE=$chgfile"
 
-[ -z $CHGFILE ] || exit 1
+[ -z $CHGFILE ] && echo "Could not find CHGfile." >&2 ; exit 1
 
 cp ${chgfile} ${chgfile}.bak 
 

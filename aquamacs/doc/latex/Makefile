@@ -32,8 +32,8 @@ pdf: aquamacs.tex changelog.tex changes.tex *.pdf
 
 html: aquamacs.tex *.pdf
 	echo "Running latex2html on $(fname)...";				     \
-	rm -r aquamacs;		\
-	../convert/latex2html -init_file l2hconf-local.pm -local_icons -html_version=4.0 $(fname) || $(error "error in latex2html -- installed?")
+	rm -r aquamacs ; \
+	../convert/latex2html -init_file l2hconf-local.pm -local_icons -html_version=4.0 $(fname)
 	sips -s format png aquamacs-logo.pdf --out $(newdir)/image.png; \
 	echo "$(fname) converted to HTML."					     ; \
 	cp aquamacs.css $(newdir)/aquamacs.css					     ; \
@@ -54,5 +54,5 @@ html: aquamacs.tex *.pdf
 	cp $(srcdir)/*.png $(destdir)/			     ; \
 	find $(destdir) -name *.helpindex -delete ; \
 	echo "Help files copied. Indexing..." ; \
-	hiutil -C -a -s en -f $(destdir)"/Aquamacs Help.helpindex" $(destdir)  || $(error "error in hiutil ")
+	hiutil -C -a -s en -f $(destdir)"/Aquamacs Help.helpindex" $(destdir) ; \
 	echo "Done."
