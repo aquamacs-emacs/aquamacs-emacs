@@ -1,85 +1,82 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
 <!--Converted with LaTeX2HTML 2018 (Released Feb 1, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>6.1 Plug-in Interface</TITLE>
+<META NAME="description" CONTENT="6.1 Plug-in Interface">
+<META NAME="keywords" CONTENT="aquamacs">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-  <meta name="generator" content=
-  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
-  <title>6.1 Plug-in Interface</title>
-  <meta name="description" content="6.1 Plug-in Interface" />
-  <meta name="keywords" content="aquamacs" />
-  <meta name="resource-type" content="document" />
-  <meta name="distribution" content="global" />
-  <meta http-equiv="Content-Type" content=
-  "text/html; charset=us-ascii" />
-  <meta name="Generator" content="LaTeX2HTML v2018" />
-  <meta http-equiv="Content-Style-Type" content="text/css" />
-  <link rel="STYLESHEET" href="aquamacs.css" type="text/css" />
-  <link rel="next" href="node32.html" />
-  <link rel="previous" href="node30.html" />
-  <link rel="up" href="node30.html" />
-  <link rel="next" href="node32.html" />
-</head>
+<LINK REL="STYLESHEET" HREF="aquamacs.css">
 
-<body>
-  <!--Navigation Panel-->
-  <a name="tex2html607" href="node32.html" id=
-  "tex2html607"><img width="32" height="32" align="bottom" border=
-  "0" alt="next" src="./next.png" /></a> <a name="tex2html603"
-  href="node30.html" id="tex2html603"><img width="32" height="32"
-  align="bottom" border="0" alt="up" src="./up.png" /></a> <a name=
-  "tex2html597" href="node30.html" id="tex2html597"><img width="32"
-  height="32" align="bottom" border="0" alt="previous" src=
-  "./prev.png" /></a> <a name="tex2html605" href="node1.html" id=
-  "tex2html605"><img width="32" height="32" align="bottom" border=
-  "0" alt="contents" src="./contents.png" /></a><br />
-  <b>Next:</b> <a name="tex2html608" href="node32.html" id=
-  "tex2html608">6.2 Load path</a> <b>Up:</b> <a name="tex2html604"
-  href="node30.html" id="tex2html604">6 Extending Aquamacs</a>
-  <b>Previous:</b> <a name="tex2html598" href="node30.html" id=
-  "tex2html598">6 Extending Aquamacs</a> &nbsp; <b><a name=
-  "tex2html606" href="node1.html" id=
-  "tex2html606">Contents</a></b><br />
-  <br />
-  <!--End of Navigation Panel-->
+<LINK REL="next" HREF="node32.html">
+<LINK REL="previous" HREF="node30.html">
+<LINK REL="up" HREF="node30.html">
+<LINK REL="next" HREF="node32.html">
+</HEAD>
 
-  <h2><a name="SECTION00071000000000000000" id=
-  "SECTION00071000000000000000">6.1 Plug-in Interface</a></h2>
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html609"
+  HREF="node32.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="./next.png"></A> 
+<A NAME="tex2html605"
+  HREF="node30.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="./up.png"></A> 
+<A NAME="tex2html599"
+  HREF="node30.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="./prev.png"></A> 
+<A NAME="tex2html607"
+  HREF="node1.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="./contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html610"
+  HREF="node32.html">6.2 Load Path</A>
+<B> Up:</B> <A NAME="tex2html606"
+  HREF="node30.html">6 Extending Aquamacs</A>
+<B> Previous:</B> <A NAME="tex2html600"
+  HREF="node30.html">6 Extending Aquamacs</A>
+ &nbsp; <B>  <A NAME="tex2html608"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
 
-  <p>All files named <i>site-start.el</i> anywhere in the load-path
-  are loaded at startup, before the user's init files are loaded.
-  For example, such a file may be placed in the user's Library
-  folder, that is in<br />
-  <tt>/Library/Application&nbsp;Support/Aquamacs&nbsp;Emacs/myPlugin</tt>.</p>
+<H2><A NAME="SECTION00071000000000000000">
+6.1 Plug-in Interface</A>
+</H2>
 
-  <p>The load-path is automatically extended to cover all
-  subdirectories in standard paths (see Section <a href=
-  "node32.html#standardpaths">6.2</a>).</p>
+<P>
+All files named <I>site-start.el</I> anywhere in the load-path are loaded at startup, before the user's init files are loaded. For example, such a file may be placed in the user's Library folder, that is in 
+<BR><TT>/Library/Application&nbsp;Support/Aquamacs&nbsp;Emacs/myPlugin</TT>.
 
-  <p>If a plug-in needs to execute code earlier in the
-  initialization phase, that is, before any Aquamacs- specific code
-  is executed (but after Emacs initilization code has been
-  executed), this code can be provided in a file
-  <i>site-prestart.el</i> anywhere in the load-path.</p>
+<P>
+The load-path is automatically extended to cover all subdirectories in standard paths (see Section <A HREF="node32.html#standardpaths">6.2</A>).
 
-  <p>Info files (M-x info) can be provided in a directory called
-  <tt>info</tt> inside the plugin directory. Aquamacs will
-  automatically add this path to `Info-default-directory-list'.
-  Plugins should provide a <tt>dir</tt> file inside the
-  <tt>info</tt> directory containing an overview (see the Emacs
-  documentation for `info').</p>
+<P>
+If a plug-in needs to execute code earlier in the initialization phase, that is, before any Aquamacs- specific code is executed (but after Emacs initilization code has been executed), this code can be provided in a file <I>site-prestart.el</I> anywhere in the load-path.
 
-  <p>Note that plug-ins should not make any assumptions about
-  whether a frame exists or is visible.</p>
+<P>
+Info files (M-x info) can be provided in a directory called <TT>info</TT> inside the plugin directory. Aquamacs will automatically add this path to `Info-default-directory-list'. Plugins should provide a <TT>dir</TT> file inside the <TT>info</TT> directory containing an overview (see the Emacs documentation for `info').
 
-  <p><br /></p>
-  <hr />
+<P>
+Note that plug-ins should not make any assumptions about whether a frame exists or is visible.
 
-  <address>
-    <i>David Reitter</i><br />
-    <i>2018-07-23</i>
-  </address>
-</body>
-</html>
+<P>
+<BR><HR>
+<ADDRESS>
+<I>David Reitter</I>
+<BR><I>2018-10-10</I>
+</ADDRESS>
+</BODY>
+</HTML>
