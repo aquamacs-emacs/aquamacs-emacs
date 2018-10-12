@@ -19,7 +19,7 @@
 # Usage:
 # sh build-libraries.sh NEW-CFLAGS BUNDLE-DIR
 
-MIN_VERSION="${1}"
+MIN_VERSION=${1:-"10.9"}
 BUNDLE_DIR="$2"
 
 APP="${BUNDLE_DIR}/Contents/MacOS/Aquamacs"
