@@ -468,8 +468,23 @@ $(srcdir)/src/stamp-h.in: $(AUTOCONF_INPUTS)
 ## don't have to duplicate the list of utilities to install in
 ## this Makefile as well.
 
-install: all install-arch-indep install-etcdoc install-arch-dep install-$(NTDIR) blessmail install-aquamacs
+install: all install-arch-indep install-etcdoc install-arch-dep install-$(NTDIR) blessmail install-aquamacs install-brewed-libraries
 	@true
+
+# The prepinstall runs a script that copies shared libraries from
+# /usr/local into the application bundle. This is mainly needed for
+# gnutls. If necessary, the libraries are recompiled for the same Mac
+# OS deployment target before they are copied. Arguments are:
+# - the Mac OS deployment version to use
+# - the path to the just-build application bundle
+# The script may modify the existing homebrew installation with the
+# recompilation.
+
+install-brewed-libraries:
+	@echo If Homebrew is installed, build and copied brewed
+	@echo shared libraries for distribution
+	sh aquamacs/build/build-homebrew-libraries.sh $(MACOSX_DEPLOYMENT_TARGET) \
+	   nextstep/Aquamacs.app
 
 ## Ensure that $subdir contains a subdirs.el file.
 ## Here and elsewhere, we set the umask so that any created files are
