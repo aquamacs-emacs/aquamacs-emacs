@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# This file is part of the nAquamacs build process. It finds any
+# This file is part of the Aquamacs build process. It finds any
 # libraries that Aquamacs is using from Homebrew and copies them into
 # the application bundle for distribution. It also updates the binary
 # executable and libraries with appropriate path references.
