@@ -244,9 +244,9 @@ for a block opening statement are given this extra offset."
 ;; Utilities
 (defmacro as-safe (&rest body)
   "Safely execute BODY, return nil if an error occurred."
-  (` (condition-case nil
-         (progn (,@ body))
-       (error nil))))
+  `(condition-case nil
+       (progn ,@body)
+     (error nil)))
 
 (defsubst as-keep-region-active ()
   "Keep the region active in XEmacs."
