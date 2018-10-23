@@ -1,17 +1,9 @@
 #!/usr/bin/perl
 
 # Aquamacs Emacs starter
-# (C) 2007, 2008, 2009 Aquamacs Project
+# (C) 2007, 2008, 2009, 2018 Aquamacs Project
 
 use strict;
-
-# Revisions
-# 1.0 - first version to be included with Aquamacs [2007-03-17 David Reitter] 
-# 1.1 - delayed deletion of new files [2008-11-12 David Reitter]
-# 1.2 - remove hard-coding of application path; consequently, remove sudo functionality
-#     - shorter delay before deleting file
-# 1.3 - changed application name (Aquamacs 2.0)
-# 1.4 - do the right thing if files have weird names like a"b or some can't be created [2016-05-05 Steve Sanbeg]
 
 # to-do: re-implement in C (or as a shell script)
 
@@ -44,7 +36,7 @@ for my $f (@ARGV) {
     # we can only call "open" with existing files.
     # that's why we create them just for the "open" call.
 
-    system('open', '-a', 'Aquamacs.app', @args);
+    system('open', '-a', 'Aquamacs.app', '--args', @args);
      
 #  } else {
 #    system("$app_path/Contents/MacOS/Aquamacs $args 2>/dev/null &");
