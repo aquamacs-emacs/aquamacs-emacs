@@ -175,11 +175,6 @@ or `CVS', and any subdirectory that contains a file named `.nosearch'."
 
 
 
-
-(setq ess-etc-directory (concat  (mac-resources-path)
-				  "lisp/aquamacs/edit-modes/ess-mode/etc"
-				  ))
-
 (aquamacs-set-defaults 
  '((html-helper-mode-uses-JDE nil)))
 (autoload 'html-helper-mode "html-helper-mode" 
