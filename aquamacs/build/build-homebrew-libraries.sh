@@ -40,10 +40,10 @@ add_cflags () {
     # normal in Ruby, because they get messed up between the shell and the
     # sed command later.
 
-    NEW_FLAG_CMD="ENV[\"CFLAGS\"]=\"${NEW_CFLAGS}\""
+    NEW_FLAG_CMD="ENV[\"CFLAGS\"]=\"${NEW_CFLAGS}\" # aquamacs-libraries"
 
     # First, delete any existing ENV line so we don't have conflicts.
-    /usr/bin/sed -i '' '/ENV/d' ${formula} || exit 1
+    /usr/bin/sed -i '' '/aquamacs-libraries/d' ${formula} || exit 1
 
     # Note that the newline in the middle is there to force sed to insert
     # a newline. This sed command is rather fragile, so be careful in
@@ -67,7 +67,8 @@ brew_reinstall () {
         BREW_ARGS=""
     fi
     add_cflags ${pkg} ${NEW_CFLAGS}
-    brew reinstall -s ${BREW_ARGS} ${pkg} || exit 1
+    # XXXX REMOVE -d!
+    brew reinstall -d --build-from-source ${BREW_ARGS} ${pkg} || exit 1
 }
 
 # Get the relevant shared libraries used by the executable or library
@@ -101,12 +102,10 @@ process_dependencies () {
         local pkg=$(echo $lib | awk -F/ '{print $5}')
         local libname="$(basename $lib)"
         local destlib="${outdir}/${libname}"
-        if [ ! -f "${outdir}/${libname}" ]; then
-            ensure_min_version "$lib" "$pkg"
-            # Copy the shared library to the app bundle and fix up paths
-            cp "${lib}" "${outdir}" || exit 1
-            chmod u+w ${destlib}
-        fi
+        ensure_min_version "$lib" "$pkg"
+        # Copy the shared library to the app bundle and fix up paths
+        cp "${lib}" "${outdir}" || exit 1
+        chmod u+w ${destlib}
         install_name_tool -change "${lib}" "@executable_path/lib/${libname}" \
              "${target}"
         process_dependencies "${destlib}" "${outdir}"
