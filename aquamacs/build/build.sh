@@ -48,8 +48,8 @@ echo "Compiler flags: $FLAGS"
 # do not use MacPorts / fink libraries
 # do not use binaries either (e.g., gnutls would be recognized)
 
-# We will run only on 10.9 and later.
-MACOSX_DEPLOYMENT_TARGET=${MACOSX_DEPLOYMENT_TARGET:-"10.9"}
+# We will run only on 10.11 and later.
+MACOSX_DEPLOYMENT_TARGET=${MACOSX_DEPLOYMENT_TARGET:-"10.11"}
 export MACOSX_DEPLOYMENT_TARGET
 
 FINALMESSAGE=""
@@ -59,7 +59,7 @@ then
 # we're going to choose the oldest SDK we have (starting with 10.9)
 # this should guarantee backwards compatibility up to that SDK version.
 # for current Aquamacs, this will typically be 10.9
-for VERS in 10.9 10.10 10.11 10.12 10.13 10.14; do
+for VERS in 10.11 10.12 10.13 10.14; do
     SDK="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${VERS}.sdk"
     if [ -d "$SDK" ]; then
         FINALMESSAGE="This build will be compatible with OS X $VERS onwards."
