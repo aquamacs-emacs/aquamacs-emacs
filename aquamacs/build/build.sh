@@ -22,7 +22,7 @@ case "$1" in
   OMIT_SYMB=
   OLD_SDK=1
   ;;
-'-nightly')
+'-flags')
   # do not use MacPorts / fink libraries for binary compatibility
   PATH=$AUTOTOOLS:/bin:/sbin:/usr/bin:/usr/sbin
   export GZIP_PROG=`which gzip`
