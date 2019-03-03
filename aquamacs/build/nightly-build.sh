@@ -58,7 +58,7 @@ mkdir builds 2>/dev/null
 aquamacs/build/build.sh -release >>$LOG 2>>$LOG  && \
 date >>$LOG && \
 echo "Building and installing Homebrew libraries." >>$LOG && \
-aquamacs/build/build-homebrew-libraries.sh >>$LOG 2>>$LOG && \
+aquamacs/build/build-homebrew-libraries.sh $APP >>$LOG 2>>$LOG && \
 echo "Packaging Aquamacs." >>$LOG && \
 cd `dirname ${APP}` && \
 tar cjf ${BLD} Aquamacs.app && \

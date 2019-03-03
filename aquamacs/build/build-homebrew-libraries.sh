@@ -22,13 +22,13 @@
 # does not remove the modified homebrew recipe files.
 
 # Usage:
-# sh build-libraries.sh BUNDLE-DIR MIN-VERSION
+# sh build-homebrew-libraries.sh BUNDLE-DIR MIN-VERSION
 
 BUNDLE_DIR="$1"
 MIN_VERSION=${2:-"10.11"}
 
 if [ "${1}x" = x -o "${1}" = "-h"  -o "${1}" = "--help"  ]; then
-   echo "Usage: sh build-libraries.sh BUNDLE-DIR [MIN-VERSION]"
+   echo "Usage: sh build-homebrew-libraries.sh BUNDLE-DIR [MIN-VERSION]"
    echo "    BUNDLE-DIR is the directory containing a compiled "
    echo "        Aquamacs, typically named Aquamacs.app"
    echo "    MIN-VERSION is the desired minimum Mac OS version."
