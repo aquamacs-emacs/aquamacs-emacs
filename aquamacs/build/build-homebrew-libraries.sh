@@ -146,7 +146,7 @@ ensure_min_version () {
 process_dependencies () {
     local target="${1}"
     local outdir="${2}"
-    local lib = ""
+    local lib=""
     echo "* Process ${target}"
     for lib in $(get_local_libs ${target}); do
         echo "** Work on ${lib}"
