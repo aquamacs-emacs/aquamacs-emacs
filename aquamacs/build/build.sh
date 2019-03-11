@@ -13,8 +13,8 @@ OLD_SDK=0
 
 case "$1" in
 '-release')
-  # do not use MacPorts / fink libraries for binary compatibility
-  PATH=$AUTOTOOLS:/bin:/sbin:/usr/bin:/usr/sbin
+  # Include /usr/local/bin/for finding homebrew libaries
+  PATH=$AUTOTOOLS:/usr/local/bin:/bin:/sbin:/usr/bin:/usr/sbin
   export GZIP_PROG=`which gzip`
   echo "Building Aquamacs (release)."
   OMIT_AUTOGEN=
@@ -23,8 +23,8 @@ case "$1" in
   OLD_SDK=1
   ;;
 '-flags')
-  # do not use MacPorts / fink libraries for binary compatibility
-  PATH=$AUTOTOOLS:/bin:/sbin:/usr/bin:/usr/sbin
+  # Include /usr/local/bin/for finding homebrew libaries
+  PATH=$AUTOTOOLS:/usr/local/bin:/sbin:/usr/bin:/usr/sbin
   export GZIP_PROG=`which gzip`
   echo "Building Aquamacs (nightly build)."
   OMIT_AUTOGEN=

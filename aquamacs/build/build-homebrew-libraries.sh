@@ -24,34 +24,16 @@
 # Usage:
 # sh build-homebrew-libraries.sh BUNDLE-DIR MIN-VERSION
 
-BUNDLE_DIR="$1"
-MIN_VERSION=${2:-"10.11"}
-
-if [ "${1}x" = x -o "${1}" = "-h"  -o "${1}" = "--help"  ]; then
-   echo "Usage: sh build-homebrew-libraries.sh BUNDLE-DIR [MIN-VERSION]"
-   echo "    BUNDLE-DIR is the directory containing a compiled "
-   echo "        Aquamacs, typically named Aquamacs.app"
-   echo "    MIN-VERSION is the desired minimum Mac OS version."
-   echo "        Defaults to ${MIN_VERSION}"
-   exit 1
-fi
-
-APP="${BUNDLE_DIR}/Contents/MacOS/Aquamacs"
-DEST_LIB_DIR="${BUNDLE_DIR}/Contents/MacOS/lib"
-NEW_CFLAGS="-mmacosx-version-min=${MIN_VERSION}"
-
-if [ ! -d ${BUNDLE_DIR} ]; then
-    echo "Error: ${BUNDLE_DIR} does not exist or is not a directory"
-    exit 1
-fi
-
-if [ ! -f ${APP} ]; then
-    echo "Error: ${APP} does not exist in ${BUNDLE_DIR}"
-    exit 1
-fi
+# All of the main script action after the functions are defined.
 
 # Add configuration for additional CFLAGS to a Homebrew formula
 # Usage: add_cflags <formula-file>
+
+debug () {
+    # Print with echo if DEBUG is set to 1
+    [ "${DEBUG}x" = "1x" ] && echo $*
+}
+
 add_cflags () {
     formula=$1
 
@@ -123,50 +105,164 @@ brew_reinstall () {
 # Get the relevant shared libraries used by the executable or library
 # Usage: get_local_libs <executable-or-library-file>
 get_local_libs () {
-    echo "$(otool -L $1 | awk '!/:/ && /usr\/local/{print $1}' | grep -v $(basename $1))"
+     echo "$(otool -L $1 | awk '!/:/ && /usr\/local/{print $1}' | grep -v $(basename $1))"
 }
 
 # Ensure that the installed Homebrew library has the required minimum version,
 # recompiling it if necessary.
 # Usage: ensure_min_version <lib-file> <package-name>
+
 ensure_min_version () {
-    lib="$1"; pkg="$2"
-    EXISTING_MIN_VERSION=$(otool -l ${lib} \
-                               | awk '/^ +version/{print $2; exit 0}' )
-    if [ "${EXISTING_MIN_VERSION}" != "${MIN_VERSION}" ]; then
-        echo "rebuilding ${pkg} for minimum version ${1}"
-        brew_reinstall $pkg || exit 1
+    local action="${1}"
+    local lib="$2"
+    local pkg=$(echo $lib | awk -F/ '{print $5}')
+    local cur_min_version=$(otool -l ${lib} \
+                                | awk '/^ +version/{print $2; exit 0}' )
+    if [ "${cur_min_version}" != "${MIN_VERSION}" ]; then
+        if [ "${action}" = "-rebuild" ]; then
+            debug "rebuilding ${pkg} for minimum version ${1}"
+            brew_reinstall "${pkg}" || exit 1
+        else
+            echo "Need to rebuild ${lib} from ${pkg}"
+            rebuild="yes"
+        fi
     else
         echo "existing installation of ${pkg} OK"
     fi
 }
 
-# Process dependencies for the given executable or library
-# Usage: process_dependencies <executable-or-library> <out-dir>
-process_dependencies () {
-    local target="${1}"
-    local outdir="${2}"
+# Check rebuild status and possibly rebuild needed libraries
+#
+# Usage:
+# process_dependencies <action> <executable-or-library>
+# Arguments:
+# - action: -rebuild or -bundle
+# - executable-or-library is the binary to analyze for dependencies
+
+rebuild_dependencies () {
+    local action="${1}"
+    local target="${2}"
     local lib=""
-    echo "* Process ${target}"
+    debug "rebuild deps for ${target}"
     for lib in $(get_local_libs ${target}); do
-        echo "** Work on ${lib}"
-        local pkg=$(echo $lib | awk -F/ '{print $5}')
         local libname="$(basename $lib)"
         local destlib="${outdir}/${libname}"
-        process_dependencies "${lib}" "${outdir}"
-        ensure_min_version "$lib" "$pkg"
-        # Copy the shared library to the app bundle and fix up paths
-        cp "${lib}" "${outdir}" || exit 1
-        chmod u+w ${destlib}
-        install_name_tool -change "${lib}" "@executable_path/lib/${libname}" \
-             "${target}"
+        debug echo "check ${lib} for ${target}"
+        rebuild_dependencies "${action}" "${lib}"
+        ensure_min_version "${action}" "$lib"
     done
 }
+
+install_libraries () {
+    # Once all the dependencies have been processed, copy the current
+    # library into the bundle and rewrite the paths in it.
+    local target="${1}"
+    local outdir="${2}"
+    local targetname="$(basename ${target})"
+    local target_dest="${outdir}/${targetname}"
+    local lib=""
+
+    debug install for "${target}" in "${outdir}"
+    # Copy the library (but not an executable) and update its ID.
+    file "${target}" | grep library > /dev/null
+    if [ "$?" = "0" ]; then
+        cp "${target}" "${outdir}" || exit 1
+        chmod u+w ${target_dest}
+        debug install_name_tool -id \
+                      "@executable_path/lib/${targetname}" \
+                      "${target_dest}"
+        install_name_tool -id \
+                      "@executable_path/lib/${targetname})" \
+                      "${target_dest}"
+    else
+        # In this case, we're deal with the executable, not a library
+        # So the target_dest name is actually just the same as target
+        target_dest="${target}"
+    fi
+
+    # Now update any shared library references in the target
+    for lib in $(get_local_libs ${target}); do
+        local libname=$(basename "${lib}")
+        install_libraries "${lib}" "${outdir}"
+        debug install_name_tool -change "${lib}" \
+                          "@executable_path/lib/${libname}" \
+                          "${target_dest}"
+
+        install_name_tool -change "${lib}" \
+                          "@executable_path/lib/${libname}" \
+                          "${target_dest}"
+    done
+}
+
+usage () {
+    /bin/echo -n "Usage: sh build-homebrew-libraries.sh"
+    echo " ACTION BUNDLE-DIR [MIN-VERSION]"
+    echo "    ACTION is one of: -bundle, -rebuild, or --help"
+    echo "        -bundle copies required Homebrew libs to the app bundle"
+    echo "        -rebuild recompiles any required Homebrew libs as needed"
+    echo "        -help prints this message"
+    echo "    BUNDLE-DIR is the directory containing a compiled "
+    echo "        Aquamacs, typically named Aquamacs.app"
+    echo "    MIN-VERSION is the desired minimum Mac OS version."
+    echo "        Defaults to ${MIN_VERSION}"
+    exit 1
+}
+
+## Executable statements
+
+ACTION="$1"
+BUNDLE_DIR="$2"
+MIN_VERSION=${3:-"10.11"}
+rebuild="no"
+
+if [ "${1}x" = x -o "${1}" = "-h"  -o "${1}" = "--help"  ]; then
+    usage
+fi
+
+if [ "${ACTION}" != "-bundle" -a "${ACTION}" != "-rebuild" ]; then
+    usage
+fi
+
+APP="${BUNDLE_DIR}/Contents/MacOS/Aquamacs"
+DEST_LIB_DIR="${BUNDLE_DIR}/Contents/MacOS/lib"
+NEW_CFLAGS="-mmacosx-version-min=${MIN_VERSION}"
+
+if [ ! -d ${BUNDLE_DIR} ]; then
+    echo "Error: ${BUNDLE_DIR} does not exist or is not a directory"
+    usage
+fi
+
+if [ ! -f ${APP} ]; then
+    echo "Error: ${APP} does not exist in ${BUNDLE_DIR}"
+    usage
+fi
 
 if [ ! -d /usr/local/Homebrew ]; then
     echo "Homebrew not installed; skipping brewed libraries"
     exit 0
 fi
 
-[ -d ${DEST_LIB_DIR} ] || mkdir ${DEST_LIB_DIR} || exit 1
-process_dependencies "${APP}" "${DEST_LIB_DIR}"
+rebuild_dependencies "${ACTION}" "${APP}"
+
+if [ "${rebuild}" = "yes" ]; then
+    echo "Libraries must be rebuilt....exiting"
+    exit 1
+fi
+
+
+if [ "${ACTION}" = "-bundle" ]; then
+    [ -d ${DEST_LIB_DIR} ] || mkdir ${DEST_LIB_DIR} || exit 1
+    install_libraries "${APP}" "${DEST_LIB_DIR}"
+    count=$(ls "${DEST_LIB_DIR}" | wc -l)
+    if [ "${count}" -gt 1 ]; then
+        echo "Libraries have been copied"
+    else
+        echo "Library copying failed"
+        exit 1
+    fi
+    count=$(otool -L "${DEST_LIB_DIR}"/* | grep /usr/local | wc -l)
+    if [ "${count}" -gt 0 ]; then
+        echo "Library installation to bundle failed"
+        exit 1
+    fi
+fi

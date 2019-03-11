@@ -57,8 +57,8 @@ mkdir builds 2>/dev/null
 # one step builds on the next:
 aquamacs/build/build.sh -release >>$LOG 2>>$LOG  && \
 date >>$LOG && \
-echo "Building and installing Homebrew libraries." >>$LOG && \
-aquamacs/build/build-homebrew-libraries.sh $APP >>$LOG 2>>$LOG && \
+echo "Copying Homebrew libraries to app bundle." >>$LOG && \
+aquamacs/build/build-homebrew-libraries.sh -bundle $APP >>$LOG 2>>$LOG && \
 echo "Packaging Aquamacs." >>$LOG && \
 cd `dirname ${APP}` && \
 tar cjf ${BLD} Aquamacs.app && \
