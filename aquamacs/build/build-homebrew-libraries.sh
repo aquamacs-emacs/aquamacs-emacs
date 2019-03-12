@@ -120,7 +120,7 @@ ensure_min_version () {
                                 | awk '/^ +version/{print $2; exit 0}' )
     if [ "${cur_min_version}" != "${MIN_VERSION}" ]; then
         if [ "${action}" = "-rebuild" ]; then
-            debug "rebuilding ${pkg} for minimum version ${1}"
+            echo "rebuilding ${pkg} for minimum version ${1}"
             brew_reinstall "${pkg}" || exit 1
         else
             echo "Need to rebuild ${lib} from ${pkg}"
@@ -149,6 +149,7 @@ rebuild_dependencies () {
         local destlib="${outdir}/${libname}"
         debug echo "check ${lib} for ${target}"
         rebuild_dependencies "${action}" "${lib}"
+        echo "Check ${lib} for ${target}"
         ensure_min_version "${action}" "$lib"
     done
 }
@@ -163,6 +164,7 @@ install_libraries () {
     local lib=""
 
     debug install for "${target}" in "${outdir}"
+
     # Copy the library (but not an executable) and update its ID.
     file "${target}" | grep library > /dev/null
     if [ "$?" = "0" ]; then
@@ -242,13 +244,22 @@ if [ ! -d /usr/local/Homebrew ]; then
     exit 0
 fi
 
+# Special check for Aquamacs: only allow gnutls
+LOCAL_LIBS="$(otool -L ${APP} | grep /usr/local | grep -v libgnutls)"
+if [ "${LOCAL_LIBS}"x != x ]; then
+    echo "Unexpected local libraries detected:"
+    echo ${LOCAL_LIBS}
+    echo "This script only allows rebuilding for gnutls and dependencies"
+    echo "Exiting.."
+    exit 1
+fi
+
 rebuild_dependencies "${ACTION}" "${APP}"
 
 if [ "${rebuild}" = "yes" ]; then
     echo "Libraries must be rebuilt....exiting"
     exit 1
 fi
-
 
 if [ "${ACTION}" = "-bundle" ]; then
     [ -d ${DEST_LIB_DIR} ] || mkdir ${DEST_LIB_DIR} || exit 1
