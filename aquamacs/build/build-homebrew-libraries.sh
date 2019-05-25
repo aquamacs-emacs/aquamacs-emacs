@@ -244,16 +244,6 @@ if [ ! -d /usr/local/Homebrew ]; then
     exit 0
 fi
 
-# Special check for Aquamacs: only allow gnutls
-LOCAL_LIBS="$(otool -L ${APP} | grep /usr/local | grep -v libgnutls)"
-if [ "${LOCAL_LIBS}"x != x ]; then
-    echo "Unexpected local libraries detected:"
-    echo ${LOCAL_LIBS}
-    echo "This script only allows rebuilding for gnutls and dependencies"
-    echo "Exiting.."
-    exit 1
-fi
-
 rebuild_dependencies "${ACTION}" "${APP}"
 
 if [ "${rebuild}" = "yes" ]; then
