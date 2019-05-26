@@ -1,53 +1,42 @@
 #!/usr/bin/perl
 
 # Aquamacs Emacs starter
-# (C) 2007, 2008, 2009, 2018 Aquamacs Project
+# (C) 2007, 2008, 2009, 2018, 2019 Aquamacs Project
+
+# To-do: re-implement in C (or as a shell script)?
 
 use strict;
-
-# to-do: re-implement in C (or as a shell script)
-
-# $app_path = '/Applications/Aquamacs.app';
-# $app_path = '<AQUAMACS-PATH>';
-# $pid = qx"ps auxc | awk '/^$ENV{'USER'} .* Aquamacs\$/ {print \$2}'";
+use warnings;
 
 my @args;
+my @files;
 my @tmpfiles;
 
 for my $f (@ARGV) {
-  if (-e $f) {
-    push @args, $f;
-  } elsif (open my($tfh), '>', $f) {
-    close $tfh;
-    push @args, $f;
-    push @tmpfiles, $f;
-  } else {
-    warn "$f: $!\n";
-  }
+    if (-e $f) {
+        push @files, $f;
+    } elsif ($f =~ /^-/) {
+        push @args, $f;
+    } elsif (open my($tfh), '>', $f) {
+        # Create a temp file because open doesn't work with
+        # non-existing files.
+        close $tfh;
+        push @files, $f;
+        push @tmpfiles, $f;
+    } else {
+        warn "$f: $!\n";
+    }
 }
- 
- # there is still an issue:
- # if the sudo emacs is still open, it will 
- # call 'open' and open the files in the wrong
- # emacs process.
- 
-# if ($ENV{'USER'} ne "root")  # hack: not sudo
-#  {
-    # we can only call "open" with existing files.
-    # that's why we create them just for the "open" call.
+unshift @args, '--args' if @args;
 
-    system('open', '-a', 'Aquamacs.app', '--args', @args);
-     
-#  } else {
-#    system("$app_path/Contents/MacOS/Aquamacs $args 2>/dev/null &");
-#  }
+system('open', '-a', 'Aquamacs', @files, @args);
 
-# delay deletion because AE drag&drop doesn't work with non-existing documents
-
+# Delay deletion of temp files because Aquamacs' drag&drop action
+# requires the file to exist.
 if (@tmpfiles and fork == 0) {
-  sleep 3;
-  unlink $_ for @tmpfiles;
-  exit;
+    sleep 3; # 3 seconds aught to be enough for Aqumacs to have
+             # started and drag&drop to have been activated and small
+             # enough to not be a burden.
+    unlink @tmpfiles;
+    exit;
 }
-
-
