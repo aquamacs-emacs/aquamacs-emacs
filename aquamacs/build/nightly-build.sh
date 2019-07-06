@@ -20,13 +20,16 @@ rm $LOG
 echo "Begin building Aquamacs." >>$LOG
 date >>$LOG
 
-echo "Updating working directory from Git repository." >>$LOG
-
-git fetch -f origin >>$LOG
-git branch -D new-$BRANCH >>/dev/null
-git checkout -f --track -b new-$BRANCH origin/$BRANCH  >>$LOG \
-&& git branch -D $BRANCH  >>$LOG \
-&& git branch -m new-$BRANCH $BRANCH  >>$LOG
+if [ "${NOGIT}x" = x ]; then
+    echo "Updating working directory from Git repository." >>$LOG
+    git fetch -f origin >>$LOG
+    git branch -D new-$BRANCH >>/dev/null
+    git checkout -f --track -b new-$BRANCH origin/$BRANCH  >>$LOG \
+        && git branch -D $BRANCH  >>$LOG \
+        && git branch -m new-$BRANCH $BRANCH  >>$LOG
+else
+    echo "NOGIT is set; skipping git fetch"
+fi
 
 echo "Latest change:" >>$LOG
 git log --oneline -1  >>$LOG

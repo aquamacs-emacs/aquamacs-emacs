@@ -10,11 +10,12 @@ OMIT_AUTOGEN=1
 FLAGS=
 OMIT_SYMB=1
 OLD_SDK=0
+TEXINFO=/usr/local/Cellar/texinfo/6.6/bin
 
 case "$1" in
 '-release')
   # Include /usr/local/bin/for finding homebrew libaries
-  PATH=$AUTOTOOLS:/usr/local/bin:/bin:/sbin:/usr/bin:/usr/sbin
+  PATH=$AUTOTOOLS:${TEXINFO}:/usr/local/bin:/bin:/sbin:/usr/bin:/usr/sbin
   export GZIP_PROG=`which gzip`
   echo "Building Aquamacs (release)."
   OMIT_AUTOGEN=
