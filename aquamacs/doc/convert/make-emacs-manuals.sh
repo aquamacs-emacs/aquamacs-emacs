@@ -9,7 +9,8 @@ maindir=`pwd`/../../..
 # makeinfo (as it comes with OSX) has a bug that produces
 # bad index.html files.  We use the homebrew version
 # if available.
-export PATH=/usr/local/Cellar/texinfo/5.2/bin:$PATH
+VERS=$(ls /usr/local/Cellar/texinfo/ | tail -n 1)
+export PATH=/usr/local/Cellar/texinfo/$VERS/bin:$PATH
 
 cd "$maindir"/aquamacs/doc/convert
 
