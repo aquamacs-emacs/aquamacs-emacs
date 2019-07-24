@@ -7,13 +7,13 @@ orig=`pwd`
 newdir="$1" || newdir=aquamacs/
 
 cd "${newdir}"
-echo `pwd`
-echo $(/usr/bin/grep -m1 -l changelog-top *.html)
-echo `/usr/bin/grep -m1 -l changelog-top *.html`
-chgfile=$(/usr/bin/grep -m1 -l changelog-top *.html)
-echo "CHGFILE=$chgfile" >&2
+echo `pwd` >&2
+echo $(/usr/bin/grep -m1 -l changelog-top *.html) >&2
+echo `/usr/bin/grep -m1 -l changelog-top *.html` >&2
+chgfile="$(/usr/bin/grep -m1 -l changelog-top *.html)"
+echo "chgfile=$chgfile" >&2
 
-[ -z $CHGFILE ] && echo "Could not find CHGfile." >&2 ; pwd >&2 ; exit 1
+[ -z "$chgfile" ] && echo "Could not find chgfile." >&2
 
 cp ${chgfile} ${chgfile}.bak 
 
