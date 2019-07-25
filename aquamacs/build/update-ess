@@ -4,14 +4,16 @@
 
 
 FILE=ess-18.10.2
-DEST=../src/site-lisp/edit-modes/ess-mode
-INFODEST=../src/site-lisp/edit-modes/info
+
+P=`pwd`
+
+DEST=$P/../src/site-lisp/edit-modes/ess-mode
+INFODEST=$P/../src/site-lisp/edit-modes/info
 EMACS=`pwd`/"../../nextstep/Aquamacs.app/Contents/MacOS/Aquamacs -nw -Q"
 EDITOR=$EMACS
 export EMACS
 export EDITOR
 
-P=`pwd`
 curl -o /tmp/$FILE.tgz http://ess.r-project.org/downloads/ess/$FILE.tgz
 
 cd /tmp
@@ -20,33 +22,42 @@ tar xvzf /tmp/$FILE.tgz
 cd /tmp/$FILE
 
 chmod -R u+w * 
+rm -r $DEST/lisp /tmp/ess 2>/dev/null
+mkdir /tmp/ess 2>/dev/null
 
-mkdir /tmp/ess
-PREFIX=/tmp/ess  make -e all
- 
-PREFIX=/tmp/ess  make -e install
+echo "Installing to: " $DEST
+echo "Make all:"
+PREFIX=/tmp/ess  make -e all   || exit 1
+echo "Make install:"
+PREFIX=/tmp/ess  make -e install  || exit 1
 
+
+echo "Copying info and lisp:"  && \
 cd $P
 mkdir $DEST 2>/dev/null
-mkdir $DEST/lisp 2>/dev/null
+
+echo "lisp dir:" $DEST/lisp
+mkdir $DEST/lisp
 mkdir $INFODEST 2>/dev/null
-rm -rf $DEST/lisp/*
+echo "Copying $(ls /tmp/ess/share/emacs/site-lisp/*)"
 mv /tmp/ess/share/emacs/site-lisp/*  $DEST/lisp/
-mv /tmp/ess/share/info/ess.info  $INFODEST/ 
 
-# icons need extra attention
+# this seems to be needed because it can't find some of the .elc files
+cp /tmp/$FILE/lisp/*.el  $DEST/lisp/ess/
 
-rm -rf $DEST/etc 
+mv /tmp/ess/share/info/ess.info  $INFODEST/
+rm -rf $DEST/etc
 mv /tmp/$FILE/etc $DEST/
 
+echo "Copied Lisp:"
+ls -R $DEST/lisp/
+
 # needed in newer version of ESS because it expects it there
-cd $DEST/lisp
-ln -s ../etc .
-cd -
+cd $DEST/lisp ;  ln -s ../etc .  ; cd -
 
 # delete some big files that arent needed
 
 rm -rf $DEST/etc/other/S-spread/*.ps
-cd $DEST/etc
+cd $DEST/etc && \
 rm config.guess backbug* Makefile  R-ESS-bugs.R Makefile BACKBUG* sas-keys.*
 

@@ -27,14 +27,14 @@ cp $P/manual-sources/gnu-head-sm.jpg /tmp/emanual/
 perl -i -p -e 's/<\/head>/<link rel="stylesheet" href="aquamacs.css" type="text\/css" \/><\/head>/i' /tmp/emanual/*.html
  
 
-$P/convert-emacs-manual-pages /tmp/emanual/*.html
+"$P"/convert-emacs-manual-pages /tmp/emanual/*.html
 version=`$P/convert-emacs-manual-title /tmp/emanual/index.html`
 sed -E 's|<body(.*)>|<body\1><a name="EmacsManualIndex"></a>|' </tmp/emanual/index.html >/tmp/emanual/index2.html
 mv /tmp/emanual/index2.html /tmp/emanual/index.html
 
 echo $version >/tmp/emanual/VERSION
 
-$P/tidy_dir.sh
+"$P"/tidy_dir.sh
 
 rm -r "$P"/../"Aquamacs Help"/"EmacsManual"
 mv /tmp/emanual $P/../"Aquamacs Help"/"EmacsManual"
