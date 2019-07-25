@@ -1,4 +1,4 @@
-#! /usr/bin/env bash
+#!/usr/bin/env bash
 FILES=./*.html
 
 for f in $(find . -iname '*.html')
