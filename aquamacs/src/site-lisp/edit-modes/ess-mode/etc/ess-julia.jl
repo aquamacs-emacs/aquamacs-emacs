@@ -1,32 +1,40 @@
 module ESS
 
+# These methods have been deprecated / moved
+macro current_module()
+    return VERSION >= v"0.7-" ? :(@__MODULE__) : :(current_module())
+end
+
+parse = VERSION >= v"0.7-" ? Base.Meta.parse : Base.parse
+function_module = VERSION >= v"0.7-" ? Base.parentmodule : Base.function_module
+
 function all_help_topics()
-    ## There are not clear topics anymore. Approximate those with a very general apropos(" ")
-    apropos(" ")
+    ## There are not clear topics anymore. Approximate those with a very general
+    ## apropos(" ")
+    Base.Docs.apropos(" ")
 end 
 
 function help(topic::AbstractString)
-    VERSION >= v"0.4-" ?
-    eval(current_module(), parse("@doc $topic")) :
-    Base.Help.help(topic)
+    VERSION >= v"0.4-" ? Core.eval(@current_module(), parse("@doc $topic")) : Base.Help.help(topic)
 end    
 
 ## modified version of function show(io::IO, m::Method)
 function fun_args(m::Method)
     tv, decls, file, line = Base.arg_decl_parts(m)
-    io = STDOUT::IO
+    io = VERSION >= v"0.7-" ? Base.stdout : STDOUT::IO # STDOUT is no longer in 1.0
     if !isempty(tv)
         Base.show_delim_array(io, tv, '{', ',', '}', false)
     end
     print(io, "(")
-    join(io, [escape_string(isempty(d[2]) ? d[1] : d[1]*"::"*d[2]) for d in decls], ",", ",")    
-    print(io, ")")
+    join(io, [escape_string(isempty(d[2]) ? d[1] : d[1]*"::"*d[2]) for d in decls],
+         ",", ",")    
+    Base.print(io, ")")
 end 
 
 ## modified versionof show(io::IO, mt::MethodTable)
 function fun_args(f::Function)
     mt = Base.MethodList(methods(f).mt)
-    mod = Base.function_module(f)
+    mod = function_module(f)   # Base.function_module deprecated in 0.7
     if mod == Main
         mod = "nil"
     end 
@@ -42,7 +50,7 @@ end
 
 function fun_args(s::AbstractString)
     try
-        m = eval(current_module(), parse(s))
+        m = Core.eval(@current_module(), parse(s))
         if ! isa(m, String)
             fun_args(m)
         end
@@ -71,7 +79,7 @@ function components(m::Module)
     for v in sort(names(m))
         s = string(v)
         if isdefined(m,v)
-            println(rpad(s, 30), summary(eval(m,v)))
+            println(rpad(s, 30), summary(Core.eval(m,v)))
         end
     end
 end
@@ -94,7 +102,7 @@ end
 function main_modules(m::Module)
     for nm in names(m)
         if isdefined(m, nm)
-            mod = eval(m, nm)
+            mod = Core.eval(m, nm)
             if isa(mod, Module)
                 print("\"$nm\" ")
             end
@@ -102,6 +110,10 @@ function main_modules(m::Module)
     end
 end
 
-main_modules() = main_modules(current_module())
+if VERSION >= v"0.7-"
+    main_modules() = main_modules(Base.parentmodule(@current_module()))
+else
+    main_modules() = main_modules(@current_module())
+end
 
 end 

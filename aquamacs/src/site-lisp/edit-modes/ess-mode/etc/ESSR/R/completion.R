@@ -1,15 +1,75 @@
 ## Do *NOT* use  1L -- it gives  parse errors in historical versions of R
 
+## Try a setup working in as old R as possible.
+## ===>
+##    1)  do not use "_" in names!   --- seems impossible for the Millenials ..
+##    2)  use our own simplified definition of  '::' and ':::' ?
+##
+if(!exists("local"))
+    local <- function(expr, envir = environment()) { invisible(eval(expr, envir=envir)) }
+
+##' Robust version of
+##'    utils:::.addFunctionInfo(c = c("recursive", "use.names"))
+local({
+    U <- asNamespace("utils"); fn <- ".addFunctionInfo"
+    EX <- exists(fn, envir=U)
+    if(EX && is.function(FN <- get(fn, envir=U))) {
+        FN(c = c("recursive", "use.names")); ##dbg: cat("Calling utils:::",fn,"(c = ...)\n")
+    }
+})
+
+
+.ess_eval <- function(str, env = globalenv()) {
+    ## don't remove; really need eval(parse(  here!!
+    tryCatch(base::eval(base::parse(text=str), envir = env),
+             error=function(e) NULL) ## also works for special objects containing @:$ etc
+}
+
+.ess_nonull <- function(x, default = "") {
+    if (is.null(x)) default
+    else x
+}
+
+.ess_srcref <- function(name, pkg) {
+    if (!is.null(pkg) && requireNamespace(pkg)) {
+        env <- asNamespace(pkg)
+    } else {
+        env <- globalenv()
+    }
+    fn <- .ess_eval(name, env)
+    out <- "()\n"
+    if (is.function(fn) && !is.null(utils::getSrcref(fn))) {
+        file <- utils::getSrcFilename(fn, full.names = TRUE)
+        if (file != "") {
+            line <- .ess_nonull(utils::getSrcLocation(fn, "line"), 1)
+            col <- .ess_nonull(utils::getSrcLocation(fn, "column"), 1)
+            out <- sprintf("(\"%s\" %d %d)\n", file, line, col - 1)
+        }
+    }
+    cat(out)
+}
+
+.ess_fn_pkg <- function(fn_name) {
+    fn <- .ess_eval(fn_name)
+    env_name <- base::environmentName(base::environment(fn))
+    out <- if (base::is.primitive(fn)) { # environment() does not work on primitives.
+               "base"
+           } else if (base::is.function(fn) && env_name != "R_GlobalEnv") {
+               env_name
+           } else {
+               ""
+           }
+    base::cat(base::sprintf("%s\n", out))
+}
+
 .ess_funargs <- function(funname) {
     if(.ess.Rversion > '2.14.1') {
         ## temporarily disable JIT compilation and errors
-        comp <- compiler::enableJIT(0) 
+        comp <- compiler::enableJIT(0)
         op <- options(error=NULL)
         on.exit({ options(op); compiler::enableJIT(comp) })
     }
-    ## don't remove; really need eval(parse(  here!!
-    fun <- tryCatch(eval(parse(text=funname)),
-                    error=function(e) NULL) ## also works for special objects containing @:$ etc
+    fun <- .ess_eval(funname)
     if(is.function(fun)) {
         special <- grepl('[:$@[]', funname)
         args <- if(!special){

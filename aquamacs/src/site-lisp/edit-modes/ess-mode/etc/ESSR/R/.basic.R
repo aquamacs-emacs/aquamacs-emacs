@@ -93,27 +93,30 @@
 .ess.source <- function(file, visibly = TRUE, output = FALSE,
                         max.deparse.length = 300, local = NULL,
                         fake.source = FALSE, keep.source = TRUE,
-                        message.prefix = "")
-{
+                        message.prefix = "") {
     if (is.null(local)) {
         local <- if (.ess.Rversion > "2.13")
             parent.frame()
         else FALSE
     }
-    ss <- if (.ess.Rversion >= "2.8")
-        base::source
-          else function(..., keep.source) base::source(...)
+
+    ss <-
+        if (.ess.Rversion >= "3.4")
+            base::source
+        else if (.ess.Rversion >= "2.8")
+            function(..., spaced) base::source(...)
+        else function(..., spaced, keep.source) base::source(...)
 
     on.exit({
         if (fake.source)
             .ess.file.remove(file)
-        else
-            cat(sprintf("%sSourced file %s\n", message.prefix, file))
-
     })
 
-    out <- ss(file, echo = visibly, local = local, print.eval = output,
+    out <- ss(file, echo = visibly, local = local, print.eval = output, spaced = FALSE,
               max.deparse.length = max.deparse.length, keep.source = keep.source)
+
+    if(!fake.source)
+        cat(sprintf("%sSourced file %s\n", message.prefix, file))
 
     ## Return value for org-babel
     invisible(out$value)

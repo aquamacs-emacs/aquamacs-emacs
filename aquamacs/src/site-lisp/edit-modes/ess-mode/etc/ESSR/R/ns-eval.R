@@ -1,4 +1,4 @@
-## COMMENT ON S3 METHODS: New S3 methods are not automatically registered. You can
+## NOTE ON S3 METHODS: New S3 methods are not automatically registered. You can
 ## register them manually after you have inserted method_name.my_class into your
 ## package environment using ess-developer, like follows:
 ##
@@ -10,38 +10,46 @@
 ## evaluate the STRING by saving into a file and calling .ess.ns_source
 .ess.ns_eval <- function(string, visibly, output, package,
                          file = tempfile("ESSDev"), verbose = FALSE,
-                         fallback_env = parent.frame()) {
+                         fallback_env = NULL, local_env = parent.frame()) {
     cat(string, file = file)
     on.exit(.ess.file.remove(file))
     .ess.ns_source(file, visibly, output, package = package,
                    verbose = verbose, fake.source = TRUE,
-                   fallback_env = fallback_env)
+                   fallback_env = fallback_env, local_env = local_env)
 }
 
-## sourcing FILE into an environment. After having a look at each new object in
-## the environment, decide what to do with it. Handles plain objects, functions,
-## existing S3 methods, S4 classes and methods. .
+##' Source FILE into an environment. After having a look at each new object in
+##' the environment, decide what to do with it. Handles plain objects,
+##' functions, existing S3 methods, S4 classes and methods.
+##' @param fallback_env environment to assign objects which don't exist in the
+##'     package namespace
 .ess.ns_source <- function(file, visibly, output, expr,
                            package = "", verbose = FALSE,
                            fake.source = FALSE,
-                           fallback_env = parent.frame())
-{
-    oldopts <- options(warn = 1)
+                           fallback_env = NULL,
+                           local_env = NULL) {
+    oldopts <- options(warn = 2)
     on.exit(options(oldopts))
-
     pname <- paste("package:", package, sep = "")
     envpkg <- tryCatch(as.environment(pname), error = function(cond) NULL)
-    if(is.null(envpkg)){
-        library(package, character.only = TRUE)
-        envpkg <- tryCatch(as.environment(pname), error = function(cond) NULL)
-    }
     if (is.null(envpkg))
-        stop(gettextf("Can't find an environment corresponding to package name '%s'",
-                      package), domain = NA)
+        if (require(package, quietly = TRUE, character.only = TRUE)) {
+            envpkg <- tryCatch(as.environment(pname), error = function(cond) NULL)
+        } else {
+            ## no such package; source in current (local) user environment
+            return(.ess.source(file, visibly = visibly,
+                               output = output, local = local_env,
+                               fake.source = fake.source))
+        }
+
     envns <- tryCatch(asNamespace(package), error = function(cond) NULL)
     if (is.null(envns))
         stop(gettextf("Can't find a namespace environment corresponding to package name '%s\"",
                       package), domain = NA)
+
+    ## Here we know that both envns and envpkg exists and are environments
+    if (is.null(fallback_env))
+        fallback_env <- .ess.ns_insert_essenv(envns)
 
     ## Get all Imports envs where we propagate objects
     pkgEnvNames <- Filter(.ess.is_package, search())
@@ -94,7 +102,8 @@
             }else{
                 if(!identical(thisEnv, thisNs)){
                     .ess.assign(this, thisEnv, envns)
-                    objectsNs <- c(objectsNs, this)}
+                    objectsNs <- c(objectsNs, this)
+                }
             }
         }else{
             newNs <- c(newNs, this)
@@ -108,15 +117,20 @@
                     if(.ess.differs(thisPkg, thisEnv)){
                         environment(thisEnv) <- environment(thisPkg)
                         .ess.assign(this, thisEnv, envpkg)
-                        funcPkg <- c(funcPkg, this)}
+                        funcPkg <- c(funcPkg, this)
+                    }
                 }else{
-                    newPkg <- c(newPkg, this)}
+                    newPkg <- c(newPkg, this)
+                }
             }else{
                 if(!identical(thisPkg, thisEnv)){
                     .ess.assign(this, thisEnv, envpkg)
-                    objectsPkg <- c(objectsPkg, this)}}
+                    objectsPkg <- c(objectsPkg, this)
+                }
+            }
         }else{
-            newPkg <- c(newPkg, this)}
+            newPkg <- c(newPkg, this)
+        }
 
         if (!is.null(thisNs)) {
             isDependent <- .ess.ns_propagate(thisEnv, this, importsEnvs)
@@ -149,6 +163,7 @@
             .ess.assign(this, thisEnv, fallback_env)
         }
     }
+
     if(length(funcNs))
         objectsNs <- c(objectsNs, sprintf("FUN[%s]", paste(funcNs, collapse = ", ")))
     if(length(funcPkg))
@@ -239,7 +254,7 @@
             if(length(dependentPkgs))
                 .ess.ns_format_deps(dependentPkgs),
             if(length(newObjects)) {
-                env_name <- if (identical(fallback_env, .GlobalEnv)) "GlobalEnv" else "Local"
+                env_name <- .ess.ns_env_name(fallback_env)
                 sprintf("%s: %s", env_name, paste(newObjects, collapse = ", "))
             }))
         if(length(msgs))
@@ -250,8 +265,7 @@
     invisible(env)
 }
 
-.ess.ns_insertMethods <- function(tableEnv,  tablePkg, envns)
-{
+.ess.ns_insertMethods <- function(tableEnv,  tablePkg, envns) {
     inserted <- character()
     for(m in ls(envir = tableEnv, all.names = T)){
         if(exists(m, envir = tablePkg, inherits = FALSE)){
@@ -269,9 +283,8 @@
 }
 
 ## our version of R's evalSource
-.ess.ns_evalSource <- function (file, visibly, output, expr,
-                                package = "", fake.source = FALSE)
-{
+.ess.ns_evalSource <- function(file, visibly, output, expr, package = "",
+                               fake.source = FALSE) {
     envns <- tryCatch(asNamespace(package), error = function(cond) NULL)
     if(is.null(envns))
         stop(gettextf("Package \"%s\" is not attached and no namespace found for it",
@@ -294,16 +307,16 @@
     env
 }
 
-.ess.assign <- function (x, value, envir)
-{
+.ess.assign <- function(x, value, envir) {
     ## Cannot add bindings to locked environments
-    if (exists(x, envir = envir, inherits = FALSE) && bindingIsLocked(x, envir)) {
+    exists <- exists(x, envir = envir, inherits = FALSE)
+    if (exists && bindingIsLocked(x, envir)) {
         unlockBinding(x, envir)
         assign(x, value, envir = envir, inherits = FALSE)
         op <- options(warn = -1)
         on.exit(options(op))
         lockBinding(x, envir)
-    } else if (!environmentIsLocked(envir)) {
+    } else if (exists || !environmentIsLocked(envir)) {
         assign(x, value, envir = envir, inherits = FALSE)
     } else {
         warning(sprintf("Cannot assign `%s` in locked environment", x),
@@ -312,7 +325,7 @@
     invisible(NULL)
 }
 
-.ess.identicalClass <- function(cls1, cls2, printInfo = FALSE){
+.ess.identicalClass <- function(cls1, cls2, printInfo = FALSE) {
     slots1 <- slotNames(class(cls1))
     slots2 <- slotNames(class(cls2))
     if(identical(slots1, slots2)){
@@ -357,6 +370,41 @@
         sprintf("DEP:%s [%s]   ", pkg, paste(pkgDependentObjs, collapse = ", "))
     })
 }
+
+.ess.ns_env_name <- function(env) {
+    name <- environmentName(env)
+    name <-
+        if (name == "") "Local"
+        else if (grepl("^essenv:", name)) "NEW"
+        else name
+    name
+}
+
+.ess.ns_insert_essenv <- function(nsenv) {
+    if (is.character(nsenv))
+        nsenv <- base::asNamespace(nsenv)
+    stopifnot(isNamespace(nsenv))
+    if (identical(nsenv, .BaseNamespaceEnv))
+        return(.GlobalEnv)
+    essenv_name <- sprintf("essenv:%s", environmentName(nsenv))
+    nsenv_parent <- parent.env(nsenv)
+    if (environmentName(nsenv_parent) == essenv_name) {
+        return(nsenv_parent)
+    }
+    essenv <- new.env(parent = nsenv_parent)
+    attr(essenv, "name") <- essenv_name
+    nssym <- ".__NAMESPACE__."
+    nssym_val <- get(nssym, envir = nsenv, inherits = FALSE)
+    unlockBinding(nssym, nsenv)
+    nsenv[[nssym]] <- NULL
+    on.exit({
+        nsenv[[nssym]] <- nssym_val
+        lockBinding(nssym, nsenv)
+    })
+    parent.env(nsenv) <- essenv
+    essenv
+}
+
 
 ## Local Variables:
 ## eval: (ess-set-style 'RRR t)
