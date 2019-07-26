@@ -3193,6 +3193,7 @@ n  -- to ignore the local variables list.")
 
       ;; Display the buffer and read a choice.
       (save-window-excursion
+	(make-frame-visible (car (frame-list)))		    
 	(pop-to-buffer buf)
 	(let* ((exit-chars '(?y ?n ?\s ?\C-g ?\C-v))
 	       (prompt (format "Please type %s%s: "
