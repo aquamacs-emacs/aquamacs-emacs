@@ -1,6 +1,6 @@
 ;;; common-win.el --- common part of handling window systems
 
-;; Copyright (C) 1993-1994, 2001-2017 Free Software Foundation, Inc.
+;; Copyright (C) 1993-1994, 2001-2019 Free Software Foundation, Inc.
 
 ;; Maintainer: emacs-devel@gnu.org
 ;; Keywords: terminals
@@ -249,7 +249,7 @@ have been processed."
 (declare-function ns-list-colors "nsfns.m" (&optional frame))
 
 (defvar x-colors
-  (if (featurep 'ns) (ns-list-colors)
+  (if (featurep 'ns) nil
   (purecopy
      '("gray100" "grey100" "gray99" "grey99" "gray98" "grey98" "gray97"
        "grey97" "gray96" "grey96" "gray95" "grey95" "gray94" "grey94"
@@ -416,6 +416,9 @@ have been processed."
 For X, the list comes from the `rgb.txt' file,v 10.41 94/02/20.
 For Nextstep, this is a list of non-PANTONE colors returned by
 the operating system.")
+
+;; Colors need to be set at runtime (not at compile-time/preload)
+(if (featurep 'ns) (setq x-colors (ns-list-colors)))
 
 (defvar w32-color-map)
 
