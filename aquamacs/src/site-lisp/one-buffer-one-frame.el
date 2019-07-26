@@ -23,7 +23,8 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2012, 2013, 2014 David Reitter
+;; Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2012, 2013, 2014,
+;;   2019: David Reitter
  
 ;; DESCRIPTION:
 ;; 
@@ -406,17 +407,19 @@ the current window is switched to the new buffer."
 		(switch t)
 		(window-to-select))
 	    ;; search for a window already displaying this buffer.
-	    (walk-windows
-	     (lambda (w)
-	       (when (and
-		      ;; buffer is displayed in this window
-		      (equal (window-buffer w) (get-bufobj (car args)))
-		      ;; Either window's frame *need not be* in the current space,
-		      (or (not obof-force-current-space)
-			  ;; or it *is* in the current space
-			  (memq (window-frame w) (ns-visible-frame-list))))
-		 (setq switch nil)
-		 (setq window-to-select w))) t t) ;) ;; t = include-hidden-frame (must be t) 
+            (dolist (include-hidden '(nil t))
+              (walk-windows
+               (lambda (w)
+                 (when (and
+                        (not window-to-select)
+                        ;; buffer is displayed in this window
+                        (equal (window-buffer w) (get-bufobj (car args)))
+                        ;; Either window's frame *need not be* in the current space,
+                        (or (not obof-force-current-space)
+                            ;; or it *is* in the current space
+                            (memq (window-frame w) (ns-visible-frame-list))))
+                   (setq switch nil)
+                   (setq window-to-select w))) t include-hidden)) ;; t = include-hidden-frame (must be t)
 	    (if switch
 		;; Did *not* find a suitable window displaying the buffer.
 		(let ((same-window-regexps 
@@ -453,7 +456,10 @@ the current window is switched to the new buffer."
 		;; the next top-level event loop (assumption)
 		;; but because the normal switch-to-buffer does it right away
 		;; we should do it manually.
-		(set-buffer (window-buffer window-to-select)))
+		(set-buffer (window-buffer window-to-select))
+                ;; Make sure frame is visible (can become unresponsive otherwise):
+                ;; https://groups.google.com/forum/#!topic/aquamacs-devel/ensH24d-P-U
+                (make-frame-visible (window-frame window-to-select)))
 	      (unless ad-return-value (setq ad-return-value (current-buffer)))))
 	;; else: not one-buffer-one-frame
 	(if (or (ns-visible-frame-list)

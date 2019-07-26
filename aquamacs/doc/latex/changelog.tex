@@ -1,4 +1,3 @@
-
 \section{Aquamacs Emacs: What's New in This Release}
 
 \subsection{Changes--- 3.5}
@@ -14,6 +13,12 @@
 
 \item This version also bundles the binary shared library for the libxml2 library (version 2.9.9).
 \item ESS has been updated to version 18.10.2.  See here for all new features: \url{http://ess.r-project.org/Manual/ess.html#New-features}.
+
+\item Known bug (MacOS Mojave): menus may require a double click to open with
+  the mouse.  When this happen, go to System Preferences, Security\&Privacy, Accessibility, and allow Aquamacs to ``control your computer''. This merely enables Aquamacs to process some UI events.
+
+\item Bug fix: a rare condition (when Tabs are not in used) could occur where frames will be unresponsive to user input.   Reported by Lewis Hyatt.
+
 \end{itemize}
 
 
@@ -1231,72 +1236,72 @@ Reported by David Romano.
 \item Based on GNU Emacs 22.1.
 
 \item Java support has just gotten a lot better. JDEE is a complete,
-	integrated development environment for Java in Emacs. It supports
-	building, source-level debugging, code generation and much
-	more. Aquamacs now contains the latest version of JDEE, configured
-	to work with the Java SDK installed via Apple's Developer
-	Tools. Visit \url{http://jdee.sunsite.dk} for more information.
+        integrated development environment for Java in Emacs. It supports
+        building, source-level debugging, code generation and much
+        more. Aquamacs now contains the latest version of JDEE, configured
+        to work with the Java SDK installed via Apple's Developer
+        Tools. Visit \url{http://jdee.sunsite.dk} for more information.
 
 \item Toolbar: The icons have been completely redesigned. The colors
-	make them easy to distinguish.  The functions available from the
-	standard toolbar have been carefully selected.
-	Using the Options - Show/Hide - Toolbar items menu,
-	icons may be shown or hidden to fit the user's needs.
+        make them easy to distinguish.  The functions available from the
+        standard toolbar have been carefully selected.
+        Using the Options - Show/Hide - Toolbar items menu,
+        icons may be shown or hidden to fit the user's needs.
 
-	Available functions:
+        Available functions:
         \begin{itemize}
-	\item New, open, save/save as, revert buffer
-	\item Undo, redo
-	\item Cut/copy/paste
-	\item Find (isearch)
-	\item Spell-check buffer (ispell-buffer)
-	\item Print
-	\item Make a new frame
-	\item Preferences
-	\item Help
-	\end{itemize}
+        \item New, open, save/save as, revert buffer
+        \item Undo, redo
+        \item Cut/copy/paste
+        \item Find (isearch)
+        \item Spell-check buffer (ispell-buffer)
+        \item Print
+        \item Make a new frame
+        \item Preferences
+        \item Help
+        \end{itemize}
 
-	We'd like to acknowledge the artists:
+        We'd like to acknowledge the artists:
         \begin{itemize}
-	\item Preferences, Revert Buffer, Kill Buffer: Jasper Hauser
-	\item New Frame, Recent Files, Spell-check: Nuovext Project
-	\item all other icons: Adrian Chromenko and David Reitter
+        \item Preferences, Revert Buffer, Kill Buffer: Jasper Hauser
+        \item New Frame, Recent Files, Spell-check: Nuovext Project
+        \item all other icons: Adrian Chromenko and David Reitter
          \end{itemize}
 
 \item Spell-Checking can now be found in the Edit menu, not in
-	Tools. The "Check As You Type" function (flyspell-mode) will
-	automatically check the buffer contents (unless it's a big buffer)
-	when first enabled.
+        Tools. The "Check As You Type" function (flyspell-mode) will
+        automatically check the buffer contents (unless it's a big buffer)
+        when first enabled.
 
 \item Spell-Checking now supports the popular cocoAspell package,
-	which includes English language dictionaries and the GNU Aspell
-	spell-checking library. Additional dictionaries may be installed.
+        which includes English language dictionaries and the GNU Aspell
+        spell-checking library. Additional dictionaries may be installed.
 
 \item Formatting (filling) text with M-q (Option-q) is a bit more
-	convenient now: when a region is selected, the command applies to
-	the whole region and not just to a paragraph.
-	We also provide M-Q (Option-Shift-q) to "unfill" a paragraph or a
-	region, which comes in handy when wrapped text needs to be
-	converted to soft-wrapped text, or to copy\&paste it into other applications.
+        convenient now: when a region is selected, the command applies to
+        the whole region and not just to a paragraph.
+        We also provide M-Q (Option-Shift-q) to "unfill" a paragraph or a
+        region, which comes in handy when wrapped text needs to be
+        converted to soft-wrapped text, or to copy\&paste it into other applications.
 
 \item one-buffer-one-frame-mode is more compatible to the normal Emacs
-	paradigm of one-frame-many-buffers for internal technical
-	reasons, but also with respect to whether newly opened frames
-	(windows) are actually selected and receive the following user
-	inputs. In many situations, classical Emacs shows a buffer in an
-	extra window, but doesn't select it - so the user can keep
-	working on the original document. Aquamacs will now do the same -
-	it will raise the appropriate frame, but not select it. If you
-	would like to make it select at all newly opened frames, use this
-	in your Preferences.el:
+        paradigm of one-frame-many-buffers for internal technical
+        reasons, but also with respect to whether newly opened frames
+        (windows) are actually selected and receive the following user
+        inputs. In many situations, classical Emacs shows a buffer in an
+        extra window, but doesn't select it - so the user can keep
+        working on the original document. Aquamacs will now do the same -
+        it will raise the appropriate frame, but not select it. If you
+        would like to make it select at all newly opened frames, use this
+        in your Preferences.el:
 
-	(setq display-buffer-reuse-frames 'select)
+        (setq display-buffer-reuse-frames 'select)
 
-	Also (the technical change): Function `switch-to-buffer' will set
-	the current buffer immediately without waiting for the next
-	top-level event loop.)  Thanks to Lowell Vaughn for pointing out a
-	seemingly unimportant bug in one of Emacs' on-board games, which
-	led to the discovery of this issue.
+        Also (the technical change): Function `switch-to-buffer' will set
+        the current buffer immediately without waiting for the next
+        top-level event loop.)  Thanks to Lowell Vaughn for pointing out a
+        seemingly unimportant bug in one of Emacs' on-board games, which
+        led to the discovery of this issue.
 
       \item Undo as in the original Emacs is available again via
         `undo'. Apple-Z and Apple-Shift-Z are bound to Aquamacs
@@ -1307,7 +1312,7 @@ Reported by David Romano.
         steps.  Suggested by Rudi Schlatte
 
 \item Undo (aquamacs-undo, Apple-Z) will now restore point and mark as
-	appropriate.
+        appropriate.
 
       \item Left/Right keys will now behave more Mac-like, whenever text is         marked (i.e. the mark is active / text has been selected). They now         move to the beginning or the end of that region, respectively. To turn off this behavior, turn off CUA mode or rebind  left/right keys in osx-key-low-priority-key-map by adding this to your Preferences.el or .emacs file:
 ]
@@ -1318,72 +1323,72 @@ Reported by David Romano.
 (osx-key-mode 1)
 
 \item Apple-2 can now be used to split the window into two (like C-x
-	2), Apple-1 will undo that split (like C-x 1).
+        2), Apple-1 will undo that split (like C-x 1).
 
 \item Cut/Copy/Paste with the secondary selection (use Option + mouse)
-	are now bound to Option-Apple-X, Option-Apple-C,
-	respectively (unless Option is not Meta, in which case you'd use
-	ESC Apple C, or whatever M-A-c is for you.)  (This is to avoid
-	problems in cases when Caps Lock is on, which is recognized as
-	Shift modifier.)
+        are now bound to Option-Apple-X, Option-Apple-C,
+        respectively (unless Option is not Meta, in which case you'd use
+        ESC Apple C, or whatever M-A-c is for you.)  (This is to avoid
+        problems in cases when Caps Lock is on, which is recognized as
+        Shift modifier.)
 
 \item The current major mode may be changed in the context menu
 
 \item Emulate-Mac-German|Italian|...-Keyboard-Modes now allow you to
-	call the commands bound to the original Meta key combinations
-	using the "Esc" key. For example, in the German keyboard
-	emulation, pressing Option-l will give you @, while Esc l will do
-	`downcase-word'.
-	Also, this mode now supports searching (Apple-F) with `isearch'.
-	Reported by Thomas Käufl.	Additionally, an emulation mode for the Finnish keyboard layout is available now. Patch by Lauri Raittila.
+        call the commands bound to the original Meta key combinations
+        using the "Esc" key. For example, in the German keyboard
+        emulation, pressing Option-l will give you @, while Esc l will do
+        `downcase-word'.
+        Also, this mode now supports searching (Apple-F) with `isearch'.
+        Reported by Thomas Käufl.	Additionally, an emulation mode for the Finnish keyboard layout is available now. Patch by Lauri Raittila.
 
 
 \item Default colors in help and *Messages* frames/buffers revised.
-	Suggested by Charles Bailey
+        Suggested by Charles Bailey
 
 \item Recently opened files that were opened from the "Recent Files"
-	menu, or from an external shell with the 'open' command or
-	something similar are now available in the minibuffer history that
-	one gets with C-x C-f `up'.
+        menu, or from an external shell with the 'open' command or
+        something similar are now available in the minibuffer history that
+        one gets with C-x C-f `up'.
 
 \item Clicking into raised frames (windows) that are not the selected
-	frame (i.e. have grey instead of red-yellow-green buttons) will
-	now activate that frame.
-	Patch by Yamamoto Mitsuharu
+        frame (i.e. have grey instead of red-yellow-green buttons) will
+        now activate that frame.
+        Patch by Yamamoto Mitsuharu
 
 \item Creator codes for loaded files are maintained and not always
-	reset to the Aquamacs / Emacs code. This way, users may use the
-	Finder to open specific files with another application by default,
-	but still edit the file in Aquamacs.
+        reset to the Aquamacs / Emacs code. This way, users may use the
+        Finder to open specific files with another application by default,
+        but still edit the file in Aquamacs.
 
 \item Updated AUCTeX (11.84). [M-x latex-mode].
-	XeTeX users: please customize `TeX-command-list' to call XeTeX
-	directly.
+        XeTeX users: please customize `TeX-command-list' to call XeTeX
+        directly.
 
 \item Haskell mode included (2.3). [M-x haskell-mode]
 
 \item RubyOnRails support via emacs-rails included (0.5.3)
-					[M-x rails-minor-mode, with M-x ruby-mode]
+                                        [M-x rails-minor-mode, with M-x ruby-mode]
 
 \item ACT-R support. [M-x actr-mode]
 
 \item Menu Bar fixes. (Disabled menu bar entries when frames invisible.)
 
 \item Aquamacs menu name shortened.
-	Suggested by Enrico Franconi
+        Suggested by Enrico Franconi
 
 \item Accessibility in OS X fixes (simulated clicks on Window elements)
-	Suggested by Alexis Gallagher
-	Patch by Yamamoto Mitsuharu
+        Suggested by Alexis Gallagher
+        Patch by Yamamoto Mitsuharu
 
 \item HTML files (and others) can be opened in the system's default
-	browser again. This applies to C-c C-z v in html-helper-mode and
-	other modes using `browse-url'.
+        browser again. This applies to C-c C-z v in html-helper-mode and
+        other modes using `browse-url'.
 
 \item  Tramp files (i.e. remote files loaded with
-	/uid@host:/path/to/file syntax) are noted in the "recent files"
-	history list and not discarded any longer when Aquamacs is
-	restarted.
+        /uid@host:/path/to/file syntax) are noted in the "recent files"
+        history list and not discarded any longer when Aquamacs is
+        restarted.
 
 \item 1.0a: Some documentation of Emacs functions (C-h f setq RET, e.g.) was not available on PPC Macs.
   Reported by David Sagan and Bill Rising.
@@ -1406,8 +1411,8 @@ Reported by Barbara Shirtcliff.
 \end{itemize}
 
 
-	Thanks for supplying build machines: Toby Blake (U Edinburgh),
-	James Pringle (U New Hampshire) and Carlo Gandolfi (Milan).
+        Thanks for supplying build machines: Toby Blake (U Edinburgh),
+        James Pringle (U New Hampshire) and Carlo Gandolfi (Milan).
 
 
 \subsection{Changes---0.9.9d}
@@ -1417,66 +1422,66 @@ Reported by Barbara Shirtcliff.
 
 
 \item  Frames (windows) now have a little icon in the title bar for the
-	selected buffer, and you can drag\&drop this to other applications.
-	Patch by  Mitsuharu Yamamoto
+        selected buffer, and you can drag\&drop this to other applications.
+        Patch by  Mitsuharu Yamamoto
 
 \item  Clicking the Dock icon of Aquamacs will now bring up a minimized
-	frame, if there is no other frame to be shown - just like in any
-	OS X application.
-	Suggested by Frank Atanassow
+        frame, if there is no other frame to be shown - just like in any
+        OS X application.
+        Suggested by Frank Atanassow
 
 \item  Fonts can now be selected comfortably with the OS X standard
-	font selector, accessible via "Options - Show Fonts".
-	Remember  - to make a setting stick, use the "Frame Appearance
-	Styles". Set the new style either for the given major mode, or as
-	a default.
-	Patch by  Mitsuharu Yamamoto
+        font selector, accessible via "Options - Show Fonts".
+        Remember  - to make a setting stick, use the "Frame Appearance
+        Styles". Set the new style either for the given major mode, or as
+        a default.
+        Patch by  Mitsuharu Yamamoto
 
 \item  C-n and C-p are now mapped to `next-line' / `previous-line'
-	again, so they may be used to jump full lines (as defined by
-	carriage returns) - even if the lines are wrapped around. The
-	arrow keys move the cursor visually as before.
-	Suggested by Tom van Vleck
+        again, so they may be used to jump full lines (as defined by
+        carriage returns) - even if the lines are wrapped around. The
+        arrow keys move the cursor visually as before.
+        Suggested by Tom van Vleck
 
 \item  Apple-` now cycles through all the frames, not just the topmost two.
-	Reported by William Henney
+        Reported by William Henney
 
 \item  Apple-: now spell-checks the buffer, provided ispell is installed.
-	Suggested by Jean-Christophe Helary
+        Suggested by Jean-Christophe Helary
 
 \item  Apple-Shift-S will now bring up a file selector rather than
-	prompting for a file name in the minibuffer. If you prefer the
-	Emacs-style prompt, you should use the Emacs-style key binding:
-	C-x C-w.
-	Suggested by Jean-Christophe Helary
+        prompting for a file name in the minibuffer. If you prefer the
+        Emacs-style prompt, you should use the Emacs-style key binding:
+        C-x C-w.
+        Suggested by Jean-Christophe Helary
 
 \item  Emulate-Mac-Keyboard-Mode: improved support for French keyboard
-	layouts
+        layouts
 
 \item  ESS 5.3.0 included
 
 \item  SLIME - the Superior Lisp Interaction Mode is now available with
-	Aquamacs. It's pre-configured for you. Use `lisp-mode' for your
-	Lisp editing, and run M-x slime to start a lisp inferior
-	process. You may need to set the variable `inferior-lisp-program'
-	via customization or in your Preferences.el as follows:
+        Aquamacs. It's pre-configured for you. Use `lisp-mode' for your
+        Lisp editing, and run M-x slime to start a lisp inferior
+        process. You may need to set the variable `inferior-lisp-program'
+        via customization or in your Preferences.el as follows:
 
 \begin{verbatim}
-	(setq inferior-lisp-program "path to lisp")
+        (setq inferior-lisp-program "path to lisp")
 \end{verbatim}
 
 
 \item  C++ Mode is used automatically for .cp files.
 
 \item  Keyboard bug-fix: certain keys could not be successfully input
-	on certain keyboard layouts, most notably the key combination
-	C-c ` as used in LaTeX mode (AUCTeX) was not available on German
-	keyboards.
-	Patch by Taiichi Hashimoto
+        on certain keyboard layouts, most notably the key combination
+        C-c ` as used in LaTeX mode (AUCTeX) was not available on German
+        keyboards.
+        Patch by Taiichi Hashimoto
 
 \item  Ispell/LaTeX bug-fix: ispell will now ignore TeX commands in
-	such buffers.
-	Patch by Bill Rising
+        such buffers.
+        Patch by Bill Rising
 
 
 \end{itemize}
@@ -1488,10 +1493,10 @@ Reported by Barbara Shirtcliff.
 \item Bugfix: Emacs-internal Input methods work again.
 
 \item System-wide input methods (via the ``International'' preference
-	panel) can now be used instead of the Emacs-specific ones.  Use
-	Options - Aquamacs Multilingual Environment - Use System Input Method
-	to turn it on or off - it's switched on by default.
-	Patch by Taiichi Hashimoto
+        panel) can now be used instead of the Emacs-specific ones.  Use
+        Options - Aquamacs Multilingual Environment - Use System Input Method
+        to turn it on or off - it's switched on by default.
+        Patch by Taiichi Hashimoto
 \end{itemize}
 
 \subsection{Changes---0.9.9b}
@@ -1499,28 +1504,28 @@ Reported by Barbara Shirtcliff.
 \begin{itemize}
 
 \item `mac-pass-option-to-system' didn't work as intended. There may
-	have been other input problems.
+        have been other input problems.
 
 \item Switching to another buffer did not change the input focus
- 	(i.e. where things you type go), even though the frame displaying
-	the buffer was raised.
-	Reported by Rick Taube
+        (i.e. where things you type go), even though the frame displaying
+        the buffer was raised.
+        Reported by Rick Taube
 
 \item tool-bar-mode calls in Preferences.el / .emacs could bring up
-	errors under certain circumstances
-	Reported by William Henney
+        errors under certain circumstances
+        Reported by William Henney
 
 \item `bury-buffer' didn't work correctly, causing situations where a
-	frame was shown and was removed immediately, for example when
-	SLIME started up or, in LaTeX (AUCTeX) mode, C-c C-l was used to
-	display compiler output.
+        frame was shown and was removed immediately, for example when
+        SLIME started up or, in LaTeX (AUCTeX) mode, C-c C-l was used to
+        display compiler output.
 
 \item Crash in `show mouse face' fixed
-	Reported by Phil
+        Reported by Phil
 
 \item  Russian as first application language (System Preference) does
-	not cause startup problems any more.
-	Reported by Vladimir Lech
+        not cause startup problems any more.
+        Reported by Vladimir Lech
 
 \end{itemize}
 
@@ -1531,175 +1536,175 @@ Reported by Barbara Shirtcliff.
 \begin{itemize}
 
 \item  SUMMARY: More bugs and other annoyances
-	have been removed. Opening new frames (for new buffers) is more
-	useful now, and frame themes aren't applied when a frame is split
-	up. Options are automatically saved across sessions. A new
-	customization groups for Emacs-die-hards makes it easier to change
-	Aquamacs-specific customization defaults.
+        have been removed. Opening new frames (for new buffers) is more
+        useful now, and frame themes aren't applied when a frame is split
+        up. Options are automatically saved across sessions. A new
+        customization groups for Emacs-die-hards makes it easier to change
+        Aquamacs-specific customization defaults.
 
 \item  Intel: Aquamacs is now available as native version for Mac
-	computers with Intel CPU.  Thanks to Jonathan Shea, Mike Bennett
-	and Richard Koch for providing compile machines.
+        computers with Intel CPU.  Thanks to Jonathan Shea, Mike Bennett
+        and Richard Koch for providing compile machines.
 
 \item  Dired in one-buffer-one-frame-mode will show new
-	directories and open files in the same frame.
+        directories and open files in the same frame.
 
 \item  Customize will show new groups etc. in the same frame and window.
 
 \item  One-Buffer-One-Frame-Mode ("Display Buffers in Separate Frames")
-	will now show buffers such as *mail*, *grep*, *shell* in their own
-	frames. This also applies if other modes open *...* buffers, such
-	as ESS opening an inferior R shell, which previously didn't even
-	show in a separate window. One-Buffer-One-Frame-Mode is also better
-	documented now and has customization options so you can decide
-	which buffers are shown in new frames.
+        will now show buffers such as *mail*, *grep*, *shell* in their own
+        frames. This also applies if other modes open *...* buffers, such
+        as ESS opening an inferior R shell, which previously didn't even
+        show in a separate window. One-Buffer-One-Frame-Mode is also better
+        documented now and has customization options so you can decide
+        which buffers are shown in new frames.
 
 \item  Frame-Appearance-Themes reconfigure a frame only if just one
-	window is present (or all windows show buffers in the same major
-	mode). This should more effectively prevent appearance switching
-	when a second window is shown temporarily.
+        window is present (or all windows show buffers in the same major
+        mode). This should more effectively prevent appearance switching
+        when a second window is shown temporarily.
 
 \item  Frame-Appearance-Themes now allow the user to delete all
-	mode-specific themes when a default is defined. Hints to select
-	"Save Options" are more prominent.
+        mode-specific themes when a default is defined. Hints to select
+        "Save Options" are more prominent.
 
 \item  Options are saved automatically upon quitting Aquamacs (it'll
-	ask you.) - customize `aquamacs-save-options-on-quit' to
-	configure.
+        ask you.) - customize `aquamacs-save-options-on-quit' to
+        configure.
 
 \item  Quitting Aquamacs: you won't be asked any more whether to quit
-	if modified buffers exist, because at that point you've always already
-	been asked to save each modified buffer.
+        if modified buffers exist, because at that point you've always already
+        been asked to save each modified buffer.
 
 \item  Aquamacs-is-more-than-Emacs is a new customization group
-	containing all customization variables whose defaults are changed
-	in Aquamacs compared to GNU Emacs or the relevant package.
-	This is useful for Emacs veterans who want certain behaviors to be
-	more similar to GNU Emacs.
+        containing all customization variables whose defaults are changed
+        in Aquamacs compared to GNU Emacs or the relevant package.
+        This is useful for Emacs veterans who want certain behaviors to be
+        more similar to GNU Emacs.
 
 \item  Bug Reporting is handled fully in the system's default mail
-	client again (unless you've set up a different
-	`send-mail-function')
-	Suggested by Robert Sloan
+        client again (unless you've set up a different
+        `send-mail-function')
+        Suggested by Robert Sloan
 
 \item  Mail composed with the Message package will now be routed
-	through the mail client by default (`message-send-mail-function')
-	and there is no "From" line. If you run postfix locally, you may
-	want to do something like the following in your .emacs or Preferences.el:
+        through the mail client by default (`message-send-mail-function')
+        and there is no "From" line. If you run postfix locally, you may
+        want to do something like the following in your .emacs or Preferences.el:
 
 \begin{verbatim}
-	(setq send-mail-function 'sendmail-send-it)
-	(setq message-send-mail-function 'sendmail-send-it)
-	(setq mail-setup-with-from t)
+        (setq send-mail-function 'sendmail-send-it)
+        (setq message-send-mail-function 'sendmail-send-it)
+        (setq mail-setup-with-from t)
 \end{verbatim}
 
-	Alternatively do the same in customization buffers.
+        Alternatively do the same in customization buffers.
 
 \item  Toolbar looks prettier now.
-	Patch by Kim F. Storm
+        Patch by Kim F. Storm
 
 \item  `Frame-Appearance-Styles' is the new name for the former `Frame
-	Appearance Themes, so they won't be confused with GNU Emacs new
-	customization themes. A global minor mode called
-	`aquamacs-styles-mode' is now used to switch them on/off.
+        Appearance Themes, so they won't be confused with GNU Emacs new
+        customization themes. A global minor mode called
+        `aquamacs-styles-mode' is now used to switch them on/off.
 
-	Some configuration variables have been renamed:
-	`aquamacs-default-styles'
-	       (was: `aquamacs-mode-specific-default-themes')
-	`aquamacs-styles-mode'
-	       (was: `aquamacs-auto-frame-parameters-flag')
-	`aquamacs-buffer-default-styles'
-	       (was: `aquamacs-buffer-specific-frame-themes')
+        Some configuration variables have been renamed:
+        `aquamacs-default-styles'
+               (was: `aquamacs-mode-specific-default-themes')
+        `aquamacs-styles-mode'
+               (was: `aquamacs-auto-frame-parameters-flag')
+        `aquamacs-buffer-default-styles'
+               (was: `aquamacs-buffer-specific-frame-themes')
 
 \item  A-Backspace deletes the whole logical line again, not just
-	the visual line. A-Shift-Backspace deletes the visual line now.
+        the visual line. A-Shift-Backspace deletes the visual line now.
 
 \item  Tilde {\textasciitilde{}} can now be input on German keyboards with the German
-	emulation mode via Option-N.
+        emulation mode via Option-N.
 
 \item  Frame-positions for individual files are now saved to/loaded
-	from a file called frame-positions.el (in ~/Library/Preferences...)
+        from a file called frame-positions.el (in ~/Library/Preferences...)
 
 
 \item  Help buffers (C-h f, C-h v) for certain Aquamacs functions could
-	have links to source code at nonexistant paths.
+        have links to source code at nonexistant paths.
 
 \item  site-start.el files in the load path (plug-ins!) aren't loaded
-	any longer if there is a file named .ignore in the same path.
+        any longer if there is a file named .ignore in the same path.
 
 \item  Bugfix in version 0.9.9: customizations weren't read if
-	aquamacs-styles (the former "Frame Appearance Themes" were
-	switched off.)
-	Reported by Brendan Dixon
+        aquamacs-styles (the former "Frame Appearance Themes" were
+        switched off.)
+        Reported by Brendan Dixon
 
 
 \item  Bugfix: Typing C-x C-f, then A-w made the newly opened frame go
-	away, but not the "Find file" prompt, which was quite persistent,
-	especially if you didn't know about C-g and the minibuffer. That
-	is fixed now.
-	Reported by a number of people.
+        away, but not the "Find file" prompt, which was quite persistent,
+        especially if you didn't know about C-g and the minibuffer. That
+        is fixed now.
+        Reported by a number of people.
 
 \item  Bugfix: Setting tool-bar-mode or changing the fringes via the
-	Options menu will now affect the default frame style as well, so
-	the setting will affect new frames (even if frame appearance
-	styles are active). Note that if fringes or tool bar are set in
-	.emacs, the customized and saved styles will override your
-	settings.
+        Options menu will now affect the default frame style as well, so
+        the setting will affect new frames (even if frame appearance
+        styles are active). Note that if fringes or tool bar are set in
+        .emacs, the customized and saved styles will override your
+        settings.
 
 \item  Bugfix: Aquamacs will not ask the user any longer whether to
-	save dired buffers and other non-file-buffers upon deleting the
-	frame (killing the buffer).
-	Reported by Carsten Bormann
+        save dired buffers and other non-file-buffers upon deleting the
+        frame (killing the buffer).
+        Reported by Carsten Bormann
 
 \item  Bugfix: desktop-mode should be able to restore the desktop on
-	startup appropriately.
-	Reported by Rudi Schlatte
+        startup appropriately.
+        Reported by Rudi Schlatte
 
 \item  Bugfix: page-wise scrolling (PgUp/PgDown) with long lines
-	scrolls exactly one screen now
+        scrolls exactly one screen now
 
 \item  Bugfix: page-wise scrolling (PgUp/PgDown) will remove the region
-	as expected when the cursor moves. Shift-PgUp/PgDown will extend
-	the region (and set the mark if neccessary).
+        as expected when the cursor moves. Shift-PgUp/PgDown will extend
+        the region (and set the mark if neccessary).
 
 \item  Bugfix: completing-read-multiple didn't work (icomplete+ library
-	updated)
+        updated)
 
 \item  Bugfix: frames sometimes didn't open in
-	one-buffer-one-frame-mode when the buffer shown was empty.
+        one-buffer-one-frame-mode when the buffer shown was empty.
 
 \item  Bugfix: In one-buffer-one-frame-mode, Apple-W deletes a window
-	or kills a buffer and returns to the next buffer in the buffer
-	list (i.e. the previously shown buffer) when the frame wasn't
-	created for the particular window / buffer being killed. Think of
-	it as a stack of buffers that are shown. Previously, Aquamacs
-	always switched to *scratch*.
+        or kills a buffer and returns to the next buffer in the buffer
+        list (i.e. the previously shown buffer) when the frame wasn't
+        created for the particular window / buffer being killed. Think of
+        it as a stack of buffers that are shown. Previously, Aquamacs
+        always switched to *scratch*.
 
 \item  Bugfix: Preview \& Print now works with buffers in Tramp Mode, too.
-	Reported by Tim Hodgson
+        Reported by Tim Hodgson
 
 \item  Bugfix: Fonts (not fontsets) set in default-frame-alist and
-	similar variables are not filtered out any more after startup if
-	they haven't been explicitly loaded (or applied to a frame, and
-	thus, loaded).
-	Reported by Konstantinos Efstathiou
+        similar variables are not filtered out any more after startup if
+        they haven't been explicitly loaded (or applied to a frame, and
+        thus, loaded).
+        Reported by Konstantinos Efstathiou
 
 \item  Bugfix: display copyright message at startup.
 
 \item  Bugfix: Javascript-mode exchanged for the one borrowed from
-	XEmacs. This one will hopefully work better now.
-	Suggested by Tom Van Vleck
+        XEmacs. This one will hopefully work better now.
+        Suggested by Tom Van Vleck
 
 \item  Bugfix: ediff-directories interferes less with one-buffer-one-frame-mode.
 
 \item  Compiling: Those who build Aquamacs themselves, note that the
-	make-aquamacs script will now produce a complete app bundle
-	located in (emacs-path)/mac/Aquamacs. The install-aquamacs script
-	only moves the bundle to /Applications. If you make any changes to
-	the Aquamacs source code (except for pre-loaded code in
-	site-load.el), it is usually sufficient to run
-	"copy-to-app -n". Remember to set the AQUAMACS\_ROOT and EMACS\_ROOT
-	environment variables before using any of these scripts.
+        make-aquamacs script will now produce a complete app bundle
+        located in (emacs-path)/mac/Aquamacs. The install-aquamacs script
+        only moves the bundle to /Applications. If you make any changes to
+        the Aquamacs source code (except for pre-loaded code in
+        site-load.el), it is usually sufficient to run
+        "copy-to-app -n". Remember to set the AQUAMACS\_ROOT and EMACS\_ROOT
+        environment variables before using any of these scripts.
 
       \item A BIG THANKYOU goes to all users who have donated
         (\url{http://aquamacs.org/donate}) in the past months. I'd
@@ -1715,84 +1720,84 @@ Reported by Barbara Shirtcliff.
 \begin{itemize}
 
 \item Meta/Option key: New minor modes allow users of various
-	keyboard layouts (German, French, Italian, GB/US) to use the
-	Option key as Meta modifier under Emacs (as it is the
-	default), but still be able to input characters such as [ ] {
-	} | and @. This works for common characters (not all). Some
-	rarely used Emacs key bindings such as M-4 on Italian
-	keyboards are overridden by these modes. Activate them via the
-	Options menu ("Option Key"), or with M-x
-	emulate-mac-french-keyboard-mode (substitute 'french' with
-	a keyboard layout in lower case).
-	The following keyboard layouts are known:
+        keyboard layouts (German, French, Italian, GB/US) to use the
+        Option key as Meta modifier under Emacs (as it is the
+        default), but still be able to input characters such as [ ] {
+        } | and @. This works for common characters (not all). Some
+        rarely used Emacs key bindings such as M-4 on Italian
+        keyboards are overridden by these modes. Activate them via the
+        Options menu ("Option Key"), or with M-x
+        emulate-mac-french-keyboard-mode (substitute 'french' with
+        a keyboard layout in lower case).
+        The following keyboard layouts are known:
 
-	German, Italian, Italian-Pro, French, US, British
+        German, Italian, Italian-Pro, French, US, British
 
-	You may define your own mappings. (Please publish them.)
+        You may define your own mappings. (Please publish them.)
 
 \item Bug reporting: Use standard GNU Emacs bug reporting facility
- 	(but go through the mail client when necessary.)
+        (but go through the mail client when necessary.)
 
 \item One-Buffer-One-Frame: Change in the decision-making process
-	about when to show a buffer in a new frame. Generally, all buffers
-	with names in *'s (such as *vc*) will be shown in the same
-	frame (as directed by `obof-same-frame-regexps'), with the
-	exception of Messages, Help and Customize buffers (as listed in
-	`obof-other-frame-regexps'). This means that more buffers will
-	open as a "small" window inside the current frame. Please report
-	back to us in case you have any unwanted results with this.
+        about when to show a buffer in a new frame. Generally, all buffers
+        with names in *'s (such as *vc*) will be shown in the same
+        frame (as directed by `obof-same-frame-regexps'), with the
+        exception of Messages, Help and Customize buffers (as listed in
+        `obof-other-frame-regexps'). This means that more buffers will
+        open as a "small" window inside the current frame. Please report
+        back to us in case you have any unwanted results with this.
 
 \item Special-Display-Frames such as the one with the *Help* buffer
-	can now show *Completions* buffers and other ones in a second
-	window inside the frame, just like other frames can.
- 	(`unsplittable' property in `special-display-frame-alist').
+        can now show *Completions* buffers and other ones in a second
+        window inside the frame, just like other frames can.
+        (`unsplittable' property in `special-display-frame-alist').
 
 \item Drag\&Drop of files in buffers with HTML/LaTeX/C modes results in
-	the appropriate code (such as $<$IMG SRC=...$>$ or
-	$\backslash$includegraphics$\{$...$\}$) being inserted.
-	Patches by Seiji Zenitani
+        the appropriate code (such as $<$IMG SRC=...$>$ or
+        $\backslash$includegraphics$\{$...$\}$) being inserted.
+        Patches by Seiji Zenitani
 
 \item AUCTeX/PDF: TeX-PDF-mode is now the default via the default of
-	its mode variable `TeX-PDF-mode' rather than an entry in
-	`LaTeX-mode-hook', making configuring the default in the
-	customization buffer (or in .emacs) easier. Updated to AUCTeX 11.82.
+        its mode variable `TeX-PDF-mode' rather than an entry in
+        `LaTeX-mode-hook', making configuring the default in the
+        customization buffer (or in .emacs) easier. Updated to AUCTeX 11.82.
 
 \item DONATE: If you like the new version, please donate so we can
-	keep the development efforts going throughout 2006. Have a great
-	new year!
+        keep the development efforts going throughout 2006. Have a great
+        new year!
 \end{itemize}
 
 Bugfixes:
 
 \begin{itemize}
 \item Browsing a URL (as in Help menu functions, mouse clicks in Gnus
-	etc. could fail in rare circumstances.
-	Reported by Count László de Almásy
+        etc. could fail in rare circumstances.
+        Reported by Count László de Almásy
 
 \item Tcsh environments will be correctly imported into Aquamacs now.
-	Reported by Michael Kohlhase
+        Reported by Michael Kohlhase
 
 \item AUCTeX and RSS documentation (info) are now included.
-	Reported by Arthur Ogus and José Figueroa-O'Farrill
+        Reported by Arthur Ogus and José Figueroa-O'Farrill
 
 \item Avoid the Dock when opening or automatically resizing frames in
-	most situations.
+        most situations.
 
 \item Up/down movements of the cursor: subtle tweak (jumping to
-	temporary goal column only in series of up/down movements.)
+        temporary goal column only in series of up/down movements.)
 
 \item `mouse-save-then-kill' for `osx-key-mode-mouse-3-behavior' set
-	to now works fine for double clicks (deleting the selected region)
-	Reported by Konrad Podczeck
+        to now works fine for double clicks (deleting the selected region)
+        Reported by Konrad Podczeck
 
 \item Tcl-mode back in the "New Buffer" menu.
-	Patch by Kevin Walzer
+        Patch by Kevin Walzer
 
 \item CPerl mode is still the default for perl files, but perl-mode is
-	not an alias any more for cperl-mode.
+        not an alias any more for cperl-mode.
 
 \item Environment import (from the default login shell) works better
-	now for users of tcsh, zsh and ksh.
+        now for users of tcsh, zsh and ksh.
 
 
 
@@ -1804,85 +1809,85 @@ Bugfixes:
 
 
 \item {\emph Summary:} New functions: Mac-style printing, Export to PDF and
-	HTML, Spelling suggestions, New buffer in mode / change major mode
-	menus, a context menu (right mouse click), speed improvements,
-	nXML and AUCTeX included text display improved (international
-	characters and proportional fonts), "wrong command-p" bug fixed
-	and much more.
+        HTML, Spelling suggestions, New buffer in mode / change major mode
+        menus, a context menu (right mouse click), speed improvements,
+        nXML and AUCTeX included text display improved (international
+        characters and proportional fonts), "wrong command-p" bug fixed
+        and much more.
 
 
 \item Printing: Aquamacs now supports full What-you-see-is-what-
-	you-get printing. Choose 'Preview and Print' from the File menu,
-	and the current buffer (or the current region, if one is marked)
-	is typeset using the color theme and the syntax coloring that is
-	active. You can then preview or print it with the standard Mac OS
-	X printing dialogs, selecting a standard Mac printer. (Output to
-	US Letter format only at this point. Sorry!)
+        you-get printing. Choose 'Preview and Print' from the File menu,
+        and the current buffer (or the current region, if one is marked)
+        is typeset using the color theme and the syntax coloring that is
+        active. You can then preview or print it with the standard Mac OS
+        X printing dialogs, selecting a standard Mac printer. (Output to
+        US Letter format only at this point. Sorry!)
 
 \item Export to PDF and HTML: The current buffer (or a region if
-	selected) can now be exported to a PDF or HTML file. Syntax
-	coloring (and the chosen color theme except for the background
-	color) are respected.
+        selected) can now be exported to a PDF or HTML file. Syntax
+        coloring (and the chosen color theme except for the background
+        color) are respected.
 
 \item LaTeX: Aquamacs now comes with the latest version of
-	AUCTeX, which will allow you to most comfortably edit LaTeX source
-	code and even preview some of the results (e.g. formulas) directly
-	in your document.  No need to install an additional AUCTeX
-	package. 	AUCTeX already works out-of-the box.
+        AUCTeX, which will allow you to most comfortably edit LaTeX source
+        code and even preview some of the results (e.g. formulas) directly
+        in your document.  No need to install an additional AUCTeX
+        package.        AUCTeX already works out-of-the box.
 
-	It is recommended that you remove any previous installations of
-	AUCTeX.
+        It is recommended that you remove any previous installations of
+        AUCTeX.
 
 \item nXML: Edit XML code more comfortably with the included
-	nxml-mode. It validates the document as you type. If you don't
-	like the mode, the following in your Preferences.el file will
-	bring the old XML mode back:
+        nxml-mode. It validates the document as you type. If you don't
+        like the mode, the following in your Preferences.el file will
+        bring the old XML mode back:
 
 \begin{verbatim}
 (assq-set-equal "<\\?xml " 'xml-mode
                            'magic-mode-alist)
 \end{verbatim}
 
-	Suggestion from Tim Bray.
+        Suggestion from Tim Bray.
 
 \item Speed: Aquamacs is a little faster now when opening new frames,
-	when frame appearance styles have been defined.
+        when frame appearance styles have been defined.
 
 \item Right-Mouse-clicks in text now bring up a context menu which
-	allows you to copy/paste, search the word under the mouse in
-	Google or look it up in the system dictionary and switch the buffer.
+        allows you to copy/paste, search the word under the mouse in
+        Google or look it up in the system dictionary and switch the buffer.
 
 \item Control-Mouse-click is always mapped to mouse-3 (right mouse
-	button) now so Apple mouse and laptop users will consistently get the same
-	functionality. To do mouse-2, just hold down the Command key while
-	clicking. (This does mouse-yank-at-click, a useful functionality that you
-	might be used to from Linux / X11 machines!)
+        button) now so Apple mouse and laptop users will consistently get the same
+        functionality. To do mouse-2, just hold down the Command key while
+        clicking. (This does mouse-yank-at-click, a useful functionality that you
+        might be used to from Linux / X11 machines!)
 
 \item Alt-Mouse-click\&drag allows you to select a secondary
-	selection. (This used to be on Command-mouse-1-drag.)
+        selection. (This used to be on Command-mouse-1-drag.)
 
 \item Spelling correction (flyspell) will make suggestions upon
-	right-clicking on a misspelled word.
+        right-clicking on a misspelled word.
 
 \item Fonts/Display: Aquamacs Emacs can now display an even wider
-	range of characters with any font available on OS X. Some
-	characters will look nicer.
-	Patches by Yamamoto Mitsuharu
+        range of characters with any font available on OS X. Some
+        characters will look nicer.
+        Patches by Yamamoto Mitsuharu
 
 \item Text Display: Aquamacs now displays text in variable-width fonts
-	with much better letter-spacing. It'll look like in other OS X
-	apps, and reading and editing long texts is much more fun now.
-	Patches by Yamamoto Mitsuharu
+        with much better letter-spacing. It'll look like in other OS X
+        apps, and reading and editing long texts is much more fun now.
+        Patches by Yamamoto Mitsuharu
 
 \item Navigation in wrapped lines (not word wrap) is easier now: arrow
-	keys will jump to the next visual line, not to the next
-	buffer/file line. Also, navigation is visual now for variable
-	width fonts like Lucida: jumping up or down moves to roughly the
-	same place in the adjacent line going after what's displayed on
-	the screen rather than counting characters (jumping to the same
-	row number in the next line).  If you don't like the behavior, you
-	can turn it off with this code in your Preferences.el / .emacs
-	file:
+        keys will jump to the next visual line, not to the next
+        buffer/file line. Also, navigation is visual now for variable
+        width fonts like Lucida: jumping up or down moves to roughly the
+        same place in the adjacent line going after what's displayed on
+        the screen rather than counting characters (jumping to the same
+        row number in the next line).  If you don't like the behavior, you
+        can turn it off with this code in your Preferences.el / .emacs
+        file:
 
 \begin{verbatim}
 (define-key osx-key-mode-map [remap previous-line]
@@ -1893,67 +1898,67 @@ Bugfixes:
 \end{verbatim}
 
 \item Scrolling and setting the point with the mouse has improved:
-	`scroll-margin' defaults to 0 now, so scrolling won't happen until
-	you've reached the first or last line in the window - except when
-	you use the cursor up/down keys (and osx-key-mode is on). Then,
-	scrolling takes place a few lines before you reach the
-	boundary. You can configure this via Aquamacs' customization
-	variable `visual-scroll-margin'.
+        `scroll-margin' defaults to 0 now, so scrolling won't happen until
+        you've reached the first or last line in the window - except when
+        you use the cursor up/down keys (and osx-key-mode is on). Then,
+        scrolling takes place a few lines before you reach the
+        boundary. You can configure this via Aquamacs' customization
+        variable `visual-scroll-margin'.
 
 \item Command-\{ comments the line or the region (in programming modes)
 \item Command-\} uncomments the line or the region (in programming
-	modes)
+        modes)
 \item Command-' comments or uncomments (toggling) the line or
-	the region (in programming modes)
+        the region (in programming modes)
 
 \item Command-Delete kills (erases) the rest of the current
-	line. (Command-Backspace kills the whole line.)
+        line. (Command-Backspace kills the whole line.)
 
 \item Filenames with spaces can now be entered without hassle.
 
 \item Modifier-Key configuration: Several previously deprecated
-	variables have been removed: `mac-reverse-ctrl-meta' and
-	'mac-command-key-is-meta'. Use the much simpler, yet
-	equally powerful variables `mac-command-modifier',
-	`mac-option-modifier', `mac-control-modifier' and
-	`mac-function-modifier' (experimental) instead.
-	Additionally, `mac-pass-option-to-system' is deprecated now:
-	instead, set `mac-option-modifier' to nil to reach the same
-	effect. The use of the Option menu is recommended.
+        variables have been removed: `mac-reverse-ctrl-meta' and
+        'mac-command-key-is-meta'. Use the much simpler, yet
+        equally powerful variables `mac-command-modifier',
+        `mac-option-modifier', `mac-control-modifier' and
+        `mac-function-modifier' (experimental) instead.
+        Additionally, `mac-pass-option-to-system' is deprecated now:
+        instead, set `mac-option-modifier' to nil to reach the same
+        effect. The use of the Option menu is recommended.
 
-	To set the Apple key to Meta (not recommended), add this to your
-	Preferences.el file:
+        To set the Apple key to Meta (not recommended), add this to your
+        Preferences.el file:
 
- 	{tt (setq mac-command-modifier 'meta)}
+        {tt (setq mac-command-modifier 'meta)}
 
 \item Fn-key can act as Meta. If you have an Fn key on your laptop,
-	you can use it as Meta key now. Add this to your Preferences.el
-	file:
+        you can use it as Meta key now. Add this to your Preferences.el
+        file:
 
- 	{\tt (setq mac-function-modifier 'meta)}
+        {\tt (setq mac-function-modifier 'meta)}
 
-	Note that support of the Fn key is experimental. Rare
-	combinations may fail on non-English keyboard layouts,
-	and some keys will not work correctly in combination with Fn and Shift.
+        Note that support of the Fn key is experimental. Rare
+        combinations may fail on non-English keyboard layouts,
+        and some keys will not work correctly in combination with Fn and Shift.
 
 \item Modifier keys such as Command or Shift show up correctly in the
-	shortcuts (menu)
+        shortcuts (menu)
 
 \item New-Buffer menu contains many more modes now, such as modes for
-	Fortran, ObjectiveC, C++, PHP, CSS, JavaScript...
-	You can add your own in the customization variable
-	`aquamacs-known-major-modes'. The menu is updated automatically.
+        Fortran, ObjectiveC, C++, PHP, CSS, JavaScript...
+        You can add your own in the customization variable
+        `aquamacs-known-major-modes'. The menu is updated automatically.
 
 \item Change-Buffer-Mode menu (in File menu) allows to change the mode
-	of the current buffer to something hopefully more useful.
+        of the current buffer to something hopefully more useful.
 
 \item Recently used major modes are now displayed in New-Buffer and
-	Change-Buffer-Mode menus .
+        Change-Buffer-Mode menus .
 
 \item M-w (kill-ring-save) will now deactivate the mark after saving
-	the region, that is deselect the region, just like on standard
-	Emacs. Apple-C will not deselect the region, just like it's done
-	on the Mac.
+        the region, that is deselect the region, just like on standard
+        Emacs. Apple-C will not deselect the region, just like it's done
+        on the Mac.
 
       \item Run executables from within Emacs that lie in your PATH as
         set in shell init files. Aquamacs will set `exec-path'
@@ -1961,77 +1966,77 @@ Bugfixes:
         more (except one default tetex path for AUCTeX).
 
 \item Questions like "Save to file before closing?" will be asked with
-	a proper dialog and not with a menu appearing out of nothing - if
-	the last action was carried out with the mouse.
+        a proper dialog and not with a menu appearing out of nothing - if
+        the last action was carried out with the mouse.
 
-	Thanks to CarbonEmacsJP project for part of this.
+        Thanks to CarbonEmacsJP project for part of this.
 
 \item Info mode: C-h i  will bring up not only up-to-date info nodes
-	for Emacs, but also info on installed packages on the system.
- 	(unless you have an INFOPATH environment variable set)
+        for Emacs, but also info on installed packages on the system.
+        (unless you have an INFOPATH environment variable set)
 
 \item Mode-specific styles: With a new menu function, you can now
-	apply the style assigned to some other mode, effectively copying
-	it over.
+        apply the style assigned to some other mode, effectively copying
+        it over.
 
 \item Mode-specific styles are not applied any more for the major-mode
-	of buffers shown in temporary windows inside frames such as the
+        of buffers shown in temporary windows inside frames such as the
 \item Completions* buffer. This prevents ugly font-switching etc. for
-	the whole frame when just a small window is opened inside the frame.
+        the whole frame when just a small window is opened inside the frame.
 
 \item New Packages: findr, htmlize, ruby's friends, auctex
-	(latex-mode), nxml-mode, matlab-mode, javascript-mode,
+        (latex-mode), nxml-mode, matlab-mode, javascript-mode,
 
 \item Notable Updated external packages: ruby-mode, ruby-*, carbon-font
 
 \item Apple/Command key is now called 'A-' internally because it looks
-	like "Apple-" (while it's really the otherwise unused "Alt" key).
-	It used to be "H-" (or: hyper), so change your configuration code
-	in case you've defined your own shortcuts.
+        like "Apple-" (while it's really the otherwise unused "Alt" key).
+        It used to be "H-" (or: hyper), so change your configuration code
+        in case you've defined your own shortcuts.
 
 \item One-Buffer-One-Frame is a minor mode now (called
-	one-buffer-one-frame-mode). Use the Options menu (and Save
-	Options) to turn it on/off, as before.
-	In this minor mode, you have some additional key bindings now:
+        one-buffer-one-frame-mode). Use the Options menu (and Save
+        Options) to turn it on/off, as before.
+        In this minor mode, you have some additional key bindings now:
 
-	C-x B, C-x C-B, C-x S-left, C-x S-right
-	they all do the same as their corresponding functions without the
-	Shift key, but they will show the buffer that they are switching
-	to in the same window, even though one-buffer-one-frame-mode is on.
+        C-x B, C-x C-B, C-x S-left, C-x S-right
+        they all do the same as their corresponding functions without the
+        Shift key, but they will show the buffer that they are switching
+        to in the same window, even though one-buffer-one-frame-mode is on.
 
-	The mode has been revised to open fewer extra windows when their
-	content is related to a specific frame - for example version
-	control checkin comments.
+        The mode has been revised to open fewer extra windows when their
+        content is related to a specific frame - for example version
+        control checkin comments.
 
 \item Manual: The Emacs Manual that comes with Aquamacs (as an Apple
-	Help document) has been updated to reflect the basis of Aquamacs,
-	namely the upcoming Emacs 22.
+        Help document) has been updated to reflect the basis of Aquamacs,
+        namely the upcoming Emacs 22.
 
 \item Command-p-Bugfix: For some users, Emacs locked up at random
-	times, showing a message like (wrong command-p ...) in the echo
-	area of a frame on every input. This bug in the underlying GNU
-	Emacs should be fixed now.
-	Patches by Yamamoto Mitsuharu, Richard Stallman, et al.
+        times, showing a message like (wrong command-p ...) in the echo
+        area of a frame on every input. This bug in the underlying GNU
+        Emacs should be fixed now.
+        Patches by Yamamoto Mitsuharu, Richard Stallman, et al.
 
 \item Bugfix: Aquamacs now correctly remembers the positions of frames
-	with specific files, so they open again on the same screen
-	position if the file is re-loaded (in the same session, or after
-	"Save Options" in the next session).
+        with specific files, so they open again on the same screen
+        position if the file is re-loaded (in the same session, or after
+        "Save Options" in the next session).
 \item Bugfix: Bookmarks did not work with `one-buffer-one-frame'
-	turned on.
+        turned on.
 \item Bugfix: Some Show/Hide options weren't saved by
-	"Save Options".
+        "Save Options".
 \item Bugfix: links from describe-variable/function help buffers to the
-	source files are correct now for the Aquamacs-specific objects
+        source files are correct now for the Aquamacs-specific objects
 \item Bugfix: Aquamacs works fine now on systems where, in the default
-	shell (e.g. via .bash profile), functions have been defined and
-	exported.
-	Reported by Terry Jones
+        shell (e.g. via .bash profile), functions have been defined and
+        exported.
+        Reported by Terry Jones
 \item Bugfix: RefTeX mode does't give constant audio signals (errors)
-	any more in certain situations
+        any more in certain situations
 \item Bugfix: Allout mode should work again (saving files)
-	Reported by Gerry Brush
-	Patch by Ken Mannheimer
+        Reported by Gerry Brush
+        Patch by Ken Mannheimer
 
 
 \end{itemize}
@@ -2040,37 +2045,37 @@ Bugfixes:
 
 \begin{itemize}
 \item Aquamacs now provides extended input methods for
-	Korean, Japanese and Chinese (GB/BIG5). You can select them in
-	the Options menu, under "Aquamacs Multilingual Environment" /
-	"Set Language Environment" - everything is integrated with
-	Mule.
+        Korean, Japanese and Chinese (GB/BIG5). You can select them in
+        the Options menu, under "Aquamacs Multilingual Environment" /
+        "Set Language Environment" - everything is integrated with
+        Mule.
 
-	In order to load more fixed-width fonts suitable for use with
-	Asian languages, you may want to load the carbon-font package,
-	which is included (but not activated) in Aquamacs. Just add the
-	following to the file
-	~/Library/Preferences/Aquamacs Emacs/Preferences.el:
+        In order to load more fixed-width fonts suitable for use with
+        Asian languages, you may want to load the carbon-font package,
+        which is included (but not activated) in Aquamacs. Just add the
+        following to the file
+        ~/Library/Preferences/Aquamacs Emacs/Preferences.el:
 
-	(require 'carbon-font)
+        (require 'carbon-font)
 
-	(maintained by   Mahn-Soo Choi.)
+        (maintained by   Mahn-Soo Choi.)
 
 \item CSS-Mode fixed.
-	(First reported by Kris Khaira and Michael Jakl.)
+        (First reported by Kris Khaira and Michael Jakl.)
 
 \item Dual-head setups (two screens) with one screen on the left,
-	the system menu on the right and Aquamacs frames on the left
-	caused problems.
-	(reported by Otto Karl Florian Diesenbacher)
+        the system menu on the right and Aquamacs frames on the left
+        caused problems.
+        (reported by Otto Karl Florian Diesenbacher)
 
 \item osx-key-mode-map can now be changed to modify key
-	assignments, in particular those of Apple Command keys
-	 (implemented in Emacs as Hyper = H- keys.)
-	(reported by William Ziemer)
+        assignments, in particular those of Apple Command keys
+         (implemented in Emacs as Hyper = H- keys.)
+        (reported by William Ziemer)
 
 \item "font-lock-keywords ... void" message used to appear when
-	attempting to load a new file. This bug in the underlying GNU
-	Emacs has been fixed.
+        attempting to load a new file. This bug in the underlying GNU
+        Emacs has been fixed.
 
       \item Apple-Q and iconized frames: When all frames where
         iconized and one attempted to quit Aquamacs, the application
@@ -2095,46 +2100,46 @@ Bugfixes:
   ``Option key for Meta (not for extra characters).''
 
 \item C-x C-f  (find-file) will bring up a window first before asking for the
-	name of the file to be loaded.
+        name of the file to be loaded.
 
 \item Files saved with Aquamacs have a nice file icon now.
 
 \item Text is now nicely shown a little to the right in windows. In
-	the left "fringe", you can see small dots indicating the end of
-	the buffer, and a small triangle indicating continued lines. If
-	you cannot see them, your Frame / default style overwrites
-	it. Select "Options / Frame Appearance Styles / Reset all styles"
-	to make the fringes appear.
+        the left "fringe", you can see small dots indicating the end of
+        the buffer, and a small triangle indicating continued lines. If
+        you cannot see them, your Frame / default style overwrites
+        it. Select "Options / Frame Appearance Styles / Reset all styles"
+        to make the fringes appear.
 
 \item The "frame appearance styles" system has been revised. *Messages* now has
-	a distinctive colored background. To change this background (or
-	the one for *Help* buffers), customize the variable
-	`aquamacs-buffer-specific-frame-styles. Also, you can turn Frame Appearance Styles on and off with a menu
-	item.
+        a distinctive colored background. To change this background (or
+        the one for *Help* buffers), customize the variable
+        `aquamacs-buffer-specific-frame-styles. Also, you can turn Frame Appearance Styles on and off with a menu
+        item.
 
 \item Setting the frame font gives a warning now (that the font
-	is only set for the current frame), or sets it as default if Frame
-	Appearance Styles are off.
+        is only set for the current frame), or sets it as default if Frame
+        Appearance Styles are off.
 
 \item Frame-related functions from File menu are now in Buffers menu.
 
 \item 1on1-* customization variables are gone---most of them were not in working
-	order (in Aquamacs) anyways due to the way we were using the
-	Oneonone package. This gets rid of quite a bit of doubly
-	implemented functionality.
+        order (in Aquamacs) anyways due to the way we were using the
+        Oneonone package. This gets rid of quite a bit of doubly
+        implemented functionality.
 
 \item You can switch the Option key from its Emacs-specific
-	Meta meaning to its Mac typical use (composing keys such as \"{u}
-	 (Engl. keyboard) or the backslash (German keyboard) by typing Apple-; -- this
-	is equivalent to the Options menu entry ``Option key for Meta.''
+        Meta meaning to its Mac typical use (composing keys such as \"{u}
+         (Engl. keyboard) or the backslash (German keyboard) by typing Apple-; -- this
+        is equivalent to the Options menu entry ``Option key for Meta.''
 
 \item The customization variable aquamacs-auto-frame-parameters allows you to
-	turn off mode-specific styles---your frames stay the same, no
-	matter what major mode you switch to.
+        turn off mode-specific styles---your frames stay the same, no
+        matter what major mode you switch to.
 
 \item Frame Appearance Styles have a better menu structure now in the Options
-	menu. Also, there is a new function ``Delete all mode-specific
-	styles''.
+        menu. Also, there is a new function ``Delete all mode-specific
+        styles''.
 
 \item Many menu items are now greyed out (cannot be selected) when no frame is visible.
 
@@ -2147,18 +2152,18 @@ Bugfixes:
 
 
 \item Every Aquamacs frame has a toolbar-button now. Use it to turn the
-	toolbar in the given frame on and off.
+        toolbar in the given frame on and off.
 
 
 
 \item Improvement when working with multiple frames: when no frame is visible,
-	Aquamacs no longer raises some other frame as soon as a file is
-	loaded.
+        Aquamacs no longer raises some other frame as soon as a file is
+        loaded.
 
 
 
 \item Mode-specific styles revised: the full set of parameters coming from
-	color themes is now supported, in addition to the font and toolbar setting.
+        color themes is now supported, in addition to the font and toolbar setting.
 
 \item Menu item to delete the mode-specific style for the current major mode.
 
@@ -2194,10 +2199,10 @@ Bugfixes:
 
 
 \item Exiting view mode (e.g. help) with 'q' deletes the frame instead of
-	iconifying it.
+        iconifying it.
 
 \item The (Apple Help) manuals work now on systems where tcsh
-	is the default shell.  (Reported by Arthur Ogus)
+        is the default shell.  (Reported by Arthur Ogus)
 
 
 \item Startup with arguments -nw (tty / in terminal) revised.
@@ -2206,16 +2211,16 @@ Bugfixes:
 
 \item You can now redefine Aquamacs keys like this:
 
-	\texttt{(define-key osx-key-mode-map [end] 'end-of-line)}
+        \texttt{(define-key osx-key-mode-map [end] 'end-of-line)}
 
-	(Thanks for reporting: Andreas Hess.)
+        (Thanks for reporting: Andreas Hess.)
 
 \item If the user changes mac-command-modifier, it may be advisable to call
 
-	 \texttt{(osx-key-reset-mode-map)}
+         \texttt{(osx-key-reset-mode-map)}
 
-	This will ensure that the keymap is updated and Aquamacs installs
-	its Mac-like keyboard commands (provided you want this).
+        This will ensure that the keymap is updated and Aquamacs installs
+        its Mac-like keyboard commands (provided you want this).
 
 \item New frames will not open behind the Dock any more.
 
@@ -2223,14 +2228,14 @@ Bugfixes:
 \item An error message (harmless) when clicking on "Finish" in customize is gone.
 
 \item Error message during version check on startup removed (occurred in
-	certain cases where users had upgraded their system.)
+        certain cases where users had upgraded their system.)
 
 \item In particular in TeX mode, Aquamacs tended to give audio signals all the
-	time when there were internal exceptions (internal errors signaled) with parsing the TeX code. Therefore, we do not ring the bell any more,
-	i.e. aquamacs-ring-bell-on-error-flag is nil by default.
-	(Reported by Ken Bloom and Andreas Hess)
+        time when there were internal exceptions (internal errors signaled) with parsing the TeX code. Therefore, we do not ring the bell any more,
+        i.e. aquamacs-ring-bell-on-error-flag is nil by default.
+        (Reported by Ken Bloom and Andreas Hess)
 \item Speedbar works when one-buffer-one-frame (``Open Buffers in Separate
-	Frames'') is turned off.
+        Frames'') is turned off.
 \item Option-up/down (if Option is meta) now scrolls page-wise.
 
 
@@ -2321,10 +2326,10 @@ Bugfixes:
 
 
 \item When saving a buffer and the Finder is not running,
-	the Finder is not opened any more. (Reported by George W. Gilchrist.)
+        the Finder is not opened any more. (Reported by George W. Gilchrist.)
 
 \item Using dead-keys (like Option-u or Option-n on most
-	keyboards) works again. (Reported by Howard Melman and Pierre Albarede
+        keyboards) works again. (Reported by Howard Melman and Pierre Albarede
 \item When modified files existed, but no frame was visible and
     one tried to quit Aquamacs, the application seemed to hang while
     prompting for keyboard input (Save file? y/n) in an invisible
@@ -2401,7 +2406,7 @@ Bugfixes:
 
 \texttt{    (setq mac-option-modifier 'meta)}
 
-	 \item Improvements in the fontset selection allow you to display the  Euro sign
+         \item Improvements in the fontset selection allow you to display the  Euro sign
     with the default font.
 
 
@@ -2458,7 +2463,7 @@ they are not in the way. (If you do not like this, we suggest you set
     and also add this to your file /Users/yourname/Library/Preferences/Aquamacs
     Emacs/Preferences.el:
 
-	\texttt{ (setq smart-frame-positioning-enforce nil)}
+        \texttt{ (setq smart-frame-positioning-enforce nil)}
 
 Or, if you would like to go with the default position all the time,
     turn the global minor mode off:
@@ -2488,18 +2493,18 @@ Or, if you would like to go with the default position all the time,
 \item Ruby-Mode included (M-x ruby-mode)
 
 \item yes-or-no-p is customizable now. Use the new customization
- 	variable aquamacs-quick-yes-or-no-prompt. (Thanks: Pavel Hlavnicka.)
+        variable aquamacs-quick-yes-or-no-prompt. (Thanks: Pavel Hlavnicka.)
 
 \item Soft word wrap (longlines-mode) is available from the Options
-	menu. To make it the default, add this to your preferences
-	file:
-	\texttt{(set-default 'longlines-mode t)}
+        menu. To make it the default, add this to your preferences
+        file:
+        \texttt{(set-default 'longlines-mode t)}
 
 \item Case-insensitive search option has gone into ``search'' submenu (in ``Edit'').
 
 \item If you are in an empty frame (i.e. a frame with an empty buffer)
-	and you load (find) a file, Aquamacs will not open an additional frame.
-	This is useful also for drag and drops, when a scratch frame is open.
+        and you load (find) a file, Aquamacs will not open an additional frame.
+        This is useful also for drag and drops, when a scratch frame is open.
 
 \item The secondary selection is back: use the Command (Apple) key
     together with clicking/dragging the mouse cursor over text in
@@ -2595,7 +2600,7 @@ Or, if you would like to go with the default position all the time,
 
 \item TeXniScope support in LaTeX mode (if installed in /Applications).
 
-	\item We have two great manuals available comfortably via Apple Help  now,
+        \item We have two great manuals available comfortably via Apple Help  now,
     directly from within Aquamacs Emacs (Help menu). There is a
     brand-new Aquamacs manual, and there is Richard
     Stallman's original Emacs manual. They can be searched (e.g. via
