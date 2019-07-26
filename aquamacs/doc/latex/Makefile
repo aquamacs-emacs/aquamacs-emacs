@@ -48,7 +48,7 @@ html: aquamacs.tex *.pdf
 	echo "Removing extra files." ; \
 	cd $(newdir) ; \
 	rm $(newdir)/WARNINGS $(newdir)/images.* $(newdir)/*.bak 2>/dev/null ; \
-	../convert/tidy_dir.sh ; \
+	(cd $(newdir); ../../convert/tidy_dir.sh) ; \
 	echo "Making new Aquamacs Help directory, copying new help files."	     ; \
 	mv $(newdir)/* $(destdir)/ ; \
 	cp $(srcdir)/*.png $(destdir)/			     ; \

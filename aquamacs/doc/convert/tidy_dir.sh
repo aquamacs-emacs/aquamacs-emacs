@@ -3,6 +3,6 @@ FILES=./*.html
 
 for f in $(find . -iname '*.html')
 do
-  echo "Processing $f..."
+  echo "Tidy $f..."
   `tidy -q -asxhtml -indent -clean -modify $f`
 done
