@@ -656,23 +656,33 @@ if modified buffers exist."
     (message "mwheel-install ignored in Aquamacs. Mouse wheel support is present by default.")
     t)
 
-(defcustom mouse-wheel-progressive-decelerator 4
+(defcustom mouse-wheel-progressive-decelerator 4.0
   "Decelerate progressive mouse wheel scrolling by this factor.
-Must be 1 or larger."
+Must be a float, 1.0 or larger"
   :group 'mouse
   :group 'Aquamacs
   :type 'float)
 
 (defun aquamacs-wheel-scroll-down (&optional amt)
-  "Scroll down (/ AMT mouse-wheel-progressive-decelerator) units"
+  "If `mouse-wheel-progressive-speed' is on, divide AMT by
+`mouse-wheel-progressive-decelerator', rounding up, before scrolling down
+that many lines. Otherwise, simply scroll down AMT lines."
   (if amt
-      (scroll-down (/ amt mouse-wheel-progressive-decelerator))
+      (let ((amt1
+	     (if mouse-wheel-progressive-speed
+		 (ceiling (/ amt mouse-wheel-progressive-decelerator)) amt)))
+	(scroll-down amt1))
     (scroll-down)))
 
 (defun aquamacs-wheel-scroll-up (&optional amt)
-  "Scroll up (/ AMT mouse-wheel-progressive-decelerator) units"
+  "If `mouse-wheel-progressive-speed' is on, divide AMT by
+`mouse-wheel-progressive-decelerator', rounding up, before scrolling up
+that many lines. Otherwise, simply scroll up AMT lines."
   (if amt
-      (scroll-up (/ amt mouse-wheel-progressive-decelerator))
+      (let ((amt1
+	     (if mouse-wheel-progressive-speed
+		 (ceiling (/ amt mouse-wheel-progressive-decelerator)) amt)))
+	(scroll-up amt1))
     (scroll-up)))
 
 (aquamacs-set-defaults
