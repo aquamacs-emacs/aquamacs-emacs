@@ -658,15 +658,15 @@ if modified buffers exist."
 
 (defcustom mouse-wheel-progressive-decelerator 4.0
   "Decelerate progressive mouse wheel scrolling by this factor.
-Must be 1 or larger."
+Must be a float, 1.0 or larger"
   :group 'mouse
   :group 'Aquamacs
   :type 'float)
 
 (defun aquamacs-wheel-scroll-down (&optional amt)
-  "If `mouse-wheel-progressive-speed' is on, divide number of lines
-to be scrolled by `mouse-wheel-progressive-decelerator', rounding up,
-before scrolling down. Otherwise, simply scroll down AMT lines. "
+  "If `mouse-wheel-progressive-speed' is on, divide AMT by
+`mouse-wheel-progressive-decelerator', rounding up, before scrolling down
+that many lines. Otherwise, simply scroll down AMT lines."
   (if amt
       (let ((amt1
 	     (if mouse-wheel-progressive-speed
@@ -675,9 +675,9 @@ before scrolling down. Otherwise, simply scroll down AMT lines. "
     (scroll-down)))
 
 (defun aquamacs-wheel-scroll-up (&optional amt)
-  "If `mouse-wheel-progressive-speed' is on, divide number of lines
-to be scrolled by `mouse-wheel-progressive-decelerator', rounding up,
-before scrolling up. Otherwise, simply scroll up AMT lines. "
+  "If `mouse-wheel-progressive-speed' is on, divide AMT by
+`mouse-wheel-progressive-decelerator', rounding up, before scrolling up
+that many lines. Otherwise, simply scroll up AMT lines."
   (if amt
       (let ((amt1
 	     (if mouse-wheel-progressive-speed
