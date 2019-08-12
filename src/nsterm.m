@@ -8295,6 +8295,10 @@ not_in_argv (NSString *arg)
   onFirstScreen = [[w screen] isEqual:[[NSScreen screens] objectAtIndex:0]];
   f = emacsframe;
   wr = [w frame];
+
+  if (! FRAME_LIVE_P (f))
+    return;
+
   col = ns_lookup_indexed_color (NS_FACE_BACKGROUND
                                  (FRAME_DEFAULT_FACE (f)),
                                  f);

@@ -751,8 +751,9 @@ may be set to `nil' if such empty frames become visible inadvertently."
 	 ;; select read-only special buffer in case it gets any input
 	 (let ((hb (init-aquamacs-last-frame-empty-buffer)))
 	   (if (null hb)
-	       (delete-frame (or frame (selected-frame))) ;; actually delete frame or show error message
-	       ;; else, go via empty buffer
+               ;; actually delete frame or show error message
+               (delete-frame (or frame (selected-frame)))
+             ;; else, go via empty buffer
 	     (with-current-buffer hb
 	       ;; to do: we should re-use a hidden frame if it exists.
 	       (let ((hf (aquamacs-make-empty-frame aquamacs-deleted-frame-position)))
@@ -761,8 +762,10 @@ may be set to `nil' if such empty frames become visible inadvertently."
 		       (delete-frame f t))
 		   (select-window (frame-first-window hf))
 		   (switch-to-buffer hb  'norecord)
-		   (make-frame-visible hf) ; HACK: must do this first, presumably to convince NS to make it key.
-		 (make-frame-invisible hf t))))))))))))
+                   ;; This hack causes problems when deleting full-screen frames.
+                   ;; and is no longer necessary (new in version 3.5)
+                   ;; (make-frame-visible hf) ; HACK: must do this first, presumably to convince NS to make it key.
+                   (make-frame-invisible hf t))))))))))))
   
 (defun aquamacs-handle-frame-iconified (&optional frame)
   "Handle frame iconification.
