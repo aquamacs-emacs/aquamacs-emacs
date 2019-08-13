@@ -13,6 +13,18 @@ OLD_SDK=0
 TEXINFO=/usr/local/Cellar/texinfo/6.6/bin
 
 case "$1" in
+'-local')
+  # Include /usr/local/bin/for finding homebrew libaries
+  PATH=$AUTOTOOLS:${TEXINFO}:/usr/local/bin:/bin:/sbin:/usr/bin:/usr/sbin
+  export GZIP_PROG=`which gzip`
+  echo "Building Aquamacs (local, optimised release)."
+  FLAGS="-march=native -mtune=native -O3 -g $FLAGS"
+  OMIT_SYMB=
+  if [ ! -e "configure" ];
+  then
+    OMIT_AUTOGEN=
+  fi
+  ;;
 '-release')
   # Include /usr/local/bin/for finding homebrew libaries
   PATH=$AUTOTOOLS:${TEXINFO}:/usr/local/bin:/bin:/sbin:/usr/bin:/usr/sbin
@@ -57,9 +69,9 @@ FINALMESSAGE=""
 
 if test $OLD_SDK -gt 0;
 then
-# we're going to choose the oldest SDK we have (starting with 10.9)
+# we're going to choose the oldest SDK we have (starting with 10.11)
 # this should guarantee backwards compatibility up to that SDK version.
-# for current Aquamacs, this will typically be 10.9
+# for current Aquamacs, this will typically be 10.11
 for VERS in 10.11 10.12 10.13 10.14; do
     SDK="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${VERS}.sdk"
     if [ -d "$SDK" ]; then
@@ -97,5 +109,12 @@ test $OMIT_SYMB || dsymutil src/emacs
 
 echo ${FINALMESSAGE}
 echo "Build finished."
+echo "IMPORTANT:"
+echo "When building for Mac OS X Mojave (10.14) and later,"
+echo "please make sure you sign the executable."
+echo "  codesign -s \"<certificate>\" --deep /nextstep/Aquamacs.app"
+echo "If you don't have a certificate yet, you can create one using the Keychain"
+echo "Access application."
+echo "(https://developer.apple.com/library/archive/documentation/Security/Conceptual/CodeSigningGuide/Procedures/Procedures.html)"
 
 exit 0
