@@ -109,12 +109,21 @@ test $OMIT_SYMB || dsymutil src/emacs
 
 echo ${FINALMESSAGE}
 echo "Build finished."
-echo "IMPORTANT:"
-echo "When building for Mac OS X Mojave (10.14) and later,"
-echo "please make sure you sign the executable."
-echo "  codesign -s \"<certificate>\" --deep /nextstep/Aquamacs.app"
-echo "If you don't have a certificate yet, you can create one using the Keychain"
-echo "Access application."
-echo "(https://developer.apple.com/library/archive/documentation/Security/Conceptual/CodeSigningGuide/Procedures/Procedures.html)"
+if [[ "$AQUAMACS_CERT" != "" ]]; then
+    echo "Signing code with $AQUAMACS_CERT"
+    codesign -s "$AQUAMACS_CERT" --deep nextstep/Aquamacs.app
+else
+    echo
+    echo "IMPORTANT"
+    echo "When building for Mac OS X Mojave (10.14) and later, please make"
+    echo "sure you sign the executable using:"
+    echo "  codesign -s \"<certificate>\" --deep nextstep/Aquamacs.app"
+    echo "or, rerun the build with AQUAMACS_CERT=\"<certificate>\":"
+    echo "  AQUAMACS_CERT=\"My Codesign Certificate\" ./build-aquamacs"
+    echo ""
+    echo "If you don't have a certificate yet, you can create one using"
+    echo "the Keychain Access application. For more information, see:"
+    echo "(https://developer.apple.com/library/archive/documentation/Security/Conceptual/CodeSigningGuide/Procedures/Procedures.html)"
+fi
 
 exit 0
