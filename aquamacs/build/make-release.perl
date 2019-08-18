@@ -5,11 +5,11 @@
 # /Applications/Aquamacs Emacs.app
 # then run this. 
 
-$PROJECT_DIR = '/Users/dr/Projects/Aquamacs';
-$REPO_DIR = '/Users/dr/aquamacs-emacs';
-
+$PROJECT_DIR = '/Users/dr/Projects/Aquamacs';  # location of AquamacsInstall.dmg
+$REPO_DIR = '/Users/dr/aquamacs-emacs-3.5';
 $BINARY = '/Applications/Aquamacs.app';
 
+#########
 
 $DMG = "$PROJECT_DIR/AquamacsInstall.dmg";
 # The source DMG is prepared, with a background, and folders .fseventsd (with empty no_log file),
@@ -106,7 +106,10 @@ $MN2 = "$VOL/Manual.pdf";
 &sys("rm $target 2>/dev/null");
 &sys("open \"$DMG\"");
 
-print("hdiutil convert  \"$DMG\" -format UDBZ -o $target\n");
+print("\n\nAdjust contents of DMG manually in Finder, then eject.\n");
+print("Afterward, run the following command to produce the final DMG.\n\n");
+
+print("   hdiutil convert  \"$DMG\" -format UDBZ -o $target\n");
 
 # format UDBZ would be smaller (bzip2), but incompatible with OS X 10.3
 
