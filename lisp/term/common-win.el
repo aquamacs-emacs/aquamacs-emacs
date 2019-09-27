@@ -425,7 +425,7 @@ the operating system.")
 (defun xw-defined-colors (&optional frame)
   "Internal function called by `defined-colors', which see."
   (if (featurep 'ns)
-      x-colors
+      (ns-list-colors)
     (or frame (setq frame (selected-frame)))
     (let (defined-colors)
       (dolist (this-color (if (eq system-type 'windows-nt)
