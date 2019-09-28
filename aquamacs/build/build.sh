@@ -10,7 +10,11 @@ OMIT_AUTOGEN=1
 FLAGS=
 OMIT_SYMB=1
 OLD_SDK=0
-TEXINFO=/usr/local/Cellar/texinfo/6.6/bin
+TEXINFO=/usr/local/opt/texinfo/bin
+
+# Xcoode has the libxml2 libraries if you ask it where they are.
+export LIBXML2_CFLAGS=`xml2-config --cflags`
+export LIBXML2_LIBS=`xml2-config --libs`
 
 case "$1" in
 '-local')
