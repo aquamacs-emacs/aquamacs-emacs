@@ -24,8 +24,9 @@ Project website:  http://aquamacs.org
 Building Aquamacs
 ------------------
 
-Call ./build-aquamacs, or "make bootstrap; make install".
+Run ./build-aquamacs
 
+For more details about building Aquamacs, see ./aquamacs/build/BUILD-AQUAMACS.txt
 
 
 Contributing to Aquamacs

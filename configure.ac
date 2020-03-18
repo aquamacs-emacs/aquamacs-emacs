@@ -5499,6 +5499,7 @@ m4_define([CHECK_MAC_COMPAT], [
 
 CHECK_MAC_COMPAT(utimensat)
 CHECK_MAC_COMPAT(futimens)
+CHECK_MAC_COMPAT(clock_gettime)
 
 AC_OUTPUT
 

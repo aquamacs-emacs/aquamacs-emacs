@@ -24,6 +24,7 @@ FLAGS=
 OMIT_SYMB=1
 OLD_SDK=0
 TEXINFO=/usr/local/opt/texinfo/bin
+TEXPATH=/Library/TeX/texbin
 
 # Xcoode has the libxml2 libraries if you ask it where they are.
 export LIBXML2_CFLAGS=`xml2-config --cflags`
@@ -44,7 +45,7 @@ case "$1" in
   ;;
 '-release')
   # Include /usr/local/bin/for finding homebrew libaries
-  PATH=$AUTOTOOLS:${TEXINFO}:/usr/local/bin:/bin:/sbin:/usr/bin:/usr/sbin
+  PATH=$AUTOTOOLS:${TEXINFO}:${TEXPATH}:/usr/local/bin:/bin:/sbin:/usr/bin:/usr/sbin
   export GZIP_PROG=`which gzip`
   echo "Building Aquamacs (release)."
   OMIT_AUTOGEN=
@@ -64,7 +65,7 @@ case "$1" in
   ;;
 *)
   # Include /usr/local/bin/for finding homebrew libaries
-  PATH=$AUTOTOOLS:${TEXINFO}:/usr/local/bin:/bin:/sbin:/usr/bin:/usr/sbin
+  PATH=$AUTOTOOLS:${TEXINFO}:${TEXPATH}:/usr/local/bin:/bin:/sbin:/usr/bin:/usr/sbin
   # during development, do not compress .el files to speed up "make install"
   export GZIP_PROG=
   echo "Building Aquamacs (development, local architecture)."
@@ -112,7 +113,8 @@ echo "MACOSX_DEPLOYMENT_TARGET=" $MACOSX_DEPLOYMENT_TARGET
 # Note: Setting MACOSX_DEPLOYMENT_TARGET is likely to be sufficient.
 
 COMPAT_CFLAGS="-Werror=partial-availability"
-COMPAT_LDFLAGS="-Wl,-no_weak_imports"
+# COMPAT_LDFLAGS="-Wl,-no_weak_imports"
+COMPAT_LDFLAGS=
 DEPLOY="-mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"
 MAXVERS="-DMAC_OS_X_VERSION_MAX_ALLOWED=101100"
 
