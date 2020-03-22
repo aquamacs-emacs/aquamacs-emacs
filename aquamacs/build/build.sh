@@ -2,6 +2,10 @@
 
 # Build Aquamacs
 
+# Load any personal configuration for the build
+AQ_PERS_CONF=~/.aqbuildrc
+[ -f ${AQ_PERS_CONF} ] && source ${AQ_PERS_CONF}
+
 # use Macports build of AUTOCONF
 AUTOTOOLS=$(dirname $0)/autotools
 export PATH=$AUTOTOOLS:$PATH
@@ -50,6 +54,8 @@ case "$1" in
   OLD_SDK=1
   ;;
 *)
+  # Include /usr/local/bin/for finding homebrew libaries
+  PATH=$AUTOTOOLS:${TEXINFO}:/usr/local/bin:/bin:/sbin:/usr/bin:/usr/sbin
   # during development, do not compress .el files to speed up "make install"
   export GZIP_PROG=
   echo "Building Aquamacs (development, local architecture)."
@@ -96,9 +102,26 @@ echo "MACOSX_DEPLOYMENT_TARGET=" $MACOSX_DEPLOYMENT_TARGET
 
 # Note: Setting MACOSX_DEPLOYMENT_TARGET is likely to be sufficient.
 
+DEPLOY="-mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"
+MAXVERS="-DMAC_OS_X_VERSION_MAX_ALLOWED=101100"
+
 # autoconf must be run via macports to allow its upgrade
+
+# Use AQ_LOCAL_CONF_FLAGS environment variable to customize the
+# configure command for private builds
+
+# Exclude some libraries from homebrew use, at least for now
+BREW_EXCLUDE_FLAGS="--without-jpeg --without-rsvg"
+
+# XXX check these options: --without-xml2 --without-clock-gettime \
 test $OMIT_AUTOGEN || ./autogen.sh ; \
-./configure --with-ns --without-x CFLAGS="$FLAGS -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET" LDFLAGS="$FLAGS -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET" || exit
+    ./configure --with-ns --without-x \
+                ${AQ_LOCAL_CONF_FLAGS} \
+                ${BREW_EXCLUDE_FLAGS} \
+                CFLAGS="$FLAGS ${DEPLOY} ${MAXVERS}" \
+                LDFLAGS="$FLAGS ${DEPLOY} ${MAXVERS}" \
+    || exit
+
 make clean || exit
 
 ## temporary:
