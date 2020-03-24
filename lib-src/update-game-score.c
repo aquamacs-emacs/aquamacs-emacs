@@ -427,7 +427,7 @@ sort_scores (struct score_entry *scores, ptrdiff_t count, bool reverse)
 
 static int
 write_scores (const char *filename, mode_t mode,
-	      const struct score_entry *scores, ptrdiff_t count)
+              const struct score_entry *scores, ptrdiff_t count)
 {
   int fd;
   FILE *f;
@@ -436,12 +436,14 @@ write_scores (const char *filename, mode_t mode,
   if (!tempfile)
     return -1;
   strcpy (stpcpy (tempfile, filename), ".tempXXXXXX");
+  /* XXX Pragma is a hack because mkostemp() is implemented in gnulib and we can use that one.*/
+#pragma clang diagnostic ignored "-Wpartial-availability"
   fd = mkostemp (tempfile, 0);
   if (fd < 0)
     return -1;
 #ifndef DOS_NT
-  if (fchmod (fd, mode) != 0)
-    return -1;
+     if (fchmod (fd, mode) != 0)
+         return -1;
 #endif
   f = fdopen (fd, "w");
   if (! f)

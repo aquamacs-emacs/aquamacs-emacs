@@ -6818,6 +6818,8 @@ etags_mktmp (void)
 #endif
 
   char *templt = concat (tmpdir, slash, "etXXXXXX");
+  /* XXX Pragma is a hack because mkostemp() is implemented in gnulib and we can use that one.*/
+#pragma clang diagnostic ignored "-Wpartial-availability"
   int fd = mkostemp (templt, O_CLOEXEC);
   if (fd < 0 || close (fd) != 0)
     {

@@ -1,6 +1,15 @@
-#!/bin/sh
-
+#!/bin/bash
+#
 # Build Aquamacs
+
+# Exit if any command fails
+set -e
+
+# This exec command forces both stdin and stderr to a log file, so we
+# don't have to carefully log the output of every command.
+BUILD_LOG=build.log
+exec &> >(tee ${BUILD_LOG})
+
 
 # Load any personal configuration for the build
 AQ_PERS_CONF=~/.aqbuildrc
@@ -102,6 +111,8 @@ echo "MACOSX_DEPLOYMENT_TARGET=" $MACOSX_DEPLOYMENT_TARGET
 
 # Note: Setting MACOSX_DEPLOYMENT_TARGET is likely to be sufficient.
 
+COMPAT_CFLAGS="-Werror=partial-availability"
+COMPAT_LDFLAGS="-Wl,-no_weak_imports"
 DEPLOY="-mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"
 MAXVERS="-DMAC_OS_X_VERSION_MAX_ALLOWED=101100"
 
@@ -118,9 +129,9 @@ test $OMIT_AUTOGEN || ./autogen.sh ; \
     ./configure --with-ns --without-x \
                 ${AQ_LOCAL_CONF_FLAGS} \
                 ${BREW_EXCLUDE_FLAGS} \
-                CFLAGS="$FLAGS ${DEPLOY} ${MAXVERS}" \
-                LDFLAGS="$FLAGS ${DEPLOY} ${MAXVERS}" \
-    || exit
+                CFLAGS="$FLAGS ${DEPLOY} ${MAXVERS} ${COMPAT_CFLAGS}" \
+                LDFLAGS="$FLAGS ${DEPLOY} ${MAXVERS} ${COMPAT_LDFLAGS}" \
+    || exit 1
 
 make clean || exit
 

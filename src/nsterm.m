@@ -6428,10 +6428,10 @@ not_in_argv (NSString *arg)
 {
   /* The following did not work until 10.6 (or 10.5.8 maybe) */
   return (NSFontPanelFaceModeMask |
-  	  NSFontPanelSizeModeMask |
-  	  NSFontPanelCollectionModeMask  |
-  	  NSFontPanelTextColorEffectModeMask  |
-  	  NSFontPanelDocumentColorEffectModeMask); 
+          NSFontPanelSizeModeMask |
+          NSFontPanelCollectionModeMask  |
+          NSFontPanelTextColorEffectModeMask  |
+          NSFontPanelDocumentColorEffectModeMask);
   /*
   return  NSFontPanelAllModesMask
   - NSFontPanelShadowEffectModeMask; */
@@ -7905,8 +7905,15 @@ not_in_argv (NSString *arg)
   /* macOS Sierra automatically enables tabbed windows.  We can't
      allow this to be enabled until it's available on a Free system.
      Currently it only happens by accident and is buggy anyway. */
-  if ([win respondsToSelector: @selector(setTabbingMode:)])
+  /* setTabbingMode was also introduced in 10.12. The pragma is a hack
+     to allow the code to compile even when we tell the compiler to
+     error on compatibility issues. It's only good for one line of
+     code, so it is repeated. */
+#pragma clang diagnostic ignored "-Wpartial-availability"
+  if ([win respondsToSelector: @selector(setTabbingMode:)]) {
+#pragma clang diagnostic ignored "-Wpartial-availability"
     [win setTabbingMode: NSWindowTabbingModeDisallowed];
+  }
 
   ns_window_num++;
   return self;

@@ -955,6 +955,9 @@ create_temp_file (ptrdiff_t nargs, Lisp_Object *args,
 
     count = SPECPDL_INDEX ();
     record_unwind_protect_nothing ();
+    /* XXX Pragma is a hack because mkostemp() is implemented in gnulib and we can use that one.*/
+#pragma clang diagnostic ignored "-Wpartial-availability"
+
     fd = mkostemp (tempfile, O_BINARY | O_CLOEXEC);
     if (fd < 0)
       report_file_error ("Failed to open temporary file using pattern",
