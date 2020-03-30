@@ -1,6 +1,15 @@
-#!/bin/sh
-
+#!/bin/bash
+#
 # Build Aquamacs
+
+# Exit if any command fails
+set -e
+
+# This exec command forces both stdin and stderr to a log file, so we
+# don't have to carefully log the output of every command.
+BUILD_LOG=build.log
+exec &> >(tee ${BUILD_LOG})
+
 
 # Load any personal configuration for the build
 AQ_PERS_CONF=~/.aqbuildrc
@@ -15,6 +24,7 @@ FLAGS=
 OMIT_SYMB=1
 OLD_SDK=0
 TEXINFO=/usr/local/opt/texinfo/bin
+TEXPATH=/Library/TeX/texbin
 
 # Xcoode has the libxml2 libraries if you ask it where they are.
 export LIBXML2_CFLAGS=`xml2-config --cflags`
@@ -35,7 +45,7 @@ case "$1" in
   ;;
 '-release')
   # Include /usr/local/bin/for finding homebrew libaries
-  PATH=$AUTOTOOLS:${TEXINFO}:/usr/local/bin:/bin:/sbin:/usr/bin:/usr/sbin
+  PATH=$AUTOTOOLS:${TEXINFO}:${TEXPATH}:/usr/local/bin:/bin:/sbin:/usr/bin:/usr/sbin
   export GZIP_PROG=`which gzip`
   echo "Building Aquamacs (release)."
   OMIT_AUTOGEN=
@@ -55,7 +65,7 @@ case "$1" in
   ;;
 *)
   # Include /usr/local/bin/for finding homebrew libaries
-  PATH=$AUTOTOOLS:${TEXINFO}:/usr/local/bin:/bin:/sbin:/usr/bin:/usr/sbin
+  PATH=$AUTOTOOLS:${TEXINFO}:${TEXPATH}:/usr/local/bin:/bin:/sbin:/usr/bin:/usr/sbin
   # during development, do not compress .el files to speed up "make install"
   export GZIP_PROG=
   echo "Building Aquamacs (development, local architecture)."
@@ -102,6 +112,9 @@ echo "MACOSX_DEPLOYMENT_TARGET=" $MACOSX_DEPLOYMENT_TARGET
 
 # Note: Setting MACOSX_DEPLOYMENT_TARGET is likely to be sufficient.
 
+COMPAT_CFLAGS="-Werror=partial-availability"
+# COMPAT_LDFLAGS="-Wl,-no_weak_imports"
+COMPAT_LDFLAGS=
 DEPLOY="-mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"
 MAXVERS="-DMAC_OS_X_VERSION_MAX_ALLOWED=101100"
 
@@ -118,9 +131,9 @@ test $OMIT_AUTOGEN || ./autogen.sh ; \
     ./configure --with-ns --without-x \
                 ${AQ_LOCAL_CONF_FLAGS} \
                 ${BREW_EXCLUDE_FLAGS} \
-                CFLAGS="$FLAGS ${DEPLOY} ${MAXVERS}" \
-                LDFLAGS="$FLAGS ${DEPLOY} ${MAXVERS}" \
-    || exit
+                CFLAGS="$FLAGS ${DEPLOY} ${MAXVERS} ${COMPAT_CFLAGS}" \
+                LDFLAGS="$FLAGS ${DEPLOY} ${MAXVERS} ${COMPAT_LDFLAGS}" \
+    || exit 1
 
 make clean || exit
 

@@ -405,6 +405,8 @@ create_lock_file (char *lfname, char *lock_info_str, bool force)
       int fd;
       memcpy (nonce, lfname, lfdirlen);
       strcpy (nonce + lfdirlen, nonce_base);
+      /* XXX Pragma is a hack because mkostemp() is implemented in gnulib and we can use that one.*/
+#pragma clang diagnostic ignored "-Wpartial-availability"
 
       fd = mkostemp (nonce, O_BINARY | O_CLOEXEC);
       if (fd < 0)

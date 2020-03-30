@@ -33,7 +33,7 @@ pdf: aquamacs.tex changelog.tex changes.tex *.pdf
 html: aquamacs.tex *.pdf
 	echo "Running latex2html on $(fname)...";				     \
 	rm -r aquamacs ; \
-	../convert/latex2html -init_file l2hconf-local.pm -local_icons -html_version=4.0 $(fname)
+	latex2html -use_pdftex -init_file lhconfig.pm -local_icons -html_version=5.0 $(fname)
 	sips -s format png aquamacs-logo.pdf --out $(newdir)/image.png; \
 	echo "$(fname) converted to HTML."					     ; \
 	cp aquamacs.css $(newdir)/aquamacs.css					     ; \

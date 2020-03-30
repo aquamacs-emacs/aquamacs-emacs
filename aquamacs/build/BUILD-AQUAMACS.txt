@@ -1,0 +1,45 @@
+This file describes the process of building Aquamacs in various ways.
+
+The Aquamacs git repository is at https://github.com/aquamacs-emacs/aquamacs-emacs.
+
+Personal build
+-----------
+
+To build Aquamacs for personal use, to add a new feature, or fix a bug, it is usually sufficient to run
+
+   ./build-aquamacs
+
+in the top-level Aquamacs directory.
+
+Development build
+---------------
+
+Nightly build
+----------
+
+The nightly build process (driven by aquamacs/build/nightly-build.sh) is used by the Aquamacs maintainer to make sure that the current git head builds correctly for distribution and to produce nightly test versions for anyone interested to try.
+
+The process goes through the following steps:
+1. Download the latest HEAD from the Aquamacs git repository
+2. Build the Aquamacs documentation
+3. Build the Aquamacs application bundle
+4. Copy the necessary external libraries (notably gnutls and its dependencies) into
+    the application bundle.
+5. Create a compressed tar file (.tar.bz2) of the application bundle
+6. Upload the compressed tar file to a web server
+
+The nightly build is not signed.
+
+If the process fails at any point, the build aborts.
+
+For the normal build process in step 3, the nightly build uses the normal build-aquamacs script with the -release option, and it should not set any environment variables relevant to build-aquamacs.
+
+The default directory for nightly builds is ~/Nightly (NIGHTLY_DIR). Changing this is not hard, but doing so has not been tested and there are possible bugs with that.
+
+Logs of the build are kept in ${NIGHTLY_DIR}/logs. There are separate logs for documentation build and the application build.
+
+The script has a few environment variables that can be overridden in some specific circumstances. See the script for details.
+
+If you are working on the nightly-build script, see the script comments for details on how to keep your work from being overwritten by the git updates.
+
+The upload script depends on both the local system configuration and the web server used to distribute the builds, so it is not part of the repository.
