@@ -4169,6 +4169,7 @@ handlePanelKeys (NSSavePanel *panel, NSEvent *theEvent)
   int i;
   BOOL ret = NO;
 
+  return NO;
   if ([theEvent type] != NSKeyDown) return NO;
   s = [theEvent characters];
 
