@@ -125,7 +125,7 @@ echo "MACOSX_DEPLOYMENT_TARGET=" $MACOSX_DEPLOYMENT_TARGET
 # Note: Setting MACOSX_DEPLOYMENT_TARGET is likely to be sufficient.
 
 COMPAT_CFLAGS="-Werror=partial-availability"
-# COMPAT_LDFLAGS="-Wl,-no_weak_imports"
+COMPAT_LDFLAGS="-Wl,-no_weak_imports"
 COMPAT_LDFLAGS=
 DEPLOY="-mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"
 MAXVERS="-DMAC_OS_X_VERSION_MAX_ALLOWED=101100"
