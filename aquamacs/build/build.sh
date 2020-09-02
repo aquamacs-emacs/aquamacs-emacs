@@ -63,6 +63,18 @@ case "$1" in
   OMIT_SYMB=
   OLD_SDK=1
   ;;
+'-xcode')
+  # Include /usr/local/bin/for finding homebrew libaries
+  PATH=$AUTOTOOLS:${TEXINFO}:${TEXPATH}:${PATH}
+  # during development, do not compress .el files to speed up "make install"
+  export GZIP_PROG=
+  echo "Building Aquamacs (development, with Xcode)"
+  FLAGS="-O0 -g $FLAGS"
+  if [ ! -e "configure" ];
+  then
+    OMIT_AUTOGEN=
+  fi
+  ;;
 *)
   # Include /usr/local/bin/for finding homebrew libaries
   PATH=$AUTOTOOLS:${TEXINFO}:${TEXPATH}:/usr/local/bin:/bin:/sbin:/usr/bin:/usr/sbin
