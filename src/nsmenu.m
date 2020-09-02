@@ -101,7 +101,7 @@ popup_activated (void)
     2) deep_p, submenu = nil: Recompute all submenus.
     3) deep_p, submenu = non-nil: Update contents of a single submenu.
    -------------------------------------------------------------------------- */
-static 
+static
 void
 ns_update_menubar (struct frame *f, bool deep_p, EmacsMenu *submenu)
 {
@@ -130,20 +130,19 @@ ns_update_menubar (struct frame *f, bool deep_p, EmacsMenu *submenu)
       //[mainMenu retain];
       //[NSApp setMainMenu: [panelMenu retain]];
       [NSApp setMainMenu: panelMenu];
-      return;  
-    } 
+      return;
+    }
   if (! [[FRAME_NS_VIEW (f) window] isKindOfClass: [EmacsWindow class]])
     {
       return;
     }
-  
+
   [NSApp setMainMenu: mainMenu];
 
   XSETFRAME (Vmenu_updating_frame, f);
 /*fprintf (stderr, "ns_update_menubar: frame: %p\tdeep: %d\tsub: %p\n", f, deep_p, submenu); */
 
   block_input ();
-  pool = [[NSAutoreleasePool alloc] init];
 
   /* Menu may have been created automatically; if so, discard it. */
   if ([app_menu isKindOfClass: [EmacsMenu class]] == NO) // && menu != panelMenu)
@@ -265,7 +264,6 @@ ns_update_menubar (struct frame *f, bool deep_p, EmacsMenu *submenu)
                   [[submenu title] UTF8String]);
 	  discard_menu_items ();
 	  unbind_to (specpdl_count, Qnil);
-          [pool release];
           unblock_input ();
 	  return;
         }
@@ -323,7 +321,6 @@ ns_update_menubar (struct frame *f, bool deep_p, EmacsMenu *submenu)
               free_menubar_widget_value_tree (first_wv);
               discard_menu_items ();
               unbind_to (specpdl_count, Qnil);
-              [pool release];
               unblock_input ();
               return;
             }
@@ -389,7 +386,6 @@ ns_update_menubar (struct frame *f, bool deep_p, EmacsMenu *submenu)
       if (NILP (items))
         {
           free_menubar_widget_value_tree (first_wv);
-          [pool release];
           unblock_input ();
           return;
         }
@@ -420,7 +416,6 @@ ns_update_menubar (struct frame *f, bool deep_p, EmacsMenu *submenu)
           if (i == n)
             {
               free_menubar_widget_value_tree (first_wv);
-              [pool release];
               unblock_input ();
               return;
             }
@@ -453,9 +448,9 @@ ns_update_menubar (struct frame *f, bool deep_p, EmacsMenu *submenu)
           [menu addSubmenuWithTitle: wv->name forFrame: f];
 
 	  if (prev_wv)
-	    prev_wv->next = wv;
+              prev_wv->next = wv;
 	  else
-	    first_wv->contents = wv;
+              first_wv->contents = wv;
 	  prev_wv = wv;
 	}
 
@@ -479,7 +474,6 @@ ns_update_menubar (struct frame *f, bool deep_p, EmacsMenu *submenu)
   if (needsSet)
     [NSApp setMainMenu: menu];
 
-  [pool release];
   unblock_input ();
 
 }
@@ -636,13 +630,13 @@ name_is_separator (name)
      {
        /* if we don't have a frame as key,
 	  then the selected frame/window and current buffer will be used.
-	  To Do: prevent changes to that buffer. 
+	  To Do: prevent changes to that buffer.
        (setting read-only here doesn't help - the event is processed later.)*/
        [FRAME_NS_VIEW (SELECTED_FRAME ()) keyDown: event];
      }
   else
     {
-      /* open panels (text fields, etc.) require a 
+      /* open panels (text fields, etc.) require a
         menu with Edit submenu, containing Copy, Paste, Undo, etc. functions
         that send the correct actions to the first responders.
         Therefore, the panelMenu (which is the main menu normally when sheets
@@ -674,7 +668,7 @@ name_is_separator (name)
     tpos++;
 
 #ifndef NS_IMPL_COCOA
-  if (*tpos != 's') 
+  if (*tpos != 's')
 #endif
     {
   keyEquivModMask = 0; /* signal */
@@ -764,7 +758,7 @@ name_is_separator (name)
   [self setMenuChangedMessagesEnabled: NO];
   [self clear];
 
-  /* align key bindings 
+  /* align key bindings
      taken from Yamamoto Mitsuharu's AppKit port */
   for (wv = (widget_value *)wvptr; wv != NULL; wv = wv->next)
     if (!name_is_separator (wv->name) && wv->key)
@@ -798,7 +792,7 @@ name_is_separator (name)
 	    wv->name = SDATA (name);
 	  }
       }
-   
+
   /* add new contents */
 
       NSMenuItem *item = [self addItemWithWidgetValue: wv];
@@ -1146,7 +1140,7 @@ update_frame_tool_bar (struct frame *f)
   [toolbar setAutosavesConfiguration:NO];
   /* setAutosavesConfiguration is problematic,
      as it creates a defaults file
-     also, doesn't seem to work with our tool bar 
+     also, doesn't seem to work with our tool bar
      construction mechanism.
      [toolbar setAutosavesConfiguration:YES];
 
@@ -1175,7 +1169,7 @@ update_frame_tool_bar (struct frame *f)
 
      ((hash1 . tool-bar-config1)
       (hash2 . tool-bar-config2))
- 
+
       The hashes are hashes of the set of Lisp-side toolbar menu items (via their event names)
       (sxhash (sort (mapcar
       (lambda (m)
@@ -1183,7 +1177,7 @@ update_frame_tool_bar (struct frame *f)
       (car m)))
       tool-bar-map)))
 
-      however, as soon as an item is added to or removed from the tool bar, do we want to 
+      however, as soon as an item is added to or removed from the tool bar, do we want to
       discard the user's tool bar configuration?
       Maybe that's okay.
 
@@ -1336,7 +1330,7 @@ update_frame_tool_bar (struct frame *f)
 
 DEFUN ("ns-tool-bar-customize", Fns_tool_bar_customize, Sns_tool_bar_customize, 0, 1, "",
        doc: /* View tool bar configuration.
-Shows the tool bar customization panel in the given frame. 
+Shows the tool bar customization panel in the given frame.
 The tool bar should be visible in FRAME when calling this function.*/)
      (frame)
      Lisp_Object frame;
@@ -1510,7 +1504,7 @@ Items in this list are always Lisp symbols.*/)
     enablement == prevEnablement ? NO : YES;
 }
 
-- (void) addDisplayItemSpacerWithIdx: (int)idx 
+- (void) addDisplayItemSpacerWithIdx: (int)idx
 				 tag: (int)tag
 				 key: (char *) key
 {
@@ -1522,7 +1516,7 @@ Items in this list are always Lisp symbols.*/)
   NSToolbarItem *item = [identifierToItem objectForKey: identifier];
   if (item == nil)
     {
-      item = [[[NSToolbarItem alloc] initWithItemIdentifier: 
+      item = [[[NSToolbarItem alloc] initWithItemIdentifier:
 	       NSToolbarFlexibleSpaceItemIdentifier]
                autorelease];
     }
@@ -1656,7 +1650,7 @@ Items in this list are always Lisp symbols.*/)
 //    so it's useless for the purposes of running the hook. */
 // hack
 - (void)checkCustomizationChange:(NSTimer*)theTimer
-{ 
+{
   if (! [self customizationPaletteIsRunning])
     { [theTimer invalidate];
       [self customizationDidChange];
@@ -1669,11 +1663,11 @@ Items in this list are always Lisp symbols.*/)
   				 selector: @selector (checkCustomizationChange:)
   				 userInfo: nil repeats: YES];
 }
-// not called upon changing tool bar 
+// not called upon changing tool bar
 // - (void)validateVisibleItems:(id)sender
 
 /* it is currently impossible to have all toolbar modifications trigger
-send a message; Command-Option dragging items for instance does not trigger 
+send a message; Command-Option dragging items for instance does not trigger
 a notification */
 
 - (void)setVisible:(BOOL)shown
@@ -1830,7 +1824,7 @@ a notification */
 
 - (void)close
 {
-   [[self window] close]; 
+   [[self window] close];
     }
 
 - (void) alertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
@@ -1859,7 +1853,7 @@ a notification */
 	  NSButton *space = [self addButtonWithTitle: @" " ];
 	  [space setHidden:YES];
 }
-      else if (CONSP (item)) 
+      else if (CONSP (item))
 {
 	  NSString *title = @"malformed";
 	  NSString *key = nil;
@@ -1981,13 +1975,13 @@ ns_popup_dialog (struct frame *f, Lisp_Object header, Lisp_Object contents)
   CHECK_CONS (contents);
   isQ = NILP (header);
 
-  
+
   if (f==NULL)
     {
       useSheet = NO;
     }
 
-  if (f) 
+  if (f)
     {
   check_window_system (f);
 
@@ -2029,7 +2023,7 @@ ns_popup_dialog (struct frame *f, Lisp_Object header, Lisp_Object contents)
       char* split = strchr( SDATA (head), '\n');
       if ( split )
 {
-	  split[0] = '\0'; 
+	  split[0] = '\0';
 	  [dialog setMessageText:
 		   [NSString stringWithUTF8String: SDATA (head)]];
 	  split[0] = '\n';  /* not nice, but works */
@@ -2057,7 +2051,7 @@ ns_popup_dialog (struct frame *f, Lisp_Object header, Lisp_Object contents)
     unwind_data->dialog = dialog;
 
     record_unwind_protect_ptr (pop_down_menu, unwind_data);
-  
+
 
   [dialog layout]; /* because we may not call beginSheet / runModal */
 
@@ -2074,7 +2068,7 @@ ns_popup_dialog (struct frame *f, Lisp_Object header, Lisp_Object contents)
 
 
   /* initiate a session that will be ended by pop_down_menu */
-  [dialog retain];  
+  [dialog retain];
   popupSession = [NSApp beginModalSessionForWindow: [dialog window]];
 
   int ret2 = -1;
@@ -2522,7 +2516,7 @@ syms_of_nsmenu (void)
 #endif
   DEFVAR_LISP ("ns-tool-bar-size-mode", Vns_tool_bar_size_mode,
 	       doc: /* *Specify the size of the tool bar items.
-The value can be `small' (for small items), `regular' 
+The value can be `small' (for small items), `regular'
 (for regular sized items) and nil for the system default.
 The default is nil.
 
