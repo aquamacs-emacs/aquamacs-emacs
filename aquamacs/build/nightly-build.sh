@@ -49,7 +49,8 @@ echo "Begin building Aquamacs at" $(date)
 if [ "${NOGIT}x" = x ]; then
     echo "Updating working directory from Git repository."
     git fetch -f origin
-    git branch -D new-$BRANCH >>/dev/null
+    # Use || true for 'git branch -D' because the command might fail, which is fine.
+    git branch -D new-$BRANCH >>/dev/null || true
     git checkout -f --track -b new-$BRANCH origin/$BRANCH  \
         && git branch -D $BRANCH  \
         && git branch -m new-$BRANCH $BRANCH
