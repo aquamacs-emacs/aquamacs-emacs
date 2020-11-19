@@ -126,12 +126,16 @@ MAXVERS="-DMAC_OS_X_VERSION_MAX_ALLOWED=101100"
 # Exclude some libraries from homebrew use, at least for now
 BREW_EXCLUDE_FLAGS="--without-jpeg --without-rsvg"
 
+DEBUG_CONF="--enable-checking='yes,glyphs' --enable-check-lisp-object-type"
+DEBUG_CFLAGS='-O0 -g3'
+
 # XXX check these options: --without-xml2 --without-clock-gettime \
 test $OMIT_AUTOGEN || ./autogen.sh ; \
     ./configure --with-ns --without-x \
                 ${AQ_LOCAL_CONF_FLAGS} \
                 ${BREW_EXCLUDE_FLAGS} \
-                CFLAGS="$FLAGS ${DEPLOY} ${MAXVERS} ${COMPAT_CFLAGS}" \
+                ${DEBUG_CON} \
+                CFLAGS="$FLAGS ${DEPLOY} ${MAXVERS} ${COMPAT_CFLAGS} ${DEBUG_CFLAGS}" \
                 LDFLAGS="$FLAGS ${DEPLOY} ${MAXVERS} ${COMPAT_LDFLAGS}" \
     || exit 1
 
