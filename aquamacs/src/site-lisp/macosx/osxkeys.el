@@ -873,6 +873,8 @@ which key is mapped to command. The value of
     (define-key map `[(,osxkeys-command-key shift g)] 'aquamacs-repeat-isearch-backward)
     (if (fboundp 'ns-do-hide-emacs)
 	(define-key map `[(,osxkeys-command-key h)] 'ns-do-hide-emacs))
+    (if (fboundp 'ns-do-hide-others)
+	(define-key map `[(,osxkeys-command-key meta h)] 'ns-do-hide-others))
     (define-key map `[(,osxkeys-command-key e)] 'aquamacs-use-selection-for-find)
     (define-key map `[(,osxkeys-command-key w)] 'close-window)
     (define-key map `[(,osxkeys-command-key m)] 'iconify-or-deiconify-frame) 
