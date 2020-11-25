@@ -20,6 +20,7 @@ Aquamacs Emacs is licensed under the GNU General Public License, v3.
 
 Project website:  http://aquamacs.org
 
+Discussion of Aquamacs takes place on the email list macosx-emacs@email.esm.psu.edu
 
 Building Aquamacs
 ------------------
@@ -31,15 +32,14 @@ For more details about building Aquamacs, see ./aquamacs/build/BUILD-AQUAMACS.tx
 
 Contributing to Aquamacs
 -------------------------
-
-Please contact the aquamacs-devel mailing list.
-(Developers only; Users should obtain support via the Emacs on OSX
-mailing list.)
+Discussion about Aquamacs development takes place on the email list  aquamacs-devel@googlegroups.com, or in issues filed at https://github.com/aquamacs-emacs/aquamacs-emacs/issues.
 
 
 Author
 -------
 
 Aquamacs Emacs started in 2005.
-Since then, it has been maintained by David Reitter, david.reitter@gmail.com.
-Many developers have since contributed to its success.
+Until 2019, it was maintained by David Reitter, david.reitter@gmail.com.
+Aquamacs is currently maintained by Win Treese, treese@acm.org.
+
+Many developers have contributed to its success.

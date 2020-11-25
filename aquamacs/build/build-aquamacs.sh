@@ -1,173 +1,110 @@
 #!/bin/bash
 #
 # Build Aquamacs
+#
+# This is the basic build for personal use, and is also used by other
+# build scripts.
 
-# Exit if any command fails
-set -e
+### The following are default settings for various options, including
+### for the compiler and configure. You can override these by setting
+### them in ~/.aqbuildrc. They do not need to be exported as environment
+### variables. You can add personal configure options and compiler flags by defining
+### USE_PERSONAL_CONFIG_OPTS and USE_PERSONAL_CFLAGS in that file.
 
-# This exec command forces both stdin and stderr to a log file, so we
-# don't have to carefully log the output of every command.
-BUILD_LOG=build.log
-exec &> >(tee ${BUILD_LOG})
+### Note: In practice, gnutls is required for being able to make
+### network connections, including for Aquamacs update checks and
+### installing packages. The best way to install it is with Homebrew
+### (https://brew.sh).
 
+### For personal builds, configure may find various libraries you have
+### installed, say from Homebrew, and these may or may not work with
+### Aquamacs. Configure things accordingly. The following two
+### variables can be used to include or omit packages. They are both
+### passed to ./configure.
 
-# Load any personal configuration for the build
-AQ_PERS_CONF=~/.aqbuildrc
-[ -f ${AQ_PERS_CONF} ] && source ${AQ_PERS_CONF}
-
-# use Macports build of AUTOCONF
-AUTOTOOLS=$(dirname $0)/autotools
-export PATH=$AUTOTOOLS:$PATH
-
-OMIT_AUTOGEN=1
-FLAGS=
-OMIT_SYMB=1
-OLD_SDK=0
-TEXINFO=/usr/local/opt/texinfo/bin
-TEXPATH=/Library/TeX/texbin
-
-# Xcoode has the libxml2 libraries if you ask it where they are.
-export LIBXML2_CFLAGS=`xml2-config --cflags`
-export LIBXML2_LIBS=`xml2-config --libs`
-
-case "$1" in
-'-local')
-  # Include /usr/local/bin/for finding homebrew libaries
-  PATH=$AUTOTOOLS:${TEXINFO}:/usr/local/bin:/bin:/sbin:/usr/bin:/usr/sbin
-  export GZIP_PROG=`which gzip`
-  echo "Building Aquamacs (local, optimised release)."
-  FLAGS="-march=native -mtune=native -O3 -g $FLAGS"
-  OMIT_SYMB=
-  if [ ! -e "configure" ];
-  then
-    OMIT_AUTOGEN=
-  fi
-  ;;
-'-release')
-  # Include /usr/local/bin/for finding homebrew libaries
-  PATH=$AUTOTOOLS:${TEXINFO}:${TEXPATH}:/usr/local/bin:/bin:/sbin:/usr/bin:/usr/sbin
-  export GZIP_PROG=`which gzip`
-  echo "Building Aquamacs (release)."
-  OMIT_AUTOGEN=
-  FLAGS='-arch x86_64 -O3 -g -mtune=corei7'
-  OMIT_SYMB=
-  OLD_SDK=1
-  ;;
-'-flags')
-  # Include /usr/local/bin/for finding homebrew libaries
-  PATH=$AUTOTOOLS:/usr/local/bin:/sbin:/usr/bin:/usr/sbin
-  export GZIP_PROG=`which gzip`
-  echo "Building Aquamacs (nightly build)."
-  OMIT_AUTOGEN=
-  FLAGS="-arch x86_64 -O3 -g -mtune=corei7 $FLAGS"
-  OMIT_SYMB=
-  OLD_SDK=1
-  ;;
-*)
-  # Include /usr/local/bin/for finding homebrew libaries
-  PATH=$AUTOTOOLS:${TEXINFO}:${TEXPATH}:/usr/local/bin:/bin:/sbin:/usr/bin:/usr/sbin
-  # during development, do not compress .el files to speed up "make install"
-  export GZIP_PROG=
-  echo "Building Aquamacs (development, local architecture)."
-  FLAGS="-O0 -g $FLAGS"
-  if [ ! -e "configure" ];
-  then
-    OMIT_AUTOGEN=
-  fi
-  ;;
-esac
-echo "Compiler flags: $FLAGS"
-
-# do not use MacPorts / fink libraries
-# do not use binaries either (e.g., gnutls would be recognized)
-
-# We will run only on 10.11 and later.
-MACOSX_DEPLOYMENT_TARGET=${MACOSX_DEPLOYMENT_TARGET:-"10.11"}
-export MACOSX_DEPLOYMENT_TARGET
-
-FINALMESSAGE=""
-
-if test $OLD_SDK -gt 0;
-then
-# we're going to choose the oldest SDK we have (starting with 10.11)
-# this should guarantee backwards compatibility up to that SDK version.
-# for current Aquamacs, this will typically be 10.11
-for VERS in 10.11 10.12 10.13 10.14; do
-    SDK="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${VERS}.sdk"
-    if [ -d "$SDK" ]; then
-        FINALMESSAGE="This build will be compatible with OS X $VERS onwards."
-	SDKROOT=${SDKROOT:-"$SDK"}
-	break
-    fi
-done
-export SDKROOT
-else
-    FINALMESSAGE="Binary backwards compatibility not available."
-fi
-
-echo "PATH=" $PATH
-echo "SDKROOT=" $SDKROOT
-echo "MACOSX_DEPLOYMENT_TARGET=" $MACOSX_DEPLOYMENT_TARGET
+CONFIG_OMIT_PACKAGES=
+CONFIG_USE_PACKAGES=
 
 
-# Note: Setting MACOSX_DEPLOYMENT_TARGET is likely to be sufficient.
+# Compiler flags: optimization
+OPT_FLAGS="-O3 -g -march=native -mtune=native"
+
+# Options for debugging: one for ./configure, one for CFLAGS
+DEBUG_CONFIG_OPTS="--enable-checking='yes,glyphs' --enable-check-lisp-object-type"
+DEBUG_CFLAGS='-O0 -g3'
+
+# Options for enforcing some backwards compatibility. These may only
+# be needed for compatibility back to El Capitan (10.11). They can be
+# overridden in .aqbuildrc, but they should normally only matter in
+# release builds.
 
 COMPAT_CFLAGS="-Werror=partial-availability"
 COMPAT_LDFLAGS="-Wl,-no_weak_imports"
-COMPAT_LDFLAGS=
-DEPLOY="-mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"
-MAXVERS="-DMAC_OS_X_VERSION_MAX_ALLOWED=101100"
 
-# autoconf must be run via macports to allow its upgrade
+# In release builds, we set the environment variable
+# MACOSX_DEPLOYMENT_TARGET from this value. Setting the environment
+# variable should be sufficient without compiler flags. This is
+# usually not needed for personal or development builds (except to
+# check that nothing incompatible has been introduced.)
+RELEASE_MIN_VERSION=10.11
 
-# Use AQ_LOCAL_CONF_FLAGS environment variable to customize the
-# configure command for private builds
+# During development, do not compress .el files to speed up "make
+# install". This one must be exported to the environment.
+export GZIP_PROG=
 
-# Exclude some libraries from homebrew use, at least for now
-BREW_EXCLUDE_FLAGS="--without-jpeg --without-rsvg"
+case $1 in
+    # -release used for both nightly and full release builds
+    -release)
+        OPT_FLAGS="-O3 -g -arch x86_64 -O3 -mtune=corei7"
+        CONFIG_OMIT_PACKAGES="--without-jpeg --without-rsvg"
+        CONFIG_USE_PACKAGES="--with-gnutls"
+        export MACOSX_DEPLOYMENT_TARGET="${RELEASE_MIN_VERSION}"
+        export GZIP_PROG=$(which gzip)
+        ;;
+    -debug)
+        USE_CONFIG_OPTS="${DEBUG_CONFIG_OPTS}"
+        USE_DEBUG_CFLAGS="${DEBUG_CFLGAS}"
+        ;;
+    *)
+        AQ_PERS_CONF=~/.aqbuildrc
+        [ -f ${AQ_PERS_CONF} ] && source "${AQ_PERS_CONF}"
+        ;;
+esac
 
-DEBUG_CONF="--enable-checking='yes,glyphs' --enable-check-lisp-object-type"
-DEBUG_CFLAGS='-O0 -g3'
+#### Below this point should normally not need to be changed. If you
+#### do find changes needed here, please submit an issue on github.
 
-# XXX check these options: --without-xml2 --without-clock-gettime \
-test $OMIT_AUTOGEN || ./autogen.sh ; \
-    ./configure --with-ns --without-x \
-                ${AQ_LOCAL_CONF_FLAGS} \
-                ${BREW_EXCLUDE_FLAGS} \
-                ${DEBUG_CON} \
-                CFLAGS="$FLAGS ${DEPLOY} ${MAXVERS} ${COMPAT_CFLAGS} ${DEBUG_CFLAGS}" \
-                LDFLAGS="$FLAGS ${DEPLOY} ${MAXVERS} ${COMPAT_LDFLAGS}" \
+[ ! -f $(which autoconf) ] && { echo "Please install autoconf"; exit 1; }
+[ ! -f $(which automake) ] && { echo "Please install automake"; exit 1; }
+
+# libxml2
+# XCode has the libxml2 libraries, so find out where they are. These
+# are exported as environment variables for ./configure
+
+export LIBXML2_CFLAGS=`xml2-config --cflags`
+export LIBXML2_LIBS=`xml2-config --libs`
+
+# Run autoconf if needed (that is, if there is no configure script)
+
+test -e configure || ./autogen.sh
+
+./configure --with-ns --without-x \
+            ${USE_PERSONAL_CONFIG_OPTS} \
+            ${USE_CONFIG_OPTS} \
+            ${CONFIG_USE_PACKAGES} \
+            ${CONFIG_OMIT_PACKAGES} \
+            CFLAGS="${OPT_FLAGS} ${COMPAT_CFLAGS} ${USE_DEBUG_CFLAGS}" \
+            LDFLAGS="${COMPAT_LDFLAGS}" \
     || exit 1
 
 make clean || exit
 
-## temporary:
-(cd etc/refcards; make; cd -)
-
 make -j4 all || exit
 make -j2 install || exit
-rm -f etc/DOC-*
+
+echo "XXX What's going on with etc/DOC-*? See old script"
 
 # generate symbol archive
-test $OMIT_SYMB || dsymutil src/emacs
-
-echo ${FINALMESSAGE}
-echo "Build finished."
-if [[ "$AQUAMACS_CERT" != "" ]]; then
-    echo "Signing code with $AQUAMACS_CERT"
-    codesign -s "$AQUAMACS_CERT" --deep nextstep/Aquamacs.app
-else
-    echo
-    echo "IMPORTANT"
-    echo "When building for Mac OS X Mojave (10.14) and later, please make"
-    echo "sure you sign the executable using:"
-    echo "  codesign -s \"<certificate>\" --deep nextstep/Aquamacs.app"
-    echo "or, rerun the build with AQUAMACS_CERT=\"<certificate>\":"
-    echo "  AQUAMACS_CERT=\"My Codesign Certificate\" ./build-aquamacs"
-    echo ""
-    echo "If you don't have a certificate yet, you can create one using"
-    echo "the Keychain Access application. For more information, see:"
-    echo "(https://developer.apple.com/library/archive/documentation/Security/Conceptual/CodeSigningGuide/Procedures/Procedures.html)"
-fi
+dsymutil src/emacs
 
 exit 0
