@@ -843,10 +843,10 @@ ns_implicitly_set_icon_type (struct frame *f)
                STRINGP (XCDR (elt)) &&
                fast_string_match (XCAR (elt), f->name) >= 0)
         {
-          image = [EmacsImage allocInitFromFile: XCDR (elt)];
-          if (image == nil)
-            image = [[NSImage imageNamed:
-                               [NSString stringWithUTF8String:
+            image = [[EmacsImage allocInitFromFile: XCDR (elt)] retain];
+            if (image == nil)
+                image = [[NSImage imageNamed:
+                                      [NSString stringWithUTF8String:
 					    SSDATA (XCDR (elt))]] retain];
         }
     }
