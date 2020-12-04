@@ -8,6 +8,6 @@ CC_OPTS = -Wall
 ## normally use flymake, so it seems like just avoiding the issue
 ## in this test is fine.  Set flymake-log-level to 3 to investigate.
 check-syntax:
-	GCC_COLORS= $(CC) $(CC_OPTS) ${CHK_SOURCES}
+	GCC_COLORS= CCC_OVERRIDE_OPTIONS="+-fno-color-diagnostics" $(CC) $(CC_OPTS) ${CHK_SOURCES}
 
 # eof
