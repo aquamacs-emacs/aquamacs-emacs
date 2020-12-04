@@ -20,6 +20,7 @@
 ;;; Code:
 
 (require 'ert)
+(require 'python)
 
 (defmacro simple-test--dummy-buffer (&rest body)
   (declare (indent 0)
