@@ -3,7 +3,7 @@
 ;; Author: David Reitter, david.reitter@gmail.com
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
- 
+
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
 
@@ -22,10 +22,10 @@
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
- 
+
 ;; Copyright (C) 2006, 2007, 2008, 2009, 2010, 2013, 2017, 2018, 2019:
 ;; David Reitter
- 
+
 
 
 ; NONE
@@ -40,20 +40,20 @@
 
 (defvar aquamacs-version "3.5"
 "A string with Aquamacs' version number.
-The format of the string is undefined. 
+The format of the string is undefined.
 For a reliable numerical representation, use `aquamacs-version-id'.")
 
-(defvar aquamacs-version-id 312
-"A float indicating Aquamacs' version number.
+(defvar aquamacs-version-id 350.1
+  "A float indicating Aquamacs' version number.
 Full integers correspond to the third position of the public
 version number, e.g. version 0.9.7 is represented as `97.x'.
-Minor version numbers are reflected in the decimals. 
+Minor version numbers are reflected in the decimals.
 It is guaranteed that for any two Aquamacs releases A and B,
-if aquamacs-version-id for B is higher than aquamacs-version-id 
+if aquamacs-version-id for B is higher than aquamacs-version-id
 for A, then B is newer than A.")
 
-(defvar aquamacs-minor-version ""
-"Version code for minor maintenance releases.
+(defvar aquamacs-minor-version "nightly"
+  "Version code for minor maintenance releases.
 Changes in this code are ignored during the online version check.")
 
 ;; compatibility for Carbon Emacs
@@ -62,9 +62,9 @@ Changes in this code are ignored during the online version check.")
 
 (require 'cocoa-compatibility)
 
-(when ;; do not load this twice 
+(when ;; do not load this twice
     (not (memq 'aquamacs-site-start features))
- 
+
   (provide 'aquamacs-site-start)
 
   (if (or init-file-user user-init-file)
@@ -80,7 +80,7 @@ Changes in this code are ignored during the online version check.")
 	      (setq features (delete p features)))
 	    aq-preloaded))
 
-  ;; load path  
+  ;; load path
   ;;(normal-top-level-add-subdirs-to-load-path)  ; no need to do this is in site-start.
 
   ;; let's not do this, as it precludes users from providing
@@ -101,7 +101,7 @@ Changes in this code are ignored during the online version check.")
 
 
   (require 'aquamacs-mode-defaults)
- 
+
   ;; init-file-user is set at this time;
   ;; user-init-file is normally not set.
   ;; see comment in startup.el
