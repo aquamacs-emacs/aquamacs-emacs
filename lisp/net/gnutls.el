@@ -43,7 +43,7 @@
   :prefix "gnutls-"
   :group 'comm)
 
-(defcustom gnutls-algorithm-priority nil
+(defcustom gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"
   "If non-nil, this should be a TLS priority string.
 For instance, if you want to skip the \"dhe-rsa\" algorithm,
 set this variable to \"normal:-dhe-rsa\"."
@@ -92,6 +92,7 @@ to all of the tests described above."
     "/etc/ssl/ca-bundle.pem"                 ; Suse
     "/usr/ssl/certs/ca-bundle.crt"           ; Cygwin
     "/usr/local/share/certs/ca-root-nss.crt" ; FreeBSD
+    "/etc/ssl/cert.pem"                      ; macOS, Dragora, Parabola
     )
   "List of CA bundle location filenames or a function returning said list.
 The files may be in PEM or DER format, as per the GnuTLS documentation.
