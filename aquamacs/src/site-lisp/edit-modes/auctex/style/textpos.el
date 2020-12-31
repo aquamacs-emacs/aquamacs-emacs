@@ -31,6 +31,10 @@
 
 ;;; Code:
 
+;; Silence the compiler:
+(declare-function LaTeX-color-definecolor-list "color" ())
+(declare-function LaTeX-xcolor-definecolor-list "xcolor" ())
+
 (defun LaTeX-env-arg-textpos-textblock (env)
   "Query for the arguments of `textblock' environment and insert
 them."

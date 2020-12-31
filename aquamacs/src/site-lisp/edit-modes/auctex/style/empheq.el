@@ -1,6 +1,6 @@
 ;;; empheq.el --- AUCTeX style for `empheq.sty' (v2.14)
 
-;; Copyright (C) 2016, 2017 Free Software Foundation, Inc.
+;; Copyright (C) 2016-2020 Free Software Foundation, Inc.
 
 ;; Author: Arash Esbati <arash@gnu.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -31,11 +31,21 @@
 
 ;;; Code:
 
-;; Needed for compiling `pushnew':
-(eval-when-compile (require 'cl))
+(eval-when-compile
+  (require 'cl-lib))
 
-;; Needed for auto-parsing.
+;; Needed for auto-parsing:
 (require 'tex)
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
+
+(declare-function LaTeX-item-equation-alignat
+		  "amsmath" (&optional suppress))
+
+(defvar LaTeX-mathtools-package-options)
 
 (defvar LaTeX-empheq-key-val-options
   `(("box")
@@ -98,6 +108,11 @@
 (defvar LaTeX-empheq-package-options
   '("overload" "overload2" "ntheorem" "newmultline" "oldmultline")
   "Package options for the empheq package.")
+(TeX-load-style "mathtools")
+;; Add elements from `LaTeX-mathtools-package-options' only once
+;; and not every time the style hook runs
+(dolist (elt LaTeX-mathtools-package-options)
+  (add-to-list 'LaTeX-empheq-package-options elt))
 
 ;; Setup for \Declare(Left|Right)Delimiter:
 
@@ -142,11 +157,11 @@
 	      (where (cadr delims)))
 	  (if (string= where "Left")
 	      (progn
-		(pushnew (concat TeX-esc "empheq" delim) lval :test #'equal)
-		(pushnew (concat TeX-esc "empheqbig" delim) lval :test #'equal))
+		(cl-pushnew (concat TeX-esc "empheq" delim) lval :test #'equal)
+		(cl-pushnew (concat TeX-esc "empheqbig" delim) lval :test #'equal))
 	    (progn
-	      (pushnew (concat TeX-esc "empheq" delim) rval :test #'equal)
-	      (pushnew (concat TeX-esc "empheqbig" delim) rval :test #'equal)))))
+	      (cl-pushnew (concat TeX-esc "empheq" delim) rval :test #'equal)
+	      (cl-pushnew (concat TeX-esc "empheqbig" delim) rval :test #'equal)))))
       (when lval
 	(setq tmp (assq-delete-all (car (assoc "left" tmp)) tmp))
 	(setq lvals (append lval lvals))
@@ -227,7 +242,7 @@ number of ampersands if possible."
       (when (looking-at "[ \t\n\r%]*\\[")
 	(forward-sexp))
       (re-search-forward "[ \t\n\r%]*{\\([^}]+\\)}")
-      (setq match (TeX-replace-regexp-in-string "[ \t\n\r%]" ""
+      (setq match (replace-regexp-in-string "[ \t\n\r%]" ""
 						(match-string-no-properties 1)))
       (if (string-match "=" match)
 	  (progn
@@ -268,11 +283,6 @@ number of ampersands if possible."
 
    ;; Load amsmath.el and mathtools.el
    (TeX-run-style-hooks "amsmath" "mathtools")
-
-   ;; Add elements from `LaTeX-mathtools-package-options' only once
-   ;; and not every time the style hook runs
-   (dolist (elt LaTeX-mathtools-package-options)
-     (add-to-list 'LaTeX-empheq-package-options elt))
 
    ;; Local version of key-val options
    (setq LaTeX-empheq-key-val-options-local
@@ -478,23 +488,7 @@ number of ampersands if possible."
      (font-latex-add-keywords '(("empheqset"             "{")
 				("DeclareLeftDelimiter"  "[{")
 				("DeclareRightDelimiter" "[{"))
-			      'function)
-     ;; Append our addition so that we don't interfere with user customizations
-     (make-local-variable 'font-latex-math-environments)
-     (add-to-list 'font-latex-math-environments "empheq" t)
-     (when (or (LaTeX-provided-package-options-member "empheq" "overload")
-	       (LaTeX-provided-package-options-member "empheq" "overload2"))
-       (let ((envs '(;; Do not insert the starred versions here;
-		     ;; function `font-latex-match-math-envII' takes
-		     ;; care of it
-		     "AmSalign"
-		     "AmSalignat"
-		     "AmSequation"
-		     "AmSflalign"
-		     "AmSgather"
-		     "AmSmultline")))
-	 (dolist (env envs)
-	   (add-to-list 'font-latex-math-environments env t))))))
+			      'function)))
  LaTeX-dialect)
 
 ;;; empheq.el ends here

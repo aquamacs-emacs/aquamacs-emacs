@@ -1,6 +1,6 @@
 ;;; tcolorbox.el --- AUCTeX style for `tcolorbox.sty' (v4.00)
 
-;; Copyright (C) 2015, 2016 Free Software Foundation, Inc.
+;; Copyright (C) 2015, 2016, 2018 Free Software Foundation, Inc.
 
 ;; Author: Tassilo Horn <tsdh@gnu.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -40,11 +40,20 @@
 
 ;;; Code:
 
-;; Needed for compiling `pushnew':
-(eval-when-compile (require 'cl))
+;; Needed for compiling `cl-pushnew':
+(eval-when-compile
+  (require 'cl-lib))
 
-;; Needed for auto-parsing.
+;; Needed for auto-parsing:
 (require 'tex)
+(require 'latex)
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
+
+(declare-function LaTeX-xcolor-definecolor-list "xcolor" ())
 
 ;; FIXME: Anything missing?
 (defvar LaTeX-tcolorbox-keyval-options
@@ -397,13 +406,9 @@
 (defvar LaTeX-tcolorbox-newtcolorbox-regexp
   `(,(concat "\\\\\\(re\\)?newtcolorbox"
 	     "[ \t\n\r%]*"
-	     "\\(?:\\[[^][]*"
-	       "\\(?:{[^}{]*"
-		 "\\(?:{[^}{]*"
-		   "\\(?:{[^}{]*}[^}{]*\\)*"
-		 "}[^}{]*\\)*"
-	       "}[^][]*\\)*"
-	     "\\]\\)?"
+	     "\\(?:"
+	     (LaTeX-extract-key-value-label 'none)
+	     "\\)?"
 	     "[ \t\n\r%]*"
 	     "{\\([a-zA-Z0-9]+\\)}"
 	     "[ \t\n\r%]*"
@@ -419,13 +424,9 @@
 (defvar LaTeX-tcolorbox-newtcbox-regexp
   `(,(concat "\\\\\\(re\\)?newtcbox"
 	     "[ \t\n\r%]*"
-	     "\\(?:\\[[^][]*"
-	       "\\(?:{[^}{]*"
-		 "\\(?:{[^}{]*"
-		   "\\(?:{[^}{]*}[^}{]*\\)*"
-		 "}[^}{]*\\)*"
-	       "}[^][]*\\)*"
-	     "\\]\\)?"
+	     "\\(?:"
+	     (LaTeX-extract-key-value-label 'none)
+	     "\\)?"
 	     "[ \t\n\r%]*"
 	     "{\\\\\\([a-zA-Z]+\\)}"
 	     "[ \t\n\r%]*"
@@ -453,7 +454,7 @@ e.g. \"tcolorboxlib-raster.el\"."
   (when (LaTeX-tcolorbox-tcbuselibrary-list)
     (let (libs)
       (dolist (x (LaTeX-tcolorbox-tcbuselibrary-list))
-	(push (TeX-replace-regexp-in-string "[ %\n\r\t]" "" (car x)) libs))
+	(push (replace-regexp-in-string "[ %\n\r\t]" "" (car x)) libs))
       (setq libs (mapconcat #'identity libs ","))
       (dolist (x (split-string libs "," t))
 	(TeX-run-style-hooks (concat "tcolorboxlib-" x)))))
@@ -476,7 +477,7 @@ e.g. \"tcolorboxlib-raster.el\"."
 	 (tmp (copy-alist LaTeX-tcolorbox-keyval-options-local)))
     (dolist (key keys)
       (setq tmp (assq-delete-all (car (assoc key tmp)) tmp))
-      (pushnew
+      (cl-pushnew
        (list key (mapcar #'car (LaTeX-xcolor-definecolor-list))) tmp :test #'equal))
     (setq LaTeX-tcolorbox-keyval-options-local (copy-alist tmp)))
   (setq LaTeX-tcolorbox-keyval-options-full

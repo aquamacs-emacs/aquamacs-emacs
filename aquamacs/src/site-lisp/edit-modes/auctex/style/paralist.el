@@ -1,6 +1,6 @@
 ;;; paralist.el -- AUCTeX style for paralist.sty
 
-;; Copyright (C) 2003-2005, 2014 Free Software Foundation, Inc.
+;; Copyright (C) 2003-2005, 2014, 2018 Free Software Foundation, Inc.
 
 ;; Author:   Ralf Angeli <angeli@iwi.uni-sb.de>
 ;; Maintainer: auctex-devel@gnu.org
@@ -29,6 +29,11 @@
 ;; This file adds support for `paralist.sty'.
 
 ;;; Code:
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
 
 ;; Insert an itemize-ish environment and ask for an optional label
 (defun LaTeX-paralist-env-item-opt-label (environment)

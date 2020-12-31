@@ -1,6 +1,6 @@
 ;;; moodle.el --- AUCTeX style for `moodle.sty' (v0.5)
 
-;; Copyright (C) 2017 Free Software Foundation, Inc.
+;; Copyright (C) 2017, 2018 Free Software Foundation, Inc.
 
 ;; Author: Arash Esbati <arash@gnu.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -34,6 +34,11 @@
 ;; easier.
 
 ;;; Code:
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
 
 (defvar LaTeX-moodle-key-val-options
   '(("points")
@@ -114,7 +119,7 @@
   ;; Deactivate the mark here in order to prevent `TeX-parse-macro'
   ;; from swapping point and mark and the \item ending up right after
   ;; \begin{...}.
-  (TeX-deactivate-mark)
+  (deactivate-mark)
   ;; Query and insert the question text.
   (let ((qtext (TeX-read-string (TeX-argument-prompt nil nil "Question Text"))))
     (when (and qtext (not (string= qtext "")))

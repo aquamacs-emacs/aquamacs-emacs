@@ -8,6 +8,15 @@
 
 ;;; Code:
 
+;; Silence the compiler:
+(declare-function font-latex-add-quotes
+		  "font-latex"
+		  (quotes))
+
+(declare-function font-latex-add-to-syntax-alist
+		  "font-latex"
+		  (list))
+
 (defvar LaTeX-german-mode-syntax-table
   (copy-syntax-table LaTeX-mode-syntax-table)
   "Syntax table used in LaTeX mode when using `german.sty'.")

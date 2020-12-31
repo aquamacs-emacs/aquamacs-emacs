@@ -1,6 +1,6 @@
 ;;; plain-tex.el --- Support for plain TeX documents.
 
-;; Copyright (C) 2010, 2013, 2016-2017  Free Software Foundation, Inc.
+;; Copyright (C) 2010, 2013, 2016-2018  Free Software Foundation, Inc.
 
 ;; Maintainer: auctex-devel@gnu.org
 ;; Keywords: tex
@@ -55,40 +55,39 @@ Install tool bar if `plain-TeX-enable-toolbar' is non-nil."
   "Keymap used in plain TeX mode.")
 
 (defvar plain-TeX-menu-entries
-  (TeX-menu-with-help
-   `(["Macro..." TeX-insert-macro
-      :help "Insert a macro and possibly arguments"]
-     ["Complete" TeX-complete-symbol
-      :help "Complete the current macro"]
-     "-"
-     ("Insert Font"
-      ["Emphasize"  (TeX-font nil ?\C-e) :keys "C-c C-f C-e"]
-      ["Bold"       (TeX-font nil ?\C-b) :keys "C-c C-f C-b"]
-      ["Typewriter" (TeX-font nil ?\C-t) :keys "C-c C-f C-t"]
-      ["Small Caps" (TeX-font nil ?\C-c) :keys "C-c C-f C-c"]
-      ["Sans Serif" (TeX-font nil ?\C-f) :keys "C-c C-f C-f"]
-      ["Italic"     (TeX-font nil ?\C-i) :keys "C-c C-f C-i"]
-      ["Slanted"    (TeX-font nil ?\C-s) :keys "C-c C-f C-s"]
-      ["Roman"      (TeX-font nil ?\C-r) :keys "C-c C-f C-r"]
-      ["Calligraphic" (TeX-font nil ?\C-a) :keys "C-c C-f C-a"])
-     ("Replace Font"
-      ["Emphasize"  (TeX-font t ?\C-e) :keys "C-u C-c C-f C-e"]
-      ["Bold"       (TeX-font t ?\C-b) :keys "C-u C-c C-f C-b"]
-      ["Typewriter" (TeX-font t ?\C-t) :keys "C-u C-c C-f C-t"]
-      ["Small Caps" (TeX-font t ?\C-c) :keys "C-u C-c C-f C-c"]
-      ["Sans Serif" (TeX-font t ?\C-f) :keys "C-u C-c C-f C-f"]
-      ["Italic"     (TeX-font t ?\C-i) :keys "C-u C-c C-f C-i"]
-      ["Slanted"    (TeX-font t ?\C-s) :keys "C-u C-c C-f C-s"]
-      ["Roman"      (TeX-font t ?\C-r) :keys "C-u C-c C-f C-r"]
-      ["Calligraphic" (TeX-font t ?\C-a) :keys "C-u C-c C-f C-a"])
-     ["Delete Font" (TeX-font t ?\C-d) :keys "C-c C-f C-d"]
-     "-"
-     ["Comment or Uncomment Region" TeX-comment-or-uncomment-region
-      :help "Comment or uncomment the currently selected region"]
-     ["Comment or Uncomment Paragraph" TeX-comment-or-uncomment-paragraph
-      :help "Comment or uncomment the paragraph containing point"]
-     ,TeX-fold-menu
-     "-" . ,TeX-common-menu-entries)))
+  `(["Macro..." TeX-insert-macro
+     :help "Insert a macro and possibly arguments"]
+    ["Complete" TeX-complete-symbol
+     :help "Complete the current macro"]
+    "-"
+    ("Insert Font"
+     ["Emphasize"  (TeX-font nil ?\C-e) :keys "C-c C-f C-e"]
+     ["Bold"       (TeX-font nil ?\C-b) :keys "C-c C-f C-b"]
+     ["Typewriter" (TeX-font nil ?\C-t) :keys "C-c C-f C-t"]
+     ["Small Caps" (TeX-font nil ?\C-c) :keys "C-c C-f C-c"]
+     ["Sans Serif" (TeX-font nil ?\C-f) :keys "C-c C-f C-f"]
+     ["Italic"     (TeX-font nil ?\C-i) :keys "C-c C-f C-i"]
+     ["Slanted"    (TeX-font nil ?\C-s) :keys "C-c C-f C-s"]
+     ["Roman"      (TeX-font nil ?\C-r) :keys "C-c C-f C-r"]
+     ["Calligraphic" (TeX-font nil ?\C-a) :keys "C-c C-f C-a"])
+    ("Replace Font"
+     ["Emphasize"  (TeX-font t ?\C-e) :keys "C-u C-c C-f C-e"]
+     ["Bold"       (TeX-font t ?\C-b) :keys "C-u C-c C-f C-b"]
+     ["Typewriter" (TeX-font t ?\C-t) :keys "C-u C-c C-f C-t"]
+     ["Small Caps" (TeX-font t ?\C-c) :keys "C-u C-c C-f C-c"]
+     ["Sans Serif" (TeX-font t ?\C-f) :keys "C-u C-c C-f C-f"]
+     ["Italic"     (TeX-font t ?\C-i) :keys "C-u C-c C-f C-i"]
+     ["Slanted"    (TeX-font t ?\C-s) :keys "C-u C-c C-f C-s"]
+     ["Roman"      (TeX-font t ?\C-r) :keys "C-u C-c C-f C-r"]
+     ["Calligraphic" (TeX-font t ?\C-a) :keys "C-u C-c C-f C-a"])
+    ["Delete Font" (TeX-font t ?\C-d) :keys "C-c C-f C-d"]
+    "-"
+    ["Comment or Uncomment Region" comment-or-uncomment-region
+     :help "Comment or uncomment the currently selected region"]
+    ["Comment or Uncomment Paragraph" TeX-comment-or-uncomment-paragraph
+     :help "Comment or uncomment the paragraph containing point"]
+    ,TeX-fold-menu
+    "-" . ,TeX-common-menu-entries))
 
 (easy-menu-define plain-TeX-mode-command-menu
     plain-TeX-mode-map
@@ -137,11 +136,9 @@ of `plain-TeX-mode-hook'."
   (setq TeX-command-default "TeX")
   (setq TeX-sentinel-default-function 'TeX-TeX-sentinel)
   (add-hook 'tool-bar-mode-on-hook 'plain-TeX-maybe-install-toolbar nil t)
-  (when (if (featurep 'xemacs)
-	    (featurep 'toolbar)
-	  (and (boundp 'tool-bar-mode) tool-bar-mode))
+  (when (and (boundp 'tool-bar-mode) tool-bar-mode)
     (plain-TeX-maybe-install-toolbar))
-  (TeX-run-mode-hooks 'text-mode-hook 'TeX-mode-hook 'plain-TeX-mode-hook)
+  (run-mode-hooks 'text-mode-hook 'TeX-mode-hook 'plain-TeX-mode-hook)
   (TeX-set-mode-name))
 
 (defun plain-TeX-common-initialization ()
@@ -282,13 +279,18 @@ i.e. you do _not_ have to cater for this yourself by adding \\\\' or $."
 ;; Menu for AmSTeX mode
 (easy-menu-define AmSTeX-mode-command-menu
     AmSTeX-mode-map
-    "Command menu used in AmsTeX mode."
+    "Command menu used in AmSTeX mode."
     (TeX-mode-specific-command-menu 'ams-tex-mode))
 
 (easy-menu-define AmSTeX-mode-menu
   AmSTeX-mode-map
-  "Menu used in AMS-TeX mode."
+  "Menu used in AmSTeX mode."
   (cons "AmS-TeX" plain-TeX-menu-entries))
+
+(defcustom AmS-TeX-mode-hook nil
+  "A hook run in AmS-TeX mode buffers."
+  :type 'hook
+  :group 'TeX-misc)
 
 ;;;###autoload
 (defun ams-tex-mode ()
@@ -312,8 +314,23 @@ of `AmS-TeX-mode-hook'."
 
   (setq TeX-base-mode-name "AmS-TeX")
   (setq TeX-command-default "AmSTeX")
-  (TeX-run-mode-hooks 'text-mode-hook 'TeX-mode-hook 'AmS-TeX-mode-hook)
+  (run-mode-hooks 'text-mode-hook 'TeX-mode-hook 'AmS-TeX-mode-hook)
   (TeX-set-mode-name))
+
+(defcustom AmSTeX-clean-intermediate-suffixes
+  TeX-clean-default-intermediate-suffixes
+  "List of regexps matching suffixes of intermediate files to be deleted.
+The regexps will be anchored at the end of the file name to be matched,
+i.e. you do _not_ have to cater for this yourself by adding \\\\' or $."
+  :type '(repeat regexp)
+  :group 'TeX-command)
+
+(defcustom AmSTeX-clean-output-suffixes TeX-clean-default-output-suffixes
+  "List of regexps matching suffixes of output files to be deleted.
+The regexps will be anchored at the end of the file name to be matched,
+i.e. you do _not_ have to cater for this yourself by adding \\\\' or $."
+  :type '(repeat regexp)
+  :group 'TeX-command)
 
 (provide 'plain-tex)
 

@@ -1,6 +1,6 @@
 ;;; booktabs.el -- AUCTeX style for booktabs.sty
 
-;; Copyright (C) 2003, 2004, 2013 Free Software Foundation, Inc.
+;; Copyright (C) 2003, 2004, 2013, 2018 Free Software Foundation, Inc.
 
 ;; Author:   Ralf Angeli <angeli@iwi.uni-sb.de>
 ;; Maintainer: auctex-devel@gnu.org
@@ -29,6 +29,11 @@
 ;; This file adds support for `booktabs.sty'.
 
 ;;; Code:
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
 
 (defun LaTeX-booktabs-arg-paren (optional prompt)
   "Prompt for a value and use parentheses when it is inserted.

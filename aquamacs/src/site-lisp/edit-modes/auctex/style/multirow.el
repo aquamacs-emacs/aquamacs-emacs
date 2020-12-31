@@ -1,6 +1,6 @@
 ;;; multirow.el --- AUCTeX style for `multirow.sty'
 
-;; Copyright (C) 2011 Free Software Foundation, Inc.
+;; Copyright (C) 2011, 2018 Free Software Foundation, Inc.
 
 ;; Author: Mads Jensen <mje@inducks.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -28,6 +28,11 @@
 ;; This file adds support for `multirow.sty'.
 
 ;;; Code:
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
 
 (TeX-add-style-hook
  "multirow"

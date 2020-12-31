@@ -32,7 +32,7 @@
 
 (defun LaTeX-pdfsync-output-page ()
   "Return page number in output file corresponding to buffer position."
-  (let* ((line (TeX-line-number-at-pos))
+  (let* ((line (line-number-at-pos))
 	 (master (TeX-active-master))
 	 (file (file-name-sans-extension
 		(file-relative-name (buffer-file-name)

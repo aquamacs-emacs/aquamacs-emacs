@@ -1,6 +1,6 @@
 ;;; prosper.el --- Prosper style file for AUCTeX
 
-;; Copyright (C) 2001, 2002, 2014  Free Software Foundation, Inc.
+;; Copyright (C) 2001, 2002, 2014, 2020 Free Software Foundation, Inc.
 
 ;; Authors:  Phillip Lord<p.lord@russet.org.uk>
 ;;           Nevin Kapur <nevin@jhu.edu>
@@ -132,7 +132,7 @@
   (insert "]"))
 
 (defun LaTeX-prosper-insert-slide (_environment)
-  (if (y-or-n-p "Surround with overlay ?")
+  (if (y-or-n-p "Surround with overlay? ")
       (progn (TeX-insert-macro "overlays")
              (if (search-backward "{" 0 t)
                  (progn
@@ -141,52 +141,49 @@
   (let ((title (TeX-read-string "Title: ")))
     (LaTeX-insert-environment "slide" (concat TeX-grop title TeX-grcl))))
 
-
-
 ;; AUCTeX configuration
-(TeX-add-style-hook "prosper"
-		    (function
-		     (lambda ()
-		       (LaTeX-add-environments
-			'("slide" LaTeX-prosper-insert-slide)
-			'("itemstep" LaTeX-env-item)
-			'("Itemize" LaTeX-env-item))
-                       (TeX-add-symbols
-                        '("documentclass"
-                          LaTeX-prosper-insert-options
-                          LaTeX-prosper-insert-title)
-                        '("title" "Title of the presentation")
-			'("subtitle" "Subtitle of the presentation")
-			'("author" "Author name")
-			'("email" "Author email")
-			'("institution" "Author institution")
-			'("slideCaption" "Caption for slide")
-			'("Logo" "Logo")
-			'("displayVersion" TeX-arg-free)
-			'("DefaultTransition"
-			  LaTeX-prosper-arg-pdftransition)
-			'("NoFrenchBabelItemize" TeX-arg-free)
-			'("part" LaTeX-prosper-arg-part)
-			'("overlays" "Number of overlays" t)
-			'("FontTitle" "Color slides" "Black & White Slides")
-			'("FontText" "Color slides" "Black & White Slides")
-			'("fontTitle" "Text")
-			'("fontText" "Text")
-			'("ColorFoot" "Color")
-			'("PDFtransition" LaTeX-prosper-arg-pdftransition)
-			'("myitem" "Level" "Definition")
-			'("fromSlide" "Number" t)
-			'("fromSlide*" "Number" t)
-			'("onlySlide" "Number" t)
-			'("onlySlide*" "Number" t)
-			'("OnlySlide" "Number")
-			'("UntilSlide" "Number")
-			'("untilSlide*" "Number")
-			'("PDForPS" TeX-arg-conditional)
-			'("onlyInPS" t)
-			'("onlyInPDF" t)
-			'("FromSlide" "Number"))))
-		    LaTeX-dialect)
-
+(TeX-add-style-hook
+ "prosper"
+ (lambda ()
+   (LaTeX-add-environments
+    '("slide" LaTeX-prosper-insert-slide)
+    '("itemstep" LaTeX-env-item)
+    '("Itemize" LaTeX-env-item))
+   (TeX-add-symbols
+    '("documentclass"
+      LaTeX-prosper-insert-options
+      LaTeX-prosper-insert-title)
+    '("title" "Title of the presentation")
+    '("subtitle" "Subtitle of the presentation")
+    '("author" "Author name")
+    '("email" "Author email")
+    '("institution" "Author institution")
+    '("slideCaption" "Caption for slide")
+    '("Logo" "Logo")
+    '("displayVersion" TeX-arg-free)
+    '("DefaultTransition"
+      LaTeX-prosper-arg-pdftransition)
+    '("NoFrenchBabelItemize" TeX-arg-free)
+    '("part" LaTeX-prosper-arg-part)
+    '("overlays" "Number of overlays" t)
+    '("FontTitle" "Color slides" "Black & White Slides")
+    '("FontText" "Color slides" "Black & White Slides")
+    '("fontTitle" "Text")
+    '("fontText" "Text")
+    '("ColorFoot" "Color")
+    '("PDFtransition" LaTeX-prosper-arg-pdftransition)
+    '("myitem" "Level" "Definition")
+    '("fromSlide" "Number" t)
+    '("fromSlide*" "Number" t)
+    '("onlySlide" "Number" t)
+    '("onlySlide*" "Number" t)
+    '("OnlySlide" "Number")
+    '("UntilSlide" "Number")
+    '("untilSlide*" "Number")
+    '("PDForPS" TeX-arg-conditional)
+    '("onlyInPS" t)
+    '("onlyInPDF" t)
+    '("FromSlide" "Number")))
+ LaTeX-dialect)
 
 ;;; prosper.el ends here

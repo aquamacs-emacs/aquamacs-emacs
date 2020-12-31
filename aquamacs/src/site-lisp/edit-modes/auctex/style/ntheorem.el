@@ -1,6 +1,6 @@
 ;;; ntheorem.el --- AUCTeX style for `ntheorem.sty' (v1.33)
 
-;; Copyright (C) 2015, 2016 Free Software Foundation, Inc.
+;; Copyright (C) 2015, 2016, 2018 Free Software Foundation, Inc.
 
 ;; Author: Arash Esbati <arash@gnu.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -35,6 +35,19 @@
 ;; docstring of `LaTeX-ntheorem-env-label' for instructions.
 
 ;;; Code
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
+
+(declare-function LaTeX-color-definecolor-list
+		  "color"
+		  ())
+
+(declare-function LaTeX-xcolor-definecolor-list
+		  "xcolor"
+		  ())
 
 (defvar LaTeX-ntheorem-theoremstyle-list
   '(("plain") ("break") ("change") ("changebreak") ("margin")

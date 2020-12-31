@@ -1,5 +1,10 @@
 ;;; slovak.el --- Setup AUCTeX for editing Slovak text.
 
+;; Silence the compiler:
+(declare-function font-latex-add-quotes
+		  "font-latex"
+		  (quotes))
+
 (TeX-add-style-hook
  "slovak"
  (lambda ()

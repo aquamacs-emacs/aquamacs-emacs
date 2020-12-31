@@ -1,6 +1,6 @@
-;;; varioref.el --- AUCTeX style file with support for varioref.sty
+;;; varioref.el --- AUCTeX style for `varioref.sty' (v1.6b)
 
-;; Copyright (C) 1999, 2013, 2015 Free Software Foundation, Inc.
+;; Copyright (C) 1999, 2013, 2015, 2018, 2019 Free Software Foundation, Inc.
 
 ;; Author: Carsten Dominik <dominik@strw.leidenuniv.nl>
 ;;         Mads Jensen <mje@inducks.org>
@@ -23,75 +23,87 @@
 ;; Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 ;; 02110-1301, USA.
 
+;;; Commentary:
+
+;; This file adds support for `varioref.sty' (v1.6b) from 2019/09/08.
+;; `varioref.sty' is a standard LaTeX package and part of TeXLive.
+
 ;;; Code:
 
-(TeX-add-style-hook "varioref"
-   (lambda ()
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
 
-     (TeX-add-symbols
+(TeX-add-style-hook
+ "varioref"
+ (lambda ()
 
-      ;; The macros with label arguments
-      '("vref" TeX-arg-ref)
-      '("Vref" TeX-arg-ref)
-      '("vrefrange" [ "Same page text" ] TeX-arg-ref TeX-arg-ref)
-      '("vrefrange*" [ "Same page text" ] TeX-arg-ref TeX-arg-ref)
-      '("vref*" TeX-arg-ref)
-      '("Vref" TeX-arg-ref)
-      '("Ref" TeX-arg-ref)
-      '("vpageref" [ "Same page text" ] [ "Different page text" ] TeX-arg-ref)
-      '("vpageref*" [ "Same page text" ] [ "Different page text" ]
-        TeX-arg-ref)
-      '("fullref" TeX-arg-ref)
-      '("labelformat" TeX-arg-counter t)
+   (TeX-add-symbols
+    ;; 3 The user interface
+    '("vref" TeX-arg-ref)
+    '("vpageref" [ "Same page text" ] [ "Different page text" ] TeX-arg-ref)
+    '("vrefrange" [ "Same page text" ] TeX-arg-ref TeX-arg-ref)
+    '("vpagerefrange" [ "Same page text" ] TeX-arg-ref TeX-arg-ref)
+    "vpagerefnum"
+    '("vpagerefcompare" 4)
+    '("vpagerefnearby"  3)
+    '("vref*" TeX-arg-ref)
+    '("vpageref*" [ "Same page text" ] [ "Different page text" ] TeX-arg-ref)
+    '("vrefrange*" [ "Same page text" ] TeX-arg-ref TeX-arg-ref)
+    '("vpagerefrange*" [ "Same page text" ] TeX-arg-ref TeX-arg-ref)
 
-      '("vpagerefrange" [ "Same page text" ] TeX-arg-ref TeX-arg-ref)
-      '("vpagerefrange*" [ "Same page text" ] TeX-arg-ref TeX-arg-ref)
+    '("Vref" TeX-arg-ref)
+    '("Vref*" TeX-arg-ref)
 
-      ;; And the other macros used for customization
-      "reftextbefore" "reftextfacebefore"
-      "reftextafter"  "reftextfaceafter" "reftexlabelrange"
-      "reftextfaraway" "vreftextvario" "vrefwarning"
-      "vpagerefnum" "vrefshowerrors")
+    ;; 5 Customization
+    "reftextbefore" "reftextfacebefore"
+    "reftextafter"  "reftextfaceafter"
+    "reftextfaraway" "vreftextvario"
+    "reftextpagerange" "reftexlabelrange"
+    "vrefwarning"  "vrefshowerrors"
+    '("fullref" TeX-arg-ref))
 
-     ;; Install completion for labels.  Only offer completion for
-     ;; commands that take only one reference as an argument
-     (setq TeX-complete-list
-	   (append
-	    '(("\\\\[Vv]ref{\\([^{}\n\r\\%,]*\\)" 1 LaTeX-label-list "}")
-              ("\\\\vref\\*?{\\([^{}\n\r\\%,]*\\)" 1 LaTeX-label-list "}")
-              ("\\\\Ref{\\([^{}\n\r\\%,]*\\)" 1 LaTeX-label-list "}")
-              ("\\\\vref\\*{\\([^{}\n\r\\%,]*\\)" 1 LaTeX-label-list "}")
-              ("\\\\fullref{\\([^{}\n\r\\%,]*\\)" 1 LaTeX-label-list "}")
-              ("\\\\vpageref\\*?\\(\\[[^]]*\\]\\)*{\\([^{}\n\r\\%,]*\\)"
-	       2 LaTeX-label-list "}"))
-	    TeX-complete-list))
+   ;; Install completion for labels.  Only offer completion for
+   ;; commands that take only one reference as an argument
+   ;; FIXME: The first 3 entries can be reduced to
+   ;; ("\\\\[Vv]ref\\*?{\\([^{}\n\r\\%,]*\\)" 1 LaTeX-label-list "}")  ???
+   (setq TeX-complete-list
+	 (append
+	  '(("\\\\[Vv]ref{\\([^{}\n\r\\%,]*\\)" 1 LaTeX-label-list "}")
+	    ("\\\\vref\\*?{\\([^{}\n\r\\%,]*\\)" 1 LaTeX-label-list "}")
+	    ("\\\\vref\\*{\\([^{}\n\r\\%,]*\\)" 1 LaTeX-label-list "}")
+	    ("\\\\fullref{\\([^{}\n\r\\%,]*\\)" 1 LaTeX-label-list "}")
+	    ("\\\\vpageref\\*?\\(\\[[^]]*\\]\\)*{\\([^{}\n\r\\%,]*\\)"
+	     2 LaTeX-label-list "}"))
+	  TeX-complete-list))
 
-     ;; Fontification
-     (when (and (fboundp 'font-latex-add-keywords)
-		(eq TeX-install-font-lock 'font-latex-setup))
-       (font-latex-add-keywords '(;; vref is already in font-latex.el,
-				  ;; so don't add it here again
-				  ("Vref"          "*{")
-				  ("vpageref"      "*[[{")
-				  ("vrefrange"     "*[{{")
-				  ("Ref"           "{")
-				  ("fullref"       "{")
-				  ("vpagerefrange" "*[{{"))
-				'reference))
+   ;; Fontification
+   (when (and (fboundp 'font-latex-add-keywords)
+	      (eq TeX-install-font-lock 'font-latex-setup))
+     (font-latex-add-keywords '(;; vref is already in font-latex.el,
+				;; so don't add it here again
+				("vpageref"      "*[[{")
+				("vrefrange"     "*[{{")
+				("vpagerefrange" "*[{{")
+				("Vref"          "*{")
+				("fullref"       "{"))
+			      'reference))
 
-     ;; Activate RefTeX reference style.
-     (and LaTeX-reftex-ref-style-auto-activate
-	  (fboundp 'reftex-ref-style-activate)
-	  (reftex-ref-style-activate "Varioref")))
-   LaTeX-dialect)
+   ;; Activate RefTeX reference style.
+   (and LaTeX-reftex-ref-style-auto-activate
+	(fboundp 'reftex-ref-style-activate)
+	(reftex-ref-style-activate "Varioref")))
+ LaTeX-dialect)
 
 (defvar LaTeX-varioref-package-options
-  '("draft" "final" "afrikaans" "american" "austrian" "naustrian" "basque"
-    "brazil" "breton" "bahasam" "catalan" "croatian" "czech" "danish"
-    "dutch" "english" "esperanto" "finnish" "french" "galician" "german"
-    "icelandic" "ngerman" "greek" "italian" "magyar" "norsk" "nynorsk"
-    "polish" "portuges" "romanian" "russian" "slovak" "slovene"
-    "spanish" "swedish" "turkish" "ukrainian" "francais" "germanb")
+  '("afrikaans" "american" "arabic" "austrian" "naustrian" "basque"
+    "bahasam" "brazil" "breton" "bulgarian" "catalan" "croatian"
+    "czech" "danish" "dutch" "english" "esperanto" "finnish" "french"
+    "galician" "german" "ngerman" "greek" "icelandic" "italian" "magyar"
+    "norsk" "nynorsk" "polish" "portuges" "romanian" "russian"
+    "slovak" "slovene" "spanish" "swedish" "turkish" "ukrainian"
+    "francais" "germanb" "draft" "final" "space" "nospace")
   "Package options for the varioref package.")
 
 ;;; varioref.el ends here

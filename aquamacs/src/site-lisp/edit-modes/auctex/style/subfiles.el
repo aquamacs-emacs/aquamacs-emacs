@@ -1,6 +1,6 @@
 ;;; subfiles.el --- AUCTeX style for the subfiles package.
 
-;; Copyright (C) 2016 Free Software Foundation, Inc.
+;; Copyright (C) 2016, 2018 Free Software Foundation, Inc.
 
 ;; Author: Uwe Brauer <oub@mat.ucm.es>
 ;; Created: 07 Nov 2016
@@ -32,6 +32,15 @@
 ;; This file adds support for the subfiles package.
 
 ;;; Code:
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
+
+(declare-function reftex-compile-variables
+		  "reftex"
+		  ())
 
 (defvar LaTeX-subfiles-package-options nil
   "Package options for the subfiles package.")

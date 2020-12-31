@@ -1,6 +1,6 @@
 ;;; titleps.el --- AUCTeX style for `titleps.sty' (v1.1.1)
 
-;; Copyright (C) 2016 Free Software Foundation, Inc.
+;; Copyright (C) 2016, 2018 Free Software Foundation, Inc.
 
 ;; Author: Arash Esbati <arash@gnu.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -30,6 +30,11 @@
 ;; `titleps.sty' is part of TeXLive.
 
 ;;; Code:
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
 
 (defvar LaTeX-titleps-section-command-list
   '("part"

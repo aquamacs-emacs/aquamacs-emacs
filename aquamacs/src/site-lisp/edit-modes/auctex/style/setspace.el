@@ -1,6 +1,6 @@
 ;;; setspace.el --- AUCTeX style for `setspace.sty'
 
-;; Copyright (C) 2011 Free Software Foundation, Inc.
+;; Copyright (C) 2011, 2018 Free Software Foundation, Inc.
 
 ;; Author: Mads Jensen <mje@inducks.org>
 ;; Created: 2011-04-16
@@ -28,6 +28,11 @@
 ;; This file adds support for `setspace.sty'.
 
 ;;; Code:
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
 
 (TeX-add-style-hook
  "setspace"

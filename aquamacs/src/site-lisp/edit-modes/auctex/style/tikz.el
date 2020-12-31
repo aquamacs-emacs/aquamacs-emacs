@@ -1,6 +1,6 @@
 ;;; tikz.el --- AUCTeX style for `tikz.sty'
 
-;; Copyright (C) 2016 Free Software Foundation, Inc.
+;; Copyright (C) 2016, 2020 Free Software Foundation, Inc.
 
 ;; Author: Matthew Leach <matthew@mattleach.net>
 ;; Maintainer: auctex-devel@gnu.org
@@ -29,6 +29,48 @@
 ;; This file adds some support for `tikz.sty'
 
 ;;; Code:
+
+(defcustom TeX-TikZ-point-name-regexp
+  "(\\([A-Za-z0-9]+\\))"
+  "A regexp that matches TikZ names."
+  :type 'regexp
+  :group 'auctex-tikz)
+
+(defconst TeX-TikZ-point-function-map
+  '(("Rect Point" TeX-TikZ-arg-rect-point)
+    ("Polar Point" TeX-TikZ-arg-polar-point)
+    ("Named Point" TeX-TikZ-arg-named-point))
+  "An alist of point specification types and their functions.")
+
+(defconst TeX-TikZ-relative-point-function-map
+  (apply #'append (mapcar
+		   (lambda (point-map)
+		     (let ((key (car point-map))
+			   (value (cadr point-map)))
+		       `((,(concat "+" key) ,value "+")
+			 (,(concat "++" key) ,value "++"))))
+		   TeX-TikZ-point-function-map))
+  "`TeX-TikZ-point-function-map' with \"+\" and \"++\" as a
+prefix.")
+
+(defconst TeX-TikZ-path-connector-function-map
+  '(("--" identity)
+    ("|-" identity)
+    ( "-|" identity)
+    ("sin" identity)
+    ("cos" identity))
+  "An alist of path connectors.")
+
+(defconst TeX-TikZ-draw-arg-function-map
+  `(,@TeX-TikZ-point-function-map
+    ,@TeX-TikZ-relative-point-function-map
+    ,@TeX-TikZ-path-connector-function-map
+    ("Node" TeX-TikZ-arg-node)
+    ("Circle" TeX-TikZ-arg-circle)
+    ("Arc" TeX-TikZ-arg-arc)
+    ("Parabola" TeX-TikZ-arg-parabola)
+    ("Grid" TeX-TikZ-arg-grid))
+  "An alist of argument names and functoins for TikZ's \draw.")
 
 (defun TeX-TikZ-get-opt-arg-string (arg &optional open close)
   "Return a string for optional arguments.
@@ -150,12 +192,6 @@ is finished."
     ;; Finish the macro.
     (insert ";")))
 
-(defcustom TeX-TikZ-point-name-regexp
-  "(\\([A-Za-z0-9]+\\))"
-  "A regexp that matches TikZ names."
-  :type 'regexp
-  :group 'auctex-tikz)
-
 (defun TeX-TikZ-find-named-points ()
   "Find TiKZ named points in current enviroment.
 Begin by finding the span of the current TikZ enviroment and then
@@ -212,42 +248,6 @@ If OPTIONAL is non-nil and the user doesn't provide a point,
   "Prompt the user for the arguments to the grid command."
   (let ((options (TeX-TikZ-arg-options t)))
     (concat "grid" options)))
-
-(defconst TeX-TikZ-point-function-map
-  '(("Rect Point" TeX-TikZ-arg-rect-point)
-    ("Polar Point" TeX-TikZ-arg-polar-point)
-    ("Named Point" TeX-TikZ-arg-named-point))
-  "An alist of point specification types and their functions.")
-
-(defconst TeX-TikZ-relative-point-function-map
-  (apply 'append (mapcar
-                  (lambda (point-map)
-                    (let ((key (car point-map))
-                          (value (cadr point-map)))
-                      `((,(concat "+" key) ,value "+")
-                        (,(concat "++" key) ,value "++"))))
-                  TeX-TikZ-point-function-map))
-  "`TeX-TikZ-point-function-map' with \"+\" and \"++\" as a
-prefix.")
-
-(defconst TeX-TikZ-path-connector-function-map
-  '(("--" identity)
-    ("|-" identity)
-    ( "-|" identity)
-    ("sin" identity)
-    ("cos" identity))
-  "An alist of path connectors.")
-
-(defconst TeX-TikZ-draw-arg-function-map
-  `(,@TeX-TikZ-point-function-map
-    ,@TeX-TikZ-relative-point-function-map
-    ,@TeX-TikZ-path-connector-function-map
-    ("Node" TeX-TikZ-arg-node)
-    ("Circle" TeX-TikZ-arg-circle)
-    ("Arc" TeX-TikZ-arg-arc)
-    ("Parabola" TeX-TikZ-arg-parabola)
-    ("Grid" TeX-TikZ-arg-grid))
-  "An alist of argument names and functoins for TikZ's \draw.")
 
 (defun TeX-TikZ-draw-arg (_ignored)
   "Prompt the user for the arguments to a TikZ draw macro."

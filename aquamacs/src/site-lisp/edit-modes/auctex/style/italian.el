@@ -1,6 +1,6 @@
 ;;; italian.el --- Setup AUCTeX for editing Italian text.
 
-;; Copyright (C) 2004, 2005 Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005, 2018 Free Software Foundation, Inc.
 
 ;; Author: Davide G. M. Salvetti <salve@debian.org>
 ;; Maintainer: Davide G. M. Salvetti <salve@debian.org>
@@ -30,6 +30,11 @@
 ;; `\">'.  However, I will be glad to see a normative reference. -- DGMS
 
 ;;; Code:
+
+;; Silence the compiler:
+(declare-function font-latex-add-quotes
+		  "font-latex"
+		  (quotes))
 
 (defvar TeX-language-it-hook nil
   "Hook run for Italian texts.")

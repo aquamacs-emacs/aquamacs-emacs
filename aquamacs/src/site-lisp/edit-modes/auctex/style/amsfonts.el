@@ -1,6 +1,6 @@
 ;;; amsfonts.el --- AUCTeX style for `amsfonts.sty' version 3.01
 
-;; Copyright (C) 2016 Free Software Foundation, Inc.
+;; Copyright (C) 2016, 2018 Free Software Foundation, Inc.
 
 ;; Maintainer: auctex-devel@gnu.org
 ;; Author: Mosè Giordano <mose@gnu.org>
@@ -28,6 +28,11 @@
 ;; This file adds support for `amsfonts.sty' version 3.01.
 
 ;;; Code:
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
 
 (TeX-add-style-hook
  "amsfonts"

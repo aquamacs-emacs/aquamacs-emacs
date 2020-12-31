@@ -1,6 +1,6 @@
 ;;; fancyref.el --- AUCTeX style file with support for fancyref.sty
 
-;; Copyright (C) 1999, 2014, 2015 Free Software Foundation, Inc.
+;; Copyright (C) 1999, 2014, 2015, 2018 Free Software Foundation, Inc.
 
 ;; Author: Carsten Dominik <dominik@strw.leidenuniv.nl>
 ;; Maintainer: auctex-devel@gnu.org
@@ -23,6 +23,11 @@
 ;; 02110-1301, USA.
 
 ;;; Code:
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
 
 (TeX-add-style-hook "fancyref"
    (lambda ()

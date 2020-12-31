@@ -1,6 +1,6 @@
 ;;; dinbrief.el --- Special code for LaTeX-Style dinbrief.
 
-;; Copyright (C) 1994, 2013, 2014  Free Software Foundation, Inc.
+;; Copyright (C) 1994, 2013, 2014, 2018, 2020 Free Software Foundation, Inc.
 
 ;; Author: Werner Fink <werner@suse.de>
 ;; Maintainer: auctex-devel@gnu.org
@@ -33,82 +33,84 @@
 
 (require 'tex)
 
-(TeX-add-style-hook "dinbrief"
- (function
-  (lambda ()
-    (add-hook 'LaTeX-document-style-hook
-     'LaTeX-dinbrief-style)
-    (LaTeX-add-environments
-     '("letter" LaTeX-dinbrief-env-recipient)
-     "dinquote")
-    (TeX-add-symbols
-     '("address" "Absender: ")
-     '("postremark" "Postvermerk: ")
-     '("date" "Datum: ")
-     '("subject" "Betreff: ")
-     '("handling" "Behandlungsvermerk: ")
-     '("cc" "Verteiler: ")
-     '("place" "Heutiger Ort: ")
-     "makelabels"
-     "nowindowrules"
-     "windowrules"
-     "nowindowtics"
-     "windowtics"
-     "disabledraftstandard"
-     "enabledraftstandard"
-     "centeraddress"
-     "normaladdress"
-     '("encl" "Anlagen: ")
-     '("backaddress" "Retouradresse: ")
-     '("signature" "Unterschrift: ")
-     '("opening" "Anrede: ")
-     '("closing" "Schluss: "))))
+(TeX-add-style-hook
+ "dinbrief"
+ (lambda ()
+   (add-hook 'LaTeX-document-style-hook
+	     'LaTeX-dinbrief-style)
+   (LaTeX-add-environments
+    '("letter" LaTeX-dinbrief-env-recipient)
+    "dinquote")
+   (TeX-add-symbols
+    '("address" "Absender")
+    '("postremark" "Postvermerk")
+    '("date" "Datum")
+    '("subject" "Betreff")
+    '("handling" "Behandlungsvermerk")
+    '("cc" "Verteiler")
+    '("place" "Heutiger Ort")
+    "makelabels"
+    "nowindowrules"
+    "windowrules"
+    "nowindowtics"
+    "windowtics"
+    "disabledraftstandard"
+    "enabledraftstandard"
+    "centeraddress"
+    "normaladdress"
+    '("encl" "Anlagen: ")
+    '("backaddress" "Retouradresse")
+    '("signature" "Unterschrift")
+    '("opening" "Anrede")
+    '("closing" "Schluss")))
  LaTeX-dialect)
 
 (defmacro LaTeX-dinbrief-insert (&rest args)
   "Insert text ignoring active markers."
-  `(progn (if (TeX-mark-active) (TeX-deactivate-mark))
+  `(progn (if mark-active (deactivate-mark))
      (insert ,@args)))
 
 (defun LaTeX-dinbrief-style ()
   "Insert some useful packages for writing german letters."
-  (save-excursion
-    (goto-char (point-min)) ; insert before \begin{document}
-    (if (re-search-forward ".begin.document." (point-max) t)
-        (beginning-of-line 1))
-    (open-line 2)
-    (indent-relative-maybe)
+  (let ((func (if (fboundp 'indent-relative-first-indent-point)
+		  'indent-relative-first-indent-point
+		'indent-relative-maybe)))
+    (save-excursion
+      (goto-char (point-min)) ; insert before \begin{document}
+      (if (re-search-forward ".begin.document." (point-max) t)
+          (beginning-of-line 1))
+      (open-line 2)
+      (funcall func)
       (LaTeX-dinbrief-insert TeX-esc "usepackage"
-	      LaTeX-optop "latin1,utf8" LaTeX-optcl
-	      TeX-grop "inputenc" TeX-grcl)
+			     LaTeX-optop "latin1,utf8" LaTeX-optcl
+			     TeX-grop "inputenc" TeX-grcl)
       (newline-and-indent)
       (LaTeX-dinbrief-insert TeX-esc "usepackage"
-	      LaTeX-optop "T1" LaTeX-optcl
-	      TeX-grop "fontenc" TeX-grcl)
-      (newline-and-indent)
+			     LaTeX-optop "T1" LaTeX-optcl
+			     TeX-grop "fontenc" TeX-grcl)
+      (funcall func)
       (LaTeX-dinbrief-insert TeX-esc "usepackage"
-	      TeX-grop "ngerman" TeX-grcl)
-      (TeX-run-style-hooks "inputenc")
-      (TeX-run-style-hooks "fontenc")
-      (TeX-run-style-hooks "ngerman")))
+			     TeX-grop "ngerman" TeX-grcl))
+    (TeX-run-style-hooks "inputenc" "fontenc" "ngerman")))
 
 (defun LaTeX-dinbrief-env-recipient (environment)
   "Insert ENVIRONMENT and prompt for recipient and address."
-  (let (
-	(sender (LaTeX-dinbrief-sender))
+  (let ((sender (LaTeX-dinbrief-sender))
 	(recipient (TeX-read-string "Empfänger: "))
 	(address (LaTeX-dinbrief-recipient))
 	(date (TeX-read-string "Datum: " (LaTeX-dinbrief-today)))
 	(postremark (TeX-read-string "Postvermerk: "))
-	(fenster (TeX-read-string "Fenster \(ja/nein\): "))
+	(fenster (TeX-read-string "Fenster (ja/nein): "))
 	(vermerk (TeX-read-string "Behandlungsvermerk: "))
 	(verteil (TeX-read-string "Verteiler: "))
 	(betreff (TeX-read-string "Betreff: "))
 	(opening (TeX-read-string "Anrede: "))
 	(closing (TeX-read-string "Schluss: "))
 	(signature (TeX-read-string "Unterschrift: "))
-	(anlage (TeX-read-string "Anlagen: ")))
-
+	(anlage (TeX-read-string "Anlagen: "))
+	(func (if (fboundp 'indent-relative-first-indent-point)
+		  'indent-relative-first-indent-point
+		'indent-relative-maybe)))
     (if (string= fenster "ja")
 	(progn
 	  (LaTeX-dinbrief-insert TeX-esc "enabledraftstandard")
@@ -121,11 +123,11 @@
 	  (newline-and-indent)
 	  (let ((retouradr (TeX-read-string "Retouradresse: " sender)))
 	    (newline-and-indent)
-	  (if (not (zerop (length retouradr)))
-	      (progn
-		(if (TeX-mark-active) (TeX-deactivate-mark))
-		(LaTeX-dinbrief-insert TeX-esc "backaddress" TeX-grop retouradr TeX-grcl)
-		(newline-and-indent)))))
+	    (if (not (zerop (length retouradr)))
+		(progn
+		  (if mark-active (deactivate-mark))
+		  (LaTeX-dinbrief-insert TeX-esc "backaddress" TeX-grop retouradr TeX-grcl)
+		  (newline-and-indent)))))
       (LaTeX-dinbrief-insert TeX-esc "enabledraftstandard")
       (newline-and-indent)
       (LaTeX-dinbrief-insert TeX-esc "centeraddress")
@@ -133,7 +135,7 @@
       (LaTeX-dinbrief-insert TeX-esc "nowindowrules")
       (newline-and-indent)
       (LaTeX-dinbrief-insert TeX-esc "windowtics"))
-      (newline-and-indent)
+    (newline-and-indent)
     (if (not (zerop (length signature)))
 	(progn
 	  (LaTeX-dinbrief-insert TeX-esc "signature" TeX-grop signature TeX-grcl)
@@ -189,21 +191,21 @@
 	  (LaTeX-dinbrief-insert TeX-esc "encl" TeX-grop anlage TeX-grcl)
 	  (newline-and-indent)))
     (LaTeX-dinbrief-insert TeX-esc "opening"
-	    TeX-grop
-	    (if (zerop (length opening))
-		(concat TeX-esc " ")
-	      opening)
-	    TeX-grcl "\n")
+			   TeX-grop
+			   (if (zerop (length opening))
+			       (concat TeX-esc " ")
+			     opening)
+			   TeX-grcl "\n")
 
-    (indent-relative-maybe)
+    (funcall func)
     (save-excursion
       (LaTeX-dinbrief-insert "\n" TeX-esc "closing"
-	      TeX-grop
-	      (if (zerop (length closing))
-		  (concat TeX-esc " ")
-		closing)
-	      TeX-grcl "\n")
-      (indent-relative-maybe))))
+			     TeX-grop
+			     (if (zerop (length closing))
+				 (concat TeX-esc " ")
+			       closing)
+			     TeX-grcl "\n")
+      (funcall func))))
 
 (defun LaTeX-dinbrief-sender ()
   "Read and write the senders address."
@@ -216,7 +218,7 @@
 	  (goto-char (point-min)) ; insert before \end{document}
 	  (if (re-search-forward ".end.document." (point-max) t)
 	      (beginning-of-line 1))
-	  (previous-line 1)             ;FIXME: Use forward-line!
+	  (forward-line -1)
 	  (LaTeX-dinbrief-insert TeX-esc "address" TeX-grop name)
 	  (if (not (zerop (length str)))
 	      (progn

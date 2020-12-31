@@ -1,6 +1,6 @@
-;;; subcaption.el --- AUCTeX style for `subcaption.sty' (v1.1-100)
+;;; subcaption.el --- AUCTeX style for `subcaption.sty' (v1.3)
 
-;; Copyright (C) 2015--2017 Free Software Foundation, Inc.
+;; Copyright (C) 2015--2019 Free Software Foundation, Inc.
 
 ;; Author: Arash Esbati <arash@gnu.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -26,10 +26,18 @@
 
 ;;; Commentary:
 
-;; This file adds support for `subcaption.sty' (v1.1-100) from
-;; 2015-09-15.  `subcaption.sty' is part of TeXLive.
+;; This file adds support for `subcaption.sty' (v1.3) from 2019-08-31.
+;; `subcaption.sty' is part of TeXLive.
 
 ;;; Code:
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
+
+(defvar LaTeX-caption-key-val-options-local)
+(defvar LaTeX-caption-key-val-options)
 
 (defvar LaTeX-subcaption-key-val-options
   '(("subrefformat" ("default" "empty" "simple" "brace" "parens")))
@@ -122,7 +130,8 @@ caption, insert only a caption."
     ;; check if hyperref.el is loaded and make it available directly.
     '("subref*"        TeX-arg-ref)
     '("phantomcaption"    0)
-    '("phantomsubcaption" 0))
+    '("phantomsubcaption" 0)
+    '("subfloat" [ "List entry" ] [ "Sub-caption" ] t))
 
    ;; The next 2 macros are part of the kernel of caption.sty, but we
    ;; load them within subcaption.el.
@@ -143,8 +152,9 @@ caption, insert only a caption."
 		    (TeX-argument-prompt nil nil "Type")
 		    '("figure" "table"))))
 
-   ;; \subcaption(box)? macros should get their own lines
-   (LaTeX-paragraph-commands-add-locally '("subcaption" "subcaptionbox"))
+   ;; \subcaption(box)? and \subfloat macros should get their own lines
+   (LaTeX-paragraph-commands-add-locally
+    '("subcaption" "subcaptionbox" "subfloat"))
 
    ;; The subfigure & subtable environments
    (LaTeX-add-environments
@@ -167,7 +177,8 @@ caption, insert only a caption."
      (font-latex-add-keywords '(("subcaption"            "*[{")
 				("subcaptionbox"         "*[{[[")
 				("phantomcaption"        "")
-				("phantomsubcaption"     ""))
+				("phantomsubcaption"     "")
+				("subfloat"              "[["))
 			      'textual)
      (font-latex-add-keywords '(("subref"                "*{"))
 			      'reference)
@@ -177,8 +188,8 @@ caption, insert only a caption."
 
 (defun LaTeX-subcaption-package-options ()
   "Prompt for package options for the subcaption package."
-  (TeX-read-key-val t
-   (append LaTeX-subcaption-key-val-options
-	   LaTeX-caption-key-val-options)))
+  (TeX-load-style "caption")
+  (TeX-read-key-val t (append LaTeX-subcaption-key-val-options
+			      LaTeX-caption-key-val-options)))
 
 ;;; subcaption.el ends here

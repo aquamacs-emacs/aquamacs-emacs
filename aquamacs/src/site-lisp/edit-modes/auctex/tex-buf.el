@@ -1,6 +1,6 @@
 ;;; tex-buf.el --- External commands for AUCTeX.
 
-;; Copyright (C) 1991-1999, 2001-2017 Free Software Foundation, Inc.
+;; Copyright (C) 1991-1999, 2001-2020 Free Software Foundation, Inc.
 
 ;; Maintainer: auctex-devel@gnu.org
 ;; Keywords: tex, wp
@@ -202,16 +202,12 @@ depend on it being positive instead of the entry in `TeX-command-list'."
 	(TeX-command-region-end (point-max)))
     (TeX-command-region override-confirm)))
 
-(unless (featurep 'xemacs)
-  ;; This variable is not defined in XEmacs because XEmacs' version of
-  ;; `pop-to-buffer' doesn't support the optional NORECORD argument.  In
-  ;; XEmacs, the third arg is ON-FRAME (Emacs: NORECORD).
-  (defcustom TeX-record-buffer nil
-    "Whether to record buffer names of generated TeX buffers.
+(defcustom TeX-record-buffer nil
+  "Whether to record buffer names of generated TeX buffers.
 When non-nil, these buffers are put at the front of the list of
 recently selected ones."
-    :group 'TeX-command
-    :type 'boolean))
+  :group 'TeX-command
+  :type 'boolean)
 
 (defun TeX-pop-to-buffer (buffer &optional other-window norecord)
   "Compatibility wrapper for `pop-to-buffer'.
@@ -230,14 +226,8 @@ This uses the function `display-buffer' as a subroutine; see the documentation
 of `display-buffer' for additional customization information.
 
 Optional third arg NORECORD non-nil means do not put this buffer
-at the front of the list of recently selected ones.
-
-NORECORD is ignored in XEmacs."
-  ;; Make sure not to use third arg in XEmacs.  In XEmacs, the third arg is
-  ;; ON-FRAME (Emacs: NORECORD), so we set it to nil.
-  (pop-to-buffer buffer other-window (and norecord
-					  (boundp 'TeX-record-buffer)
-					  TeX-record-buffer)))
+at the front of the list of recently selected ones."
+  (pop-to-buffer buffer other-window (and norecord (not TeX-record-buffer))))
 
 (defun TeX-recenter-output-buffer (line)
   "Redisplay buffer of TeX job output so that most recent output can be seen.
@@ -319,9 +309,7 @@ message buffer and start at the first error."
   (if (or (null (TeX-active-buffer))
 	  (eq 'compilation-mode (with-current-buffer TeX-command-buffer
 				  major-mode)))
-      (if (featurep 'xemacs)
-	  (next-error arg)
-	(next-error arg reparse))
+      (next-error arg reparse)
 
     ;; Force reparsing when the function is called with a universal-argument.
     (if (consp arg) (setq reparse t arg nil))
@@ -434,11 +422,11 @@ to be run."
 	  ((= length 1)
 	   (setq engine (car TeX-check-engine-list))
 	   (y-or-n-p (format "%s is required to build this document.
-Do you want to use this engine?" (cdr (assoc engine name-alist)))))
+Do you want to use this engine? " (cdr (assoc engine name-alist)))))
 	  ;; More than one engine is allowed.
 	  ((> length 1)
 	   (if (y-or-n-p (format "It appears %s are required to build this document.
-Do you want to select one of these engines?"
+Do you want to select one of these engines? "
 				 (mapconcat
 				  (lambda (elt) (cdr (assoc elt name-alist)))
 				  TeX-check-engine-list ", ")))
@@ -461,7 +449,7 @@ Do you want to select one of these engines?"
 	     (setq TeX-check-engine-list nil))))
        (TeX-engine-set engine)
        (when (and (fboundp 'add-file-local-variable)
-		  (y-or-n-p "Do you want to remember the choice?"))
+		  (y-or-n-p "Do you want to remember the choice? "))
 	 (add-file-local-variable 'TeX-engine engine)
 	 (save-buffer))))))
 
@@ -491,6 +479,11 @@ asked if it is positive, and suppressed if it is not.
 Run function `TeX-check-engine' to check the correct engine has
 been set."
   (TeX-check-engine name)
+
+  ;; Make sure that `TeX-command-buffer' is set always.
+  ;; It isn't safe to remove similar lines in `TeX-run-command' etc.
+  ;; because preview-latex calls `TeX-run-command' directly.
+  (setq-default TeX-command-buffer (current-buffer))
 
   (cond ((eq file #'TeX-region-file)
 	 (setq TeX-current-process-region-p t))
@@ -554,12 +547,6 @@ without further expansion."
   (let (pat
 	pos ;;FIXME: Should this be dynamically scoped?
 	entry TeX-command-text TeX-command-pos
-        ;; FIXME: This variable appears to be unused!
-	(file `(lambda (&rest args)
-		 (shell-quote-argument
-		  (concat (and (stringp TeX-command-pos) TeX-command-pos)
-			  (apply #',file args)
-			  (and (stringp TeX-command-pos) TeX-command-pos)))))
         expansion-res case-fold-search string expansion arguments)
     (setq list (cons
 		(list "%%" (lambda nil
@@ -567,6 +554,17 @@ without further expansion."
 			     "%"))
 		(or list (TeX-expand-list)))
 	  pat (regexp-opt (mapcar #'car list)))
+    ;; `TeX-command-expand' is called with `file' argument being one
+    ;; of `TeX-master-file', `TeX-region-file' and
+    ;; `TeX-active-master'.  The return value of these functions
+    ;; sometimes needs suitable "decorations" for an argument for
+    ;; underlying shell or latex executable, or both, when the
+    ;; relavant file name involves some special characters such as
+    ;; space and multibyte characters.  Hence embed that function in a
+    ;; template prepared for that purpose.
+    (setq file (apply-partially
+		#'TeX--master-or-region-file-with-extra-quotes
+		file))
     (while (setq pos (string-match pat command pos))
       (setq string (match-string 0 command)
 	    entry (assoc string list)
@@ -596,6 +594,52 @@ without further expansion."
 	  (setq command
 		(replace-match string t t command)))))
   command)
+
+(defun TeX--master-or-region-file-with-extra-quotes
+    (file-fn &optional extension nondirectory ask extra)
+  "Return file name with quote for shell.
+Helper function of `TeX-command-expand'.
+
+This is a kind of template.  How to use:
+Fix, by `apply-partially', the first argument FILE-FN as one of
+the three functions `TeX-master-file', `TeX-region-file' or
+`TeX-active-master'.  Then the result is just a wrapper for that
+function suitable in `TeX-command-expand'.
+
+As a wrapper described above, it passes EXTENSION, NONDIRECTORY
+and ASK to the \"bare\" function as-is, and arranges the returned
+file name for use with command shell.  I.e. it encloses the file
+name with space within quotes `\"' first when \" \\input\" is
+supplemented (indicated by dynamically binded variable
+`TeX-command-text' having string value.)  It also encloses the
+file name within \\detokenize{} when the following three
+conditions are met:
+1. compiling with standard (pdf)LaTeX or upLaTeX
+2. \" \\input\" is supplemented
+3. EXTRA is non-nil (default when expanding \"%T\")"
+  (shell-quote-argument
+   (let* ((raw (funcall file-fn extension nondirectory ask))
+	  ;; String `TeX-command-text' means that the file name is
+	  ;; given through \input command.
+	  (quote-for-space (if (and (stringp TeX-command-text)
+				    (string-match " " raw))
+			       "\"" "")))
+     (format
+      (if (and extra
+	       (stringp TeX-command-text)
+	       (memq major-mode '(latex-mode doctex-mode))
+	       (memq TeX-engine '(default uptex)))
+	  ;; Since TeXLive 2018, the default encoding for LaTeX
+	  ;; files has been changed to UTF-8 if used with
+	  ;; classic TeX or pdfTeX.  I.e.,
+	  ;; \usepackage[utf8]{inputenc} is enabled by default
+	  ;; in (pdf)latex.
+	  ;; c.f. LaTeX News issue 28
+	  ;; Due to this change, \detokenize is required to
+	  ;; recognize non-ascii characters in the file name
+	  ;; when \input precedes.
+	  "\\detokenize{ %s }" "%s")
+      (concat quote-for-space raw quote-for-space)))))
 
 (defun TeX-check-files (derived originals extensions)
   "Check if DERIVED is newer than any of the ORIGINALS.
@@ -803,7 +847,7 @@ omitted) and `TeX-region-file'."
 	  ((and
 	    ;; Rationale: makeindex should be run when final document is almost
 	    ;; complete (see
-	    ;; http://tex.blogoverflow.com/2012/09/dont-forget-to-run-makeindex/),
+	    ;; https://tex-talk.net/2012/09/dont-forget-to-run-makeindex/),
 	    ;; otherwise, after following latex runs, index pages may change due
 	    ;; to changes in final document, resulting in extra makeindex and
 	    ;; latex runs.
@@ -996,48 +1040,53 @@ Called with one argument PROCESS.")
 Usually coding system is the same as the TeX file with eol format
 adjusted to OS default value.  Take care of Japanese TeX, which
 requires special treatment."
-  (when (featurep 'mule)
-    (if (and (boundp 'japanese-TeX-mode)
-	     (fboundp 'japanese-TeX-set-process-coding-system)
-	     (with-current-buffer TeX-command-buffer
-	       japanese-TeX-mode))
-	(japanese-TeX-set-process-coding-system process)
-      (let ((cs (with-current-buffer TeX-command-buffer
-		  buffer-file-coding-system)))
-	;; The value of `buffer-file-coding-system' is sometimes
-	;; undecided-{unix,dos,mac}.  That happens when the file
-	;; contains no multibyte chars and only end of line format is
-	;; determined.  Emacs lisp reference recommends not to use
-	;; undecided-* for process coding system, so it might seem
-	;; reasonable to change undecided-* to some fixed coding
-	;; system like this:
-	;; (if (eq 'undecided (coding-sytem-type cs))
-	;;     (setq cs 'utf-8))
-	;; However, that can lose when the following conditions are
-	;; met:
-	;; (1) The document is divided into multiple files.
-	;; (2) The command buffer contains no multibyte chars.
-	;; (3) The other files contain mutlibyte chars and saved in
-	;;     a coding system other than the coding system chosen
-	;;     above.
-	;; So we leave undecided-* unchanged here.  Although
-	;; undecided-* is not quite safe for the coding system for
-	;; encoding, i.e., keyboard input to the TeX process, we
-	;; expect that this does not raise serious problems because it
-	;; is pretty rare that TeX process needs keyboard input of
-	;; multibyte chars.
+  (if (and (boundp 'japanese-TeX-mode)
+	   (fboundp 'japanese-TeX-set-process-coding-system)
+	   (with-current-buffer TeX-command-buffer
+	     japanese-TeX-mode))
+      (japanese-TeX-set-process-coding-system process)
+    (let ((cs (coding-system-base (with-current-buffer TeX-command-buffer
+				    buffer-file-coding-system))))
+      ;; The value of `buffer-file-coding-system' is sometimes
+      ;; undecided-{unix,dos,mac}.  That happens when the file
+      ;; contains no multibyte chars and only end of line format is
+      ;; determined.  Emacs lisp reference recommends not to use
+      ;; undecided-* for process coding system, so it might seem
+      ;; reasonable to change `undecided' into some fixed coding
+      ;; system like this:
+      ;; (if (eq 'undecided cs)
+      ;;     (setq cs 'utf-8))
+      ;; However, that can lose when the following conditions are met:
+      ;; (1) The document is divided into multiple files.
+      ;; (2) The command buffer contains no multibyte chars.
+      ;; (3) The other files contain mutlibyte chars and saved in a
+      ;;     coding system other than the one chosen above.
+      ;; So we leave `undecided' unchanged here.  Although `undecided'
+      ;; is not quite safe for the coding system for encoding, i.e.,
+      ;; keyboard input to the TeX process, we expect that this does
+      ;; not raise serious problems because it is pretty rare that TeX
+      ;; process needs keyboard input of multibyte chars.
 
-	;; Eol format of TeX files can differ from OS default. TeX
-	;; binaries accept all type of eol format in the given files
-	;; and output messages according to OS default.  So we set eol
-	;; format to OS default value.
-	(setq cs (coding-system-change-eol-conversion
-		  cs
-		  ;; The eol of macosX is LF, not CR.  So we choose
-		  ;; other than `unix' only for w32 system.
-		  ;; FIXME: what should we do for cygwin?
-		  (if (eq system-type 'windows-nt) 'dos 'unix)))
-	(set-process-coding-system process cs cs)))))
+      ;; `utf-8-with-signature' (UTF-8 with BOM) doesn't suit at all
+      ;; for the coding system for encoding because it always injects
+      ;; 3-byte BOM in front of its return value (even when the string
+      ;; to be sent has only ascii characters!)  Thus we change it
+      ;; into `utf-8'.  On decoding, `utf-8' can decode UTF-8 with
+      ;; BOM.  So it is safe for both decoding and encoding.
+      (if (eq cs 'utf-8-with-signature)
+	  (setq cs 'utf-8))
+
+      ;; Eol format of TeX files can differ from OS default. TeX
+      ;; binaries accept all type of eol format in the given files
+      ;; and output messages according to OS default.  So we set eol
+      ;; format to OS default value.
+      (setq cs (coding-system-change-eol-conversion
+		cs
+		;; The eol of macosX is LF, not CR.  So we choose
+		;; other than `unix' only for w32 system.
+		;; FIXME: what should we do for cygwin?
+		(if (eq system-type 'windows-nt) 'dos 'unix)))
+      (set-process-coding-system process cs cs))))
 
 (defcustom TeX-show-compilation nil
   "*If non-nil, show output of TeX compilation in other window."
@@ -1085,8 +1134,7 @@ Return the new process."
 	  (setq compilation-in-progress (cons process compilation-in-progress))
 	  process)
       (setq mode-line-process ": run")
-      (set-buffer-modified-p (buffer-modified-p))
-      (sit-for 0)				; redisplay
+      (force-mode-line-update)
       (call-process TeX-shell nil buffer nil
 		    TeX-shell-command-option command))))
 
@@ -1244,7 +1292,21 @@ run of `TeX-run-TeX', use
 (defun TeX-run-compile (_name command _file)
   "Ignore first and third argument, start compile with second argument."
   (let ((default-directory (TeX-master-directory)))
-    (setq TeX-command-buffer (compile command))))
+    (setq TeX-command-buffer (compile command)))
+  ;; Make `compilation-mode' recognize file names with spaces.
+  ;; (bug#36483)
+  ;; FIXME: This is just an ad-hoc workaround and it's better to fix
+  ;; the regular expression in compile.el properly, if possible.  But
+  ;; there was no response to such request in emacs-devel@gnu.org.
+  (with-current-buffer TeX-command-buffer
+    (make-local-variable 'compilation-error-regexp-alist)
+    ;; Add slightly modified entry of the one associated with `comma'
+    ;; in `compilation-error-regexp-alist-alist' to pick up file names
+    ;; with spaces.
+    (add-to-list 'compilation-error-regexp-alist
+		 '("^\"\\([^,\"\n\t]+\\)\", line \\([0-9]+\\)\
+\\(?:[(. pos]+\\([0-9]+\\))?\\)?[:.,; (-]\\( warning:\\|[-0-9 ]*(W)\\)?" 1 2 3 (4))
+		 t)))
 
 (defun TeX-run-shell (_name command _file)
   "Ignore first and third argument, start shell-command with second argument."
@@ -1285,7 +1347,7 @@ With support for MS-DOS, especially when dviout is used with PC-9801 series."
       (if TeX-after-start-process-function
 	  (funcall TeX-after-start-process-function process))
       (set-process-filter process #'TeX-background-filter)
-      (process-kill-without-query process))))
+      (set-process-query-on-exit-flag process nil))))
 
 (defun TeX-run-silent (name command _file)
   "Start process with second argument."
@@ -1298,7 +1360,7 @@ With support for MS-DOS, especially when dviout is used with PC-9801 series."
 				  TeX-shell-command-option command)))
       (if TeX-after-start-process-function
 	  (funcall TeX-after-start-process-function process))
-      (process-kill-without-query process))))
+      (set-process-query-on-exit-flag process nil))))
 
 (defun TeX-run-interactive (name command file)
   "Run TeX interactively.
@@ -1348,15 +1410,10 @@ Parameters NAME and FILE are ignored."
 (defun TeX-run-discard-or-function (name command file)
   "Start COMMAND as process or execute it as a Lisp function.
 If run as a process, the output is discarded.  COMMAND is
-expected to be a string.  NAME and FILE are ignored.
-Aquamacs extension:
-COMMAND may be a string containing a lisp expression
-to be evaluated." ;; Aquamacs
-  (let ((expr (car (read-from-string command)))) ;; Aquamacs
-    (if (or (functionp expr) ;; Aquamacs
-            (and (listp expr) (functionp (car expr)))) ;; Aquamacs
-      (TeX-run-function name command file) ;; Aquamacs
-      (TeX-run-discard name command file)))) ;; Aquamacs
+expected to be a string.  NAME and FILE are ignored."
+  (if (functionp (car (read-from-string command)))
+      (TeX-run-function name command file)
+    (TeX-run-discard name command file)))
 
 (defun TeX-run-ispell-on-document (_command _ignored _name)
   "Run ispell on all open files belonging to the current document.
@@ -1386,7 +1443,7 @@ reasons.  Use `TeX-run-function' instead."
       (apply TeX-sentinel-function nil name nil)
 
       ;; Force mode line redisplay soon
-      (set-buffer-modified-p (buffer-modified-p)))))
+      (force-mode-line-update))))
 
 (defun TeX-command-sentinel (process msg)
   "Process TeX command output buffer after the process dies."
@@ -1422,10 +1479,12 @@ reasons.  Use `TeX-run-function' instead."
 	     ;; If buffer and mode line will show that the process
 	     ;; is dead, we can delete it now.  Otherwise it
 	     ;; will stay around until M-x list-processes.
-	     (delete-process process)
+	     (delete-process process))
 
-	     ;; Force mode line redisplay soon
-	     (set-buffer-modified-p (buffer-modified-p))))))
+	   ;; Force mode line redisplay soon
+	   ;; Do this in all buffers (bug#38058 and bug#40965)
+	   (force-mode-line-update t))))
+
   (setq compilation-in-progress (delq process compilation-in-progress)))
 
 
@@ -1535,7 +1594,7 @@ Return nil ifs no errors were found."
 ;;   Package xyz123 Warning: ...
 ;;   Class xyz123 Warning: ...
 (defvar LaTeX-warnings-regexp
-  "\\(?:LaTeX\\|Class\\|Package\\|\*\\) [-A-Za-z0-9]* ?[Ww]arning:"
+  "\\(?:LaTeX\\|Class\\|Package\\|\\*\\) [-A-Za-z0-9]* ?[Ww]arning:"
   "Regexp matching LaTeX warnings.")
 
 (defun TeX-LaTeX-sentinel-has-warnings ()
@@ -1642,7 +1701,7 @@ Rerun to get mark in right position\\." nil t)
 	 (message
 	  "%s" "You should run LaTeX again to get TikZ marks in right position")
 	 (setq TeX-command-next TeX-command-default))
-	((re-search-forward "^\* xsim warning: \"rerun\"" nil t)
+	((re-search-forward "^\\* xsim warning: \"rerun\"" nil t)
 	 (message
 	  "%s" "You should run LaTeX again to synchronize exercise properties")
 	 (setq TeX-command-next TeX-command-default))
@@ -1824,9 +1883,11 @@ variable is nil."
 (defvar compilation-in-progress nil
   "List of compilation processes now running.")
 
-(or (assq 'compilation-in-progress minor-mode-alist)
-    (setq minor-mode-alist (cons '(compilation-in-progress " Compiling")
-				 minor-mode-alist)))
+;; COMPATIBILITY for emacs < 27
+(if (< emacs-major-version 27)
+    (or (assq 'compilation-in-progress minor-mode-alist)
+	(setq minor-mode-alist (cons '(compilation-in-progress " Compiling")
+				     minor-mode-alist))))
 
 (defun TeX-process-get-variable (name symbol &optional default)
   "Return the value in the process buffer for NAME of SYMBOL.
@@ -1886,7 +1947,7 @@ command."
   "Format the mode line for a buffer containing output from PROCESS."
     (setq mode-line-process (concat ": "
 				    (symbol-name (process-status process))))
-    (set-buffer-modified-p (buffer-modified-p)))
+    (force-mode-line-update))
 
 (defun TeX-command-filter (process string)
   "Filter to process normal output."
@@ -1905,7 +1966,7 @@ command."
   "Format the mode line for a buffer containing TeX output from PROCESS."
     (setq mode-line-process (concat " " TeX-current-page ": "
 				    (symbol-name (process-status process))))
-    (set-buffer-modified-p (buffer-modified-p)))
+    (force-mode-line-update))
 
 (defun TeX-format-filter (process string)
   "Filter to process TeX output."
@@ -1999,14 +2060,22 @@ command."
        (with-current-buffer TeX-command-buffer
 	 (TeX-process-buffer (TeX-active-master)))))
 
-(defun TeX-active-master (&optional extension nondirectory)
+(defun TeX-active-master (&optional extension nondirectory _ignore)
   "The master file currently being compiled.
 
 If optional argument EXTENSION is non-nil, add that file extension to
 the name.  Special value t means use `TeX-default-extension'.
 
 If optional second argument NONDIRECTORY is non-nil, do not include
-the directory."
+the directory.
+
+The compatibility argument IGNORE is ignored."
+  ;; The third argument `_ignore' is kept for symmetry with
+  ;; `TeX-master-file's third argument `ask'.  For example, it's used
+  ;; in `TeX--master-or-region-file-with-extra-quotes', where we don't
+  ;; know which function has to be called.  Keep this in mind should
+  ;; you want to use another argument here.
+  ;; See also the similar comment in `TeX-region-file'.
   (if TeX-current-process-region-p
       (TeX-region-file extension nondirectory)
     (TeX-master-file extension nondirectory)))
@@ -2044,7 +2113,33 @@ The hooks are run in the region buffer, you may use the variable
     (while (setq pos (string-match "[~#]" file pos))
       (setq file (replace-match "\\\\string\\&" t nil file 0)
 	    pos (+ pos 8))))
-  file)
+  ;; Use \unexpanded so that \message outputs the raw file name.
+  ;; When \usepackage[utf8]{inputenc} is used in standard (pdf)latex,
+  ;; \message does not output non-ascii file name in raw form without
+  ;; \unexpanded, which makes AUCTeX to fail to recognize the file
+  ;; names right when analysing the process output buffer.
+  ;; Note that \usepackage[utf8]{inputenc} is enabled by default in
+  ;; standard (pdf)latex since TeXLive 2018.
+  (if (and (memq major-mode '(latex-mode doctex-mode))
+	   ;; Japanese upLaTeX requires the same treatment with
+	   ;; respect to non-ascii characters other than Japanese, in
+	   ;; file names within \message{}.
+	   ;; However, pLaTeX (non u- version) does not support
+	   ;; non-ascii file name encoded in UTF-8.  So considering
+	   ;; `ptex' doesn't make sense here.  We cater for only
+	   ;; `default' and `uptex' engines.
+	   (memq TeX-engine '(default uptex)))
+      ;; It would fail to put entire `file' inside \unexpanded{} when
+      ;; the above loop injects \string before "#" and "~".  So put
+      ;; only multibyte characters inside \unexpanded{}.
+      ;; It is safe in upLaTeX to use \unexpanded{} on Japanese
+      ;; characters though they are handled by upLaTeX in a totally
+      ;; different way from inputenc.
+      ;; Thus put all multibyte characters, without considering
+      ;; whether they are Japanese or not, inside \unexpanded{}.
+      (replace-regexp-in-string "[[:multibyte:]]+"
+				"\\\\unexpanded{\\&}" file t)
+    file))
 
 (defvar font-lock-mode-enable-list)
 (defvar font-lock-auto-fontify)
@@ -2109,8 +2204,10 @@ original file."
 			   (if (not (re-search-forward TeX-header-end nil t))
 			       ""
 			     (re-search-forward "[\r\n]" nil t)
-			     (buffer-substring (point-min) (point)))))))))
+			     (buffer-substring-no-properties
+			      (point-min) (point)))))))))
 	 (header-offset 0)
+	 first-line
 	 ;; We search for the trailer from the master file, if it is
 	 ;; not present in the region.
 	 (trailer-offset 0)
@@ -2130,21 +2227,36 @@ original file."
 			      ;;(beginning-of-line 1)
 			      (re-search-backward "[\r\n]" nil t)
 			      (setq trailer-offset (TeX-current-offset))
-			      (buffer-substring (point) (point-max))))))))))
+			      (buffer-substring-no-properties
+			       (point) (point-max))))))))))
     ;; file name should be relative to master
     (setq original (TeX-quote-filename (file-relative-name
 					original (TeX-master-directory)))
 	  master-name (TeX-quote-filename master-name))
+
+    ;; If the first line begins with "%&", put that line separately on
+    ;; the very first line of the region file so that the first line
+    ;; parsing will work.
+    (setq first-line (if (and (> (length header) 1)
+			      (string= (substring header 0 2) "%&"))
+			 ;; This would work even if header has no newline.
+			 (substring header 0 (string-match "\n" header))
+		       ""))
+    (unless (string= first-line "")
+      ;; Remove first-line from header.
+      (setq header (substring header (length first-line)))
+      (setq first-line (concat first-line "\n")))
+
     (with-current-buffer file-buffer
       (setq buffer-read-only t
 	    buffer-undo-list t)
       (setq original-content (buffer-string))
       (let ((inhibit-read-only t))
 	(erase-buffer)
-	(when (boundp 'buffer-file-coding-system)
-	  (setq buffer-file-coding-system
-		(with-current-buffer master-buffer buffer-file-coding-system)))
-	(insert "\\message{ !name(" master-name ")}"
+	(setq buffer-file-coding-system
+	      (with-current-buffer master-buffer buffer-file-coding-system))
+	(insert first-line
+		"\\message{ !name(" master-name ")}"
 		header
 		TeX-region-extra
 		"\n\\message{ !name(" original ") !offset(")
@@ -2385,10 +2497,7 @@ already in an Emacs buffer) and the cursor is placed at the error."
 		    (if (> arg 0)
 			(1+ TeX-error-last-visited)
 		      (1- TeX-error-last-visited))
-		    item (if (natnump TeX-error-last-visited)
-			     (nth TeX-error-last-visited TeX-error-list)
-			   ;; XEmacs doesn't support `nth' with a negative index.
-			   nil))
+		    item (nth TeX-error-last-visited TeX-error-list))
 	      ;; Increase or decrease `arg' only if the warning isn't to be
 	      ;; skipped.
 	      (unless (TeX-error-list-skip-warning-p (nth 0 item) (nth 10 item))
@@ -2478,7 +2587,7 @@ Return non-nil if an error or warning is found."
 	  ;; TeX error
 	  "^\\(!\\|\\(.*?\\):[0-9]+:\\) \\|"
 	  ;; New file
-	  "(\n?\\([^\n())]+\\)\\|"
+	  "(\n?\\([^\n()]+\\)\\|"
 	  ;; End of file.
 	  "\\()\\)\\|"
 	  ;; Hook to change line numbers
@@ -2552,10 +2661,8 @@ Return non-nil if an error or warning is found."
 	    ;; Polish `file' string
 	    (setq file
 		  (let ((string file))
-		    ;; Trim whitespaces at the front.  XXX: XEmacs doesn't
-		    ;; support character classes in regexps, like "[:space:]".
 		    (setq string
-			  (if (string-match "\\'[ \t\n\r]*" string)
+			  (if (string-match "\\`[ \t\n\r]+" string)
 			      (replace-match "" t t string)
 			    string))
 		    ;; Sometimes `file' is something like
@@ -3281,46 +3388,40 @@ error."
   :group 'TeX-output)
 
 (defface TeX-error-description-error
-  (if (< emacs-major-version 22)
-      nil
-    ;; This is the same as `error' face in latest GNU Emacs versions.
-    '((((class color) (min-colors 88) (background light))
-       :foreground "Red1" :weight bold)
-      (((class color) (min-colors 88) (background dark))
-       :foreground "Pink" :weight bold)
-      (((class color) (min-colors 16) (background light))
-       :foreground "Red1" :weight bold)
-      (((class color) (min-colors 16) (background dark))
-       :foreground "Pink" :weight bold)
-      (((class color) (min-colors 8))
-       :foreground "red" :weight bold)
-      (t (:inverse-video t :weight bold))))
+  ;; This is the same as `error' face in latest GNU Emacs versions.
+  '((((class color) (min-colors 88) (background light))
+     :foreground "Red1" :weight bold)
+    (((class color) (min-colors 88) (background dark))
+     :foreground "Pink" :weight bold)
+    (((class color) (min-colors 16) (background light))
+     :foreground "Red1" :weight bold)
+    (((class color) (min-colors 16) (background dark))
+     :foreground "Pink" :weight bold)
+    (((class color) (min-colors 8))
+     :foreground "red" :weight bold)
+    (t (:inverse-video t :weight bold)))
   "Face for \"Error\" string in error descriptions.")
 
 (defface TeX-error-description-warning
-  (if (< emacs-major-version 22)
-      nil
-    ;; This is the same as `warning' face in latest GNU Emacs versions.
-    '((((class color) (min-colors 16)) :foreground "DarkOrange" :weight bold)
-      (((class color)) :foreground "yellow" :weight bold)))
+  ;; This is the same as `warning' face in latest GNU Emacs versions.
+  '((((class color) (min-colors 16)) :foreground "DarkOrange" :weight bold)
+    (((class color)) :foreground "yellow" :weight bold))
   "Face for \"Warning\" string in error descriptions.")
 
 (defface TeX-error-description-tex-said
-  (if (< emacs-major-version 22)
-      nil
-    ;; This is the same as `font-lock-function-name-face' face in latest GNU
-    ;; Emacs versions.
-    '((((class color) (min-colors 88) (background light))
-       :foreground "Blue1")
-      (((class color) (min-colors 88) (background dark))
-       :foreground "LightSkyBlue")
-      (((class color) (min-colors 16) (background light))
-       :foreground "Blue")
-      (((class color) (min-colors 16) (background dark))
-       :foreground "LightSkyBlue")
-      (((class color) (min-colors 8))
-       :foreground "blue" :weight bold)
-      (t (:inverse-video t :weight bold))))
+  ;; This is the same as `font-lock-function-name-face' face in latest GNU
+  ;; Emacs versions.
+  '((((class color) (min-colors 88) (background light))
+     :foreground "Blue1")
+    (((class color) (min-colors 88) (background dark))
+     :foreground "LightSkyBlue")
+    (((class color) (min-colors 16) (background light))
+     :foreground "Blue")
+    (((class color) (min-colors 16) (background dark))
+     :foreground "LightSkyBlue")
+    (((class color) (min-colors 8))
+     :foreground "blue" :weight bold)
+    (t (:inverse-video t :weight bold)))
   "Face for \"TeX said\" string in error descriptions.")
 
 (defface TeX-error-description-help
@@ -3624,32 +3725,31 @@ forward, if negative)."
 (easy-menu-define TeX-error-overview-menu
   TeX-error-overview-mode-map
   "Menu used in TeX error overview mode."
-  (TeX-menu-with-help
-   '("TeX errors"
-     ["Next error" TeX-error-overview-next-error
-      :help "Jump to the next error"]
-     ["Previous error" TeX-error-overview-previous-error
-      :help "Jump to the previous error"]
-     ["Go to source" TeX-error-overview-goto-source
-      :help "Show the error in the source"]
-     ["Jump to source" TeX-error-overview-jump-to-source
-      :help "Move point to the error in the source"]
-     ["Go to log" TeX-error-overview-goto-log
-      :help "Show the error in the log buffer"]
-     "-"
-     ["Debug Bad Boxes" TeX-error-overview-toggle-debug-bad-boxes
-      :style toggle :selected TeX-debug-bad-boxes
-      :help "Show overfull and underfull boxes"]
-     ["Debug Warnings" TeX-error-overview-toggle-debug-warnings
-      :style toggle :selected TeX-debug-warnings
-      :help "Show warnings"]
-     ["Ignore Unimportant Warnings"
-      TeX-error-overview-toggle-suppress-ignored-warnings
-      :style toggle :selected TeX-suppress-ignored-warnings
-      :help "Hide specified warnings"]
-     "-"
-     ["Quit" TeX-error-overview-quit
-      :help "Quit"])))
+  '("TeX errors"
+    ["Next error" TeX-error-overview-next-error
+     :help "Jump to the next error"]
+    ["Previous error" TeX-error-overview-previous-error
+     :help "Jump to the previous error"]
+    ["Go to source" TeX-error-overview-goto-source
+     :help "Show the error in the source"]
+    ["Jump to source" TeX-error-overview-jump-to-source
+     :help "Move point to the error in the source"]
+    ["Go to log" TeX-error-overview-goto-log
+     :help "Show the error in the log buffer"]
+    "-"
+    ["Debug Bad Boxes" TeX-error-overview-toggle-debug-bad-boxes
+     :style toggle :selected TeX-debug-bad-boxes
+     :help "Show overfull and underfull boxes"]
+    ["Debug Warnings" TeX-error-overview-toggle-debug-warnings
+     :style toggle :selected TeX-debug-warnings
+     :help "Show warnings"]
+    ["Ignore Unimportant Warnings"
+     TeX-error-overview-toggle-suppress-ignored-warnings
+     :style toggle :selected TeX-suppress-ignored-warnings
+     :help "Hide specified warnings"]
+    "-"
+    ["Quit" TeX-error-overview-quit
+     :help "Quit"]))
 
 (defvar TeX-error-overview-list-entries nil
   "List of errors to be used in the error overview.")
@@ -3695,102 +3795,72 @@ forward, if negative)."
   "Show an overview of the errors occurred in the last TeX run."
   (interactive)
   ;; Check requirements before start.
-  (if (fboundp 'tabulated-list-mode)
-      (if (setq TeX-error-overview-active-buffer (TeX-active-buffer))
-	  ;; `TeX-error-overview-list-entries' is going to be used only as value
-	  ;; of `tabulated-list-entries' in `TeX-error-overview-mode'.  In
-	  ;; principle, we don't need `TeX-error-overview-list-entries', but
-	  ;; `tabulated-list-entries' is buffer-local and we need the list of
-	  ;; entries before creating the error overview buffer in order to
-	  ;; decide whether we need to show anything.
-	  (if (setq TeX-error-overview-list-entries
-		    (TeX-error-overview-make-entries
-		     (TeX-master-directory)))
-	      (progn
-		(setq TeX-error-overview-orig-window (selected-window)
-		      TeX-error-overview-orig-frame
-		      (window-frame TeX-error-overview-orig-window))
-		;; Create the error overview buffer.  This is
-		;; automatically killed before running TeX commands, so if
-		;; exists it is up-to-date and doesn't need to be
-		;; re-created.
-		(unless (get-buffer TeX-error-overview-buffer-name)
-		  (with-current-buffer
-		      (get-buffer-create TeX-error-overview-buffer-name)
-		    (TeX-error-overview-mode)))
-		;; Move point to the line associated to the last visited
-		;; error.
-		(with-current-buffer TeX-error-overview-buffer-name
-		  (goto-char (point-min))
-		  (forward-line (with-current-buffer
-				    TeX-error-overview-active-buffer
-				  TeX-error-last-visited))
-		  ;; Create a new frame for the error overview or display the
-		  ;; buffer in the same frame, depending on the setup.
-		  (if (TeX-error-overview-setup)
-		      (if (frame-live-p TeX-error-overview-frame)
-			  ;; Do not create a duplicate frame if there is
-			  ;; already one, just select it.
-			  (select-frame-set-input-focus
-			   TeX-error-overview-frame)
-			;; Create a new frame and store its name.
-			(select-frame
-			 (setq TeX-error-overview-frame
-			       (make-frame
-				TeX-error-overview-frame-parameters)))
-			(set-window-buffer (selected-window)
-					   TeX-error-overview-buffer-name)
-			(set-window-dedicated-p (selected-window) t))
-		    (TeX-pop-to-buffer TeX-error-overview-buffer-name))))
-	    (error (concat "No error or warning to show"
-			   ;; Suggest to display warnings and bad boxes with the
-			   ;; appropriate key-bindings if there are such
-			   ;; messages in the output buffer.  Rationale of the
-			   ;; test: `TeX-error-overview-list-entries' is nil,
-			   ;; but if `TeX-error-list' is not nil it means that
-			   ;; there are hidden warnings/bad boxes.
-			   (when (TeX-process-get-variable (TeX-active-master)
-							   'TeX-error-list)
-			     (format ".  Type `%s' and `%s' to display \
+  (if (setq TeX-error-overview-active-buffer (TeX-active-buffer))
+      ;; `TeX-error-overview-list-entries' is going to be used only as value
+      ;; of `tabulated-list-entries' in `TeX-error-overview-mode'.  In
+      ;; principle, we don't need `TeX-error-overview-list-entries', but
+      ;; `tabulated-list-entries' is buffer-local and we need the list of
+      ;; entries before creating the error overview buffer in order to
+      ;; decide whether we need to show anything.
+      (if (setq TeX-error-overview-list-entries
+		(TeX-error-overview-make-entries
+		 (TeX-master-directory)))
+	  (progn
+	    (setq TeX-error-overview-orig-window (selected-window)
+		  TeX-error-overview-orig-frame
+		  (window-frame TeX-error-overview-orig-window))
+	    ;; Create the error overview buffer.  This is
+	    ;; automatically killed before running TeX commands, so if
+	    ;; exists it is up-to-date and doesn't need to be
+	    ;; re-created.
+	    (unless (get-buffer TeX-error-overview-buffer-name)
+	      (with-current-buffer
+		  (get-buffer-create TeX-error-overview-buffer-name)
+		(TeX-error-overview-mode)))
+	    ;; Move point to the line associated to the last visited
+	    ;; error.
+	    (with-current-buffer TeX-error-overview-buffer-name
+	      (goto-char (point-min))
+	      (forward-line (with-current-buffer
+				TeX-error-overview-active-buffer
+			      TeX-error-last-visited))
+	      ;; Create a new frame for the error overview or display the
+	      ;; buffer in the same frame, depending on the setup.
+	      (if (TeX-error-overview-setup)
+		  (if (frame-live-p TeX-error-overview-frame)
+		      ;; Do not create a duplicate frame if there is
+		      ;; already one, just select it.
+		      (select-frame-set-input-focus
+		       TeX-error-overview-frame)
+		    ;; Create a new frame and store its name.
+		    (select-frame
+		     (setq TeX-error-overview-frame
+			   (make-frame
+			    TeX-error-overview-frame-parameters)))
+		    (set-window-buffer (selected-window)
+				       TeX-error-overview-buffer-name)
+		    (set-window-dedicated-p (selected-window) t))
+		(TeX-pop-to-buffer TeX-error-overview-buffer-name))))
+	(error (concat "No error or warning to show"
+		       ;; Suggest to display warnings and bad boxes with the
+		       ;; appropriate key-bindings if there are such
+		       ;; messages in the output buffer.  Rationale of the
+		       ;; test: `TeX-error-overview-list-entries' is nil,
+		       ;; but if `TeX-error-list' is not nil it means that
+		       ;; there are hidden warnings/bad boxes.
+		       (when (TeX-process-get-variable (TeX-active-master)
+						       'TeX-error-list)
+			 (format ".  Type `%s' and `%s' to display \
 warnings and bad boxes"
-				     (substitute-command-keys
-				      "\\<TeX-mode-map>\\[TeX-toggle-debug-warnings]")
-				     (substitute-command-keys
-				      "\\<TeX-mode-map>\\[TeX-toggle-debug-bad-boxes]"))))))
-	(error "No process for this document"))
-    (error "Error overview is available only in Emacs 24 or later")))
+				 (substitute-command-keys
+				  "\\<TeX-mode-map>\\[TeX-toggle-debug-warnings]")
+				 (substitute-command-keys
+				  "\\<TeX-mode-map>\\[TeX-toggle-debug-bad-boxes]"))))))
+    (error "No process for this document")))
 
 ;;; Output mode
 
-(defalias 'TeX-special-mode
-  (if (fboundp 'special-mode)
-      (progn
-        (defvaralias 'TeX-special-mode-map 'special-mode-map)
-        #'special-mode)
-    (defvar TeX-special-mode-map
-      (let ((map (make-sparse-keymap)))
-        (suppress-keymap map)
-        (define-key map "q" (if (fboundp 'quit-window)
-                                'quit-window
-                              'bury-buffer))
-        (define-key map " " (if (fboundp 'scroll-up-command)
-                                'scroll-up-command
-                              'scroll-up))
-        (define-key map [backspace] (if (fboundp 'scroll-down-command)
-                                        'scroll-down-command
-                                      'scroll-down))
-        (define-key map "\C-?" (if (fboundp 'scroll-down-command)
-                                   'scroll-down-command
-                                 'scroll-down))
-        (define-key map "?" 'describe-mode)
-        (define-key map "h" 'describe-mode)
-        (define-key map ">" 'end-of-buffer)
-        (define-key map "<" 'beginning-of-buffer)
-        (define-key map "g" 'revert-buffer)
-        map)
-      "Keymap for `TeX-special-mode-map'.")
-    (lambda ()
-      "Placeholder mode for Emacsen which don't have `special-mode'.")))
+(define-derived-mode TeX-special-mode special-mode "TeX")
 
 (defvar TeX-output-mode-map
   (let ((map (make-sparse-keymap)))

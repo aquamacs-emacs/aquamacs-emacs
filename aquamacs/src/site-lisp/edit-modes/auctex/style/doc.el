@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2004, 2008, 2016 Free Software Foundation, Inc.
 
-;; Author: Frank Küster <frank@kuesterei.ch>
+;; Author: Frank KÃ¼ster <frank@kuesterei.ch>
 ;; Maintainer: auctex-devel@gnu.org
 ;; Keywords: tex
 
@@ -189,5 +189,5 @@
  LaTeX-dialect)
 
 ;; Local Variables:
-;; coding: iso-8859-1
+;; coding: utf-8
 ;; End:

@@ -1,6 +1,6 @@
 ;;; fontaxes.el --- AUCTeX style for `fontaxes.sty' version v1.0d
 
-;; Copyright (C) 2014 Free Software Foundation, Inc.
+;; Copyright (C) 2014, 2018, 2020 Free Software Foundation, Inc.
 
 ;; Author: Arash Esbati <arash@gnu.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -34,22 +34,28 @@
 
 ;;; Code:
 
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
+
 (TeX-add-style-hook
  "fontaxes"
  (lambda ()
    (TeX-add-symbols
-    ;; Various font shapes
-    '("swshape"           -1)  ; swash shape
-    '("sscshape"          -1)  ; spaced small caps
+    ;; Various font shapes:
+    ;; These macros are now part of LaTeX kernel 2020-02-02
+    ;; '("swshape"           -1)  ; swash shape
+    ;; '("sscshape"          -1)  ; spaced small caps
+    ;; '("swdefault"          0)
+    ;; '("sscdefault"         0)
+    ;; '("ulcdefault"         0)
     '("fontprimaryshape"   t)
     '("fontsecondaryshape" t)
-    '("swdefault"          t)
-    '("sscdefault"         t)
-    '("ulcdefault"         t)
 
     ;; Figure versions
     '("figureversion"
-      (TeX-arg-eval mapconcat 'identity
+      (TeX-arg-eval mapconcat #'identity
                     (TeX-completing-read-multiple
                      "Style, alignment: "
                      '(("text") ("osf")
@@ -81,9 +87,10 @@
                     '(("tabular") ("proportional"))))
 
     ;; Additional commands
-    '("textsw"              t)
-    '("textssc"             t)
-    '("textulc"             t)
+    ;; These macros are now part of LaTeX kernel 2020-02-02
+    ;; '("textsw"              t)
+    ;; '("textssc"             t)
+    ;; '("textulc"             t)
     '("textfigures"         t)
     '("liningfigures"       t)
     '("tabularfigures"      t)
@@ -97,13 +104,6 @@
                                 ("tabularfigures"      "{")
                                 ("proportionalfigures" "{"))
                               'type-command)
-     (font-latex-add-keywords '(("textsw"              "{")
-                                ("textssc"             "{")
-                                ("textulc"             "{"))
-                              'bold-command)
-     (font-latex-add-keywords '(("swshape"             "")
-                                ("sscshape"            ""))
-                              'bold-declaration)
      (font-latex-add-keywords '(("figureversion"       "{"))
                               'variable)))
  LaTeX-dialect)

@@ -1,8 +1,8 @@
 ;;; alphanum.el --- AUCTeX style for `alphanum.sty'
 
-;; Copyright (C) 2004 Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2018 Free Software Foundation, Inc.
 
-;; Author: Frank Küster <frank@kuesterei.ch>
+;; Author: Frank KÃ¼ster <frank@kuesterei.ch>
 ;; Maintainer: auctex-devel@gnu.org
 ;; Keywords: tex
 
@@ -28,12 +28,15 @@
 ;; This is file alphanum.el, which makes AUCTeX usable with jura.cls
 ;; and its style file alphanum.sty.
 ;;
-;; Contributed by Frank Küster <frank@kuesterei.ch>. The code for
+;; Contributed by Frank KÃ¼ster <frank@kuesterei.ch>. The code for
 ;; reftex has been written by Carsten Dominik, the maintainer of
 ;; reftex, but all the errors are mine.
 
 ;;; Code:
 
+;; Silence the compiler:
+(declare-function reftex-match-string "reftex" (n))
+(defvar reftex-section-regexp)
 
 (defun TeX-arg-none (arg)
   (insert " "))
@@ -96,5 +99,5 @@
  LaTeX-dialect)
 
 ;; Local Variables:
-;; coding: iso-8859-1
+;; coding: utf-8
 ;; End:

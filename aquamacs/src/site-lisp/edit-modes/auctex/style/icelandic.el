@@ -1,6 +1,6 @@
 ;;; icelandic.el --- AUCTeX style for the `icelandic' babel option.
 
-;; Copyright (C) 2007 Free Software Foundation, Inc.
+;; Copyright (C) 2007, 2018 Free Software Foundation, Inc.
 
 ;; Author: Ralf Angeli <angeli@caeruleus.net>
 ;; Maintainer: auctex-devel@gnu.org
@@ -30,6 +30,11 @@
 ;; `icelandic' babel option.
 
 ;;; Code:
+
+;; Silence the compiler:
+(declare-function font-latex-add-quotes
+		  "font-latex"
+		  (quotes))
 
 (defvar LaTeX-icelandic-mode-syntax-table
   (copy-syntax-table LaTeX-mode-syntax-table)

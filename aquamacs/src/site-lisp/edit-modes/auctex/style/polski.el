@@ -1,6 +1,6 @@
 ;;; polski.el --- AUCTeX style for `polski.sty'.
 
-;; Copyright (C) 2007 Free Software Foundation, Inc.
+;; Copyright (C) 2007, 2018 Free Software Foundation, Inc.
 
 ;; Author: Ralf Angeli <angeli@caeruleus.net>
 ;; Maintainer: auctex-devel@gnu.org
@@ -30,6 +30,11 @@
 ;; `polski.sty'.
 
 ;;; Code:
+
+;; Silence the compiler:
+(declare-function font-latex-add-quotes
+		  "font-latex"
+		  (quotes))
 
 (defvar LaTeX-polski-package-options
   '("plmath" "nomathsymbols" "MeX" "T1" "QX" "OT1" "OT4" "prefixinginverb"

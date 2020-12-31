@@ -1,6 +1,6 @@
 ;;; subfigure.el --- AUCTeX style file for subfigure.sty
 
-;; Copyright (C) 2003, 2005, 2013 Free Software Foundation, Inc.
+;; Copyright (C) 2003, 2005, 2013, 2018 Free Software Foundation, Inc.
 
 ;; Author: Reiner Steib  <Reiner.Steib@gmx.de>
 ;; Maintainer: auctex-devel@gnu.org
@@ -28,6 +28,11 @@
 ;; AUCTeX style file for `subfigure.sty'
 
 ;;; Code:
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
 
 (TeX-add-style-hook
  "subfigure"

@@ -33,6 +33,11 @@
 
 ;;; Code:
 
+;; Silence the compiler:
+(defvar LaTeX-pst-fillstyle-list)
+(defvar LaTeX-pst-parameters-completion-regexp)
+(defvar LaTeX-pst-parameters-name-list)
+
 ;;; Parameters
 (defvar LaTeX-pstgrad-parameters-name-list
   '("gradangle" "gradbegin" "gradend" "gradlines" "gradmidpoint"

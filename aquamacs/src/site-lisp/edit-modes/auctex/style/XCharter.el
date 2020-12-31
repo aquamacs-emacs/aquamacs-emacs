@@ -1,6 +1,6 @@
 ;;; XCharter.el --- AUCTeX style for `XCharter.sty' (v1.094)
 
-;; Copyright (C) 2014, 2017 Free Software Foundation, Inc.
+;; Copyright (C) 2014, 2017, 2018 Free Software Foundation, Inc.
 
 ;; Author: Arash Esbati <arash@gnu.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -30,6 +30,11 @@
 ;; `XCharter.sty' is part of TeXLive.
 
 ;;; Code:
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
 
 (TeX-add-style-hook
  "XCharter"

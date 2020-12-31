@@ -1,6 +1,6 @@
 ;;; scrbase.el --- AUCTeX style for the KOMA-Script bundle.
 
-;; Copyright (C) 2002, 2004, 2005, 2007, 2014 Free Software Foundation, Inc.
+;; Copyright (C) 2002, 2004, 2005, 2007, 2014, 2018 Free Software Foundation, Inc.
 
 ;; Author: Mark Trettin <Mark.Trettin@gmx.de>
 ;; Created: 2002-09-26
@@ -31,6 +31,12 @@
 ;; You need this file since it's loaded from the class-styles.
 
 ;;; Code:
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
+
 (TeX-add-style-hook "scrbase"
   (lambda ()
     (TeX-add-symbols

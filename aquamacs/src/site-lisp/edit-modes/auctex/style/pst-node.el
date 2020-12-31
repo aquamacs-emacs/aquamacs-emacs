@@ -35,6 +35,17 @@
 
 ;;; Code:
 
+;; Silence the compiler:
+(declare-function LaTeX-package-parameter-value
+		  "pstricks" (param pname))
+(declare-function LaTeX-package-parameters-pref-and-chosen
+		  "pstricks" (param pname noskip))
+(declare-function LaTeX-package-parameters
+		  "pstricks" (optional pname preparam param))
+(declare-function LaTeX-pst-angle  "pstricks" ())
+(declare-function LaTeX-pst-point  "pstricks" ())
+(declare-function LaTeX-pst-arrows "pstricks" ())
+
 (defalias 'LaTeX-pst-node 'LaTeX-pst-point)
 
 (defvar LaTeX-pstnode-parameters-completion-regexp

@@ -1,6 +1,6 @@
 ;;; exam.el --- AUCTeX style for the (LaTeX) exam class
 
-;; Copyright (C) 2016, 2017 Free Software Foundation, Inc.
+;; Copyright (C) 2016--2020 Free Software Foundation, Inc.
 
 ;; Author: Uwe Brauer <oub@mat.ucm.es>
 ;; Created: 2016-03-06
@@ -32,9 +32,21 @@
 
 ;;; Code:
 
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
+
+(defvar LaTeX-article-class-options)
+
 (defvar LaTeX-exam-class-options
   '("answers" "noanswers" "cancelspace" "nocancelspace" "addpoints")
   "Class options for the exam class.")
+
+(TeX-load-style "article")
+;; Add options from `LaTeX-article-class-options' only once:
+(dolist (opt LaTeX-article-class-options)
+  (add-to-list 'LaTeX-exam-class-options opt))
 
 (defun LaTeX-exam-insert-item ()
   "Insert a new item in an environment from exam class.
@@ -48,6 +60,9 @@ Item inserted depends on the environment."
           "subpart")
          ((string= environment "subsubparts")
           "subsubpart")
+	 ((member environment '("choices" "oneparchoices"
+				"checkboxes" "oneparcheckboxes"))
+	  "choice")
          ;; Fallback
          (t "item"))))
 
@@ -63,9 +78,6 @@ Arguments NAME and TYPE are the same as for the function
  "exam"
  (lambda ()
    (TeX-run-style-hooks "article")
-   ;; Add options from `LaTeX-article-class-options' only once:
-   (dolist (opt LaTeX-article-class-options)
-     (add-to-list 'LaTeX-exam-class-options opt))
    ;; Make our label prefix available ...
    (let ((envs '("questions")))
      (dolist (env envs)
@@ -85,6 +97,10 @@ Arguments NAME and TYPE are the same as for the function
    (LaTeX-add-environments
     '("solution" [ "Height" ])
     '("select")
+    '("choices" LaTeX-env-item)
+    '("oneparchoices" LaTeX-env-item)
+    '("checkboxes" LaTeX-env-item)
+    '("oneparcheckboxes" LaTeX-env-item)
     '("solutionorbox" [ "Height" ])
     '("solutionorlines" [ "Height" ])
     '("solutionordottedlines" [ "Height" ])
@@ -95,21 +111,27 @@ Arguments NAME and TYPE are the same as for the function
     '("subsubparts" LaTeX-env-item))
 
    ;; Tell AUCTeX about special environments:
-   (let ((envs '("questions" "parts" "subparts" "subsubparts")))
+   (let ((envs '("questions"
+		 "parts"      "subparts"         "subsubparts"
+		 "choices"    "oneparchoices"
+		 "checkboxes" "oneparcheckboxes")))
      (dolist (env envs)
        (add-to-list 'LaTeX-item-list
-                    (cons env 'LaTeX-exam-insert-item))))
+                    (cons env 'LaTeX-exam-insert-item)
+		    t)))
 
    ;; Append us only once:
    (unless (and (string-match "question" LaTeX-item-regexp)
-                (string-match "subsub" LaTeX-item-regexp))
+                (string-match "sub" LaTeX-item-regexp))
      (set (make-local-variable 'LaTeX-item-regexp)
           (concat
            LaTeX-item-regexp
            "\\|"
+	   "choice\\b"
+	   "\\|"
            "\\(titled\\)?question\\b"
            "\\|"
-           "\\(sub\\|subsub\\)?part\\b"))
+           "\\(sub\\)*part\\b"))
      (LaTeX-set-paragraph-start))
 
    (TeX-add-symbols
@@ -220,7 +242,7 @@ Arguments NAME and TYPE are the same as for the function
     '("checkboxchar" 1)
     '("checkboxeshook" 0)
     '("checkedchar" 1)
-    '("choice" 0)
+    '("choice" (TeX-arg-literal " "))
     '("choicelabel" 0)
     '("choiceshook" 0)
     '("chpgword" 1)

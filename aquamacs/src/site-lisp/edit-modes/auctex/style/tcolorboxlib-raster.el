@@ -1,6 +1,6 @@
 ;;; tcolorboxlib-raster.el --- AUCTeX style for `raster' library from tcolorbox
 
-;; Copyright (C) 2016 Free Software Foundation, Inc.
+;; Copyright (C) 2016, 2018 Free Software Foundation, Inc.
 
 ;; Author: Arash Esbati <arash@gnu.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -28,6 +28,14 @@
 ;; This file adds support for `raster' library from tcolorbox.sty.
 
 ;;; Code:
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
+
+(defvar LaTeX-tcolorbox-keyval-options-local)
+(defvar LaTeX-tcolorbox-keyval-options-full)
 
 (defvar LaTeX-tcolorbox-lib-raster-keyval-options
   '(;; 14.3 Option Keys of the Library
@@ -104,7 +112,7 @@
   ;; Deactivate the mark here in order to prevent `TeX-parse-macro'
   ;; from swapping point and mark and the \item ending up right after
   ;; \begin{...}.
-  (TeX-deactivate-mark)
+  (deactivate-mark)
   (LaTeX-insert-item)
   ;; The inserted \item may have outdented the first line to the
   ;; right.  Fill it, if appropriate.

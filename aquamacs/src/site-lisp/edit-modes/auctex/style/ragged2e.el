@@ -1,6 +1,6 @@
 ;;; ragged2e.el --- AUCTeX style for `ragged2e.sty'
 
-;; Copyright (C) 2011, 2015 Free Software Foundation, Inc.
+;; Copyright (C) 2011, 2015, 2019 Free Software Foundation, Inc.
 
 ;; Author: Mads Jensen <mje@inducks.org>
 ;; Created: 2011-04-16
@@ -29,6 +29,11 @@
 
 ;;; Code:
 
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
+
 (TeX-add-style-hook
  "ragged2e"
  (lambda ()
@@ -54,10 +59,19 @@
     ;; \justifying
     "JustifyingParfillskip" "JustifyingParindent")
 
-   (TeX-run-style-hooks "footmisc" "everysel"))
+   (TeX-run-style-hooks "footmisc" "everysel")
+
+   ;; Fontification
+   (when (and (featurep 'font-latex)
+	      (eq TeX-install-font-lock 'font-latex-setup))
+     (font-latex-add-keywords '(("Centering"    "")
+				("justifying"   "")
+				("RaggedRight"  "")
+				("RaggedLeft"   ""))
+			      'function)))
  LaTeX-dialect)
 
-(defvar LaTeX-ragged2e-package-options 
+(defvar LaTeX-ragged2e-package-options
   '("originalcommands" "newcommands" "originalparameters" "document"
     "newparameters" "footnotes" "raggedrightboxes")
   "Package options for the ragged2e package.")

@@ -1,6 +1,6 @@
 ;;; fontspec.el --- AUCTeX style for `fontspec.sty' version 2.6a.
 
-;; Copyright (C) 2013, 2017 Free Software Foundation, Inc.
+;; Copyright (C) 2013, 2017, 2018, 2020 Free Software Foundation, Inc.
 
 ;; Maintainer: auctex-devel@gnu.org
 ;; Author: Mosè Giordano <mose@gnu.org>
@@ -33,6 +33,14 @@
 ;; backward compatibilty.
 
 ;;; Code:
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
+
+(declare-function LaTeX-color-definecolor-list "color" ())
+(declare-function LaTeX-xcolor-definecolor-list "xcolor" ())
 
 (defvar LaTeX-fontspec-font-features
   '(;; 5 Font selection
@@ -207,7 +215,7 @@ to retrieve the list of fonts."
     (let* ((colorcmd (if (member "xcolor" (TeX-style-list))
 			 #'LaTeX-xcolor-definecolor-list
 		       #'LaTeX-color-definecolor-list))
-	   (tmp (copy-alist LaTeX-fontspec-font-features-local)))
+	   (tmp (copy-alist LaTeX-fontspec-font-features)))
       (setq tmp (assq-delete-all (car (assoc "Color" tmp)) tmp))
       (push (list "Color" (mapcar #'car (funcall colorcmd))) tmp)
       (setq LaTeX-fontspec-font-features-local
@@ -245,6 +253,8 @@ to retrieve the list of fonts."
 (TeX-add-style-hook
  "fontspec"
  (lambda ()
+   (unless (featurep 'tex-buf)
+     (require 'tex-buf))
    (TeX-check-engine-add-engines 'luatex 'xetex)
    (TeX-run-style-hooks "expl3" "xparse")
 

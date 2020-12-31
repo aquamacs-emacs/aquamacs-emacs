@@ -1,7 +1,7 @@
 ;;; tex-info.el --- Support for editing Texinfo source.
 
 ;; Copyright (C) 1993, 1994, 1997, 2000, 2001, 2004, 2005, 2006,
-;;               2011-2015, 2017  Free Software Foundation, Inc.
+;;               2011-2015, 2017-2019  Free Software Foundation, Inc.
 
 ;; Maintainer: auctex-devel@gnu.org
 ;; Keywords: tex
@@ -25,16 +25,12 @@
 
 ;;; Code:
 
-(eval-when-compile (require 'cl))
+(eval-when-compile
+  (require 'cl-lib))
 
 (require 'tex)
 
 (require 'texinfo)
-;; Make sure the Texinfo mode of AUCTeX is still used after loading
-;; texinfo.el.  (This is only an issue on Emacs 21.)
-(when (and (boundp 'TeX-modes)
-	   (memq 'texinfo-mode TeX-modes))
-  (defalias 'texinfo-mode 'TeX-texinfo-mode))
 
 ;;; Environments:
 (defvar Texinfo-environment-list
@@ -297,7 +293,7 @@ character. Return the resulting string."
     (while (and (< pos (length
 			node-name)) (string-match "@\\(comma\\)[[:blank:]]*{}" node-name pos))
       (setq node-name (concat  (substring node-name 0 (match-beginning 0))
-			       (cdr (TeX-assoc-string (match-string 1 node-name) map))
+			       (cdr (assoc-string (match-string 1 node-name) map))
 			       (substring node-name (match-end 0)))
 	    pos (1+ (match-beginning 0)))))
   node-name)
@@ -311,7 +307,7 @@ commands. Return the resulting string."
 	 (re (regexp-opt (mapcar 'car map))) )
     (while (and (< pos (length node-name)) (string-match re node-name pos))
       (setq node-name (concat  (substring node-name 0 (match-beginning 0))
-			       "@" (cdr (TeX-assoc-string (match-string 0 node-name) map))
+			       "@" (cdr (assoc-string (match-string 0 node-name) map))
 			       "{}"
 			       (substring node-name (match-end 0)))
 	    pos (1+ (match-beginning 0)))))
@@ -327,16 +323,16 @@ commands. Return the resulting string."
     (let (nodes dups)
       (while (re-search-forward "^@node\\b" nil t)
 	(skip-chars-forward "[:blank:]")
-	(pushnew (list (Texinfo-nodename-de-escape
-			(buffer-substring-no-properties
-			 (point) (progn (skip-chars-forward "^\r\n,")
-					(skip-chars-backward "[:blank:]")
-					(point)))))
-		 nodes
-		 :test (lambda (a b)
-			 (when (equal a b)
-			   (push (cons a (TeX-line-number-at-pos (point))) dups)
-			   t))))
+	(cl-pushnew (list (Texinfo-nodename-de-escape
+			   (buffer-substring-no-properties
+			    (point) (progn (skip-chars-forward "^\r\n,")
+					   (skip-chars-backward "[:blank:]")
+					   (point)))))
+		    nodes
+		    :test (lambda (a b)
+			    (when (equal a b)
+			      (push (cons a (line-number-at-pos (point))) dups)
+			      t))))
       (when dups
 	(display-warning
 	 'AUCTeX
@@ -441,13 +437,12 @@ is assumed by default."
 (defvar reftex-level-indent)
 (defvar reftex-label-menu-flags)
 (defvar reftex-tables-dirty)
+(defvar reftex-label-alist-builtin)
 
-(eval-when-compile
-  (when (fboundp 'declare-function)
-    (declare-function reftex-match-string "reftex" (n))
-    (declare-function reftex-section-number "reftex-parse" (&optional level star))
-    (declare-function reftex-nicify-text "reftex" (text))
-    (declare-function reftex-ensure-compiled-variables "reftex" ())))
+(declare-function reftex-match-string "reftex" (n))
+(declare-function reftex-section-number "reftex-parse" (&optional level star))
+(declare-function reftex-nicify-text "reftex" (text))
+(declare-function reftex-ensure-compiled-variables "reftex" ())
 
 (defun Texinfo-reftex-section-info (file)
   ;; Return a section entry for the current match.
@@ -530,6 +525,18 @@ is assumed by default."
 	(define-key map "\e\r" 'texinfo-insert-@item)) ;*** Alias
     (define-key map "\C-c\C-s" 'Texinfo-insert-node)
     (define-key map "\C-c]" 'texinfo-insert-@end)
+
+    ;; Override some bindings in `TeX-mode-map'
+    ;; FIXME: Inside @math{}, you can use all plain TeX math commands
+    ;; even in Texinfo documents.  Thus it might be nice to develop
+    ;; context sensitive command so that the following four keys
+    ;; inherit the command in `TeX-mode-map' inside @math{}.
+    (define-key map "$"  #'self-insert-command)
+    (define-key map "^"  #'self-insert-command)
+    (define-key map "_"  #'self-insert-command)
+    (define-key map "\\" #'self-insert-command)
+    ;; Users benefit from `TeX-electric-macro' even in Texinfo mode
+    (define-key map "@" #'TeX-insert-backslash)
     map)
   "Keymap for Texinfo mode.")
 
@@ -541,58 +548,57 @@ is assumed by default."
 (easy-menu-define Texinfo-mode-menu
   Texinfo-mode-map
   "Menu used in Texinfo mode."
-  (TeX-menu-with-help
-   `("Texinfo"
-     ["Node ..." texinfo-insert-@node
-      :help "Insert a node"]
-     ["Macro ..." TeX-insert-macro
-      :help "Insert a macro and possibly arguments"]
-     ["Complete Macro" TeX-complete-symbol
-      :help "Complete the current macro"]
-     ["Environment ..." Texinfo-insert-environment
-      :help "Insert an environment"]
-     ["Item" texinfo-insert-@item
-      :help "Insert an @item"]
-     "-"
-     ("Insert Font"
-      ["Emphasize"  (TeX-font nil ?\C-e) :keys "C-c C-f C-e"]
-      ["Bold"       (TeX-font nil ?\C-b) :keys "C-c C-f C-b"]
-      ["Typewriter" (TeX-font nil ?\C-t) :keys "C-c C-f C-t"]
-      ["Small Caps" (TeX-font nil ?\C-c) :keys "C-c C-f C-c"]
-      ["Italic"     (TeX-font nil ?\C-i) :keys "C-c C-f C-i"]
-      ["Sample"    (TeX-font nil ?\C-s) :keys "C-c C-f C-s"]
-      ["Roman"      (TeX-font nil ?\C-r) :keys "C-c C-f C-r"])
-     ("Replace Font"
-      ["Emphasize"  (TeX-font t ?\C-e) :keys "C-u C-c C-f C-e"]
-      ["Bold"       (TeX-font t ?\C-b) :keys "C-u C-c C-f C-b"]
-      ["Typewriter" (TeX-font t ?\C-t) :keys "C-u C-c C-f C-t"]
-      ["Small Caps" (TeX-font t ?\C-c) :keys "C-u C-c C-f C-c"]
-      ["Italic"     (TeX-font t ?\C-i) :keys "C-u C-c C-f C-i"]
-      ["Sample"    (TeX-font t ?\C-s) :keys "C-u C-c C-f C-s"]
-      ["Roman"      (TeX-font t ?\C-r) :keys "C-u C-c C-f C-r"])
-     ["Delete Font" (TeX-font t ?\C-d) :keys "C-c C-f C-d"]
-     "-"
-     ["Create Master Menu" texinfo-master-menu
-      :help "Make a master menu for the whole Texinfo file"]
-     ["Create Menu" texinfo-make-menu
-      :help "Make or update the menu for the current section"]
-     ["Update Node" texinfo-update-node
-      :help "Update the current node"]
-     ["Update Every Node" texinfo-every-node-update
-      :help "Update every node in the current file"]
-     ["Update All Menus" texinfo-all-menus-update
-      :help "Update every menu in the current file"]
-     "-"
-     ("Commenting"
-      ["Comment or Uncomment Region"
-       TeX-comment-or-uncomment-region
-       :help "Comment or uncomment the currently selected region"]
-      ["Comment or Uncomment Paragraph"
-       TeX-comment-or-uncomment-paragraph
-       :help "Comment or uncomment the current paragraph"])
-     ,TeX-fold-menu
-     "-"
-     . ,TeX-common-menu-entries)))
+  `("Texinfo"
+    ["Node ..." texinfo-insert-@node
+     :help "Insert a node"]
+    ["Macro ..." TeX-insert-macro
+     :help "Insert a macro and possibly arguments"]
+    ["Complete Macro" TeX-complete-symbol
+     :help "Complete the current macro"]
+    ["Environment ..." Texinfo-insert-environment
+     :help "Insert an environment"]
+    ["Item" texinfo-insert-@item
+     :help "Insert an @item"]
+    "-"
+    ("Insert Font"
+     ["Emphasize"  (TeX-font nil ?\C-e) :keys "C-c C-f C-e"]
+     ["Bold"       (TeX-font nil ?\C-b) :keys "C-c C-f C-b"]
+     ["Typewriter" (TeX-font nil ?\C-t) :keys "C-c C-f C-t"]
+     ["Small Caps" (TeX-font nil ?\C-c) :keys "C-c C-f C-c"]
+     ["Italic"     (TeX-font nil ?\C-i) :keys "C-c C-f C-i"]
+     ["Sample"    (TeX-font nil ?\C-s) :keys "C-c C-f C-s"]
+     ["Roman"      (TeX-font nil ?\C-r) :keys "C-c C-f C-r"])
+    ("Replace Font"
+     ["Emphasize"  (TeX-font t ?\C-e) :keys "C-u C-c C-f C-e"]
+     ["Bold"       (TeX-font t ?\C-b) :keys "C-u C-c C-f C-b"]
+     ["Typewriter" (TeX-font t ?\C-t) :keys "C-u C-c C-f C-t"]
+     ["Small Caps" (TeX-font t ?\C-c) :keys "C-u C-c C-f C-c"]
+     ["Italic"     (TeX-font t ?\C-i) :keys "C-u C-c C-f C-i"]
+     ["Sample"    (TeX-font t ?\C-s) :keys "C-u C-c C-f C-s"]
+     ["Roman"      (TeX-font t ?\C-r) :keys "C-u C-c C-f C-r"])
+    ["Delete Font" (TeX-font t ?\C-d) :keys "C-c C-f C-d"]
+    "-"
+    ["Create Master Menu" texinfo-master-menu
+     :help "Make a master menu for the whole Texinfo file"]
+    ["Create Menu" texinfo-make-menu
+     :help "Make or update the menu for the current section"]
+    ["Update Node" texinfo-update-node
+     :help "Update the current node"]
+    ["Update Every Node" texinfo-every-node-update
+     :help "Update every node in the current file"]
+    ["Update All Menus" texinfo-all-menus-update
+     :help "Update every menu in the current file"]
+    "-"
+    ("Commenting"
+     ["Comment or Uncomment Region"
+      comment-or-uncomment-region
+      :help "Comment or uncomment the currently selected region"]
+     ["Comment or Uncomment Paragraph"
+      TeX-comment-or-uncomment-paragraph
+      :help "Comment or uncomment the current paragraph"])
+    ,TeX-fold-menu
+    "-"
+    . ,TeX-common-menu-entries))
 
 (defvar Texinfo-font-list
   '((?\C-b "@b{" "}")
@@ -658,15 +664,9 @@ value of `Texinfo-mode-hook'."
        texinfo-imenu-generic-expression)
 
   (set (make-local-variable 'font-lock-defaults)
-	;; COMPATIBILITY for Emacs 20
-	(if (boundp 'texinfo-font-lock-syntactic-keywords)
-	    '(texinfo-font-lock-keywords
-	      nil nil nil backward-paragraph
-	      (font-lock-syntactic-keywords
-	       . texinfo-font-lock-syntactic-keywords))
-	  ;; This is for Emacs >= 23.3, when
-	  ;; `texinfo-font-lock-syntactic-keywords' was removed.
-	  '(texinfo-font-lock-keywords nil nil nil backward-paragraph)))
+       '(texinfo-font-lock-keywords nil nil nil backward-paragraph))
+  (set (make-local-variable 'syntax-propertize-function)
+       texinfo-syntax-propertize-function)
 
   ;; Outline settings.
   (set (make-local-variable 'outline-regexp)
@@ -705,8 +705,8 @@ value of `Texinfo-mode-hook'."
 
   (when (and (boundp 'add-log-current-defun-function)
 	     (fboundp 'texinfo-current-defun-name))
-    (setq add-log-current-defun-function
-	  #'texinfo-current-defun-name))
+    (set (make-local-variable 'add-log-current-defun-function)
+	 #'texinfo-current-defun-name))
 
   (TeX-add-symbols
    '("acronym" "Acronym")
@@ -856,7 +856,7 @@ value of `Texinfo-mode-hook'."
   (if (and (boundp 'reftex-mode) reftex-mode)
       (Texinfo-reftex-hook))
 
-  (TeX-run-mode-hooks 'text-mode-hook 'Texinfo-mode-hook)
+  (run-mode-hooks 'text-mode-hook 'Texinfo-mode-hook)
   (TeX-set-mode-name))
 
 (defcustom Texinfo-clean-intermediate-suffixes nil

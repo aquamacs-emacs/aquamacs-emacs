@@ -1,6 +1,6 @@
 ;;; alltt.el --- AUCTeX style for `alltt.sty'
 
-;; Copyright (C) 2004, 2005, 2014, 2016 Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005, 2014, 2016, 2018, 2020 Free Software Foundation, Inc.
 
 ;; Author: Ralf Angeli <angeli@iwi.uni-sb.de>
 ;; Maintainer: auctex-devel@gnu.org
@@ -30,6 +30,10 @@
 
 ;;; Code:
 
+;; Silence the compiler:
+(declare-function font-latex-set-syntactic-keywords
+		  "font-latex")
+
 (TeX-add-style-hook
  "alltt"
  (lambda ()
@@ -38,10 +42,10 @@
 		'("alltt" current-indentation) t)
    (add-to-list 'LaTeX-verbatim-environments-local "alltt")
    ;; Fontification
-   (when (and (fboundp 'font-latex-update-font-lock)
+   (when (and (fboundp 'font-latex-set-syntactic-keywords)
 	      (eq TeX-install-font-lock 'font-latex-setup))
      ;; Tell font-lock about the update.
-     (font-latex-update-font-lock t)))
+     (font-latex-set-syntactic-keywords)))
  LaTeX-dialect)
 
 (defvar LaTeX-alltt-package-options nil

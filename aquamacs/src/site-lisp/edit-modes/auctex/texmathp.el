@@ -1,6 +1,6 @@
 ;;; texmathp.el -- Code to check if point is inside LaTeX math environment
 
-;; Copyright (C) 1998, 2004, 2017 Free Software Foundation, Inc.
+;; Copyright (C) 1998, 2004, 2017, 2020 Free Software Foundation, Inc.
 
 ;; Author: Carsten Dominik <dominik@strw.LeidenUniv.nl>
 ;; Maintainer: auctex-devel@gnu.org
@@ -51,9 +51,10 @@
 ;;  specifying which command at what position is responsible for math
 ;;  mode being on or off.
 ;;
-;;  To configure which macros and environments influence LaTeX math mode,
-;;  customize the variable `texmathp-tex-commands'.  By default
-;;  it recognizes the LaTeX core as well as AMS-LaTeX (see the variable
+;;  To configure which macros and environments influence LaTeX math
+;;  mode, customize the variable `texmathp-tex-commands'. By default
+;;  it recognizes the plain TeX and LaTeX core as well as AMS-LaTeX
+;;  and packages mathtools, empheq and breqn (see the variable
 ;;  `texmathp-tex-commands-default', also as an example).
 ;;
 ;;  To try out the code interactively, use `M-x texmathp RET'.
@@ -87,6 +88,11 @@
 ;;  If any of the the special macros like \mbox or \ensuremath has optional
 ;;  arguments, math mode inside these optional arguments is *not* influenced
 ;;  by the macro.
+;;
+;;  Nested \(\) and \[\] can confuse texmathp. It returns nil at AAA in the
+;;  following examples:
+;;  \[ x=y \mbox{abc \(\alpha\) cba} AAA \]
+;;  \[ x=y \begin{minipage}{3cm} abc \[\alpha\] cba \end{minipage} AAA \]
 ;;--------------------------------------------------------------------------
 
 ;;; Code:
@@ -141,6 +147,7 @@
     ("xalignat"      env-on)      ("xalignat*"     env-on)
     ("xxalignat"     env-on)      ("\\boxed"       arg-on)
     ("\\text"        arg-off)     ("\\intertext"   arg-off)
+    ("\\tag"         arg-off)     ("\\tag*"        arg-off)
 
     ;; mathtools
     ("\\shortintertext"   arg-off)
@@ -152,7 +159,14 @@
     ("AmSgather"     env-on)      ("AmSgather*"    env-on)
     ("AmSmultline"   env-on)      ("AmSmultline*"  env-on)
     ("AmSflalign"    env-on)      ("AmSflalign*"   env-on)
-    ("AmSalignat"    env-on)      ("AmSalignat*"   env-on))
+    ("AmSalignat"    env-on)      ("AmSalignat*"   env-on)
+
+    ;; breqn
+    ("dmath"         env-on)      ("dmath*"        env-on)
+    ("dseries"       env-on)      ("dseries*"      env-on)
+    ("dgroup"        env-on)      ("dgroup*"       env-on)
+    ("darray"        env-on)      ("darray*"       env-on)
+    ("dsuspend"      env-off))
   "The default entries for `texmathp-tex-commands', which see.")
 
 (defun texmathp-compile ()
@@ -177,13 +191,11 @@ customize (customize calls it when setting the variable)."
 		      ((memq type '(sw-toggle))      'togglers)))
       (set var (cons (car entry) (symbol-value var))))
     (setq texmathp-onoff-regexp
-	  (concat "[^\\\\]\\("
-		  (mapconcat 'regexp-quote switches "\\|")
-		  "\\)")
+	  (concat "\\(?:[^\\]\\|\\`\\)"
+		  (regexp-opt switches t))
 	  texmathp-toggle-regexp
-	  (concat "\\([^\\\\\\$]\\|\\`\\)\\("
-		  (mapconcat 'regexp-quote togglers "\\|")
-		  "\\)"))))
+	  (concat "\\([^\\$]\\|\\`\\)"
+		  (regexp-opt togglers t)))))
 
 (defcustom texmathp-tex-commands nil
   "List of environments and macros influencing (La)TeX math mode.
@@ -229,8 +241,8 @@ empty lines we go back to fix the search limit."
 
 (defcustom texmathp-allow-detached-args nil
   "*Non-nil means, allow arguments of macros to be detached by whitespace.
-When this is t, `aaa' will be interpreted as an argument of \bb in the
-following construct:  \bbb [xxx] {aaa}
+When this is t, `aaa' will be interpreted as an argument of \\bbb in the
+following construct:  \\bbb [xxx] {aaa}
 This is legal in TeX.  The disadvantage is that any number of braces expressions
 will be considered arguments of the macro independent of its definition."
   :group 'texmathp
@@ -239,7 +251,7 @@ will be considered arguments of the macro independent of its definition."
 (defvar texmathp-why nil
   "After a call to `texmathp' this variable shows why math-mode is on or off.
 The value is a cons cell (MATCH . POSITION).
-MATCH is a string like a car of an entry in `texmathp-tex-commands', e.q.
+MATCH is a string like a car of an entry in `texmathp-tex-commands', e.g.
 \"equation\" or \"\\ensuremath\" or \"\\=\\[\" or \"$\".
 POSITION is the buffer position of the match.  If there was no match,
 it points to the limit used for searches, usually two paragraphs up.")
@@ -279,14 +291,17 @@ See the variable `texmathp-tex-commands' about which commands are checked."
 
     ;; Select the nearer match
     (and env-match (setq match env-match))
-    (and mac-match (> (cdr mac-match) (cdr match)) (setq match mac-match))
+    ;; Use `>=' instead of `>' in case called inside \ensuremath{..}
+    ;; beginning just at (point-min).
+    (and mac-match (>= (cdr mac-match) (cdr match)) (setq match mac-match))
     (setq math-on (memq (nth 1 (assoc (car match) texmathp-tex-commands1))
 			'(env-on arg-on)))
 
     ;; Check for switches
     (and (not math-on)
 	 (setq sw-match (texmathp-match-switch bound))
-	 (> (cdr sw-match) (cdr match))
+	 ;; Use `>=' instead of `>' by similar reason as above. (bug#41559)
+	 (>= (cdr sw-match) (cdr match))
 	 (eq (nth 1 (assoc (car sw-match) texmathp-tex-commands1)) 'sw-on)
 	 (setq match sw-match math-on t))
 
@@ -302,7 +317,7 @@ See the variable `texmathp-tex-commands' about which commands are checked."
 
     ;; Store info, show as message when interactive, and return
     (setq texmathp-why match)
-    (and (interactive-p)
+    (and (called-interactively-p 'any)
 	 (message "math-mode is %s: %s begins at buffer position %d"
 		  (if math-on "on" "off")
 		  (or (car match) "new paragraph")

@@ -1,6 +1,6 @@
 ;;; mdframed.el --- AUCTeX style for `mdframed.sty' (v1.9b)
 
-;; Copyright (C) 2016, 2017 Free Software Foundation, Inc.
+;; Copyright (C) 2016--2018 Free Software Foundation, Inc.
 
 ;; Author: Arash Esbati <arash@gnu.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -37,11 +37,20 @@
 
 ;;; Code:
 
-;; Needed for compiling `pushnew':
-(eval-when-compile (require 'cl))
+;; Needed for compiling `cl-pushnew':
+(eval-when-compile
+  (require 'cl-lib))
 
-;; Needed for auto-parsing.
+;; Needed for auto-parsing:
 (require 'tex)
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
+
+(declare-function LaTeX-color-definecolor-list "color" ())
+(declare-function LaTeX-xcolor-definecolor-list "xcolor" ())
 
 (defvar LaTeX-mdframed-key-val-options
   '(;; 6.2. Restoring the settings
@@ -214,9 +223,9 @@
 	   (val (cadr (assoc "style" LaTeX-mdframed-key-val-options)))
 	   (temp (copy-alist LaTeX-mdframed-key-val-options-local))
 	   (opts (assq-delete-all (car (assoc key temp)) temp)))
-      (pushnew (list key (TeX-delete-duplicate-strings
-			  (append val (mapcar #'car (LaTeX-mdframed-mdfdefinestyle-list)))))
-	       opts :test #'equal)
+      (cl-pushnew (list key (TeX-delete-duplicate-strings
+			     (append val (mapcar #'car (LaTeX-mdframed-mdfdefinestyle-list)))))
+	          opts :test #'equal)
       (setq LaTeX-mdframed-key-val-options-local
 	    (copy-alist opts))))
   ;;
@@ -242,7 +251,7 @@
 	   (tmp (copy-alist LaTeX-mdframed-key-val-options-local)))
       (dolist (x keys)
 	(setq tmp (assq-delete-all (car (assoc x tmp)) tmp))
-	(pushnew (list x (mapcar #'car (funcall colorcmd))) tmp :test #'equal))
+	(cl-pushnew (list x (mapcar #'car (funcall colorcmd))) tmp :test #'equal))
       (setq LaTeX-mdframed-key-val-options-local
 	    (copy-alist tmp)))))
 

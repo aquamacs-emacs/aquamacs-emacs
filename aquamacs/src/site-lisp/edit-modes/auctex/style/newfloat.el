@@ -1,6 +1,6 @@
 ;;; newfloat.el --- AUCTeX style for `newfloat.sty' (v1.1-109)
 
-;; Copyright (C) 2015 Free Software Foundation, Inc.
+;; Copyright (C) 2015, 2018 Free Software Foundation, Inc.
 
 ;; Author: Arash Esbati <arash@gnu.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -54,8 +54,13 @@
 
 ;;; Code:
 
-;; Needed for auto-parsing.
+;; Needed for auto-parsing:
 (require 'tex)
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
 
 (defvar LaTeX-newfloat-key-val-options
   '(("fileext")

@@ -1,6 +1,6 @@
-;;; AnonymousPro.el --- AUCTeX style for `AnonymousPro.sty' (v2.1)
+;;; AnonymousPro.el --- AUCTeX style for `AnonymousPro.sty' (v2.2)
 
-;; Copyright (C) 2014 Free Software Foundation, Inc.
+;; Copyright (C) 2014, 2019 Free Software Foundation, Inc.
 
 ;; Author: Arash Esbati <arash@gnu.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -26,8 +26,8 @@
 
 ;;; Commentary:
 
-;; This file adds support for `AnonymousPro.sty' (v2.1) from
-;; 2014/03/22.  `AnonymousPro.sty' is part of TeXLive.
+;; This file adds support for `AnonymousPro.sty' (v2.2) from
+;; 2019/07/07.  `AnonymousPro.sty' is part of TeXLive.
 
 ;;; Code:
 
@@ -84,7 +84,7 @@
  LaTeX-dialect)
 
 (defvar LaTeX-AnonymousPro-package-options
-  '("ttdefault" "scale")
+  '("ttdefault" "scale" "scaled")
   "Package options for the AnonymousPro package.")
 
 ;;; AnonymousPro.el ends here
