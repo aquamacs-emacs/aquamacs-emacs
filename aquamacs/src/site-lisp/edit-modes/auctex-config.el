@@ -3,7 +3,7 @@
 ;; Maintainer: David Reitter
 ;; originally authored by Kevin Walzer
 ;; Keywords: auctex
- 
+
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
 
@@ -22,41 +22,37 @@
 ;; along with Aquamacs Emacs; see the file COPYING.  If not, write to the
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
- 
+
 ;; Copyright (C) 2005, Kevin Walzer
 ;; Copyright (C) 2008, 2009, 2015, David Reitter
 
-  
+
 ;; set the PATH to typical locations for TeX stuff
 
 (mapc (lambda (path)
 	(setenv "PATH"
 		(concat (getenv "PATH") ":" path))
-	
+
 	(add-to-list 'exec-path path 'append))
-      (append 
-       ; prefer TeXLive installation
+      (append
+                                        ; prefer TeXLive installation
        '("/usr/texbin")
        '("/Library/TeX/texbin")
-       ; in case /usr/texbin is missing
-       (reverse (sort (file-expand-wildcards 
-		       "/usr/local/texlive/20*/bin") 
+                                        ; in case /usr/texbin is missing
+       (reverse (sort (file-expand-wildcards
+		       "/usr/local/texlive/20*/bin")
 		      'string<))
-       ; over older teTex. 
-       (reverse (sort (file-expand-wildcards 
-		       "/usr/local/teTeX/bin/*-apple-darwin-current") 
+                                        ; over older teTex.
+       (reverse (sort (file-expand-wildcards
+		       "/usr/local/teTeX/bin/*-apple-darwin-current")
 		      'string<))))
 
 ;; make sure auctex is loaded from the correct place,
 ;; i.e. the first file in load-path
 ;; load the right auctex.el (first one in load-path)
 ;; (locate-library "auctex.el" t)
-(load "tex-site" nil nil nil)
 (load "auctex" nil nil nil)
 (load "preview-latex" nil nil nil)
-;; this is not done by default
-;; maybe add a menu option?
-;;(load "preview-latex.el" nil t t)
 
 (aquamacs-set-defaults '(
 			 ( TeX-parse-self t)
@@ -69,10 +65,33 @@
 
 (autoload 'bib-cite-minor-mode "bib-cite")
 (autoload 'turn-on-bib-cite "bib-cite")
-; only load if ghostscript is installed
 
+(defun smart-dnd-latex ()
+  (smart-dnd-setup
+   '(
+     ("\\.tex\\'" . "\\input{%r}\n")
+     ("\\.cls\\'" . "\\documentclass{%f}\n")
+     ("\\.sty\\'" . "\\usepackage{%f}\n")
+     ("\\.eps\\'" . "\\includegraphics[]{%r}\n")
+     ("\\.ps\\'"  . "\\includegraphics[]{%r}\n")
+     ("\\.pdf\\'" . "\\includegraphics[]{%r}\n")
+     ("\\.jpg\\'" . "\\includegraphics[]{%r}\n")
+     ("\\.png\\'" . "\\includegraphics[]{%r}\n")
+     )))
 
-; (aquamacs-latex-find-style-file-paths)
+(defun smart-dnd-setup-always-insert-quoted-file-name ()
+  "Setup `smart-dnd-mode' so that drag&drop always inserts the file path."
+  (smart-dnd-setup '((".*" . "\"%r\""))))
+
+;; non-AUCTeX mode:
+(add-hook 'latex-mode-hook 'smart-dnd-latex)
+;; AUCTeX:
+(defvar LaTeX-mode-hook nil)
+(add-hook 'LaTeX-mode-hook 'smart-dnd-latex)
+
+;; only load if ghostscript is installed
+
+;; (aquamacs-latex-find-style-file-paths)
 ;; (defun aquamacs-latex-find-style-file-paths ()
 ;;   "Find TeXLive distribution path."
 ;;   (let ((latex-executable
@@ -81,14 +100,14 @@
 ;; 	 (with-temp-buffer
 ;; 	   (shell-command "which latex " t)
 ;; 	   (if (string-match "^no " (buffer-string))
-;; 	       (message  
+;; 	       (message
 ;; 		"No latex binary found.")
 ;; 	     (buffer-substring (point-min) (max 0 (- (point-max) (if (eq (char-before (point-max)) 10) 1 0))))))))
 
 ;;     ;; how does one print the search path from tex?
 ;;     (let ((path (file-name-directory (file-truename latex-executable)))
 ;; 	  (count 0 ))
-;;       (while (and (file-exists-p path) 
+;;       (while (and (file-exists-p path)
 ;; 		  (not (equal path "/"))
 ;; 		  (< count 5)
 ;; 		  (not (or (file-directory-p (concat path "/texmf" ))
@@ -96,7 +115,7 @@
 ;; 	(file-truename latex-executable)
 ;; 	(setq count (1+ count))
 ;; 	(setq path (file-truename (concat path "/.."))))
-;;       (apply #'nconc 
+;;       (apply #'nconc
 ;; 	     (mapcar
 ;; 	      (lambda (file)
 ;; 		(if (and (> (length file) 1) (file-exists-p file))
@@ -108,9 +127,9 @@
 ;; 			    (concat path "/share/texmf.local/tex")
 ;; 			    "/usr/local/texlive/texmf-local/tex"
 ;; 			    "~/Library/texmf/tex/")
-;; 		      (split-string (getenv "TEXINPUTS") ":") 
+;; 		      (split-string (getenv "TEXINPUTS") ":")
 ;; 		      ))))))
- 
+
 (defvar aq-preview-latex-checked nil)
 (defun load-preview-if-ghostscript ()
   "Loads preview-latex.el in case Ghostscript is installed.
@@ -119,7 +138,7 @@ Only checks once - subsequent calls will not result in any action."
     (with-temp-buffer
       (shell-command "which pdf2dsc " t)
       (if (string-match "^no " (buffer-string))
-	   (message  
+	   (message
 	    "No Ghostscript (pdf2dsc) found - preview-latex not activated.")
 	(load "auctex/preview-latex" nil nil nil)))
     (setq aq-preview-latex-checked t)) nil)
@@ -164,21 +183,21 @@ Only checks once - subsequent calls will not result in any action."
 Jump to definition of reference clicked on, or, if
 no reference is found, execute the LaTeX View command."
   (interactive "e")
-  (save-excursion 
+  (save-excursion
     (mouse-set-point ev)
     (condition-case nil
 	(let ((aquamacs-ring-bell-on-error-flag nil))
 	  (reftex-view-crossref current-prefix-arg))
-      (error 
+      (error
        (TeX-command  "View" 'TeX-master-file)))
     nil))
- 
+
 (defun aquamacs-skim-running-p ()
   (ignore-errors
-    (> (string-to-number 
+    (> (string-to-number
 	(with-temp-buffer
 	  (shell-command "ps ax | grep --count -e '[Ss]kim.app'" t)
-	  (buffer-string))) 
+	  (buffer-string)))
        0)))
 
 (defvar aquamacs-skim-timer nil)
@@ -187,22 +206,22 @@ no reference is found, execute the LaTeX View command."
 
 (defun aquamacs-check-for-skim ()
 "Show help message if Skim.app is running."
-  (and (equal major-mode 'latex-mode) (boundp 'TeX-PDF-mode) TeX-PDF-mode 
-       (file-readable-p (expand-file-name 
-			 (TeX-master-file (TeX-output-extension)) 
-			 (and buffer-file-name 
+  (and (equal major-mode 'latex-mode) (boundp 'TeX-PDF-mode) TeX-PDF-mode
+       (file-readable-p (expand-file-name
+			 (TeX-master-file (TeX-output-extension))
+			 (and buffer-file-name
 			      (file-name-directory buffer-file-name))))
-     ;; check for running 
+     ;; check for running
      (aquamacs-skim-running-p)
      (cancel-timer aquamacs-skim-timer)
      aquamacs-skim-show-info-message
-     (message 
-      (substitute-command-keys 
-       (format 
+     (message
+      (substitute-command-keys
+       (format
 	"Skim detected. Use \\[aquamacs-latex-crossref]%s to jump to the PDF and back."
-	(if (eq 'control mac-emulate-three-button-mouse) 
+	(if (eq 'control mac-emulate-three-button-mouse)
 	    " (Shift-Apple-Click)" ""))))))
-  
+
 
 ;; (defun turn-on-TeX-source-correlate-mode ()
 ;;   "Turn on `TeX-source-correlate-mode'.
@@ -219,17 +238,17 @@ no reference is found, execute the LaTeX View command."
 (defun aquamacs-latex-viewer-support ()
   "Support for Skim as LaTeX viewer if present."
   (add-to-list 'TeX-command-list
-	     '("Jump to PDF" 
+	     '("Jump to PDF"
 	       "%V" TeX-run-discard-or-function nil t :help "Run Viewer") 'append)
-  
+
   (and (boundp 'reftex-mode-map) reftex-mode-map
        (define-key reftex-mode-map [(shift mouse-2)] nil))
 
   (and (boundp 'LaTeX-mode-map) LaTeX-mode-map
-       (define-key LaTeX-mode-map [(shift mouse-2)] 
+       (define-key LaTeX-mode-map [(shift mouse-2)]
 	 'aquamacs-latex-crossref))
   (unless aquamacs-skim-timer ;; just once per session
-    (setq aquamacs-skim-timer 
+    (setq aquamacs-skim-timer
 	  (run-with-idle-timer 30 t 'aquamacs-check-for-skim)))
   (TeX-source-correlate-mode 1) ;; FIXME: this is a global mode.  Should start in auctex.el?
   ;; This may start a latex process to determine whether to use synctex.
@@ -246,8 +265,8 @@ no reference is found, execute the LaTeX View command."
      ;;       ("Skim"  "/Applications/Skim.app/Contents/SharedSupport/displayline -b %n %o %b")
      ;;       ("Skim"   "%(Ad)/Contents/MacOS/bin/displayline -b %n %o %b")
      ("Skim" "(lambda () (aquamacs-call-viewer %n \"%b\"))")))
-   (TeX-view-predicate-list 
-    ((output-pdf-skim-running 
+   (TeX-view-predicate-list
+    ((output-pdf-skim-running
       (and (string-match "pdf" (TeX-output-extension))
 	   (aquamacs-skim-running-p)))))
    (TeX-view-program-selection
@@ -291,28 +310,28 @@ Otherwise, leave it to Skim.")
   "Display current output file as PDF at LINE (as in file SOURCE).
 Calls `aquamacs-tex-pdf-viewer' to display the PDF file using the
 Skim AppleScript protocol."
-  (let* ((full-file-name 
-	 (expand-file-name
-	  ;; as in TeX-view
-	  ;; C-c C-c view uses %o (from TeX-expand-list), which
-	  ;; is the same.
-	  (TeX-active-master (TeX-output-extension))
-	  default-directory))
-	(full-source-name
-	 (expand-file-name 
-	  source ;; this is relative to the master 
-	  (file-name-directory full-file-name))))
+  (let* ((full-file-name
+          (expand-file-name
+           ;; as in TeX-view
+           ;; C-c C-c view uses %o (from TeX-expand-list), which
+           ;; is the same.
+           (TeX-active-master (TeX-output-extension))
+           default-directory))
+         (full-source-name
+          (expand-file-name
+           source ;; this is relative to the master
+           (file-name-directory full-file-name))))
     (do-applescript
-     (format 
+     (format
       "
- set theSink to POSIX file \"%s\" 
- set theSource to POSIX file \"%s\" 
- tell application \"%s\" 
-     activate 
-     open theSink 
+ set theSink to POSIX file \"%s\"
+ set theSource to POSIX file \"%s\"
+ tell application \"%s\"
+     activate
+     open theSink
      tell front document to go to TeX line %d from theSource%s
   end tell
-" 
+"
       full-file-name full-source-name aquamacs-tex-pdf-viewer line
       ;; do not say "showing reading bar false" so users can override in future
       (cond ((eq t aquamacs-skim-show-reading-bar)
@@ -322,7 +341,7 @@ Skim AppleScript protocol."
 	    (t ""))))))
 
 (if (boundp 'aquamacs-default-toolbarx-meaning-alist) ;; not on TTY
-    (aquamacs-set-defaults 
+    (aquamacs-set-defaults
      '((TeX-PDF-mode t)
        ;; Toolbar business
        (TeX-bar-TeX-all-button-alists

@@ -1050,20 +1050,20 @@ please check its value")
   ;; Initialize the window-system only after processing the command-line
   ;; args so that -Q can influence this initialization.
   (condition-case error
-    (unless noninteractive
-      (if (and initial-window-system
-	       (not (featurep
-		     (intern
-		      (concat (symbol-name initial-window-system) "-win")))))
-	  (error "Unsupported window system `%s'" initial-window-system))
-      ;; Process window-system specific command line parameters.
-      (setq command-line-args
-            (let ((window-system initial-window-system)) ;Hack attack!
-              (handle-args-function command-line-args)))
-      ;; Initialize the window system. (Open connection, etc.)
-      (let ((window-system initial-window-system)) ;Hack attack!
-        (window-system-initialization))
-      (put initial-window-system 'window-system-initialized t))
+      (unless noninteractive
+        (if (and initial-window-system
+                 (not (featurep
+                       (intern
+                        (concat (symbol-name initial-window-system) "-win")))))
+            (error "Unsupported window system `%s'" initial-window-system))
+        ;; Process window-system specific command line parameters.
+        (setq command-line-args
+              (let ((window-system initial-window-system)) ;Hack attack!
+                (handle-args-function command-line-args)))
+        ;; Initialize the window system. (Open connection, etc.)
+        (let ((window-system initial-window-system)) ;Hack attack!
+          (window-system-initialization))
+        (put initial-window-system 'window-system-initialized t))
     ;; If there was an error, print the error message and exit.
     (error
      (princ
@@ -1086,15 +1086,15 @@ please check its value")
   (run-hooks 'before-init-hook)
 
   (let ((initial-frame-alist (append (unless init-file-debug '((visibility . nil)))
-				      initial-frame-alist)))
+                                     initial-frame-alist)))
 
-  ;; Under X, create the X frame and delete the terminal frame.
-  (unless (daemonp)
-    (if (or noninteractive emacs-basic-display)
-	(setq menu-bar-mode nil
-	      tool-bar-mode nil
-	      no-blinking-cursor t))
-    (frame-initialize))
+    ;; Under X, create the X frame and delete the terminal frame.
+    (unless (daemonp)
+      (if (or noninteractive emacs-basic-display)
+          (setq menu-bar-mode nil
+                tool-bar-mode nil
+                no-blinking-cursor t))
+      (frame-initialize))
 
     ;; allow frame-notice-user-settings to override
     (setq frame-initial-geometry-arguments
@@ -1217,23 +1217,23 @@ please check its value")
 		(if init-file-user
 		    (let ((user-init-file-1
 			   (cond
-			     ((eq system-type 'ms-dos)
-			      (concat "~" init-file-user "/_emacs"))
-			     ((not (eq system-type 'windows-nt))
-			      (concat "~" init-file-user "/.emacs"))
-			     ;; Else deal with the Windows situation
-			     ((directory-files "~" nil "^\\.emacs\\(\\.elc?\\)?$")
-			      ;; Prefer .emacs on Windows.
-			      "~/.emacs")
-			     ((directory-files "~" nil "^_emacs\\(\\.elc?\\)?$")
-			      ;; Also support _emacs for compatibility, but warn about it.
-			      (push `(initialization
-				      ,(format-message
-					"`_emacs' init file is deprecated, please use `.emacs'"))
-				    delayed-warnings-list)
-			      "~/_emacs")
-			     (t ;; But default to .emacs if _emacs does not exist.
-			      "~/.emacs"))))
+                            ((eq system-type 'ms-dos)
+                             (concat "~" init-file-user "/_emacs"))
+                            ((not (eq system-type 'windows-nt))
+                             (concat "~" init-file-user "/.emacs"))
+                            ;; Else deal with the Windows situation
+                            ((directory-files "~" nil "^\\.emacs\\(\\.elc?\\)?$")
+                             ;; Prefer .emacs on Windows.
+                             "~/.emacs")
+                            ((directory-files "~" nil "^_emacs\\(\\.elc?\\)?$")
+                             ;; Also support _emacs for compatibility, but warn about it.
+                             (push `(initialization
+                                     ,(format-message
+                                       "`_emacs' init file is deprecated, please use `.emacs'"))
+                                   delayed-warnings-list)
+                             "~/_emacs")
+                            (t ;; But default to .emacs if _emacs does not exist.
+                             "~/.emacs"))))
 		      ;; This tells `load' to store the file name found
 		      ;; into user-init-file.
 		      (setq user-init-file t)
@@ -1276,7 +1276,7 @@ please check its value")
 			    (setq user-init-file source))))
 
 		      (unless inhibit-default-init
-                          (load "default" t t))))))))
+                        (load "default" t t))))))))
 	(if init-file-debug
 	    ;; Do this without a condition-case if the user wants to debug.
 	    (funcall inner)
@@ -1292,15 +1292,15 @@ An error occurred while loading `%s':\n\n%s%s%s\n\n\
 To ensure normal operation, you should investigate and remove the
 cause of the error in your initialization file.  Start Emacs with
 the `--debug-init' option to view a complete error backtrace."
-		      user-init-file
-		      (get (car error) 'error-message)
-		      (if (cdr error) ": " "")
-		      (mapconcat (lambda (s) (prin1-to-string s t))
-				 (cdr error) ", "))
+                              user-init-file
+                              (get (car error) 'error-message)
+                              (if (cdr error) ": " "")
+                              (mapconcat (lambda (s) (prin1-to-string s t))
+                                         (cdr error) ", "))
 	      :warning)
 	     (setq init-file-had-error t))))
 
-      (if (and deactivate-mark transient-mark-mode)
+        (if (and deactivate-mark transient-mark-mode)
 	    (with-current-buffer (window-buffer)
 	      (deactivate-mark)))
 
@@ -1308,7 +1308,7 @@ the `--debug-init' option to view a complete error backtrace."
 	(when (and (not noninteractive)
 		   (file-exists-p abbrev-file-name)
 		   (file-readable-p abbrev-file-name))
-	    (quietly-read-abbrev-file abbrev-file-name))
+          (quietly-read-abbrev-file abbrev-file-name))
 
 	;; If the abbrevs came entirely from the init file or the
 	;; abbrevs file, they do not need saving.
@@ -1379,6 +1379,10 @@ the `--debug-init' option to view a complete error backtrace."
 		   (throw 'package-dir-found t)))))))
        (package-initialize))
 
+  ;; Final Aquamacs-specific initialization
+  (load "aquamacs-final-init")
+  ;; Back to regular Emacs init process
+
   (setq after-init-time (current-time))
   ;; Display any accumulated warnings after all functions in
   ;; `after-init-hook' like `desktop-read' have finalized possible
@@ -1428,8 +1432,8 @@ Your `load-path' seems to contain\n\
 your `.emacs.d' directory: %s\n\
 This is likely to cause problems...\n\
 Consider using a subdirectory instead, e.g.: %s"
-                                    dir (expand-file-name
-                                         "lisp" user-emacs-directory))
+                                            dir (expand-file-name
+                                                 "lisp" user-emacs-directory))
                             :warning))))
 
   ;; If -batch, terminate after processing the command options.
