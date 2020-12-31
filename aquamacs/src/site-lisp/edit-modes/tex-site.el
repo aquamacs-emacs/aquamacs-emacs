@@ -72,8 +72,7 @@ TeX-auto-* (automatically generated lisp).")
   (expand-file-name "auctex" (file-name-directory load-file-name))
   "The directory where the AUCTeX non-Lisp data is located.")
 
-(defcustom TeX-auto-global
-    (expand-file-name "var/auctex" (file-name-directory load-file-name))
+(defcustom TeX-auto-global nil
   "*Directory containing automatically generated information.
 Must end with a directory separator.
 
@@ -300,7 +299,7 @@ runs the hooks in `docTeX-mode-hook'.
 ;;; Generated autoloads from multi-prompt.el
 
 (autoload 'multi-prompt "multi-prompt" "\
-Completing prompt for a list of strings.  
+Completing prompt for a list of strings.
 The first argument SEPARATOR should be the string (of length 1) to
 separate the elements in the list.  The second argument UNIQUE should
 be non-nil, if each element must be unique.  The remaining elements
