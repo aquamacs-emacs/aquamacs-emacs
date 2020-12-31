@@ -15,16 +15,21 @@ AQ_MODES_DIR="${AQUAMACS_ROOT}/aquamacs/src/site-lisp/edit-modes"
 
 #tar xzf auctex*.tar.gz
 # cd auctex-*
-./configure --prefix="${AQUAMACS_ROOT}/src/site-lisp/edit-modes/" --with-emacs="${EMACS}" --with-lispdir="${AQUAMACS_ROOT}/src/site-lisp/edit-modes" --without-texmf-dir
+./configure --prefix="${AQ_MODES_DIR}" \
+            --with-emacs="${EMACS}" \
+            --with-lispdir="${AQ_MODES_DIR}" \
+            --without-texmf-dir
 
 make
 
-rm -r ${AQUAMACS_ROOT}/src/site-lisp/edit-modes/auctex
-cp doc/auctex.info "${AQUAMACS_ROOT}/src/site-lisp/edit-modes/info/"
-cp doc/preview-latex.info "${AQUAMACS_ROOT}/src/site-lisp/edit-modes/info/"
+rm -r "${AQ_MODES_DIR}/auctex"
+
+cp doc/auctex.info "${AQ_MODES_DIR}/info"
+cp doc/preview-latex.info "${AQ_MODES_DIR}/info"
 
 make install
 
-# manual fixes:
-# set TeX-auto-global to nil in tex-site.
-# add aquamacs-specific patches
+echo "Removing byte-compiled files"
+rm "${AQ_MODES_DIR}/auctex/*.elc"
+
+echo "Commit changes and then apply Aquamacs changes"
