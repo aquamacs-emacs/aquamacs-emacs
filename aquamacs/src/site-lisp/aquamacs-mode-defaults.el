@@ -1,10 +1,10 @@
 ; Aquamacs
 ; Mode & Package defaults
- 
+
 ;; Author: David Reitter, david.reitter@gmail.com
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
- 
+
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
 
@@ -23,7 +23,7 @@
 ;; along with Aquamacs; see the file COPYING.  If not, write to the
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
- 
+
 ;; Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011 David Reitter
 
 ;; Add edit-modes file hierarchy to load-path
@@ -42,34 +42,7 @@
 (unless aquamacs-preloaded-load-path
   (message "Error: load path cache was not computed during preloading."))
 
-;; load auctex if present 
-
-;; AUCTEX - load at runtime (necessary?)
-(condition-case nil 
-    (require 'auctex-config nil t)
-  (error nil))
-
-(defun smart-dnd-latex ()
-   (smart-dnd-setup
-    '(
-      ("\\.tex\\'" . "\\input{%r}\n")
-      ("\\.cls\\'" . "\\documentclass{%f}\n")
-      ("\\.sty\\'" . "\\usepackage{%f}\n")
-      ("\\.eps\\'" . "\\includegraphics[]{%r}\n")
-      ("\\.ps\\'"  . "\\includegraphics[]{%r}\n")
-      ("\\.pdf\\'" . "\\includegraphics[]{%r}\n")
-      ("\\.jpg\\'" . "\\includegraphics[]{%r}\n")
-      ("\\.png\\'" . "\\includegraphics[]{%r}\n")
-      )))
-;; non-AUCTeX mode:
-(add-hook 'latex-mode-hook 'smart-dnd-latex)
-;; AUCTeX:
-(defvar LaTeX-mode-hook nil)
-(add-hook 'LaTeX-mode-hook 'smart-dnd-latex)
-
-(defun smart-dnd-setup-always-insert-quoted-file-name ()
-  "Setup `smart-dnd-mode' so that drag&drop always inserts the file path."
-  (smart-dnd-setup '((".*" . "\"%r\""))))
+;; For AUCTeX, see aquamacs-final-init.el
 
 ;; Eshell
 (add-hook 'eshell-mode-hook 'smart-dnd-setup-always-insert-quoted-file-name)
