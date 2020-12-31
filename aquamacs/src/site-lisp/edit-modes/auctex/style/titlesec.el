@@ -1,6 +1,6 @@
-;;; titlesec.el --- AUCTeX style for `titlesec.sty' (v2.10.0)
+;;; titlesec.el --- AUCTeX style for `titlesec.sty' (v2.11)
 
-;; Copyright (C) 2016 Free Software Foundation, Inc.
+;; Copyright (C) 2016--2019 Free Software Foundation, Inc.
 
 ;; Author: Arash Esbati <arash@gnu.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -26,10 +26,15 @@
 
 ;;; Commentary:
 
-;; This file adds support for `titlesec.sty' (v2.10.0) from
-;; 2011/12/15.  `titlesec.sty' is part of TeXLive.
+;; This file adds support for `titlesec.sty' (v2.11) from
+;; 2019/07/16.  `titlesec.sty' is part of TeXLive.
 
 ;;; Code:
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
 
 (defvar LaTeX-titlesec-key-val-options
   '(("page" ("even" "odd"))
@@ -116,11 +121,11 @@ insert the argument in brackets."
     '("titleformat"
       (LaTeX-arg-titlesec-titlespec)
       [TeX-arg-eval completing-read
-		     (TeX-argument-prompt optional nil "Shape")
-		     LaTeX-titlesec-section-shape-list]
+		    (TeX-argument-prompt optional nil "Shape")
+		    LaTeX-titlesec-section-shape-list]
       (TeX-arg-conditional (y-or-n-p "With optional after-code? ")
 			   (4 [nil])
-			 (4)))
+			   (4)))
 
     '("chaptertitlename" 0)
 
@@ -147,7 +152,8 @@ insert the argument in brackets."
     '("fillast"   0)
     '("filinner"  0)
     '("filouter"  0)
-    '("wordsep"	  0)
+    '("wordsep"   0)
+    '("nostruts"  0)
 
     ;; 3.4. Rules
     '("titleline"
@@ -235,6 +241,7 @@ insert the argument in brackets."
     "rigidchapters" "rubberchapters"
     "bottomtitles"  "nobottomtitles" "nobottomtitles*"
     "aftersep"      "largestsep"     "pageatnewline"
+    "nostruts"
 
     ;; 3.4. Rules
     "calcwidth"

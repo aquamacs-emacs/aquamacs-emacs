@@ -1,6 +1,6 @@
 ;;; biblatex.el --- AUCTeX style for `biblatex.sty' version 2.8a.
 
-;; Copyright (C) 2012-2014, 2016 Free Software Foundation, Inc.
+;; Copyright (C) 2012-2014, 2016, 2018 Free Software Foundation, Inc.
 
 ;; Author: Ralf Angeli <angeli@caeruleus.net>
 ;; Maintainer: auctex-devel@gnu.org
@@ -29,6 +29,13 @@
 ;; This file adds support for `biblatex.sty' version 2.8a.
 
 ;;; Code:
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
+
+(defvar reftex-cite-format-builtin)
 
 (defvar LaTeX-biblatex-entrytype
   '(;; Regular Types

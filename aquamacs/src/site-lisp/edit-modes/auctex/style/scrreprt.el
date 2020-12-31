@@ -1,6 +1,6 @@
 ;;; scrreprt.el --- AUCTeX style for scrreprt.cls.
 
-;; Copyright (C) 2002, 2005 Free Software Foundation
+;; Copyright (C) 2002, 2005, 2018 Free Software Foundation
 
 ;; Author: Mark Trettin <Mark.Trettin@gmx.de>
 ;; Created: 2002-09-26
@@ -29,6 +29,11 @@
 ;; `scrbase.el'.
 
 ;;; Code:
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
 
 (TeX-add-style-hook
  "scrreprt"

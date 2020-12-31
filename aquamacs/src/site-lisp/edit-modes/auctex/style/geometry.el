@@ -1,6 +1,6 @@
 ;;; geometry.el --- AUCTeX style for `geometry.sty' (v5.6)
 
-;; Copyright (C) 2015 Free Software Foundation, Inc.
+;; Copyright (C) 2015, 2018 Free Software Foundation, Inc.
 
 ;; Author: Arash Esbati <arash@gnu.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -31,6 +31,11 @@
 
 ;;; Code:
 
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
+
 (defvar LaTeX-geometry-always-key-val-options
   '(("layout") ("layoutwidth") ("layoutheight") ("layoutsize")
     ("layouthoffset") ("layoutvoffset") ("layoutoffset") ("hscale")
@@ -58,29 +63,27 @@
 	      "c1paper" "c2paper" "c3paper" "c4paper" "c5paper"
 	      "c6paper" "b0j" "b1j" "b2j" "b3j" "b4j" "b5j" "b6j"
 	      "ansiapaper" "ansibpaper" "ansicpaper" "ansidpaper"
-	      "ansiepaper" "ansiapaper" "ansibpaper" "ansicpaper"
-	      "ansidpaper" "ansiepaper"))
+	      "ansiepaper"))
     ("papername" ("a0paper" "a1paper" "a2paper" "a3paper" "a4paper"
 		  "a5paper" "a6paper" "b0paper" "b1paper" "b2paper"
 		  "b3paper" "b4paper" "b5paper" "b6paper" "c0paper"
 		  "c1paper" "c2paper" "c3paper" "c4paper" "c5paper"
 		  "c6paper" "b0j" "b1j" "b2j" "b3j" "b4j" "b5j" "b6j"
 		  "ansiapaper" "ansibpaper" "ansicpaper" "ansidpaper"
-		  "ansiepaper" "ansiapaper" "ansibpaper" "ansicpaper"
-		  "ansidpaper" "ansiepaper"))
+		  "ansiepaper"))
     ("a0paper") ("a1paper") ("a2paper") ("a3paper") ("a4paper") ("a5paper")
     ("a6paper") ("b0paper") ("b1paper") ("b2paper") ("b3paper") ("b4paper")
     ("b5paper") ("b6paper") ("c0paper") ("c1paper") ("c2paper") ("c3paper")
     ("c4paper") ("c5paper") ("c6paper") ("b0j") ("b1j") ("b2j") ("b3j")
     ("b4j") ("b5j") ("b6j") ("ansiapaper") ("ansibpaper") ("ansicpaper")
-    ("ansidpaper") ("ansiepaper") ("ansiapaper") ("ansibpaper") ("ansicpaper")
     ("ansidpaper") ("ansiepaper") ("screen") ("paperwidth") ("paperheight")
     ("papersize") ("landscape") ("portrait")
-    ("driver" ("dvips" "dvipdfm" "pdftex" "vtex" "xetex" "auto" "none"))
-    ("dvips") ("dvipdfm") ("pdftex") ("xetex") ("vtex") ("verbose")
-    ("reset") ("mag") ("truedimen") ("pass") ("showframe") ("showcrop"))
+    ("driver" ("dvips" "dvipdfm" "dvipdfmx" "xdvipdfmx"
+	       "pdftex" "luatex" "vtex" "xetex" "auto" "none"))
+    ("dvips") ("dvipdfm") ("dvipdfmx") ("xdvipdfmx") ("pdftex") ("luatex")
+    ("xetex") ("vtex") ("verbose") ("reset")
+    ("mag") ("truedimen") ("pass") ("showframe") ("showcrop"))
   "Key=value options allowed only in the preamble for geometry macros.")
-
 
 ;; Needed for auto-parsing.
 (require 'tex)
@@ -139,7 +142,12 @@ package.")
 				("newgeometry"   "{")
 				("savegeometry"  "{")
 				("loadgeometry"  "{"))
-			      'function)))
+			      'function))
+
+   ;; Option management
+   (if (and (LaTeX-provided-package-options-member "geometry" "dvipdfmx")
+	    (not (eq TeX-engine 'xetex)))
+       (setq TeX-PDF-from-DVI "Dvipdfmx")))
  LaTeX-dialect)
 
 (defun LaTeX-geometry-package-options ()

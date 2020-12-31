@@ -121,9 +121,9 @@
 	(list (concat slash citations opt arg) 3 'font-lock-constant-face)
 	;;
 	;; Text between `` quotes ''.
-	(cons (concat (regexp-opt `("``" "\"<" "\"`" "<<" "«") t)
-		      "[^'\">»]+"	;a bit pessimistic
-		      (regexp-opt `("''" "\">" "\"'" ">>" "»") t))
+	(cons (concat (regexp-opt `("``" "\"<" "\"`" "<<" "Â«") t)
+		      "[^'\">Â»]+"	;a bit pessimistic
+		      (regexp-opt `("''" "\">" "\"'" ">>" "Â»") t))
 	      'font-lock-string-face)
 	;;
 	;; Command names, special and general.
@@ -148,7 +148,8 @@
 
 (defface tex-math-face
   '((t :inherit font-lock-string-face))
-  "Face used to highlight TeX math expressions.")
+  "Face used to highlight TeX math expressions."
+  :group 'tex)
 (defvar tex-math-face 'tex-math-face)
 
 ;; Use string syntax but math face for $...$.
@@ -169,5 +170,9 @@
     )
 
 (provide 'tex-font)
+
+;; Local Variables:
+;; coding: utf-8
+;; End:
 
 ;;; tex-font.el ends here

@@ -1,6 +1,6 @@
 ;;; bicaption.el --- AUCTeX style for `bicaption.sty' (v1.1-158)
 
-;; Copyright (C) 2016, 2017 Free Software Foundation, Inc.
+;; Copyright (C) 2016--2020 Free Software Foundation, Inc.
 
 ;; Author: Arash Esbati <arash@gnu.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -34,6 +34,20 @@
 
 ;;; Code:
 
+;; Needed for compiling `LaTeX-check-insert-macro-default-style':
+(require 'latex)
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
+
+(declare-function LaTeX-babel-active-languages "babel" ())
+(declare-function LaTeX-polyglossia-active-languages "polyglossia" ())
+
+(defvar LaTeX-caption-supported-float-types)
+(defvar LaTeX-caption-key-val-options)
+
 (defvar LaTeX-bicaption-key-val-options
   '(("bi-lang" ("first" "second" "both"))
     ("bi-singlelinecheck" ("false" "no" "off" "0" "true" "yes" "on" "1"))
@@ -50,6 +64,9 @@ If CAP-BOX is non-nil, also query and include optional arguments
 for the box command.  If LABEL-INSIDE is non-nil, insert \\label
 inside the first mandatory argument, otherwise after all
 arguments."
+  ;; \bicaption   [<list entry #1>]{<heading #1>}[<list entry #2>]{<heading #2>}
+  ;; \bicaptionbox[<list entry #1>]{<heading #1>}[<list entry #2>]{<heading #2>}
+  ;;              [<width>][<inner-pos>]{<contents>}
   (let* (;; \bisubcaption needs an environment, "minipage" will be
 	 ;; popular.  If so, check next higher environment to find out
 	 ;; where we are
@@ -100,15 +117,20 @@ arguments."
     (when cap-box
       (let* ((TeX-arg-opening-brace "[")
 	     (TeX-arg-closing-brace "]")
-	     (width (completing-read (TeX-argument-prompt t nil "Width")
-				     (mapcar (lambda (elt) (concat TeX-esc (car elt)))
-					     (LaTeX-length-list))))
-	     (inpos (if (and width (not (string-equal width "")))
-			(completing-read (TeX-argument-prompt t nil "Inner position")
-					 '("c" "l" "r" "s"))
-		      "")))
-	(TeX-argument-insert width t)
-	(TeX-argument-insert inpos t)))
+	     (last-optional-rejected nil)
+	     (width (LaTeX-check-insert-macro-default-style
+		     (completing-read (TeX-argument-prompt t nil "Width")
+				      (mapcar (lambda (elt) (concat TeX-esc (car elt)))
+					      (LaTeX-length-list)))))
+	     (last-optional-rejected (or (not width)
+					 (and width (string= width ""))))
+	     (inpos (LaTeX-check-insert-macro-default-style
+		     (if (and width (not (string-equal width "")))
+			 (completing-read (TeX-argument-prompt t nil "Inner position")
+					  '("c" "l" "r" "s"))
+		       ""))))
+	(and width (TeX-argument-insert width t))
+	(and inpos (TeX-argument-insert inpos t))))
     (LaTeX-fill-paragraph)
     ;; Insert label -- a new line is inserted only if label is there:
     (when (and (not label-inside) (not star)
@@ -167,6 +189,7 @@ square brackets."
 
 (defun LaTeX-bicaption-package-options ()
   "Prompt for package options for the bicaption package."
+  (TeX-load-style "caption")
   (TeX-read-key-val t
 		    (append
 		     `(,(list "language"

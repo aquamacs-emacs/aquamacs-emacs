@@ -1,8 +1,9 @@
-;;; lettrine.el --- AUCTeX style for `lettrine.sty'
+;;; lettrine.el --- AUCTeX style for `lettrine.sty' (v2.21)
 
-;; Copyright (C) 2011 Free Software Foundation, Inc.
+;; Copyright (C) 2011, 2018 Free Software Foundation, Inc.
 
 ;; Author: Mads Jensen <mje@inducks.org>
+;; Maintainer: auctex-devel@gnu.org
 ;; Keywords: tex
 
 ;; This file is part of AUCTeX.
@@ -24,12 +25,18 @@
 
 ;;; Commentary:
 
-;; This file adds support for `lettrine.sty'.
+;; This file adds support for `lettrine.sty' (v2.21) from 2018/08/28.
 
 ;;; Code:
 
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
+
 (defvar LaTeX-lettrine-key-val-options
   '(("lines")
+    ("depth")
     ("lhang")
     ("loversize")
     ("lraise")
@@ -37,8 +44,12 @@
     ("nindent")
     ("slope")
     ("ante")
-    ("image" ("true")))
-  "Key=value options for \\lettrine")
+    ("image" ("true"))
+    ("grid" ("true"))
+    ("novskip")
+    ("realheight" ("true"))
+    ("refstring"))
+  "Key=value options for \\lettrine marco.")
 
 (TeX-add-style-hook
  "lettrine"
@@ -46,26 +57,35 @@
    (TeX-add-symbols
     '("lettrine" [ TeX-arg-key-val LaTeX-lettrine-key-val-options ]
       "Letter" "Text")
+    '("DefaultLoversize" 0)
+    '("DefaultLraise" 0)
+    '("DefaultLhang" 0)
     '("LettrineImageFalse" 0)
-    ;; all of the below can be configured with either \setlength or
-    ;; \renewcommand
+    '("LettrineOnGridfalse" 0)
+    '("LettrineRealHeightfalse" 0)
+    '("LettrineSelfReffalse" 0)
     '("LettrineFont" 0)
     '("LettrineFontHook" 0)
     '("LettrineTextFont" 0)
-    '("LettrineWidth" 0)
-    '("DefaultLhang" 0)
-    '("DefaultLoversize" 0)
-    '("DefaultLraise" 0)
-    '("DefaultFindent" 0)
-    '("DefaultNindent" 0)
-    '("DefaultSlope" 0)
     ;; above settings can also be input a file, and pointed to with
     ;; \renewcommand
-    '("DefaultOptionsFile" 0))
+    '("DefaultOptionsFile" TeX-arg-file-name))
+
+   ;; Counters:
+   (LaTeX-add-counters "DefaultLines" "DefaultDepth")
+
+   ;; Lengths and dimensions:
+   (LaTeX-add-lengths "DefaultFindent"
+		      "DefaultNindent"
+		      "DefaultSlope"
+		      "DiscardVskip"
+		      "LettrineWidth"
+		      "LettrineHeight"
+		      "LettrineDepth")
 
    ;; Fontification
    (when (and (fboundp 'font-latex-add-keywords)
-              (eq TeX-install-font-lock 'font-latex-setup))
+	      (eq TeX-install-font-lock 'font-latex-setup))
      (font-latex-add-keywords '(("lettrine" "[{{")) 'textual)))
  LaTeX-dialect)
 

@@ -1,6 +1,6 @@
 ;;; environ.el --- AUCTeX style for `environ.sty' version v0.3
 
-;; Copyright (C) 2015, 2016 Free Software Foundation, Inc.
+;; Copyright (C) 2015, 2016, 2018 Free Software Foundation, Inc.
 
 ;; Author: Arash Esbati <arash@gnu.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -44,6 +44,11 @@
 ;; the correct completion.
 
 ;;; Code:
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
 
 (defvar LaTeX-auto-environ-NewEnviron nil
   "Temporary for parsing the arguments of `\\NewEnviron'

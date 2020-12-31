@@ -1,6 +1,6 @@
-;;; fancyvrb.el --- AUCTeX style for `fancyvrb.sty' version 2.8.
+;;; fancyvrb.el --- AUCTeX style for `fancyvrb.sty' version 3.0.
 
-;; Copyright (C) 2013, 2014, 2016, 2017 Free Software Foundation, Inc.
+;; Copyright (C) 2013, 2014, 2016-2018, 2020 Free Software Foundation, Inc.
 
 ;; Maintainer: auctex-devel@gnu.org
 ;; Author: Mosè Giordano <mose@gnu.org>
@@ -25,7 +25,7 @@
 
 ;;; Commentary:
 
-;; This file adds support for `fancyvrb.sty' version 2.8.
+;; This file adds support for `fancyvrb.sty' version 3.0.
 
 ;; This style has some capabilities to parse user defined macros,
 ;; environments and saved blocks with `SaveVerbatim' environments and
@@ -43,11 +43,20 @@
 
 ;;; Code:
 
-;; Needed for auto-parsing.
+;; Needed for auto-parsing:
 (require 'tex)
+(require 'latex)
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
+
+(declare-function font-latex-set-syntactic-keywords
+		  "font-latex")
 
 (defvar LaTeX-fancyvrb-key-val-options
-  '(("commentchar" ("none"))
+  `(("commentchar" ("none"))
     ("gobble")
     ("formatcom")
     ;; Undocumented key
@@ -89,6 +98,10 @@
     ("defineactive")
     ;; Undocumented key
     ("defineactive*")
+    ;; Undocumented key and introduced in version 2.81 2011/04/06
+    ("vspace" ,(mapcar (lambda (x)
+			 (concat TeX-esc (car x)))
+		       (LaTeX-length-list)))
     ;; Actually, the following options are used only by the `BVerbatim'
     ;; environment.
     ("boxwidth" ("auto" "dimension"))
@@ -116,14 +129,7 @@ Starred versions are not included in this list.")
 Starred versions are not included in this list.")
 
 (defvar LaTeX-fancyvrb-key-val-skip-regexp
-  (concat
-   "\\(?:\\[[^][]*"
-     "\\(?:{[^}{]*"
-       "\\(?:{[^}{]*"
-	 "\\(?:{[^}{]*}[^}{]*\\)*"
-       "}[^}{]*\\)*"
-     "}[^][]*\\)*"
-   "\\]\\)?")
+  (concat "\\(?:" (LaTeX-extract-key-value-label 'none) "\\)?")
   "Helper regexp to skip over an optional argument.")
 
 ;; Setup for defining new Verbatim commands:
@@ -193,21 +199,27 @@ CLEANUP is non-nil, do not insert any arguments in the buffer and
 update only various AUCTeX variables for verbatim macros.  If
 RECUSTOM is non-nil, delete macros from the variable
 `TeX-symbol-list' before adding the new ones."
-  (let ((new-mac (unless cleanup
-		   (if recustom
+  ;; This part is only relevant when called by user:
+  (unless cleanup
+    (let ((new-mac (if recustom
 		       (completing-read
 			(TeX-argument-prompt optional nil "Verbatim macro: \\" t)
 			(mapcar #'car (apply #'append LaTeX-fancyvrb-macro-list)))
 		     (TeX-read-string
-		      (TeX-argument-prompt optional nil "New verbatim macro: \\" t)))))
-	(base-mac (unless cleanup
-		    (completing-read (TeX-argument-prompt optional nil "Based on macro")
-				     LaTeX-fancyvrb-base-macros)))
-	(rec-flag (if recustom "Rec" "C")))
-    ;; We are (re-)defining a macro: Insert user queried input and use
-    ;; `LaTeX-add-fancyvrb-macros' on the input
-    (unless cleanup
-      (TeX-argument-insert new-mac optional TeX-esc)
+		      (TeX-argument-prompt optional nil "New verbatim macro: \\" t))))
+	  (base-mac (completing-read (TeX-argument-prompt optional nil "Based on macro")
+				     LaTeX-fancyvrb-base-macros))
+	  (rec-flag (if recustom "Rec" "C")))
+      ;; We are (re-)defining a macro: Insert user queried input and
+      ;; use `LaTeX-add-fancyvrb-macros' on the input.  Do not enclose
+      ;; the first argument in braces as this will improve
+      ;; fontification.  Otherwise, the part between 2 closing braces
+      ;; get fontified, i.e.:
+      ;; \CustomVerbatimCommand{\foo}{Verb}{}
+      ;;                            ^     ^
+      (let ((TeX-arg-opening-brace "")
+	    (TeX-arg-closing-brace ""))
+	(TeX-argument-insert new-mac optional TeX-esc))
       (TeX-argument-insert base-mac optional)
       (TeX-argument-insert
        (TeX-read-key-val optional LaTeX-fancyvrb-key-val-options-local) optional)
@@ -234,7 +246,7 @@ RECUSTOM is non-nil, delete macros from the variable
 		[ TeX-arg-key-val LaTeX-fancyvrb-key-val-options-local ]
 		LaTeX-fancyvrb-arg-file-relative))
 	     (when (and (fboundp 'font-latex-add-keywords)
-			(fboundp 'font-latex-update-font-lock))
+			(eq TeX-install-font-lock 'font-latex-setup))
 	       (font-latex-add-keywords `((,mac-name "[{"))
 					'reference)))
 	    ;; New macros for saving verbatim text:
@@ -250,7 +262,7 @@ RECUSTOM is non-nil, delete macros from the variable
 		     (format "%s" name))))
 		TeX-arg-verb))
 	     (when (and (fboundp 'font-latex-add-keywords)
-			(fboundp 'font-latex-update-font-lock))
+			(eq TeX-install-font-lock 'font-latex-setup))
 	       (font-latex-add-keywords `((,mac-name "[{"))
 					'textual)))
 	    ;; New macros for using previously saved text:
@@ -262,95 +274,101 @@ RECUSTOM is non-nil, delete macros from the variable
 		 (TeX-argument-prompt optional nil "Saved name")
 		 (LaTeX-fancyvrb-saveverb-list))))
 	     (when (and (fboundp 'font-latex-add-keywords)
-			(fboundp 'font-latex-update-font-lock))
+			(eq TeX-install-font-lock 'font-latex-setup))
 	       (font-latex-add-keywords `((,mac-name "{"))
 					'textual)))
 	    ;; Anything else is considered as verbatim typesetting macro:
 	    (t
 	     (TeX-add-symbols
-	      `(mac-name
+	      `(,mac-name
+		[ TeX-arg-key-val LaTeX-fancyvrb-key-val-options-local ]
+		TeX-arg-verb)
+	      ;; Defined macros have a starred version where the
+	      ;; `showspaces' key is set to true
+	      `(,(concat mac-name "*")
 		[ TeX-arg-key-val LaTeX-fancyvrb-key-val-options-local ]
 		TeX-arg-verb))
-	     (add-to-list 'LaTeX-verbatim-macros-with-delims-local mac-name t)
+	     (add-to-list 'LaTeX-verbatim-macros-with-delims-local
+			  mac-name t)
+	     (add-to-list 'LaTeX-verbatim-macros-with-delims-local
+			  (concat mac-name "*") t)
 	     (when (and (fboundp 'font-latex-add-keywords)
-			(fboundp 'font-latex-update-font-lock))
-	       (font-latex-add-keywords `((,mac-name "["))
+			(eq TeX-install-font-lock 'font-latex-setup))
+	       (font-latex-add-keywords `((,mac-name "*["))
 					'textual))))))
   ;; Update font-lock:
-  (when (and (fboundp 'font-latex-add-keywords)
-	     (fboundp 'font-latex-update-font-lock)
+  (when (and (fboundp 'font-latex-set-syntactic-keywords)
 	     (eq TeX-install-font-lock 'font-latex-setup))
-    (font-latex-update-font-lock t)))
+    (font-latex-set-syntactic-keywords)))
 
 (defun LaTeX-fancyvrb-arg-define-environment (optional &optional cleanup)
   "Query and insert a new verbatim environment with fancyvrb package.
 If OPTIONAL is non-nil, insert the arguments in brackets.  If
 CLEANUP is non-nil, do not insert any arguments in the buffer and
 update only various AUCTeX variables for verbatim environments."
-  (let ((new-env (unless cleanup
-		   (TeX-read-string
-		    (TeX-argument-prompt optional nil "New verbatim environment"))))
-	(base-env (unless cleanup
-		    (completing-read (TeX-argument-prompt optional nil "Based on environment")
-				     LaTeX-fancyvrb-base-environments))))
-    ;; We are defining a new env: First insert the arguments and the
-    ;; run `LaTeX-add-fancyvrb-environments' on '(new-env base-env).
-    ;; If base-env is SaveVerbatim, run
-    ;; `LaTeX-add-fancyvrb-saveverbatims' on new-env as well.
-    (unless cleanup
-      (TeX-argument-insert (car new-env) optional)
+  (unless cleanup
+    (let ((new-env (TeX-read-string
+		    (TeX-argument-prompt optional nil "New verbatim environment")))
+	  (base-env (completing-read
+		     (TeX-argument-prompt optional nil "Based on environment")
+		     LaTeX-fancyvrb-base-environments)))
+      ;; We are defining a new env: First insert the arguments and then
+      ;; run `LaTeX-add-fancyvrb-environments' on '(new-env base-env).
+      ;; If base-env is SaveVerbatim, run
+      ;; `LaTeX-add-fancyvrb-saveverbatims' on new-env as well.
+      (TeX-argument-insert new-env optional)
       (TeX-argument-insert base-env optional)
       (TeX-argument-insert
        (TeX-read-key-val optional LaTeX-fancyvrb-key-val-options-local) optional)
       (LaTeX-add-fancyvrb-environments `(,new-env ,base-env))
       (when (string= base-env "SaveVerbatim")
-	(LaTeX-add-fancyvrb-saveverbatims new-env)))
-    ;;
-    ;; Now run the procdure:
-    (dolist (elt (LaTeX-fancyvrb-environment-list))
-      (let ((env (car elt))
-	    (type (cadr elt)))
-	(cond ((string= type "VerbatimOut")
-	       (LaTeX-add-environments
-		`(,env (lambda (env)
-			 (let ((options (TeX-read-key-val t LaTeX-fancyvrb-key-val-options-local))
-			       (file (TeX-read-string "Output file: ")))
-			   (LaTeX-insert-environment
-			    env
-			    (concat
-			     (unless (zerop (length options))
-			       (concat LaTeX-optop options LaTeX-optcl))
-			     (concat TeX-grop file TeX-grcl))))))))
-	      ((string= type "SaveVerbatim")
-	       (TeX-auto-add-regexp `(,(concat "\\\\begin{"
-					       env
-					       "}"
-					       LaTeX-fancyvrb-key-val-skip-regexp
-					       "{\\([^}]+\\)}")
-				      1 LaTeX-auto-fancyvrb-saveverbatim)))
-	      (t
-	       ;; Regular verbatim environments have a starred
-	       ;; version; so add them here; the non-starred additions
-	       ;; to `LaTeX-verbatim-environments-local' and
-	       ;; `LaTeX-indent-environment-list' are done outside
-	       ;; (cond ...):
-	       (LaTeX-add-environments
-		`(,env LaTeX-env-args
-		       [ TeX-arg-key-val LaTeX-fancyvrb-key-val-options-local ]))
-	       (LaTeX-add-environments
-		`(,(concat env "*") LaTeX-env-args
-		  [ TeX-arg-key-val LaTeX-fancyvrb-key-val-options-local ]))
-	       (add-to-list 'LaTeX-verbatim-environments-local (concat env "*"))
-	       (add-to-list 'LaTeX-indent-environment-list
-			    `(,(concat env "*") current-indentation) t)))
-	;; These apply for all environments defined:
-	(add-to-list 'LaTeX-verbatim-environments-local env)
-	(add-to-list 'LaTeX-indent-environment-list `(,env current-indentation) t)))
-    ;; Update font-lock:
-    (when (and (fboundp 'font-latex-add-keywords)
-	       (fboundp 'font-latex-update-font-lock)
-	       (eq TeX-install-font-lock 'font-latex-setup))
-      (font-latex-update-font-lock t))))
+	(LaTeX-add-fancyvrb-saveverbatims new-env))))
+  ;;
+  ;; Now run the procdure:
+  (dolist (elt (LaTeX-fancyvrb-environment-list))
+    (let ((env (car elt))
+	  (type (cadr elt)))
+      (cond ((string= type "VerbatimOut")
+	     (LaTeX-add-environments
+	      `(,env (lambda (env)
+		       (let ((options (TeX-read-key-val
+				       t LaTeX-fancyvrb-key-val-options-local))
+			     (file (TeX-read-string "Output file: ")))
+			 (LaTeX-insert-environment
+			  env
+			  (concat
+			   (unless (zerop (length options))
+			     (concat LaTeX-optop options LaTeX-optcl))
+			   (concat TeX-grop file TeX-grcl))))))))
+	    ((string= type "SaveVerbatim")
+	     (TeX-auto-add-regexp `(,(concat "\\\\begin{"
+					     env
+					     "}"
+					     LaTeX-fancyvrb-key-val-skip-regexp
+					     "{\\([^}]+\\)}")
+				    1 LaTeX-auto-fancyvrb-saveverbatim)))
+	    (t
+	     ;; Regular verbatim environments have a starred
+	     ;; version; so add them here; the non-starred additions
+	     ;; to `LaTeX-verbatim-environments-local' and
+	     ;; `LaTeX-indent-environment-list' are done outside
+	     ;; (cond ...):
+	     (LaTeX-add-environments
+	      `(,env LaTeX-env-args
+		     [ TeX-arg-key-val LaTeX-fancyvrb-key-val-options-local ]))
+	     (LaTeX-add-environments
+	      `(,(concat env "*") LaTeX-env-args
+		[ TeX-arg-key-val LaTeX-fancyvrb-key-val-options-local ]))
+	     (add-to-list 'LaTeX-verbatim-environments-local (concat env "*"))
+	     (add-to-list 'LaTeX-indent-environment-list
+			  `(,(concat env "*") current-indentation) t)))
+      ;; These apply for all environments defined:
+      (add-to-list 'LaTeX-verbatim-environments-local env)
+      (add-to-list 'LaTeX-indent-environment-list `(,env current-indentation) t)))
+  ;; Update font-lock:
+  (when (and (fboundp 'font-latex-set-syntactic-keywords)
+	     (eq TeX-install-font-lock 'font-latex-setup))
+    (font-latex-set-syntactic-keywords)))
 
 (defun LaTeX-fancyvrb-arg-file-relative (optional)
   "Query and insert a file name relative to current master file.
@@ -380,6 +398,8 @@ If OPTIONAL is non-nil, insert the file name in brackets."
     "VerbatimFootnotes"
     ;; Improved verbatim commands
     '("Verb" [TeX-arg-key-val LaTeX-fancyvrb-key-val-options-local] TeX-arg-verb)
+    ;; \Verb also has a starred version:
+    '("Verb*" [TeX-arg-key-val LaTeX-fancyvrb-key-val-options-local] TeX-arg-verb)
     '("DefineShortVerb" (TeX-arg-eval
 			 TeX-read-string
 			 (TeX-argument-prompt optional nil "Character")
@@ -503,13 +523,13 @@ If OPTIONAL is non-nil, insert the file name in brackets."
    (add-to-list 'LaTeX-indent-environment-list '("SaveVerbatim" current-indentation) t)
    (add-to-list 'LaTeX-indent-environment-list '("VerbatimOut" current-indentation) t)
    (add-to-list 'LaTeX-verbatim-macros-with-delims-local "Verb")
+   (add-to-list 'LaTeX-verbatim-macros-with-delims-local "Verb*")
 
    ;; Fontification
    (when (and (fboundp 'font-latex-add-keywords)
-	      (fboundp 'font-latex-update-font-lock)
 	      (eq TeX-install-font-lock 'font-latex-setup))
-     (font-latex-add-keywords '(("CustomVerbatimCommand"       "{{{")
-				("RecustomVerbatimCommand"     "{{{")
+     (font-latex-add-keywords '(("CustomVerbatimCommand"       "|{\\{{")
+				("RecustomVerbatimCommand"     "|{\\{{")
 				("DefineVerbatimEnvironment"   "{{{")
 				("RecustomVerbatimEnvironment" "{{{")
 				("DefineShortVerb"   "{")
@@ -520,16 +540,13 @@ If OPTIONAL is non-nil, insert the file name in brackets."
 				("BVerbatimInput" "[{")
 				("LVerbatimInput" "[{"))
 			      'reference)
-     (font-latex-add-keywords '(("Verb" "[") ; The second argument should
-					; actually be verbatim.
+     (font-latex-add-keywords '(("Verb" "*[") ; The second argument is verbatim.
 				("SaveVerb"     "[{")
 				("UseVerb"      "{")
 				("UseVerbatim"  "{")
 				("LUseVerbatim" "{")
 				("BUseVerbatim" "{"))
-			      'textual)
-     ;; Tell font-lock about the update.
-     (font-latex-update-font-lock t)))
+			      'textual)))
  LaTeX-dialect)
 
 (defvar LaTeX-fancyvrb-package-options nil

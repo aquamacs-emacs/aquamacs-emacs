@@ -1,6 +1,6 @@
 ;;; theorem.el --- AUCTeX style for `theorem.sty' (v2.2c)
 
-;; Copyright (C) 2015 Free Software Foundation, Inc.
+;; Copyright (C) 2015, 2018 Free Software Foundation, Inc.
 
 ;; Author: Arash Esbati <arash@gnu.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -35,6 +35,11 @@
 ;; docstring of `LaTeX-theorem-env-label' for instructions.
 
 ;;; Code:
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
 
 (defvar LaTeX-theorem-theoremstyle-list
   '(("plain") ("break") ("margin") ("change")

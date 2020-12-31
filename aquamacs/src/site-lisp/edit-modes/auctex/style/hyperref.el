@@ -1,6 +1,6 @@
 ;;; hyperref.el --- AUCTeX style for `hyperref.sty' v6.83m
 
-;; Copyright (C) 2008, 2013--2016 Free Software Foundation, Inc.
+;; Copyright (C) 2008, 2013-2020 Free Software Foundation, Inc.
 
 ;; Author: Ralf Angeli <angeli@caeruleus.net>
 ;; Maintainer: auctex-devel@gnu.org
@@ -30,8 +30,16 @@
 
 ;;; Code:
 
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
+
+(declare-function font-latex-set-syntactic-keywords
+		  "font-latex")
+
 (defvar LaTeX-hyperref-package-options-list
-  '(;; See http://www.tug.org/applications/hyperref/manual.html#x1-40003
+  '(;; See https://www.tug.org/applications/hyperref/manual.html#x1-40003
     ;; General options
     ("draft" ("true" "false"))
     ("final" ("true" "false"))
@@ -153,7 +161,7 @@
     ("nextactionraw"))
   "Key=value options for href macro of the hyperref package.")
 
-;; See http://www.tug.org/applications/hyperref/ftp/doc/manual.html#x1-220006.2
+;; See https://www.tug.org/applications/hyperref/ftp/doc/manual.html#x1-220006.2
 
 (defvar LaTeX-hyperref-forms-options
   '(("accesskey")
@@ -221,6 +229,9 @@
    (TeX-add-symbols
     '("hypersetup" (TeX-arg-key-val LaTeX-hyperref-package-options-list))
     '("href" [ (TeX-arg-key-val LaTeX-hyperref-href-options) ] "URL" "Text")
+    ;; Completion for \url is provided via url.el.  Hence the entry in
+    ;; this style is commented:
+    ;; '("url" "URL" ignore)
     '("nolinkurl" t)
     '("hyperbaseurl" t)
     '("hyperimage" "Image URL" "Text")
@@ -262,21 +273,23 @@
     '("MakeButtonField" "Text"))
 
    ;; Form fields must be inside a "Form"-env, one per file is allowed, cf.
-   ;; http://www.tug.org/applications/hyperref/ftp/doc/manual.html#x1-200006
+   ;; https://www.tug.org/applications/hyperref/ftp/doc/manual.html#x1-200006
    ;; It is up to user to insert [<options>] after \begin{Form}
    (LaTeX-add-environments
     '("Form"))
 
-   ;; Do not indent the content of the "Form"-env; it is odd if the whole
-   ;; document is indented.  Append to `LaTeX-indent-environment-list' in order
-   ;; not to override custom settings.
-   (make-local-variable 'LaTeX-indent-environment-list)
-   (add-to-list 'LaTeX-indent-environment-list '("Form" current-indentation) t)
+   ;; Do not indent the content of the "Form"-env; it is odd if the
+   ;; whole document is indented.  Append it to a local version of
+   ;; `LaTeX-document-regexp':
+   (unless (string-match-p "Form" LaTeX-document-regexp)
+     (set (make-local-variable 'LaTeX-document-regexp)
+	  (concat LaTeX-document-regexp "\\|" "Form")))
 
    (add-to-list 'LaTeX-verbatim-macros-with-braces-local "nolinkurl")
    (add-to-list 'LaTeX-verbatim-macros-with-braces-local "hyperbaseurl")
    (add-to-list 'LaTeX-verbatim-macros-with-braces-local "hyperimage")
    (add-to-list 'LaTeX-verbatim-macros-with-braces-local "hyperref")
+   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "href")
 
    ;; In hyperref package, \url macro is redefined and \url|...| can't be used,
    ;; while it's possible when only url package (required by hyperref) is loaded
@@ -284,8 +297,7 @@
 	 (remove "url"  LaTeX-verbatim-macros-with-delims-local))
 
    ;; Fontification
-   (when (and (fboundp 'font-latex-add-keywords)
-	      (fboundp 'font-latex-set-syntactic-keywords)
+   (when (and (featurep 'font-latex)
 	      (eq TeX-install-font-lock 'font-latex-setup))
      (font-latex-add-keywords '(("href" "[{{")
 				("nolinkurl" "{")
@@ -304,6 +316,11 @@
 			      'function)
      ;; For syntactic fontification, e.g. verbatim constructs.
      (font-latex-set-syntactic-keywords))
+
+   ;; Option management
+   (if (and (LaTeX-provided-package-options-member "hyperref" "dvipdfmx")
+            (not (eq TeX-engine 'xetex)))
+       (setq TeX-PDF-from-DVI "Dvipdfmx"))
 
    ;; Activate RefTeX reference style.
    (and LaTeX-reftex-ref-style-auto-activate

@@ -1,5 +1,7 @@
 ;;; mflogo.el --- AUCTeX style for `mflogo.sty'
 
+;; Copyright (C) 2012, 2019 Free Software Foundation, Inc.
+
 ;; Author: Mads Jensen <mje@inducks.org>
 ;; Maintainer: auctex-devel@gnu.org
 ;; Created: 2011-02-02
@@ -28,19 +30,27 @@
 
 ;;; Code:
 
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
+
 (TeX-add-style-hook
  "mflogo"
  (lambda ()
    (TeX-add-symbols
-    '("textlogo" 1)
-    '("logofamily" 1))
+    '("textlogo"   "Text")
+    '("logofamily" -1)
+    '("MF"          0)
+    '("MP"          0))
 
    ;; Fontification
    (when (and (featurep 'font-latex)
 	      (eq TeX-install-font-lock 'font-latex-setup))
-     (font-latex-add-keywords '(("logofamily" "{")
-				("textlogo" "{"))
-			      'function)))
+     (font-latex-add-keywords '(("textlogo" "{"))
+			      'type-command)
+     (font-latex-add-keywords '(("logofamily" ""))
+			      'type-declaration)))
  LaTeX-dialect)
 
 (defvar LaTeX-mflogo-package-options nil

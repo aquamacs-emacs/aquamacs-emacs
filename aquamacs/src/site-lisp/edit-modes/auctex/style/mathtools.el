@@ -1,6 +1,6 @@
 ;;; mathtools.el --- Style hook for the LaTeX package `mathtools'.
 
-;; Copyright (C) 2011-2012, 2014, 2016 Free Software Foundation, Inc.
+;; Copyright (C) 2011-2020 Free Software Foundation, Inc.
 
 ;; Author: Mads Jensen <mje@inducks.org>
 ;; Created: 2011-02-13
@@ -32,12 +32,19 @@
 ;;; This package serves as a wrapper for amsmath, adding more features
 ;;; and fixing a few bugs in amsmath.  The mathstyle argument for many
 ;;; of the macros is discussed at
-;;; <http://www.tug.org/TUGboat/Articles/tb22-4/tb72perlS.pdf>
+;;; <https://www.tug.org/TUGboat/Articles/tb22-4/tb72perlS.pdf>
 
 ;;; Code:
 
-;; Needed for auto-parsing.
+;; Needed for auto-parsing:
 (require 'tex)
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
+
+(defvar LaTeX-amsmath-package-options)
 
 ;; amsmath options which can be passed directly to mathtools are
 ;; appended in the style hook below
@@ -47,6 +54,9 @@
     ;; via nonrobust package option)
     "nonrobust")
   "Package options for the mathtools package.")
+(TeX-load-style "amsmath")
+(dolist (elt LaTeX-amsmath-package-options)
+  (add-to-list 'LaTeX-mathtools-package-options elt))
 
 (defvar LaTeX-mathtools-key-val-options
   '(("showonlyrefs")
@@ -239,9 +249,6 @@ Put line break macro on the last line.  Next, insert an ampersand."
 
    ;; mathtools requires amsmath, as some bugs in amsmath are fixed
    (TeX-run-style-hooks "amsmath")
-
-   (dolist (elt LaTeX-amsmath-package-options)
-     (add-to-list 'LaTeX-mathtools-package-options elt))
 
    (LaTeX-add-environments
     ;; 3.4.1 Matrices

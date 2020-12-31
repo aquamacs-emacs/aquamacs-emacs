@@ -1,6 +1,6 @@
 ;;; nomencl.el --- AUCTeX style for the nomencl class.
 
-;; Copyright (C) 2007 Free Software Foundation, Inc.
+;; Copyright (C) 2007, 2018 Free Software Foundation, Inc.
 
 ;; Author: Ralf Angeli <angeli@caeruleus.net>
 ;; Maintainer: auctex-devel@gnu.org
@@ -29,6 +29,11 @@
 ;; This file adds support for the nomencl package.
 
 ;;; Code:
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
 
 (defvar LaTeX-nomencl-package-options
   '("refeq" "norefeq" "refpage" "norefpage" "prefix" "noprefix" "cfg" "nocfg"

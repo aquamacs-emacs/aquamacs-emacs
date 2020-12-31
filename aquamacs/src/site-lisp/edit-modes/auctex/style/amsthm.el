@@ -1,6 +1,6 @@
 ;;; amsthm.el --- Style hook for the AMS-LaTeX amsthm package.
 
-;; Copyright (C) 1997, 2013--2015 Free Software Foundation, Inc.
+;; Copyright (C) 1997, 2013--2015, 2018 Free Software Foundation, Inc.
 
 ;; Author: Carsten Dominik <dominik@strw.leidenuniv.nl>
 ;; Maintainer: auctex-devel@gnu.org
@@ -30,6 +30,11 @@
 ;; docstring of `LaTeX-amsthm-env-label' for instructions.
 
 ;;; Code:
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
 
 (defvar LaTeX-amsthm-package-options nil
   "Package options for the amsthm package.")

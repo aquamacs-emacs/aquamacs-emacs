@@ -2,6 +2,11 @@
 
 ;;; Code:
 
+;; Silence the compiler:
+(declare-function font-latex-add-quotes
+		  "font-latex"
+		  (quotes))
+
 (TeX-add-style-hook
  "danish"
  (lambda ()

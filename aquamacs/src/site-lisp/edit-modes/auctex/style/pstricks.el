@@ -1,6 +1,7 @@
 ;;; pstricks.el --- AUCTeX style for the `pstricks' package.
 
-;; Copyright (C) 2007, 2009, 2013-2015 Free Software Foundation, Inc.
+;; Copyright (C) 2007, 2009, 2013-2015, 2018, 2020
+;;                Free Software Foundation, Inc.
 
 ;; Author: Holger Sparr <holger.sparr@gmx.net>
 ;; Maintainer: auctex-devel@gnu.org
@@ -48,7 +49,7 @@
 ;;
 ;; 14/06/2007 rewrite of pstricks.el based on Jean-Philippe Georget's
 ;;            pstricks.el version found on <URI:
-;;            http://www.emacswiki.org/cgi-bin/wiki/pstricks.el>
+;;            https://www.emacswiki.org/emacs/pstricks.el>
 
 ;;; TODO:
 ;;
@@ -59,6 +60,9 @@
 ;;    can be generalized.
 
 ;;; Code:
+
+(eval-when-compile
+  (require 'cl-lib))
 
 ;;; General Functions
 
@@ -228,7 +232,7 @@ package PNAME"
 
 (defun LaTeX-pst-point-in-parens (_optional)
   "Enclose point in parentheses."
-  (LaTeX-pst-enclose-obj 'LaTeX-pst-point ?( ?)))
+  (LaTeX-pst-enclose-obj 'LaTeX-pst-point ?\( ?\)))
 
 ;;; Angles
 (defvar LaTeX-pst-angle-list (list "0")
@@ -681,7 +685,7 @@ package PNAME"
        (cond ((string= type "object")
               (setq TeX-auto-symbol
                     (cons (list (nth 1 list)
-                                (caddr (assoc (nth 2 list)
+                                (cl-caddr (assoc (nth 2 list)
                                               (TeX-symbol-list))))
                           TeX-auto-symbol)))
              ((string= type "fontdot")
@@ -716,7 +720,7 @@ comma separated list. Point has to be within the sexp to modify."
         (progn
           (re-search-backward "\\\\\\([a-zA-Z]\\)")
           (forward-word 1)
-          (insert-pair nil ?[ ?]))
+          (insert-pair nil ?\[ ?\]))
       (up-list 1)
       (backward-char 1)
       (save-excursion
@@ -778,7 +782,11 @@ comma separated list. Point has to be within the sexp to modify."
  (lambda ()
    (unless (or (member "pst-pdf" TeX-active-styles)
 	       (eq TeX-engine 'xetex))
-     (TeX-PDF-mode-off))
+     ;; Leave at user's choice whether to disable `TeX-PDF-mode' or
+     ;; not. Instead set up `TeX-PDF-from-DVI' option so that AUCTeX
+     ;; takes dvips+ps2pdf route when `TeX-PDF-mode' is enabled.
+     ;; (TeX-PDF-mode-off)
+     (setq TeX-PDF-from-DVI "Dvips"))
    (mapc 'TeX-auto-add-regexp LaTeX-auto-pstricks-regexp-list)
    (LaTeX-add-environments
     '("pspicture" LaTeX-pst-env-pspicture)

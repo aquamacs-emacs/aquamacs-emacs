@@ -25,20 +25,17 @@
 
 ;;; Code:
 
-
-(TeX-add-style-hook "emp"
- (function
-  (lambda ()
-     (TeX-add-symbols "empuse" "empTeX"  "empaddtoTeX"
-		      "emprelude" "empaddtoprelude" "unitlength"
- 		     )
-    (LaTeX-add-environments
-     '("empfile" LaTeX-env-empfile)
-     '("emp" LaTeX-env-emp-gen)
-     '("empdef" LaTeX-env-emp-gen)
-     '("empgraph" LaTeX-env-emp-gen)
-     '("empcmds")
-     )))
+(TeX-add-style-hook
+ "emp"
+ (lambda ()
+   (TeX-add-symbols "empuse" "empTeX"  "empaddtoTeX"
+		    "emprelude" "empaddtoprelude" "unitlength")
+   (LaTeX-add-environments
+    '("empfile" LaTeX-env-empfile)
+    '("emp" LaTeX-env-emp-gen)
+    '("empdef" LaTeX-env-emp-gen)
+    '("empgraph" LaTeX-env-emp-gen)
+    '("empcmds")))
  LaTeX-dialect)
 
 (defun LaTeX-env-emp-gen (environment-name)
@@ -51,7 +48,7 @@ Used for emp, empdef, and empgraph environments."
 	 ;;; emp, empdef, and empgraph environments
 	 ;;; we give them 1 by default
 	 ;;; not necessarily the best thing to do?
-	 )
+	 LaTeX-emp-fig-name)
      (if (not (zerop (length emp-fig-name)))
 	 (progn
 	   (setq LaTeX-emp-fig-name (concat LaTeX-optop emp-fig-name LaTeX-optcl))
@@ -61,20 +58,19 @@ Used for emp, empdef, and empgraph environments."
      (end-of-line)
      (insert "(" emp-fig-width "," emp-fig-height ")")
      (forward-line 1)
-     (indent-according-to-mode)
-     ))
+     (indent-according-to-mode)))
 
 (defun LaTeX-env-empfile (_optional)
-   "Ask for file. Insert empfile environment"
-   (let ((empfile (TeX-read-string "empfile: " "")))
+   "Ask for file. Insert empfile environment."
+   (let ((empfile (TeX-read-string "empfile: " ""))
+	 LaTeX-emp-file-name mpost-emp-file-name)
      (if (not (zerop (length empfile)))
 	 (progn
 	   (setq LaTeX-emp-file-name (concat LaTeX-optop empfile LaTeX-optcl))
 	   (setq mpost-emp-file-name (concat empfile ".mp"))
 	   (LaTeX-insert-environment "empfile" LaTeX-emp-file-name))
-       (progn
-	 (setq mpost-emp-file-name "\\jobname")
-	 (LaTeX-insert-environment "empfile")))
+       (setq mpost-emp-file-name "\\jobname")
+       (LaTeX-insert-environment "empfile"))
      (if LaTeX-write18-enabled-p
 	 (progn
 	   (forward-line 1)
@@ -82,4 +78,5 @@ Used for emp, empdef, and empgraph environments."
 	   (newline-and-indent)
 	   (insert "\\immediate\\write18{mpost -tex=latex " mpost-emp-file-name TeX-grcl)
 	   (forward-line -2)))))
+
 ;;; emp.el ends here

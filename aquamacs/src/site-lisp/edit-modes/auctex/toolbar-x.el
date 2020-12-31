@@ -106,7 +106,8 @@
 
 ;;; Code:
 
-(eval-when-compile (require 'cl))
+(eval-when-compile
+  (require 'cl-lib))
 
 ;; Note that this just gives a useful default.  Icons are expected to
 ;; be in subdirectory "images" or "toolbar" relative to the load-path.
@@ -127,7 +128,7 @@
 			      ;;(file-directory-p x)
 			      x))
 		     load-path))
-   (list (concat data-directory "images"))) ;; Aquamacs
+   (list data-directory))
   "List of directories where toolbarx finds its images.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -149,8 +150,6 @@
 (defun toolbarx-make-string-from-symbol (symbol)
   "Return a string from the name of a SYMBOL.
 Upcase initials and replace dashes by spaces."
-  (if (eq symbol 'separator) ;; Aquamacs
-     "--" ;; Aquamacs
   (let* ((str (upcase-initials (symbol-name symbol)))
 	 (str2))
     (dolist (i (append str nil))
@@ -158,7 +157,6 @@ Upcase initials and replace dashes by spaces."
 	  (push 32 str2)
 	(push i str2)))			; else push identical
     (concat (nreverse str2))))
-  ) ;; Aquamacs
 
 (defun toolbarx-make-symbol-from-string (string)
   "Return a (intern) symbol from STRING.
@@ -182,7 +180,7 @@ different.  OPTION-LIST equal to nil is a good option list."
     (dotimes (i n)
       (when (> i 0)
 	(setq temp-opt-list (cddr temp-opt-list)))
-      (pushnew (car temp-opt-list) list-diff :test #'equal)
+      (cl-pushnew (car temp-opt-list) list-diff :test #'equal)
       (setq elt-in-valid (and elt-in-valid
 			      (memq (car temp-opt-list)
 				    valid-options))))
@@ -278,13 +276,8 @@ command, COMM is returned."
 ;; handle `menu titles' differently) meanwhile in XEmacs, menus are lists of
 ;; vectors
 
-(defmacro toolbarx--if-when-compile (test then else)
-  (declare (indent 1) (debug t))
-  (if (eval test) then else))
-
-(toolbarx--if-when-compile (not (featurep 'xemacs))
 (defun toolbarx-emacs-mount-popup-menu
-  (strings var type &optional title save)
+    (strings var type &optional title save)
   "Return an interactive `lambda'-expression that shows a popup menu.
 This function is the action of `toolbarx-mount-popup-menu' if
 inside Emacs. See documentation of that function for more."
@@ -313,7 +306,7 @@ inside Emacs. See documentation of that function for more."
     (dolist (i strings)
       ;; finding a new symbol
       (let* ((aux-count 0)
-	    (i-symb (toolbarx-make-symbol-from-string i)))
+	     (i-symb (toolbarx-make-symbol-from-string i)))
 	(setq key i-symb)
 	(while (memq key used-symbols)
 	  (setq aux-count (1+ aux-count))
@@ -326,7 +319,7 @@ inside Emacs. See documentation of that function for more."
 			 ,(if (eq real-type 'radio)
 			      `(setq ,var ,count)
 			    `(if (memq ,count ,var)
-				(setq ,var (delete ,count ,var))
+				 (setq ,var (delete ,count ,var))
 			       (setq ,var (sort (cons ,count ,var) '<))))
 			 (toolbarx-refresh))
 		      (when (eq real-save 'always)
@@ -348,69 +341,10 @@ inside Emacs. See documentation of that function for more."
 	(setq used-symbols (cons key used-symbols)))
       (define-key-after keymap (vector key)
 	`(menu-item "Save state of this menu"
-		   (lambda nil (interactive)
-		     (customize-save-variable (quote ,var) ,var)))))
+		    (lambda nil (interactive)
+		      (customize-save-variable (quote ,var) ,var)))))
     ;; returns a `lambda'-expression
     `(lambda nil (interactive) (popup-menu (quote ,keymap)))))
-
-(defun toolbarx-xemacs-mount-popup-menu
-  (strings var type &optional title save)
-  "Return an interactive `lambda'-expression that shows a popup menu.
-This function is the action of `toolbarx-mount-popup-menu' if
-inside XEmacs. See documentation of that function for more."
-  (let* ((menu (if (and title (stringp title))
-		   (list title)
-		 (setq title nil)
-		 (list "Dropdown menu")))
-	 (count 0)
-	 (menu-item)
-	 (menu-callback)
-	 (real-type (if (eq type 'toggle) 'toggle 'radio))
-	 (real-save (when save (if (eq save 'offer) 'offer 'always))))
-    ;; warn if type is not `radio' ot `toggle'; use `radio' if incorrect.
-    (unless (eq type real-type)
-      (warn (concat "TYPE should be symbols `radio' or `toggle', "
-		    "but %s found; using `radio'")
-            type))
-    ;; warn if save is not `nil', `offer' or `always'; use nil when incorrect
-    (unless (eq save real-save)
-      (setq real-save nil)
-      (display-warning 'toolbarx
-		       (format (concat "SAVE should be symbols `nil', "
-				       "`offer' or `always', but %s found; "
-				       "using `nil'")
-			       save)))
-    ;; making the menu list of vectors
-    (dolist (str strings)
-      (setq count (1+ count))
-      (setq menu-callback (list 'progn
-				(if (eq real-type 'radio)
-				    `(setq ,var ,count)
-				  `(if (memq ,count ,var)
-				       (setq ,var (delete ,count ,var))
-				     (setq ,var (sort (cons ,count ,var) '<))))
-				'(toolbarx-refresh)))
-      (when (eq real-save 'always)
-	(setq menu-callback (append menu-callback
-				    (list (list 'customize-save-variable
-						(list 'quote var) var)))))
-      (setq menu-item (vector str menu-callback
-			      :style real-type
-			      :selected (if (eq real-type 'radio)
-					     `(eq ,var ,count)
-					   `(memq ,count ,var))))
-      (setq menu (append menu (list menu-item))))
-    (when (eq real-save 'offer)
-      (setq menu (append menu (list "--:shadowEtchedInDash")))
-      (setq menu (append menu (list
-			       (vector
-				"Save state of this menu"
-				`(customize-save-variable (quote ,var)
-							  ,var))))))
-    ;; returnung the lambda-expression
-    `(lambda nil (interactive)
-       (let ((popup-menu-titles ,(if title t nil)))
-	 (popup-menu (quote ,menu)))))))
 
 (defun toolbarx-mount-popup-menu (strings var type &optional title save)
   "Return a command that show a popup menu.
@@ -433,22 +367,15 @@ is nil, do not try to save anything.  If it is `offer', a menu
 item is added offering the user the possibiity to save state of
 that dropdown menu for future sesseions (using `custom').  If it
 is `always', state is saved every time that a item is clicked."
-  (if (featurep 'xemacs)
-      (toolbarx-xemacs-mount-popup-menu strings var type title save)
-    (toolbarx-emacs-mount-popup-menu strings var type title save)))
+  (toolbarx-emacs-mount-popup-menu strings var type title save))
 
 (defun toolbarx-option-value (opt)
-  "Return option value according to Emacs flavour.
-If OPT is a vector, return first element if in Emacs or
-second if in XEmacs.  Otherwise, return OPT.
-If OPT is vector and length is smaller than the necessary (like
-if in XEmacs and vector has length 1), then nil is returned."
+  "If OPT is a vector, return first element, otherwise, return OPT.
+If OPT is vector and length is smaller than the necessary, then
+nil is returned."
   (if (vectorp opt)
-      (if (featurep 'xemacs)
-	  (when (> (length opt) 1)
-	    (aref opt 1))
-	(when (> (length opt) 0)
-	  (aref opt 0)))
+      (when (> (length opt) 0)
+	(aref opt 0))
     opt))
 
 (defun toolbarx-eval-function-or-symbol (object type-test-func)
@@ -485,44 +412,24 @@ documentation of function `toolbarx-process-symbol')."
 	   (let* ((val (toolbarx-option-value img))
 		  (all-obj-ok t)
 		  (good-obj
-		   (if (featurep 'xemacs)
-		       ;; if XEmacs
-		       (or (stringp val) ; a string
-			   (glyphp val)  ; or a glyph
-			   (and (symbolp val) ; or a symbol bound to a
-				(boundp val)  ; glyph-list
-				(check-toolbar-button-syntax
-				 (vector val
-					 (lambda nil (interactive))
-					 nil nil) t))
-			   (and (listp val) ; or a glyph-or-string list
-				(> (length val) 0)
-				(< (length val) 7)
-				(dolist (i val all-obj-ok)
-				  (setq all-obj-ok
-					(and all-obj-ok
-					     (or (not i)
-						 (stringp i)
-						 (glyphp i)))))))
-		     ;; if Emacs
-		     (or (stringp val)	  ; string
-			 (and (consp val) ; or image descriptor
-			      (eq (car val) 'image))
-			 (and (symbolp val) ; or a symbol bound to a
-			      (boundp val)  ; image descriptor
-					    ; (defined with `defimage')
-			      (consp (eval val))
-			      (eq (car (eval val)) 'image))
-			 (and (listp val) ; or list with 4 strings or
-					  ; image descriptors
-			      (= (length val) 4)
-			      (dolist (i val all-obj-ok)
-				(setq all-obj-ok
-				      (and all-obj-ok
-					   (or (stringp i)
-					       (and (consp i)
-						    (eq (car i)
-							'image)))))))))))
+		   (or (stringp val)	  ; string
+		       (and (consp val) ; or image descriptor
+			    (eq (car val) 'image))
+		       (and (symbolp val) ; or a symbol bound to a
+			    (boundp val)  ; image descriptor
+					; (defined with `defimage')
+			    (consp (eval val))
+			    (eq (car (eval val)) 'image))
+		       (and (listp val) ; or list with 4 strings or
+					; image descriptors
+			    (= (length val) 4)
+			    (dolist (i val all-obj-ok)
+			      (setq all-obj-ok
+				    (and all-obj-ok
+					 (or (stringp i)
+					     (and (consp i)
+						  (eq (car i)
+						      'image))))))))))
 	     (cons good-obj val)))))
     (toolbarx-eval-function-or-symbol obj toolbarx-test-image-type-simple)))
 
@@ -533,12 +440,9 @@ documentation of function `toolbarx-process-symbol')."
   (let ((toolbarx-test-button-type-simple
 	 (lambda (but)
 	   (let* ((val (toolbarx-option-value but))
-		  (good-obj (if (featurep 'xemacs)
-				;; if XEmacs
-				t
-			      ;; if Emacs
-			      (and (consp val)
-				   (memq (car val) '(:toggle :radio))))))
+		  (good-obj
+		   (and (consp val)
+			(memq (car val) '(:toggle :radio)))))
 	     (cons good-obj val)))))
     (toolbarx-eval-function-or-symbol obj toolbarx-test-button-type-simple)))
 
@@ -569,16 +473,7 @@ VAL (see documentation of function `toolbarx-process-symbol')."
 	   (let* ((val (toolbarx-option-value obj))
 		  (all-but-def-opts '(top bottom left right))
 		  (all-opts '(default top bottom left right))
-		  (good-obj
-		   (if (featurep 'xemacs)
-		       ;; if XEmacs
-		       (if (symbolp val)
-			   (memq val all-opts)
-			 (and (consp val)
-			      (memq (car val) all-but-def-opts)
-			      (memq (cdr val) all-but-def-opts)))
-		     ;; if Emacs
-		     t)))
+		  (good-obj t))
 	     (cons good-obj val)))))
     (toolbarx-eval-function-or-symbol obj toolbarx-test-toolbar-type-simple)))
 
@@ -639,10 +534,8 @@ object VAL of a dropdown group (see documentation of function
   (let* ((props-types-alist
 	  '((:image	      toolbarx-test-image-type)
 	    (:command	      toolbarx-test-any-type)
-            (:title           toolbarx-test-string-or-nil) ;; Aquamacs
 	    (:enable	      toolbarx-test-any-type)
 	    (:visible	      toolbarx-test-any-type)
-            (:label           toolbarx-test-string-or-nil) ;; Aquamacs
 	    (:help	      toolbarx-test-string-or-nil)
 	    (:insert	      toolbarx-test-any-type	   . and)
 	    (:toolbar	      toolbarx-test-toolbar-type)
@@ -1114,46 +1007,30 @@ in the end of SWITCHES, which is returned."
 
 (defun toolbarx-find-image (image)
   "Return image descriptor or glyph for IMAGE.
-In Emacs, return an image descriptor for IMAGE.  In XEmacs,
-return a glyph.
 
 IMAGE is string.  Usually IMAGE neither contains a directory nor
 an extension.  If the extension is omitted, `xpm', `xbm' and
 `pbm' are tried.  If the directory is omitted,
 `toolbarx-image-path' is searched."
-  ;; `find-image' in Emacs 21 looks in `load-path' and `data-directory'.  In
-  ;; Emacs 22, we have `image-load-path' which includes `load-path' and
-  ;; `data-directory'.
-  ;;
-  ;; If there's some API in XEmacs to find the images, we should use it
-  ;; instead of locate-library.
-  ;;
-  ;; Emacs 22 has locate-file, but the other Emacsen don't.  The
-  ;; following should hopefully get us to all images ultimately.
-
   (let ((file))
-    (dolist (i '("" ".png" ".tiff" ".xpm" ".xbm" ".pbm")) ;; Aquamacs
+    (dolist (i '("" ".xpm" ".xbm" ".pbm"))
       (unless file
 	(setq file (locate-library (concat image i) t toolbarx-image-path))))
-    (if (featurep 'xemacs)
-	(and file (make-glyph file))
-      (if file
-	  (create-image file)
-	(find-image `((:type png :file ,(concat image ".png")) ;; Aquamacs
-                      (:type tiff :file ,(concat image ".tiff")) ;; Aquamacs
-                      (:type xpm :file ,(concat image ".xpm"))
-                      (:type xbm :file ,(concat image ".xbm"))
-                      (:type pbm :file ,(concat image ".pbm"))))))))
+    (if file
+	(create-image file)
+      (find-image `((:type xpm :file ,(concat image ".xpm"))
+		    (:type xbm :file ,(concat image ".xbm"))
+		    (:type pbm :file ,(concat image ".pbm")))))))
+
 ;; next variable interfaces between parsing and display engines
 (defvar toolbarx-internal-button-switches nil
   "Store the list of processed buttons, used by `toolbarx-refresh'.
 This variable can store different values for the different buffers.")
 
 
-(toolbarx--if-when-compile (not (featurep 'xemacs))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Second engine: display parsed buttons in Emacs
-(progn
+
 (defun toolbarx-emacs-add-button (button used-keys keymap)
   "Insert a button where BUTTON is its description.
 USED-KEYS should be a list of symbols, where the first element is
@@ -1194,7 +1071,7 @@ function `toolbar-install-toolbar'."
 			  (setq add-list (cons (cdr prop-good-val) add-list))))
 		      (setq add-list (nreverse add-list))
 		      (when (eq 2 (length add-list)) ; just 1 value, no
-						     ; add-function
+					; add-function
 			(setq add-list (cadr add-list)))
 		      (setq filtered-props-temp (append
 						 (list (car p) add-list)
@@ -1224,7 +1101,7 @@ function `toolbar-install-toolbar'."
 		    image)
 		   ((and (symbolp image) ; or a symbol bound to a
 			 (boundp image)  ; image descriptor (defined
-				       ; with `defimage')g
+					; with `defimage')g
 			 (consp (eval image))
 			 (eq (car (eval image)) 'image))
 		    (eval image))
@@ -1232,9 +1109,9 @@ function `toolbar-install-toolbar'."
 					; with 4 strings or image
 					; descriptors
 		    (apply 'vector (mapcar (lambda (img)
-					      (if (stringp img)
-						  (toolbarx-find-image img)
-						img))
+					     (if (stringp img)
+						 (toolbarx-find-image img)
+					       img))
 					   image))))))
 	       (command
 		(let* ((com (nth 1 (memq :command filtered-props)))
@@ -1248,14 +1125,11 @@ function `toolbar-install-toolbar'."
 			     (cadr (memq :enable filtered-props))))
 	       (visible (cons (memq :visible filtered-props)
 			      (cadr (memq :visible filtered-props))))
-               (label (cons (memq :label filtered-props) ;; Aquamacs
-                            (cadr (memq :label filtered-props)))) ;; Aquamacs
 	       (button (cons (memq :button filtered-props)
 			     (cadr (memq :button filtered-props))))
 	       (menuitem (append
 			  (list 'menu-item
-                                (or (cadr (memq :title filtered-props)) ;; Aquamacs
-                                    (toolbarx-make-string-from-symbol symbol)) ;; Aquamacs
+				(toolbarx-make-string-from-symbol symbol)
 				command
 				:image image-descriptor)
 			  (when (car help)
@@ -1264,8 +1138,6 @@ function `toolbar-install-toolbar'."
 			    (list :enable (cdr enable)))
 			  (when (car visible)
 			    (list :visible (cdr visible)))
-                          (when (car label) ;; Aquamacs
-                            (list :label (cdr label))) ;; Aquamacs
 			  (when (car button)
 			    (list :button (cdr button)))))
 	       (key-not-used
@@ -1316,379 +1188,9 @@ is used and the default value of `toolbarx-map' is changed."
 							  tool-bar-map-temp)
     (if global-flag
 	(setq-default tool-bar-map tool-bar-map-temp)
-      (setq tool-bar-map tool-bar-map-temp)))))
+      (setq tool-bar-map tool-bar-map-temp))))
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Third engine: display parsed buttons in XEmacs
-(progn
-(defun toolbarx-xemacs-image-properties (image)
-  "Return a list of properties of IMAGE.
-IMAGE should be a string or a list of one to six strings or
-glyphs or nil, or a symbol bound to a list of one to six
-glyphs (them must be a valid image list, like one created with
-the function `toolbar-make-button-list').  Return a
-list (GLYPH-LIST HEIGHT WIDTH) where HEIGHT (resp. WIDTH) is the
-maximum of the heights (resp. widths) of all glyphs (or strings
-converted to glyphs) in GLYPH-LIST.  If IMAGE is not a list, it
-is treated as a list with IMAGE as only element.  Strings are
-converted to glyphs with the function `toolbarx-find-image'.  If,
-after possible string-to-glyph convertions, the list of glyphs
-has nil as first element, GLYPH-LIST becomes nil."
-  (let* ((glyph-list
-	  (if (symbolp image)		; if symbol, them must be a
-					; valid image list, like
-					; created by function
-					; `toolbar-make-button-list'
-	      (eval image)
-	    (let ((img-list (if (listp image)
-				image
-			      (list image)))
-		  (glyph-list-temp))
-	      ;; glyph-list-temp
-	      (setq glyph-list-temp
-		    (dolist (glyph img-list (nreverse glyph-list-temp))
-		      (if (stringp glyph)
-			  (setq glyph-list-temp
-				(cons (toolbarx-find-image glyph)
-				      glyph-list-temp))
-			(setq glyph-list-temp (cons glyph glyph-list-temp)))))
-	      (unless (car glyph-list-temp)
-		(setq glyph-list-temp nil))
-	      glyph-list-temp)))
-	 (usable-buttons
-	  ;; computing inheritage
-	  (let* ((usable-temp))
-	    (if toolbar-captioned-p	; problematic point :-(
-		(progn
-		  ;; CAP-UP:  cap-up -> up
-		  (setq usable-temp (cons (cond
-					   ((nth 3 glyph-list))
-					   ((nth 0 glyph-list)))
-					  usable-temp))
-		  ;; CAP-DOWN:	cap-down -> cap-up -> down -> up
-		  (setq usable-temp (cons (cond
-					   ((nth 4 glyph-list))
-					   ((nth 3 glyph-list))
-					   ((nth 1 glyph-list))
-					   ((nth 0 glyph-list)))
-					  usable-temp))
-		  ;; CAP-DISABLED:  cap-disabled -> cap-up -> disabled -> up
-		  (setq usable-temp (cons (cond
-					   ((nth 5 glyph-list))
-					   ((nth 3 glyph-list))
-					   ((nth 2 glyph-list))
-					   ((nth 0 glyph-list)))
-					  usable-temp)))
-	      ;; UP:  up
-	      (setq usable-temp (cons (nth 0 glyph-list) usable-temp))
-	      ;; DOWN:	down -> up
-	      (setq usable-temp (cons (cond
-				       ((nth 1 glyph-list))
-				       ((nth 0 glyph-list)))
-				      usable-temp))
-	      ;; DISABLED:  disabled -> up
-	      (setq usable-temp (cons (cond
-				       ((nth 2 glyph-list))
-				       ((nth 0 glyph-list)))
-				      usable-temp)))
-	    usable-temp))
-	 (height (apply 'max 0 (mapcar (lambda (glyph)
-					 (if glyph
-					     (glyph-height glyph)
-					   0))
-				       usable-buttons)))
-	 (width (apply 'max 0 (mapcar (lambda (glyph)
-					(if glyph
-					    (glyph-width glyph)
-					  0))
-				      usable-buttons))))
-    (list (if (symbolp image) image glyph-list) height width)))
-
-
-
-(defun toolbarx-xemacs-button-properties (button)
-  "Return a list of properties of BUTTON.
-The result is either nil (if not to be inserted) or a list in the format
- (TOOLBAR HEIGHT WIDTH BUTTON-DESCRIPTION)
-where
-
-TOOLBAR is one of the symbols `default', `top', `right', `bottom'
-  or `left'.
-
-HEIGHT and WIDTH are the maximal dimentions of all the glyphs
-  involved.
-
-BUTTON-DESCRIPTION is button definition in XEmacs; see the
-  documentation of variable `default-toolbar'."
-  (let* ((filtered-props
-	  (let* ((filtered-props-temp)
-		 (prop-good-val)
-		 (prop))
-	    (dolist (p (nth 0 toolbarx-button-props) filtered-props-temp)
-	      ;;    property	       -> (car p)
-	      ;;    test type function -> (cadr p)
-	      ;;    add-function       -> (cddr p)
-	      (setq prop (memq (car p) button))
-	      ;; if so, check if value is of correct type
-	      (when prop
-		;; if property is of add-type, them the value is a list
-		;; (:add-value-list VAL VAL). Each VAL should be checked.
-		(if (and (cddr p) (eq :add-value-list (car (cadr prop))))
-		    (let* ((add-list (list (cddr p))))
-		      (dolist (val (cdr (cadr prop)))
-			(setq prop-good-val (funcall (cadr p) val))
-			(when (car prop-good-val)
-			  (setq add-list (cons (cdr prop-good-val) add-list))))
-		      (setq add-list (nreverse add-list))
-		      (when (eq 2 (length add-list)) ; just 1 value, no
-						     ; add-function
-			(setq add-list (cadr add-list)))
-		      (setq filtered-props-temp (append
-						 (list (car p) add-list)
-						 filtered-props-temp)))
-		  ;; if override-property
-		  (setq prop-good-val (funcall (cadr p) (cadr prop)))
-		  (when (car prop-good-val)
-		    (setq filtered-props-temp (append
-					       (list (car p)
-						     (cdr prop-good-val))
-					       filtered-props-temp))))))))
-	 (insert (or (not (memq :insert filtered-props))
-		     ;; (memq :insert filtered-props) holds
-		     (eval (nth 1 (memq :insert filtered-props))))))
-    (when insert
-      (let* ((image-props (toolbarx-xemacs-image-properties
-			   (cadr (memq :image filtered-props))))
-	     (glyph-list (car image-props))
-	     (image-height (nth 1 image-props))
-	     (image-width (nth 2 image-props))
-	     (command
-	      (let* ((com (nth 1 (memq :command filtered-props)))
-		     (app (nth 1 (memq :append-command filtered-props)))
-		     (prep (nth 1 (memq :prepend-command filtered-props))))
-		(when (or com app prep)
-		  (toolbarx-make-command com prep app))))
-	     ;; enable defaults to `t'
-	     (enable (if (memq :enable filtered-props)
-			 (cadr (memq :enable filtered-props))
-		       t))
-	    ;; help defaults to nil
-	     (help (when (memq :help filtered-props)
-		     (cadr (memq :help filtered-props))))
-	     ;; toolbar defaults to `default'
-	     (toolbar-prop (cons (memq :toolbar filtered-props)
-				 (cadr (memq :toolbar filtered-props))))
-	     (toolbar (if (car toolbar-prop)
-			  (if (symbolp (cdr toolbar-prop))
-			      (cdr toolbar-prop)
-			    ;; (cdr toolbar-prop) is cons cell
-			    (if (eq (cadr toolbar-prop)
-					  (default-toolbar-position))
-				      (cddr toolbar-prop)
-				   (cadr toolbar-prop)))
-			'default)))
-	(when glyph-list
-	  (list toolbar image-height image-width
-		(vector glyph-list command enable help)))))))
-
-(defun toolbarx-xemacs-refresh-process-button-or-insert-list (switches
-							      toolbar-props)
-  "Process SWITCHES, returning an updated version of TOOLBAR-PROPS.
-TOOLBAR-PROPS should be a list with 12 elements, each one representing
-properties (in this order) `locale', `default', `top', `right',
-`bottom', `left', `default-height', `default-width', `top-height',
-`right-width', `bottom-height' and `left-width'.  The return is a list
-with the same properties updated.
-
-NB: Buttons (vectors) are inserted in front of the lists
-represented by `default', `top', `right', `bottom' and `left', so
-the lists are built reversed."
-  (let ((locale		 (nth 0	 toolbar-props))
-	(default	 (nth 1	 toolbar-props))
-	(top		 (nth 2	 toolbar-props))
-	(right		 (nth 3	 toolbar-props))
-	(bottom		 (nth 4	 toolbar-props))
-	(left		 (nth 5	 toolbar-props))
-	(default-height	 (nth 6	 toolbar-props))
-	(default-width	 (nth 7	 toolbar-props))
-	(top-height	 (nth 8	 toolbar-props))
-	(right-width	 (nth 9	 toolbar-props))
-	(bottom-height	 (nth 10 toolbar-props))
-	(left-width	 (nth 11 toolbar-props))
-	(toolbar-props-temp))
-    (dolist (button switches)
-      (if (eq (car button) :insert)
-	  (when (eval (cadr button))
-	    ;; if insert group, process `cddr'
-	    (progn
-	      (setq toolbar-props-temp
-		    (toolbarx-xemacs-refresh-process-button-or-insert-list
-		     (cddr button)
-		     (list locale default top right bottom left
-			   default-height default-width top-height
-			   right-width bottom-height left-width)))
-	      (setq default	   (nth 1  toolbar-props-temp))
-	      (setq top		   (nth 2  toolbar-props-temp))
-	      (setq right	   (nth 3  toolbar-props-temp))
-	      (setq bottom	   (nth 4  toolbar-props-temp))
-	      (setq left	   (nth 5  toolbar-props-temp))
-	      (setq default-height (nth 6  toolbar-props-temp))
-	      (setq default-width  (nth 7  toolbar-props-temp))
-	      (setq top-height	   (nth 8  toolbar-props-temp))
-	      (setq right-width	   (nth 9  toolbar-props-temp))
-	      (setq bottom-height  (nth 10 toolbar-props-temp))
-	      (setq left-width	   (nth 11 toolbar-props-temp))))
-	;; else, if normal button
-	(let* ((button-props (toolbarx-xemacs-button-properties button))
-	       (toolbar (nth 0 button-props))
-	       (height (nth 1 button-props))
-	       (width (nth 2 button-props))
-	       (button-description (nth 3 button-props)))
-	  (when button-props
-	    (cond
-	     ;; default
-	     ((eq toolbar 'default)
-	      (setq default (cons button-description default))
-	      (setq default-height (max default-height height))
-	      (setq default-width (max default-width width)))
-	     ;; top
-	     ((eq toolbar 'top)
-	      (setq top (cons button-description top))
-	      (setq top-height (max top-height height)))
-	     ;; right
-	     ((eq toolbar 'right)
-	      (setq right (cons button-description right))
-	      (setq right-width (max right-width width)))
-	     ;; bottom
-	     ((eq toolbar 'bottom)
-	      (setq bottom (cons button-description bottom))
-	      (setq bottom-height (max bottom-height height)))
-	     ;; left
-	     ((eq toolbar 'left)
-	      (setq left (cons button-description left))
-	      (setq left-width (max left-width width))))))))
-    ;; return a list similar to toolbar-props
-    (list locale default top right bottom left default-height
-	  default-width top-height right-width bottom-height left-width)))
-
-
-(defun toolbarx-xemacs-refresh (&optional global-flag)
-  "Refresh the toolbar in XEmacs."
-  (let* ((switches (if global-flag
-		       (if (default-boundp 'toolbarx-internal-button-switches)
-			   (default-value 'toolbarx-internal-button-switches)
-			 toolbarx-internal-button-switches)
-		     toolbarx-internal-button-switches))
-	 (locale  (if global-flag 'global (current-buffer)))
-	 (toolbar-init (list locale	; locale
-			     nil	; default
-			     nil	; top
-			     nil	; right
-			     nil	; bottom
-			     nil	; left
-			     0		; default-height
-			     0		; default-width
-			     0		; top-height
-			     0		; right-width
-			     0		; bottom-height
-			     0))	; left-width
-	 (toolbar-props
-	  (toolbarx-xemacs-refresh-process-button-or-insert-list switches
-								 toolbar-init))
-	 ;; NB: Buttons (vectors) are inserted in front of the lists
-	 ;; represented by `default', `top', `right', `bottom' and
-	 ;; `left', so the lists are built reversed.
-	 (default	  (nreverse (nth 1  toolbar-props)))
-	 (top		  (nreverse (nth 2  toolbar-props)))
-	 (right		  (nreverse (nth 3  toolbar-props)))
-	 (bottom	  (nreverse (nth 4  toolbar-props)))
-	 (left		  (nreverse (nth 5  toolbar-props)))
-	 (default-height  (nth 6  toolbar-props))
-	 (default-width	  (nth 7  toolbar-props))
-	 (top-height	  (nth 8  toolbar-props))
-	 (right-width	  (nth 9  toolbar-props))
-	 (bottom-height	  (nth 10 toolbar-props))
-	 (left-width	  (nth 11 toolbar-props))
-	 (button-raised-border 2)
-	 (default-border (specifier-instance default-toolbar-border-width))
-	 (top-border (specifier-instance top-toolbar-border-width))
-	 (right-border (specifier-instance right-toolbar-border-width))
-	 (bottom-border (specifier-instance bottom-toolbar-border-width))
-	 (left-border (specifier-instance left-toolbar-border-width)))
-    ;; adding borders
-    (when default
-      (setq default-height (+ (* 2 button-raised-border)
-			      (* 2 default-border)
-			      default-height))
-      (setq default-width (+ (* 2 button-raised-border)
-			     (* 2 default-border)
-			     default-width)))
-    (when top
-      (setq top-height (+ (* 2 button-raised-border)
-			  (* 2 top-border)
-			  top-height)))
-    (when right
-      (setq right-width (+ (* 2 button-raised-border)
-			   (* 2 right-border)
-			   right-width)))
-    (when bottom
-      (setq bottom-height (+ (* 2 button-raised-border)
-			     (* 2 bottom-border)
-			     bottom-height)))
-    (when left
-      (setq left-width (+ (* 2 button-raised-border)
-			  (* 2 left-border)
-			  left-width)))
-    ;; deal with specifiers
-    ;; - remove all specifiers for toolbars witout buttons
-    (if default
-	(progn
-	  ;; Only activate the tool bar if it is already visible.
-	  (when toolbar-visible-p
-	    (set-specifier default-toolbar-visible-p (not (not default)) locale)
-	    (if (memq (default-toolbar-position) '(top bottom))
-		(set-specifier default-toolbar-height default-height locale)
-	      (set-specifier default-toolbar-width default-width locale)))
-	  (set-specifier default-toolbar default locale))
-      (remove-specifier default-toolbar locale)
-      (remove-specifier default-toolbar-visible-p locale)
-      (remove-specifier default-toolbar-height locale)
-      (remove-specifier default-toolbar-width locale))
-    (if top
-	(progn
-	  (set-specifier top-toolbar-visible-p (not (not top)) locale)
-	  (set-specifier top-toolbar-height top-height locale)
-	  (set-specifier top-toolbar top locale))
-      (remove-specifier top-toolbar locale)
-      (remove-specifier top-toolbar-visible-p locale)
-      (remove-specifier top-toolbar-height locale))
-    (if right
-	(progn
-	  (set-specifier right-toolbar-visible-p (not (not right))
-			 locale)
-	  (set-specifier right-toolbar-width right-width locale)
-	  (set-specifier right-toolbar right locale))
-      (remove-specifier right-toolbar locale)
-      (remove-specifier right-toolbar-visible-p locale)
-      (remove-specifier right-toolbar-width locale))
-    (if bottom
-	(progn
-	  (set-specifier bottom-toolbar-visible-p (not (not bottom)) locale)
-	  (set-specifier bottom-toolbar-height bottom-height locale)
-	  (set-specifier bottom-toolbar bottom locale))
-      (remove-specifier bottom-toolbar locale)
-      (remove-specifier bottom-toolbar-visible-p locale)
-      (remove-specifier bottom-toolbar-height locale))
-    (if left
-	(progn
-	  (set-specifier left-toolbar-visible-p (not (not left)) locale)
-	  (set-specifier left-toolbar-width left-width locale)
-	  (set-specifier left-toolbar left locale))
-      (remove-specifier left-toolbar locale)
-      (remove-specifier left-toolbar-visible-p locale)
-      (remove-specifier left-toolbar-width locale))))))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; finishing parsing engine
@@ -1697,9 +1199,7 @@ the lists are built reversed."
   "Redraw the toolbar, peviously installed with `toolbarx'.
 Force global refresh if GLOBAL-FLAG is non-nil."
   (interactive "P")
-  (if (featurep 'xemacs)
-      (toolbarx-xemacs-refresh global-flag)
-    (toolbarx-emacs-refresh global-flag)))
+  (toolbarx-emacs-refresh global-flag))
 
 ;;;###autoload (autoload 'toolbarx-install-toolbar "toolbar-x")
 
@@ -1987,17 +1487,14 @@ this button is ignored."
 		      switches)
       (set (make-local-variable 'toolbarx-internal-button-switches)
 	   switches)
-      (unless (featurep 'xemacs)
-	(make-local-variable 'tool-bar-map))))
+      (make-local-variable 'tool-bar-map)))
   (toolbarx-refresh global-flag))
 
 
 (defconst toolbarx-default-toolbar-meaning-alist
-  `((separator :image "sep" :command t :enable nil :help "")
+  '((separator :image "sep" :command t :enable nil :help "")
 
-    (,(if (and (not (featurep 'xemacs)) (>= emacs-major-version 22))
-	  'new-file
-	'open-file)
+    (new-file
      :image ["new" toolbar-file-icon]
      :command [find-file toolbar-open]
      :enable [(not (window-minibuffer-p
@@ -2005,17 +1502,14 @@ this button is ignored."
 	      t]
      :help ["Specify a new file's name, to edit the file" "Visit new file"])
 
-    ,(when (and (not (featurep 'xemacs)) (>= emacs-major-version 22))
-       '(open-file :image ["open" toolbar-file-icon]
-		   :command [menu-find-file-existing toolbar-open]
-		   :enable [(not (window-minibuffer-p
-				  (frame-selected-window menu-updating-frame)))
-			    t]
-		   :help ["Read a file into an Emacs buffer" "Open a file"]))
+    (open-file :image ["open" toolbar-file-icon]
+		:command [menu-find-file-existing toolbar-open]
+		:enable [(not (window-minibuffer-p
+			       (frame-selected-window menu-updating-frame)))
+			 t]
+		:help ["Read a file into an Emacs buffer" "Open a file"])
 
-    (dired :image [,(if (>= emacs-major-version 22)
-			"diropen"
-		      "open")
+    (dired :image ["diropen"
 		   toolbar-folder-icon]
 	   :command [dired toolbar-dired]
 	   :help ["Read a directory, operate on its files" "Edit a directory"])

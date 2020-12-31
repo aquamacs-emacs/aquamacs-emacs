@@ -1,6 +1,6 @@
 ;;; tex-jp.el --- Support for Japanese TeX.  -*- coding: iso-2022-jp-unix; -*-
 
-;; Copyright (C) 1999, 2001-2008, 2012-2013, 2016-2017
+;; Copyright (C) 1999, 2001-2008, 2012-2013, 2016-2018
 ;;   Free Software Foundation, Inc.
 
 ;; Author:     KOBAYASHI Shinji <koba@flab.fujitsu.co.jp>,
@@ -41,7 +41,8 @@
 
 (defgroup AUCTeX-jp nil
   "Japanese support in AUCTeX."
-  :group 'AUCTeX)
+  :group 'AUCTeX
+  :link '(custom-manual "(auctex)Japanese"))
 
 (defcustom japanese-TeX-engine-default 'ptex
   "Default TeX engine for Japanese TeX."
@@ -50,7 +51,7 @@
 		 (const :tag "jTeX" jtex)
 		 (const :tag "upTeX" uptex)))
 
-(defcustom japanese-TeX-use-kanji-opt-flag (not (eq system-type 'windows-nt))
+(defcustom japanese-TeX-use-kanji-opt-flag t
   "Add kanji option to Japanese pTeX family if non-nil.
 If `TeX-japanese-process-input-coding-system' or
 `TeX-japanese-process-output-coding-system' are non-nil, the process coding
@@ -63,55 +64,6 @@ systems are determined by their values regardless of the kanji option."
              '((ptex "pTeX" "ptex %(kanjiopt)" "platex %(kanjiopt)" "eptex")
                (jtex "jTeX" "jtex" "jlatex" nil)
                (uptex "upTeX" "euptex" "uplatex" "euptex"))))
-
-;; 順調に行けば不要になる。
-(defcustom japanese-TeX-command-list
-  ;; Changed to double quotes for Windows afflicted people.  I don't
-  ;; use the %(latex) and %(tex) shorthands here because I have not
-  ;; clue whether Omega-related versions exist.  --dak
-  '(("jTeX" "%(PDF)jtex %`%S%(PDFout)%(mode)%' %t"
-     TeX-run-TeX nil (plain-tex-mode) :help "Run NTT jTeX")
-    ("jLaTeX" "%(PDF)jlatex %`%S%(PDFout)%(mode)%' %t"
-     TeX-run-TeX nil (latex-mode) :help "Run NTT jLaTeX")
-    ("pTeX" "%(PDF)ptex %(kanjiopt)%`%S%(PDFout)%(mode)%' %t"
-     TeX-run-TeX nil (plain-tex-mode) :help "Run ASCII pTeX")
-    ("pLaTeX" "%(PDF)platex %(kanjiopt)%`%S%(PDFout)%(mode)%' %t"
-     TeX-run-TeX nil (latex-mode) :help "Run ASCII pLaTeX")
-    ("Mendex" "mendex %(mendexkopt)%s" TeX-run-command nil t :help "Create index file with mendex")
-    ("jBibTeX" "jbibtex %s" TeX-run-BibTeX nil t :help "Run jBibTeX")
-    ("pBibTeX" "pbibtex %(kanjiopt)%s" TeX-run-BibTeX nil t :help "Run pBibTeX"))
-  "Additional list of commands, especially for Japanese.
-For detail, see `TeX-command-list', to which this list is appended."
-  :group 'AUCTeX-jp
-  :type '(repeat (group :value ("" "" TeX-run-command nil t)
-			(string :tag "Name")
-			(string :tag "Command")
-			(choice :tag "How"
-				:value TeX-run-command
-				(function-item TeX-run-command)
-				(function-item TeX-run-format)
-				(function-item TeX-run-TeX)
-				(function-item TeX-run-interactive)
-				(function-item TeX-run-BibTeX)
-				(function-item TeX-run-compile)
-				(function-item TeX-run-shell)
-				(function-item TeX-run-discard)
-				(function-item TeX-run-background)
-				(function-item TeX-run-silent)
-				(function-item TeX-run-discard-foreground)
-				(function-item TeX-run-function)
-				(function-item TeX-run-discard-or-function)
-				(function :tag "Other"))
-			(boolean :tag "Prompt")
-			(choice :tag "Modes"
-				(const :tag "All" t)
-				(set (const :tag "Plain TeX" plain-tex-mode)
-				     (const :tag "LaTeX" latex-mode)
-				     (const :tag "DocTeX" doctex-mode)
-				     (const :tag "ConTeXt" context-mode)
-				     (const :tag "Texinfo" texinfo-mode)
-				     (const :tag "AmSTeX" ams-tex-mode)))
-			(repeat :tag "Menu elements" :inline t sexp))))
 
 ;; customize option の初期値や saved value そのものを改変しないように
 ;; するため、setcar の使用は避ける。
@@ -133,12 +85,6 @@ For detail, see `TeX-command-list', to which this list is appended."
 	   l)))
        TeX-command-list))
 
-;; 順調に行けば不要になる。
-(setq TeX-command-list
-      (append japanese-TeX-command-list
-	      '(("-" "" ignore nil t)) ;; separator for command menu
-	      TeX-command-list))
-
 ;; Define before first use.
 (defvar japanese-TeX-mode nil
   "Non-nil means the current buffer handles Japanese TeX/LaTeX.")
@@ -151,12 +97,7 @@ For detail, see `TeX-command-list', to which this list is appended."
        '(
         ;; -kanji オプションの文字列を作る。
         ("%(kanjiopt)" (lambda ()
-                         (if (and
-                              ;; non-mule な emacsen はそもそも日本語
-                              ;; 文書を typeset することは考えなくても
-                              ;; いいだろう、とは思うけど一応…。
-                              (featurep 'mule)
-                              japanese-TeX-use-kanji-opt-flag)
+                         (if japanese-TeX-use-kanji-opt-flag
                              (let ((str (japanese-TeX-get-encoding-string)))
                                (if str (format " -kanji=%s " str) ""))
                            "")))
@@ -189,8 +130,7 @@ For detail, see `TeX-command-list', to which this list is appended."
                            (t "makeindex"))))
         ;; mendex 用日本語コードオプション。
         ("%(mendexkopt)" (lambda ()
-                           (if (and (featurep 'mule)
-                                    japanese-TeX-use-kanji-opt-flag)
+                           (if japanese-TeX-use-kanji-opt-flag
                                (let ((str (japanese-TeX-get-encoding-string)))
                                  ;; １文字目を大文字に。
                                  (if str (format " -%c " (upcase (aref str 0)))
@@ -303,20 +243,6 @@ See also a user custom option `TeX-japanese-process-input-coding-system'."
   :group 'AUCTeX-jp
   :type '(choice (const :tag "Default" nil) coding-system))
 
-;; 順調に行けば不要になる。
-(defcustom japanese-TeX-command-default "pTeX"
-  "*The default command for `TeX-command' in the japanese-TeX mode."
-  :group 'AUCTeX-jp
-  :type 'string)
-  (make-variable-buffer-local 'japanese-TeX-command-default)
-
-;; 順調に行けば不要になる。
-(defcustom japanese-LaTeX-command-default "LaTeX"
-  "*The default command for `TeX-command' in the japanese-LaTeX mode."
-  :group 'AUCTeX-jp
-  :type 'string)
-  (make-variable-buffer-local 'japanese-LaTeX-command-default)
-
 (defcustom japanese-LaTeX-default-style "jarticle"
   "*Default when creating new Japanese documents."
   :group 'AUCTeX-jp
@@ -382,12 +308,14 @@ See also a user custom option `TeX-japanese-process-input-coding-system'."
 		   ;; ptex なら mac は utf-8。
 		   ;; windows で -kanji オプションありの時はその文字コード、
 		   ;; なしの時は sjis。
+		   ;; texlive 2018 からは sjis ではなく utf-8 になったので
+		   ;; そちらに合わせる。
 		   ((eq TeX-engine 'ptex)
 		    (cond ((eq system-type 'darwin)
 			   'utf-8)
 			  ((and japanese-TeX-use-kanji-opt-flag kanji)
 			   kanji)
-			  (t 'shift_jis)))
+			  (t 'utf-8)))
 		   ;; jtex なら sjis に固定する。
 		   ((eq TeX-engine 'jtex)
 		    'shift_jis)
@@ -404,29 +332,7 @@ See also a user custom option `TeX-japanese-process-input-coding-system'."
 		   ;; ただし、locale が日本語をサポートしない場合は
 		   ;; euc に固定する。
 		   (t
-		    (let ((lcs
-			   (cond
-			    ((boundp 'locale-coding-system)
-			     locale-coding-system)
-			    ;; XEmacs doesn't have `locale-coding-system'.
-			    ;; Instead xemacs 21.5 has
-			    ;; `get-coding-system-from-locale' and
-			    ;; `current-locale'.  They aren't available on
-			    ;; xemacs 21.4.
-			    ((and
-			      (featurep 'xemacs)
-			      (fboundp 'get-coding-system-from-locale))
-			     (get-coding-system-from-locale
-			      (if (fboundp 'current-locale)
-				  (current-locale)
-				;; I don't know XEmacs well, so incorporate
-				;; the suggestion of
-				;; http://lists.gnu.org/archive/html/auctex-devel/2017-02/msg00079.html
-				;; as well.
-				(or (getenv "LC_ALL")
-				    (getenv "LC_CTYPE")
-				    (getenv "LANG")
-				    "")))))))
+		    (let ((lcs locale-coding-system))
 		      (if (and lcs (japanese-TeX-coding-ejsu lcs))
 			  lcs 'euc-jp)))))))
 
@@ -434,11 +340,12 @@ See also a user custom option `TeX-japanese-process-input-coding-system'."
 	   (enc (cond
 		 ;; ptex で -kanji オプションありなら、その文字コード。
 		 ;; なしなら utf-8 か sjis。
+		 ;; texlive 2018 で w32 でも utf-8 がデフォルトになっ
+		 ;; たようなので、それに合わせる。
 		 ((eq TeX-engine 'ptex)
 		  (if (and japanese-TeX-use-kanji-opt-flag kanji)
 		      kanji
-		    (if (eq system-type 'windows-nt)
-			'shift_jis 'utf-8)))
+		    'utf-8))
 		 ;; jtex なら euc か sjis に固定する。
 		 ((eq TeX-engine 'jtex)
 		  (if (memq system-type '(windows-nt darwin))
@@ -469,28 +376,20 @@ shift_jis: \"sjis\"
 utf-8:     \"utf8\"
 Return nil otherwise."
   (let ((base (coding-system-base coding-system)))
-    (if (featurep 'xemacs)
-	(setq base (coding-system-name base)))
     (cdr (assq base
               '((japanese-iso-8bit . "euc")
-                (euc-jp . "euc") ; for xemacs
                 (iso-2022-jp . "jis")
                 (japanese-shift-jis . "sjis")
-                (shift_jis . "sjis") ; for xemacs
                 (utf-8 . "utf8")
-                (mule-utf-8 . "utf8") ; for emacs 21, 22
-                ;; utf-8-auto や utf-8-emacs を入れる必要はあるのか？
+		;; TeXLive 2018 から BOM つき UTF-8 もサポートされた。
+                (utf-8-with-signature . "utf8")
 
-                ;; xemacs 21.5 with mule には、jisx0213 の charset は
-                ;; あるがそれ用の coding system はない。
                 (euc-jis-2004 . "euc")
                 (iso-2022-jp-2004 . "jis")
                 (japanese-shift-jis-2004 . "sjis")
 
                 (japanese-cp932 . "sjis")
-                (eucjp-ms . "euc")
-                (windows-932 . "sjis") ; for xemacs 21.5 with mule
-		)))))
+                (eucjp-ms . "euc"))))))
 
 (defun japanese-TeX-get-encoding-string ()
   "Return coding option string for Japanese pTeX family.
@@ -624,15 +523,15 @@ overwrite the value already set locally."
 
 ;;; Support for various self-insert-command
 
-(fset 'japanese-TeX-self-insert-command
-      (cond ((fboundp 'can-n-egg-self-insert-command)
-	     #'can-n-egg-self-insert-command)
-	    ((fboundp 'egg-self-insert-command)
-	     #'egg-self-insert-command)
-	    ((fboundp 'canna-self-insert-command)
-	     #'canna-self-insert-command)
-	    (t
-	     #'self-insert-command)))
+(defalias 'japanese-TeX-self-insert-command
+  (cond ((fboundp 'can-n-egg-self-insert-command)
+	 #'can-n-egg-self-insert-command)
+	((fboundp 'egg-self-insert-command)
+	 #'egg-self-insert-command)
+	((fboundp 'canna-self-insert-command)
+	 #'canna-self-insert-command)
+	(t
+	 #'self-insert-command)))
 
 (defun TeX-insert-punctuation ()
   "Insert point or comma, cleaning up preceding space."

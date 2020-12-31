@@ -1,6 +1,6 @@
 ;;; beamer.el --- AUCTeX style for the latex-beamer class
 
-;; Copyright (C) 2003, 2004, 2005, 2008, 2013-2016 Free Software Foundation
+;; Copyright (C) 2003-2005, 2008, 2013-2016, 2018, 2020 Free Software Foundation, Inc.
 
 ;; Author: Thomas Baumann <thomas.baumann@ch.tum.de>
 ;; Created: 2003-12-20
@@ -28,6 +28,11 @@
 ;; This file adds support for the latex-beamer class.
 
 ;;; Code:
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
 
 (defun LaTeX-beamer-after-insert-env (env start _end)
   "Do beamer-specific stuff after the insertion of an environment."
@@ -79,8 +84,8 @@
    (LaTeX-paragraph-commands-add-locally "frametitle")
 
    (TeX-add-symbols
-    '("alert" 1)
-    '("alt" TeX-arg-beamer-overlay-spec 2)
+    '("alert" [ TeX-arg-beamer-overlay-spec ] 1)
+    '("alt" [ TeX-arg-beamer-overlay-spec ] 2)
     '("beamerbutton" 1)
     '("beamergotobutton" 1)
     '("beamerreturnbutton" 1)
@@ -88,41 +93,41 @@
     '("frame" TeX-arg-beamer-frametitle)
     '("frametitle"
       (TeX-arg-eval TeX-read-string "Title: " nil 'LaTeX-beamer-frametitle-history))
-    '("hyperlink" TeX-arg-beamer-overlay-spec 2)
-    '("hyperlinkslideprev" TeX-arg-beamer-overlay-spec 1)
-    '("hyperlinkslidenext" TeX-arg-beamer-overlay-spec 1)
-    '("hyperlinkframestart" TeX-arg-beamer-overlay-spec 1)
-    '("hyperlinkframeend" TeX-arg-beamer-overlay-spec 1)
-    '("hyperlinkframestartnext" TeX-arg-beamer-overlay-spec 1)
-    '("hyperlinkframeendprev" TeX-arg-beamer-overlay-spec 1)
-    '("hyperlinkpresentationstart" TeX-arg-beamer-overlay-spec 1)
-    '("hyperlinkpresentationend" TeX-arg-beamer-overlay-spec 1)
-    '("hyperlinkappendixstart" TeX-arg-beamer-overlay-spec 1)
-    '("hyperlinkappendixend" TeX-arg-beamer-overlay-spec 1)
-    '("hyperlinkdocumentstart" TeX-arg-beamer-overlay-spec 1)
-    '("hyperlinkdocumentend" TeX-arg-beamer-overlay-spec 1)
-    '("hypertarget" TeX-arg-beamer-overlay-spec 2)
+    '("hyperlink" [ TeX-arg-beamer-overlay-spec ] 2)
+    '("hyperlinkslideprev" [ TeX-arg-beamer-overlay-spec ] 1)
+    '("hyperlinkslidenext" [ TeX-arg-beamer-overlay-spec ] 1)
+    '("hyperlinkframestart" [ TeX-arg-beamer-overlay-spec ] 1)
+    '("hyperlinkframeend" [ TeX-arg-beamer-overlay-spec ] 1)
+    '("hyperlinkframestartnext" [ TeX-arg-beamer-overlay-spec ] 1)
+    '("hyperlinkframeendprev" [ TeX-arg-beamer-overlay-spec ] 1)
+    '("hyperlinkpresentationstart" [ TeX-arg-beamer-overlay-spec ] 1)
+    '("hyperlinkpresentationend" [ TeX-arg-beamer-overlay-spec ] 1)
+    '("hyperlinkappendixstart" [ TeX-arg-beamer-overlay-spec ] 1)
+    '("hyperlinkappendixend" [ TeX-arg-beamer-overlay-spec ] 1)
+    '("hyperlinkdocumentstart" [ TeX-arg-beamer-overlay-spec ] 1)
+    '("hyperlinkdocumentend" [ TeX-arg-beamer-overlay-spec ] 1)
+    '("hypertarget" [ TeX-arg-beamer-overlay-spec ] 2)
     '("institute" 1)
-    '("invisible" TeX-arg-beamer-overlay-spec 1)
-    '("label" TeX-arg-beamer-overlay-spec 1)
+    '("invisible" [ TeX-arg-beamer-overlay-spec ] 1)
+    '("label" [ TeX-arg-beamer-overlay-spec ] 1)
     '("logo" 1)
     '("note" TeX-arg-beamer-note 1)
-    '("only" TeX-arg-beamer-overlay-spec 1)
-    '("onslide" TeX-arg-beamer-overlay-spec)
+    '("only" [ TeX-arg-beamer-overlay-spec ] 1)
+    '("onslide" [ TeX-arg-beamer-overlay-spec ])
     '("partpage")
     '("pause" ["Slide number"])
-    '("structure" TeX-arg-beamer-overlay-spec 1)
-    '("temporal" TeX-arg-beamer-overlay-spec 3)
+    '("structure" [ TeX-arg-beamer-overlay-spec ] 1)
+    '("temporal" [ TeX-arg-beamer-overlay-spec ] 3)
     '("titlepage")
     '("titlegraphic" 1)
-    '("uncover" TeX-arg-beamer-overlay-spec 1)
+    '("uncover" [ TeX-arg-beamer-overlay-spec ] 1)
     '("usetheme" LaTeX-arg-beamer-theme)
     '("useinnertheme" LaTeX-arg-beamer-inner-theme)
     '("useoutertheme" LaTeX-arg-beamer-outer-theme)
     '("usecolortheme" LaTeX-arg-beamer-color-theme)
     '("usefonttheme" LaTeX-arg-beamer-font-theme)
     '("usetheme" LaTeX-arg-beamer-theme)
-    '("visible" TeX-arg-beamer-overlay-spec 1))
+    '("visible" [ TeX-arg-beamer-overlay-spec ] 1))
 
    (LaTeX-add-environments
     '("actionenv")
@@ -180,15 +185,20 @@
 				("subtitle" "[{")
 				("author" "[{")
 				("date" "[{")
-				("frametitle" "<[{")) 'slide-title)
-     (font-latex-update-font-lock t)))
+				("frametitle" "<[{")) 'slide-title)))
  LaTeX-dialect)
 
-(defun TeX-arg-beamer-overlay-spec (_optional &optional _prompt)
-  "Prompt for overlay specification."
-  (let ((overlay (TeX-read-string "(Optional) Overlay: ")))
-    (unless (zerop (length overlay))
-      (insert "<" overlay ">"))
+(defun TeX-arg-beamer-overlay-spec (optional &optional prompt)
+  "Prompt for overlay specification.
+If OPTIONAL is non-nil, insert the specification only if
+non-empty and enclosed in \"<>\".  PROMPT replaces the standard
+one."
+  (let ((TeX-arg-opening-brace "<")
+        (TeX-arg-closing-brace ">"))
+    (TeX-argument-insert
+     (TeX-read-string
+      (TeX-argument-prompt optional prompt "Overlay"))
+     optional)
     (indent-according-to-mode)))
 
 (defun TeX-arg-beamer-frametitle (_optional &optional _prompt)
@@ -348,6 +358,7 @@ also be a string.  Then the length of the string is used."
 
 (defun LaTeX-beamer-class-options ()
   "Read the beamer class options from the user."
+  (TeX-load-style "hyperref")
   (TeX-read-key-val t '(("usepdftitle" ("false")) ("envcountsect")
 			("notheorems") ("noamsthm") ("compress") ("t") ("c")
 			("leqno") ("fleqn") ("handout") ("trans") ("pdftex")

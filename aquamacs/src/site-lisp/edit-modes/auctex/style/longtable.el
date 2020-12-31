@@ -1,6 +1,6 @@
 ;;; longtable.el --- AUCTeX style for `longtable.sty'.
 
-;; Copyright (C) 2013--2017  Free Software Foundation, Inc.
+;; Copyright (C) 2013--2018  Free Software Foundation, Inc.
 
 ;; Maintainer: auctex-devel@gnu.org
 ;; Author: Mosè Giordano <mose@gnu.org>
@@ -28,6 +28,11 @@
 ;; This file adds support for `longtable.sty'.
 
 ;;; Code:
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
 
 (defvar LaTeX-longtable-skipping-regexp
   (regexp-opt '("[l]" "[r]" "[c]" ""))

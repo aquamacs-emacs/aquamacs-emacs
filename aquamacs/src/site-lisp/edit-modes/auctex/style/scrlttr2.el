@@ -1,6 +1,6 @@
 ;;; scrlttr2.el --- AUCTeX style for scrlttr2.cls.
 
-;; Copyright (C) 2002, 2007, 2014 Free Software Foundation
+;; Copyright (C) 2002, 2007, 2014, 2018 Free Software Foundation
 
 ;; Author: Mark Trettin <Mark.Trettin@gmx.de>
 ;; Created: 2002-10-26
@@ -36,6 +36,11 @@
 ;; set in a personal `*.lco'-File. IMHO.
 
 ;;; Code
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
 
 (TeX-add-style-hook "scrlttr2"
   (lambda ()

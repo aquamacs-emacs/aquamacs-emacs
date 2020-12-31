@@ -1,6 +1,6 @@
 ;;; mn2e.el --- AUCTeX style for `mn2e.cls' version 2.2.
 
-;; Copyright (C) 2015 Free Software Foundation, Inc.
+;; Copyright (C) 2015, 2018 Free Software Foundation, Inc.
 
 ;; Maintainer: auctex-devel@gnu.org
 ;; Author: Mosè Giordano <mose@gnu.org>
@@ -28,6 +28,11 @@
 ;; This file adds support for `mn2e.cls' version 2.2.
 
 ;;; Code:
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
 
 (TeX-add-style-hook
  "mn2e"

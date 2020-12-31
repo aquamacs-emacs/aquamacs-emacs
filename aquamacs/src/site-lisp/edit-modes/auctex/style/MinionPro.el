@@ -1,6 +1,6 @@
 ;;; MinionPro.el -- AUCTeX style for MinionPro.sty
 
-;; Copyright (C) 2005, 2014 Free Software Foundation, Inc.
+;; Copyright (C) 2005, 2014, 2018 Free Software Foundation, Inc.
 
 ;; Author: Mark Trettin <Mark.Trettin@gmx.de>
 ;; Maintainer: auctex-devel@gnu.org
@@ -31,6 +31,11 @@
 ;; bundle from <https://www.github.com/sebschub>.
 
 ;;; Code:
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
 
 (TeX-add-style-hook
  "MinionPro"

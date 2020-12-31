@@ -1,6 +1,6 @@
 ;;; color.el --- AUCTeX style for `color.sty' (v1.1a)
 
-;; Copyright (C) 2015--2017 Free Software Foundation, Inc.
+;; Copyright (C) 2015--2019 Free Software Foundation, Inc.
 
 ;; Author: Arash Esbati <arash@gnu.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -33,6 +33,14 @@
 ;; implementation of this style and testing.
 
 ;;; Code:
+
+;; Needed for compiling `LaTeX-check-insert-macro-default-style':
+(require 'latex)
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
 
 (defvar LaTeX-color-colour-models
   '("cmyk" "gray" "named" "rgb")
@@ -118,111 +126,124 @@
 
 (defun TeX-arg-color (optional &optional prompt)
   "Insert arguments of various color commands from `color.sty'."
-  ;; \color{<name>} or \color[<model>]{<color spec>}
-  ;; First, ask for <model>.  `named' is removed here from completion
-  ;; if package option is not given
-  (let ((model (completing-read
-		(TeX-argument-prompt t prompt "Color model")
-		(if (not (or (LaTeX-provided-package-options-member "color" "dvips")
-			     (LaTeX-provided-package-options-member "color" "dvipsnames")))
-		    (remove "named" LaTeX-color-colour-models)
-		  LaTeX-color-colour-models))))
-    (if (string-equal model "")
-	;; if empty, ask for <name> with completion
-	(let ((color (completing-read
-		      (TeX-argument-prompt optional prompt "Color name")
-		      (LaTeX-color-definecolor-list))))
-	  (TeX-argument-insert color optional))
-      ;; if not empty, insert [<model>] and proceed
-      (insert (concat LaTeX-optop model LaTeX-optcl))
-      (cond (;; <cmyk> model
-	     (string-equal model "cmyk")
-	     (let ((cyan    (TeX-read-string "Value Cyan (between 0,1): "))
-		   (magenta (TeX-read-string "Value Magenta (between 0,1): "))
-		   (yellow  (TeX-read-string "Value Yellow (between 0,1): "))
-		   (black   (TeX-read-string "Value Black (between 0,1): ")))
-	       (TeX-argument-insert
-		(concat cyan "," magenta "," yellow "," black) optional)))
-	    ;; <rgb> model
-	    ((string-equal model "rgb")
-	     (let ((red   (TeX-read-string "Value Red (between 0,1): "))
-		   (green (TeX-read-string "Value Green (between 0,1): "))
-		   (blue  (TeX-read-string "Value Blue (between 0,1): ")))
-	       (TeX-argument-insert
-		(concat red "," green "," blue) optional)))
-	    ;; <gray> model
-	    ((string-equal model "gray")
-	     (let ((grayness (TeX-read-string "Value Gray (between 0,1): ")))
-	       (TeX-argument-insert grayness optional)))
-	    ;; <named> model; allowed are dvipsnames.
-	    ((string-equal model "named")
-	     (let ((color (completing-read "Named Color: "
-					   LaTeX-color-dvipsnames-colors)))
-	       (TeX-argument-insert color optional)))))))
+  ;; \color{<name>} or \color[<model>]{<color spec>} First, ask for
+  ;; <model>.  This happens depending on the values of
+  ;; `TeX-insert-macro-default-style' and if `current-prefix-arg'.
+  ;; `named' is removed here from completion if package option is not
+  ;; given.
+  (let* ((last-optional-rejected nil)
+         (model (LaTeX-check-insert-macro-default-style
+                 (completing-read
+                  (TeX-argument-prompt t prompt "Color model")
+                  (if (not (or (LaTeX-provided-package-options-member "color" "dvips")
+                               (LaTeX-provided-package-options-member "color" "dvipsnames")))
+                      (remove "named" LaTeX-color-colour-models)
+                    LaTeX-color-colour-models)))))
+    ;; If <model> is non-nil because of 'mandatory-args-only and not
+    ;; an empty string, then insert it
+    (if (and model (not (string-equal model "")))
+        (progn
+          (insert (concat LaTeX-optop model LaTeX-optcl))
+          (cond (;; <cmyk> model
+                 (string-equal model "cmyk")
+                 (let ((cyan    (TeX-read-string "Value Cyan (between 0,1): "))
+                       (magenta (TeX-read-string "Value Magenta (between 0,1): "))
+                       (yellow  (TeX-read-string "Value Yellow (between 0,1): "))
+                       (black   (TeX-read-string "Value Black (between 0,1): ")))
+                   (TeX-argument-insert
+                    (concat cyan "," magenta "," yellow "," black) optional)))
+                ;; <rgb> model
+                ((string-equal model "rgb")
+                 (let ((red   (TeX-read-string "Value Red (between 0,1): "))
+                       (green (TeX-read-string "Value Green (between 0,1): "))
+                       (blue  (TeX-read-string "Value Blue (between 0,1): ")))
+                   (TeX-argument-insert
+                    (concat red "," green "," blue) optional)))
+                ;; <gray> model
+                ((string-equal model "gray")
+                 (let ((grayness (TeX-read-string "Value Gray (between 0,1): ")))
+                   (TeX-argument-insert grayness optional)))
+                ;; <named> model; allowed are dvipsnames.
+                ((string-equal model "named")
+                 (let ((color (completing-read "Named Color: "
+                                               LaTeX-color-dvipsnames-colors)))
+                   (TeX-argument-insert color optional)))))
+      ;; if empty, ask for <name> with completion
+      (let ((color (completing-read
+                    (TeX-argument-prompt optional prompt "Color name")
+                    (LaTeX-color-definecolor-list))))
+        (TeX-argument-insert color optional)))))
 
 (defun TeX-arg-color-fcolorbox (optional &optional prompt)
   "Insert arguments of `\\fcolorbox' from `color.sty'. "
   ;; \fcolorbox{<frame color name>}{<box color name>}{<text>} or
   ;; \fcolorbox[<model>]{<frame color spec>}{<box color spec>}{<text>}
-  ;; First, ask for <model>; remove `named' again
-  (let ((model (completing-read
-		(TeX-argument-prompt t prompt "Color model")
-		(if (not (or (LaTeX-provided-package-options-member "color" "dvips")
-			     (LaTeX-provided-package-options-member "color" "dvipsnames")))
-		    (remove "named" LaTeX-color-colour-models)
-		  LaTeX-color-colour-models))))
-    (if (string-equal model "")
-	;; if empty, ask for <frame color spce> with completion
-	(let ((frame-color (completing-read
-			    (TeX-argument-prompt optional prompt "Frame color name")
-			    (LaTeX-color-definecolor-list)))
-	      (box-color   (completing-read
-			    (TeX-argument-prompt optional prompt "Box color name")
-			    (LaTeX-color-definecolor-list))))
-	  (TeX-argument-insert frame-color optional)
-	  (TeX-argument-insert box-color   optional))
-      ;; if not empty, insert [<model>] and cater for 2 mandatory args.
-      (insert (concat LaTeX-optop model LaTeX-optcl))
-      (cond (;; <cmyk> model
-	     (string-equal model "cmyk")
-	     (let ((cyan    (TeX-read-string "Frame value Cyan (between 0,1): "))
-		   (magenta (TeX-read-string "Frame value Magenta (between 0,1): "))
-		   (yellow  (TeX-read-string "Frame value Yellow (between 0,1): "))
-		   (black   (TeX-read-string "Frame value Black (between 0,1): ")))
-	       (TeX-argument-insert
-		(concat cyan "," magenta "," yellow "," black) optional))
-	     (let ((cyan    (TeX-read-string "Box value Cyan (between 0,1): "))
-		   (magenta (TeX-read-string "Box value Magenta (between 0,1): "))
-		   (yellow  (TeX-read-string "Box value Yellow (between 0,1): "))
-		   (black   (TeX-read-string "Box value Black (between 0,1): ")))
-	       (TeX-argument-insert
-		(concat cyan "," magenta "," yellow "," black) optional)))
-	    ;; <rgb> model
-	    ((string-equal model "rgb")
-	     (let ((red   (TeX-read-string "Frame value Red (between 0,1): "))
-		   (green (TeX-read-string "Frame value Green (between 0,1): "))
-		   (blue  (TeX-read-string "Frame value Blue (between 0,1): ")))
-	       (TeX-argument-insert
-		(concat red "," green "," blue) optional))
-	     (let ((red   (TeX-read-string "Box value Red (between 0,1): "))
-		   (green (TeX-read-string "Box value Green (between 0,1): "))
-		   (blue  (TeX-read-string "box value Blue (between 0,1): ")))
-	       (TeX-argument-insert
-		(concat red "," green "," blue) optional)))
-	    ;; <gray> model
-	    ((string-equal model "gray")
-	     (let ((grayness (TeX-read-string "Frame value Gray (between 0,1): ")))
-	       (TeX-argument-insert grayness optional))
-	     (let ((grayness (TeX-read-string "Box value Gray (between 0,1): ")))
-	       (TeX-argument-insert grayness optional)))
-	    ;; <named> model; allowed are dvipsnames.
-	    ((string-equal model "named")
-	     (let ((color (completing-read "Frame named Color: "
-					   LaTeX-color-dvipsnames-colors)))
-	       (TeX-argument-insert color optional))
-	     (let ((color (completing-read "Box named Color: "
-					   LaTeX-color-dvipsnames-colors)))
-	       (TeX-argument-insert color optional)))))))
+  ;; First, ask for <model> depending on
+  ;; `TeX-insert-macro-default-style' and `current-prefix-arg'.
+  ;; Remove `named' if necessary.
+  (let* ((last-optional-rejected nil)
+	 (model (LaTeX-check-insert-macro-default-style
+                 (completing-read
+                  (TeX-argument-prompt t prompt "Color model")
+                  (if (not (or (LaTeX-provided-package-options-member "color" "dvips")
+                               (LaTeX-provided-package-options-member "color" "dvipsnames")))
+                      (remove "named" LaTeX-color-colour-models)
+                    LaTeX-color-colour-models)))))
+    ;; If <model> is non-nil because of 'mandatory-args-only and not
+    ;; an empty string, then insert [<model>] and cater for 2
+    ;; mandatory args.
+    (if (and model (not (string-equal model "")))
+	(progn
+	  (insert (concat LaTeX-optop model LaTeX-optcl))
+	  (cond (;; <cmyk> model
+		 (string-equal model "cmyk")
+		 (let ((cyan    (TeX-read-string "Frame value Cyan (between 0,1): "))
+		       (magenta (TeX-read-string "Frame value Magenta (between 0,1): "))
+		       (yellow  (TeX-read-string "Frame value Yellow (between 0,1): "))
+		       (black   (TeX-read-string "Frame value Black (between 0,1): ")))
+		   (TeX-argument-insert
+		    (concat cyan "," magenta "," yellow "," black) optional))
+		 (let ((cyan    (TeX-read-string "Box value Cyan (between 0,1): "))
+		       (magenta (TeX-read-string "Box value Magenta (between 0,1): "))
+		       (yellow  (TeX-read-string "Box value Yellow (between 0,1): "))
+		       (black   (TeX-read-string "Box value Black (between 0,1): ")))
+		   (TeX-argument-insert
+		    (concat cyan "," magenta "," yellow "," black) optional)))
+		;; <rgb> model
+		((string-equal model "rgb")
+		 (let ((red   (TeX-read-string "Frame value Red (between 0,1): "))
+		       (green (TeX-read-string "Frame value Green (between 0,1): "))
+		       (blue  (TeX-read-string "Frame value Blue (between 0,1): ")))
+		   (TeX-argument-insert
+		    (concat red "," green "," blue) optional))
+		 (let ((red   (TeX-read-string "Box value Red (between 0,1): "))
+		       (green (TeX-read-string "Box value Green (between 0,1): "))
+		       (blue  (TeX-read-string "box value Blue (between 0,1): ")))
+		   (TeX-argument-insert
+		    (concat red "," green "," blue) optional)))
+		;; <gray> model
+		((string-equal model "gray")
+		 (let ((grayness (TeX-read-string "Frame value Gray (between 0,1): ")))
+		   (TeX-argument-insert grayness optional))
+		 (let ((grayness (TeX-read-string "Box value Gray (between 0,1): ")))
+		   (TeX-argument-insert grayness optional)))
+		;; <named> model; allowed are dvipsnames.
+		((string-equal model "named")
+		 (let ((color (completing-read "Frame named Color: "
+					       LaTeX-color-dvipsnames-colors)))
+		   (TeX-argument-insert color optional))
+		 (let ((color (completing-read "Box named Color: "
+					       LaTeX-color-dvipsnames-colors)))
+		   (TeX-argument-insert color optional)))))
+      ;; if empty, ask for {<frame color spce>}{<box color name>} with completion
+      (let ((frame-color (completing-read
+			  (TeX-argument-prompt optional prompt "Frame color name")
+			  (LaTeX-color-definecolor-list)))
+	    (box-color   (completing-read
+			  (TeX-argument-prompt optional prompt "Box color name")
+			  (LaTeX-color-definecolor-list))))
+	(TeX-argument-insert frame-color optional)
+	(TeX-argument-insert box-color   optional)))))
 
 (TeX-add-style-hook
  "color"

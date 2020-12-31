@@ -1,6 +1,6 @@
 ;;; url.el --- AUCTeX style for `url.sty'
 
-;; Copyright (C) 2004, 2005 Free Software Foundation, Inc.
+;; Copyright (C) 2004-2005, 2018, 2020 Free Software Foundation, Inc.
 
 ;; Author: Ralf Angeli <angeli@iwi.uni-sb.de>
 ;; Maintainer: auctex-devel@gnu.org
@@ -30,6 +30,14 @@
 
 ;;; Code:
 
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
+
+(declare-function font-latex-set-syntactic-keywords
+		  "font-latex")
+
 (TeX-add-style-hook
  "url"
  (lambda ()
@@ -46,21 +54,28 @@
     "UrlOrds"
     "UrlRight"
     "UrlSpecials"
-    "path"
-    "url"
+    '("path" (TeX-arg-verb-delim-or-brace "Path"))
+    ;; "hyperref" redefines \url so that the argument is only in
+    ;; braces.  We check here if hyperref is loaded:
+    '("url" (TeX-arg-conditional (member "hyperref" (TeX-style-list))
+				 ("Url")
+			         ((TeX-arg-verb-delim-or-brace "Url"))))
     "urldef"
     '("urlstyle" TeX-arg-urlstyle))
 
    (add-to-list 'LaTeX-verbatim-macros-with-delims-local "path")
-   (add-to-list 'LaTeX-verbatim-macros-with-delims-local "url")
+   ;; hyperref.el has some code to remove "url" from
+   ;; `LaTeX-verbatim-macros-with-delims-local', but we check here as
+   ;; well if "hyperref" is already loaded:
+   (unless (member "hyperref" (TeX-style-list))
+     (add-to-list 'LaTeX-verbatim-macros-with-delims-local "url"))
    (add-to-list 'LaTeX-verbatim-macros-with-braces-local "path")
    (add-to-list 'LaTeX-verbatim-macros-with-braces-local "url")
 
    ;; Fontification
    (when (and (fboundp 'font-latex-add-keywords)
-	      (fboundp 'font-latex-update-font-lock)
 	      (eq TeX-install-font-lock 'font-latex-setup))
-     (font-latex-add-keywords '(("path" "{") ("url" "{")) 'reference)
+     (font-latex-add-keywords '(("path" "") ("url" "")) 'reference)
      (font-latex-add-keywords '(("Url" "")
 				("UrlBigBreakPenalty" "")
 				("UrlBigBreaks" "")
@@ -76,7 +91,7 @@
 				("urlstyle" "{"))
 			      'variable)
      ;; Tell font-lock about the update.
-     (font-latex-update-font-lock t)))
+     (font-latex-set-syntactic-keywords)))
  LaTeX-dialect)
 
 (defun TeX-arg-urlstyle (optional &optional prompt)

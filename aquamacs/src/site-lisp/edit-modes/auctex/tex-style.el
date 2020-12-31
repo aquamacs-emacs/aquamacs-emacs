@@ -1,7 +1,6 @@
 ;;; tex-style.el --- Customizable variables for AUCTeX style files
 
-;; Copyright (C) 2005, 2007, 2009, 2012-2017
-;;   Free Software Foundation, Inc.
+;; Copyright (C) 2005, 2007, 2009, 2012-2020 Free Software Foundation, Inc.
 
 ;; Author: Reiner Steib <Reiner.Steib@gmx.de>
 ;; Keywords: tex, wp, convenience
@@ -234,7 +233,7 @@ It can be a list of themes or a function.  If it is the symbol
 This variable is intended to be used as a file local variable to
 override the autodetection of the biblatex backend.")
 (make-variable-buffer-local 'LaTeX-biblatex-use-Biber)
-(put 'LaTeX-biblatex-use-Biber 'safe-local-variable 'TeX-booleanp)
+(put 'LaTeX-biblatex-use-Biber 'safe-local-variable #'booleanp)
 
 ;; style/comment.el
 
@@ -271,8 +270,8 @@ and `LaTeX-csquotes-close-quote' are non-empty strings."
 ;; style/emp.el
 
 (defcustom LaTeX-write18-enabled-p t
-  "*If non-nil, insert automatically the \\write18 calling metapost.
-When disabled, you have to use mpost on the mp files automatically 
+  "If non-nil, insert automatically the \\write18 calling metapost.
+When disabled, you have to use mpost on the mp files automatically
 produced by emp.sty and then re-LaTeX the document."
   :type 'boolean
   :group 'LaTeX-style)
@@ -283,8 +282,8 @@ produced by emp.sty and then re-LaTeX the document."
   "Unique letter identifying exam class macros in RefTeX.
 
 A character argument for quick identification when RefTeX inserts
-new labels with `reftex-label'.  It must be unique.  It is
-initialized to ?x."
+new references with `reftex-reference'.  It must be unique.  It
+is initialized to ?x."
   :group 'LaTeX-style
   :type 'character)
 
@@ -347,8 +346,7 @@ found in the TeX search path.
 
 `LaTeX-includegraphics-read-file-relative' lists all graphic files
 in the master directory and its subdirectories and inserts the
-relative file name.  This option does not work with Emacs 21 or
-XEmacs.
+relative file name.
 
 The custom option `simple' works as
 `LaTeX-includegraphics-read-file-relative' but it lists all kind of
@@ -357,16 +355,16 @@ files.
 Inserting the subdirectory in the filename (as
 `LaTeX-includegraphics-read-file-relative') is discouraged by
 `epslatex.ps'."
-;; ,----[ epslatex.ps; Section 12; (page 26) ]
-;; | Instead of embedding the subdirectory in the filename, there are two
-;; | other options
-;; |   1. The best method is to modify the TeX search path [...]
-;; |   2. Another method is to specify sub/ in a \graphicspath command
-;; |      [...].  However this is much less efficient than modifying the
-;; |      TeX search path
-;; `----
-;; See "Inefficiency" and "Unportability" in the same section for more
-;; information.
+  ;; ,----[ epslatex.ps; Section 12; (page 26) ]
+  ;; | Instead of embedding the subdirectory in the filename, there are two
+  ;; | other options
+  ;; |   1. The best method is to modify the TeX search path [...]
+  ;; |   2. Another method is to specify sub/ in a \graphicspath command
+  ;; |      [...].  However this is much less efficient than modifying the
+  ;; |      TeX search path
+  ;; `----
+  ;; See "Inefficiency" and "Unportability" in the same section for more
+  ;; information.
   :group 'LaTeX-style
   :type '(choice (const :tag "TeX" LaTeX-includegraphics-read-file-TeX)
 		 (const :tag "relative"
@@ -376,6 +374,47 @@ Inserting the subdirectory in the filename (as
 					 (read-file-name "Image file: ")
 					 (TeX-master-directory))))
 		 (function :tag "other")))
+
+;; style/revtex4-2.el
+
+(defcustom LaTeX-revtex4-2-video-label "vid:"
+  "Default prefix to labels in video environments of REVTeX4-2 class."
+  :group 'LaTeX-label
+  :type 'string)
+
+(defcustom LaTeX-revtex4-2-video-reftex-quick-id-key ?v
+  "Unique letter identifying \"video\" environment in RefTeX.
+
+A character argument for quick identification when RefTeX inserts
+new references with `reftex-reference'.  It must be unique.  It
+is initialized to ?v."
+  :group 'LaTeX-style
+  :type 'character)
+
+;; style/shortvrb.el
+
+(defcustom LaTeX-shortvrb-chars nil
+  "List of characters toggling verbatim mode.
+When your document uses the shortvrb style and you have a
+\\MakeShortVrb{\\|} in your file to write verbatim text as
+|text|, then set this variable to the list (?|).  Then AUCTeX
+fontifies |text| as verbatim.
+
+Preferably, you should do this buffer-locally using a file
+variable near the end of your document like so:
+
+  %% Local Variables:
+  %% LaTeX-shortvrb-chars: (?|)
+  %% End:
+
+When you customize this variable to a non-nil value, then it
+becomes the default value meaning that verbatim fontification is
+always performed for the characters in the list, no matter if
+your document actually defines shortvrb chars using
+\\MakeShortVrb."
+  :group 'LaTeX-style
+  :type '(repeat character))
+(put 'LaTeX-shortvrb-chars 'safe-local-variable 'listp)
 
 ;; style/splitidx.el
 
@@ -388,6 +427,10 @@ must be unique.  It is initialized to ?s when added to
 `reftex-index-macros'."
   :group 'LaTeX-style
   :type 'character)
+
+;; Don't look for file-local variables before this line, so that the
+;; example in the docstring of `LaTeX-shortvrb-chars' isn't picked up.
+
 
 (provide 'tex-style)
 

@@ -1,6 +1,6 @@
 ;;; bulgarian.el --- AUCTeX style for the `bulgarian' babel option.
 
-;; Copyright (C) 2008 Free Software Foundation, Inc.
+;; Copyright (C) 2008, 2018 Free Software Foundation, Inc.
 
 ;; Author: Ralf Angeli <angeli@caeruleus.net>
 ;; Maintainer: auctex-devel@gnu.org
@@ -30,6 +30,11 @@
 ;; `bulgarian' babel option.
 
 ;;; Code:
+
+;; Silence the compiler:
+(declare-function font-latex-add-quotes
+		  "font-latex"
+		  (quotes))
 
 (defvar LaTeX-bulgarian-mode-syntax-table
   (copy-syntax-table LaTeX-mode-syntax-table)

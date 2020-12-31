@@ -1,6 +1,6 @@
 ;;; minted.el --- AUCTeX style for `minted.sty' (v2.5)
 
-;; Copyright (C) 2014-2017 Free Software Foundation, Inc.
+;; Copyright (C) 2014-2018, 2020 Free Software Foundation, Inc.
 
 ;; Author: Tassilo Horn <tsdh@gnu.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -31,6 +31,21 @@
 ;;; Code:
 
 (require 'tex)
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
+
+(declare-function font-latex-set-syntactic-keywords
+		  "font-latex")
+
+(declare-function LaTeX-color-definecolor-list "color" ())
+(declare-function LaTeX-xcolor-definecolor-list "xcolor" ())
+(declare-function LaTeX-add-newfloat-DeclareFloatingEnvironments
+		  "newfloat" (&rest newfloat-declarefloatingenvironments))
+
+(defvar font-latex-syntactic-keywords-extra)
 
 (defvar LaTeX-minted-key-val-options
   '(("autogobble" ("true" "false"))
@@ -116,11 +131,16 @@
     ;; in a .tex file, Emacs asks to apply a variable which is not
     ;; safe and does not restore the frame; the splitted frame
     ;; remains.  I couldn't figure out why, so for now, I add the
-    ;; styles from Pygments version 2.1.3 here.
-    ("style" ("colorful" "default" "emacs" "friendly" "fruity" "igor"
-	      "lovelace" "manni" "monokai" "murphy" "native"
-	      "paraiso-dark" "paraiso-light" "pastie" "perldoc"
-	      "rrt" "tango" "trac" "vim" "vs" "xcode"))
+    ;; styles from Pygments version 2.5.2 here.
+    ("style" ("abap" "algol" "algol_nu" "arduino" "autumn"
+	      "borland" "bw" "colorful" "default" "emacs"
+	      "friendly" "fruity" "igor" "inkpot" "lovelace"
+	      "manni" "monokai" "murphy" "native" "paraiso-dark"
+	      "paraiso-light" "pastie" "perldoc"
+	      "rainbow_dash" "rrt" "sas"
+	      "solarized-dark" "solarized-light" "stata"
+	      "stata-dark" "stata-light"
+	      "tango" "trac" "vim" "vs" "xcode"))
     ("stepnumber")
     ("stepnumberfromfirst")
     ("stepnumberoffsetvalues" ("true" "false"))
@@ -273,7 +293,6 @@ are loaded."
 			   TeX-arg-verb))
       (add-to-list 'LaTeX-verbatim-macros-with-delims-local lang)
       (when (and (fboundp 'font-latex-add-keywords)
-		 (fboundp 'font-latex-update-font-lock)
 		 (eq TeX-install-font-lock 'font-latex-setup))
 	(font-latex-add-keywords `((,lang "[")) 'textual))))
   ;; \newmintinline{foo}{opts} => \fooinline[key=vals]|code| or
@@ -286,11 +305,10 @@ are loaded."
 		  (concat (cadr name-lang) "inline"))))
       (add-to-list 'TeX-auto-symbol
 		   `(,lang [ TeX-arg-key-val LaTeX-minted-key-val-options-local ]
-			  TeX-arg-verb))
+			   TeX-arg-verb-delim-or-brace))
       (add-to-list 'LaTeX-verbatim-macros-with-delims-local lang)
       (add-to-list 'LaTeX-verbatim-macros-with-braces-local lang)
       (when (and (fboundp 'font-latex-add-keywords)
-		 (fboundp 'font-latex-update-font-lock)
 		 (eq TeX-install-font-lock 'font-latex-setup))
 	(font-latex-add-keywords `((,lang "[")) 'textual))))
   ;; \newmintedfile{foo}{opts} => \foofile[key=vals]{file-name}
@@ -302,10 +320,10 @@ are loaded."
       (add-to-list 'TeX-auto-symbol
 		   `(,lang [ TeX-arg-key-val LaTeX-minted-key-val-options-local ]
 			   TeX-arg-file))))
-  (when (and (fboundp 'font-latex-update-font-lock)
+  (when (and (fboundp 'font-latex-set-syntactic-keywords)
 	     (eq TeX-install-font-lock 'font-latex-setup))
     ;; Refresh font-locking so that the verbatim envs take effect.
-    (font-latex-update-font-lock t))
+    (font-latex-set-syntactic-keywords))
   ;; Also update the key=vals
   (LaTeX-minted-update-key-vals))
 
@@ -368,7 +386,7 @@ a list of strings."
       LaTeX-arg-minted-language TeX-arg-verb)
     '("mintinline"
       [ TeX-arg-key-val LaTeX-minted-key-val-options-local ]
-      LaTeX-arg-minted-language TeX-arg-verb)
+      LaTeX-arg-minted-language TeX-arg-verb-delim-or-brace)
     '("newminted" ["Environment Name"] LaTeX-arg-minted-language
       (TeX-arg-key-val LaTeX-minted-key-val-options-local))
     '("newmint" ["Macro Name"] LaTeX-arg-minted-language
@@ -431,7 +449,6 @@ a list of strings."
 
    ;; Fontification
    (when (and (fboundp 'font-latex-add-keywords)
-	      (fboundp 'font-latex-update-font-lock)
 	      (eq TeX-install-font-lock 'font-latex-setup))
      (font-latex-add-keywords '(("usemintedstyle"  "[{")
 				("setminted"       "[{")
@@ -454,7 +471,7 @@ a list of strings."
      (LaTeX-minted-add-syntactic-keywords-extra 'delim
 						'("mint" "mintinline"))
      ;; Tell font-lock about the update.
-     (font-latex-update-font-lock t)))
+     (font-latex-set-syntactic-keywords)))
  LaTeX-dialect)
 
 (defvar LaTeX-minted-package-options '("chapter"     "cache"

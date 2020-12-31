@@ -1,6 +1,6 @@
 ;; xcolor.el --- AUCTeX style for `xcolor.sty' (v2.12)
 
-;; Copyright (C) 2016--2017 Free Software Foundation, Inc.
+;; Copyright (C) 2016--2019 Free Software Foundation, Inc.
 
 ;; Author: Arash Esbati <arash@gnu.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -43,6 +43,14 @@
 ;; style for `xcolor.sty' is not already loaded.
 
 ;;; Code:
+
+;; Needed for compiling `LaTeX-check-insert-macro-default-style':
+(require 'latex)
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
 
 (defvar LaTeX-xcolor-core-color-models
   '("rgb" "cmy" "cmyk" "hsb" "gray")
@@ -264,7 +272,7 @@ xcolor package.")
     (let ((head (car colset))
 	  (tail (cadr colset))
 	  (cols (split-string
-		 (TeX-replace-regexp-in-string "[ %\n\r\t]" "" (nth 2 colset))
+		 (replace-regexp-in-string "[ %\n\r\t]" "" (nth 2 colset))
 		 "\\(,[^;]+;\\|,[^;]+$\\)" t)))
       (dolist (color cols)
 	(LaTeX-add-xcolor-definecolors (concat head color tail))))))
@@ -274,12 +282,13 @@ xcolor package.")
 (add-hook 'TeX-update-style-hook #'TeX-auto-parse t)
 
 (defun TeX-arg-xcolor-definecolor (optional)
-  "Insert arguments of \\definecolor and similar macros from
-xcolor.sty."
+  "Insert arguments of \\definecolor and similar macros from xcolor.sty."
   ;; \definecolor[<type>]{<name>}{<model-list>}{<spec-list>}
-  (let* ((xcoltype  (completing-read
-		     (TeX-argument-prompt t nil "Type")
-		     LaTeX-xcolor-type-color-models))
+  (let* ((last-optional-rejected nil)
+	 (xcoltype  (LaTeX-check-insert-macro-default-style
+		     (completing-read
+		      (TeX-argument-prompt t nil "Type")
+		      LaTeX-xcolor-type-color-models)))
 	 (xcolname  (TeX-read-string
 		     (TeX-argument-prompt optional nil "Color name")))
 	 (xcolmodel (completing-read
@@ -301,14 +310,15 @@ xcolor.sty."
     (TeX-argument-insert xcolspec optional)))
 
 (defun TeX-arg-xcolor-definecolorset (optional)
-  "Insert arguments of \\definecolorset and similar macros from
-xcolor.sty."
-  (let ((xcoltype (completing-read
-		   (TeX-argument-prompt t nil "Type")
-		   LaTeX-xcolor-type-color-models))
-	(xcolmodel (completing-read
-		    (TeX-argument-prompt optional nil "Model")
-		    (LaTeX-xcolor-color-models t))))
+  "Insert arguments of \\definecolorset and similar macros from xcolor.sty."
+  (let* ((last-optional-rejected nil)
+	 (xcoltype (LaTeX-check-insert-macro-default-style
+		    (completing-read
+		     (TeX-argument-prompt t nil "Type")
+		     LaTeX-xcolor-type-color-models)))
+	 (xcolmodel (completing-read
+		     (TeX-argument-prompt optional nil "Model")
+		     (LaTeX-xcolor-color-models t))))
     (when (and xcoltype (not (string= xcoltype "")))
       (insert (format "[%s]" xcoltype)))
     (TeX-argument-insert xcolmodel optional)))
@@ -316,9 +326,11 @@ xcolor.sty."
 (defun TeX-arg-xcolor (optional)
   "Insert arguments of various color commands from xcolor.sty."
   ;; \color{<name>} or \color[<model-list>]{<spec-list>}
-  (let* ((xcolmodel (completing-read
-		     (TeX-argument-prompt t nil "Model (list)")
-		     (LaTeX-xcolor-color-models t)))
+  (let* ((last-optional-rejected nil)
+	 (xcolmodel (LaTeX-check-insert-macro-default-style
+		     (completing-read
+		      (TeX-argument-prompt t nil "Model (list)")
+		      (LaTeX-xcolor-color-models t))))
 	 (xcolor (if (and xcolmodel (not (string= xcolmodel "")))
 		     (TeX-read-string
 		      (TeX-argument-prompt optional nil (concat xcolmodel " spec (list)")))
@@ -332,21 +344,30 @@ xcolor.sty."
 (defun TeX-arg-xcolor-fcolorbox (optional)
   "Insert arguments of \\fcolorbox from xcolor.sty."
   ;;\fcolorbox[<frame model>]{<frame spec>}[<background model>]{<background spec>}{<text>}
-  (let* ((xfrmodel (completing-read
-		    (TeX-argument-prompt t nil "(Frame) Color model")
-		    LaTeX-xcolor-color-models))
-	 (xfrspec  (if (or (string= xfrmodel "")
+  (let* ((last-optional-rejected nil)
+	 (xfrmodel (LaTeX-check-insert-macro-default-style
+		    (completing-read
+		     (TeX-argument-prompt t nil "(Frame) Color model")
+		     LaTeX-xcolor-color-models)))
+	 ;; Set `last-optional-rejected' acc. to `xfrmodel'
+	 (last-optional-rejected (or (not xfrmodel)
+				     (and xfrmodel (string= xfrmodel ""))))
+	 (xfrspec  (if (or (null xfrmodel)
+			   (string= xfrmodel "")
 			   (string= xfrmodel "named"))
 		       (completing-read
 			(TeX-argument-prompt optional nil "Frame color spec")
 			(LaTeX-xcolor-definecolor-list))
 		     (TeX-read-string
 		      (TeX-argument-prompt optional nil "Frame color spec"))))
-	 (xbgmodel (completing-read
-		    (TeX-argument-prompt t nil "Background Color model")
-		    LaTeX-xcolor-color-models))
-	 (xbgspec  (if (or (string= xfrmodel "")
+	 (xbgmodel (LaTeX-check-insert-macro-default-style
+		    (completing-read
+		     (TeX-argument-prompt t nil "Background Color model")
+		     LaTeX-xcolor-color-models)))
+	 (xbgspec  (if (or (null xfrmodel)
+			   (string= xfrmodel "")
 			   (string= xfrmodel "named")
+			   (null xbgmodel)
 			   (string= xbgmodel "")
 			   (string= xbgmodel "named"))
 		       (completing-read
@@ -360,7 +381,6 @@ xcolor.sty."
     (when (and xbgmodel (not (string= xbgmodel "")))
       (insert (format "[%s]" xbgmodel)))
     (TeX-argument-insert xbgspec optional)))
-
 
 (TeX-add-style-hook
  "xcolor"

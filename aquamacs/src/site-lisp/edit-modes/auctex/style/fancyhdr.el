@@ -1,6 +1,6 @@
 ;;; fancyhdr.el --- AUCTeX style for `fancyhdr.sty'
 
-;; Copyright (C) 2012, 2013 Free Software Foundation, Inc.
+;; Copyright (C) 2012, 2013, 2018, 2020 Free Software Foundation, Inc.
 
 ;; Author: Mads Jensen <mje@inducks.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -28,6 +28,11 @@
 ;; This file adds support for `fancyhdr.sty', version 3.2
 
 ;;; Code:
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
 
 (TeX-add-style-hook
  "fancyhdr"
@@ -64,7 +69,6 @@
 
    ;; Fontification
    (when (and (fboundp 'font-latex-add-keywords)
-	      (fboundp 'font-latex-update-font-lock)
 	      (eq TeX-install-font-lock 'font-latex-setup))
      (font-latex-add-keywords '(("fancyhead" "[{")
                                 ("fancyfoot" "[{")
@@ -80,9 +84,7 @@
      (font-latex-add-keywords '(("headrulewidth" "")
                                 ("footrulewidth" "")
                                 ("plainheadrulewidth" "")
-                                ("plainfootrulewidth" "")) 'variable)
-     ;; Tell font-lock about the update.
-     (font-latex-update-font-lock)))
+                                ("plainfootrulewidth" "")) 'variable)))
  LaTeX-dialect)
 
 ;; Because there can be many positions, `TeX-completing-read-multiple' is used

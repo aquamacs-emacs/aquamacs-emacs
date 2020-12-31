@@ -1,6 +1,6 @@
-;;; paracol.el --- AUCTeX style for `paracol.sty' (v1.32)
+;;; paracol.el --- AUCTeX style for `paracol.sty' (v1.35)
 
-;; Copyright (C) 2016 Free Software Foundation, Inc.
+;; Copyright (C) 2016--2019 Free Software Foundation, Inc.
 
 ;; Author: Arash Esbati <arash@gnu.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -26,7 +26,7 @@
 
 ;;; Commentary:
 
-;; This file adds support for `paracol.sty' (v1.32) from 2015/10/10.
+;; This file adds support for `paracol.sty' (v1.35) from 2018/12/31.
 ;; `paracol.sty' is part of TeXLive.
 
 ;; `paracol.sty' provides an environment (paracol) and a command
@@ -45,6 +45,11 @@
 ;; actually used.
 
 ;;; Code:
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
 
 (defun TeX-arg-paracol-switchcolumn* (optional)
   "Query and insert the column argument of \\switchcolum macro.
@@ -113,6 +118,7 @@ If OPTIONAL is non-nil, insert the result in square brackets."
     '("switchcolumn" [ "Column" ] )
     '("switchcolumn*" [ TeX-arg-paracol-switchcolumn* ] )
     '("thecolumn")
+    '("definecolumnpreamble" "Column" t)
     '("ensurevspace" TeX-arg-length)
 
     ;; 7.3 Commands for Column and Gap Width
@@ -176,7 +182,7 @@ If OPTIONAL is non-nil, insert the result in square brackets."
     ;; the command only here but not for fontification
     '("columncolor" (TeX-arg-conditional (member "xcolor" (TeX-style-list))
 					 (TeX-arg-xcolor)
-				       (TeX-arg-color))
+					 (TeX-arg-color))
       [ "Column" ] )
 
     ;; \normalcolumncolor[col]
@@ -188,7 +194,7 @@ If OPTIONAL is non-nil, insert the result in square brackets."
     ;; \normalcolseprulecolor[col]
     '("colseprulecolor" (TeX-arg-conditional (member "xcolor" (TeX-style-list))
 					     (TeX-arg-xcolor)
-					   (TeX-arg-color))
+					     (TeX-arg-color))
       [ "Column" ] )
     '("normalcolseprulecolor" [ "Column" ] )
 
@@ -203,7 +209,7 @@ If OPTIONAL is non-nil, insert the result in square brackets."
 		      "C" "G" "S" "F" "N" "P" "T" "B" "L" "R"))
       (TeX-arg-conditional (member "xcolor" (TeX-style-list))
 			   (TeX-arg-xcolor)
-			 (TeX-arg-color)))
+			   (TeX-arg-color)))
 
     ;; \nobackgroundcolor{region}
     '("nobackgroundcolor"
@@ -223,20 +229,25 @@ If OPTIONAL is non-nil, insert the result in square brackets."
 		    '("toc" "lof" "lot"))
       "Column")
 
+    ;; 7.10 Page Flushing Commands
     '("flushpage" 0))
 
-   ; \switchcolumn should get its own line:
+   ;; \belowfootnoteskip is a length:
+   (LaTeX-add-lengths "belowfootnoteskip")
+
+   ;; \switchcolumn should get its own line:
    (LaTeX-paragraph-commands-add-locally "switchcolumn")
 
    ;; Fontification
    (when (and (featurep 'font-latex)
 	      (eq TeX-install-font-lock 'font-latex-setup))
-			      ;; FIXME: Syntax is \switchcolumn[num]*[text].
+     (font-latex-add-keywords '(("switchcolumn"			"*["))
+			      ;; FIXME: Syntax is
+			      ;; \switchcolumn[num]*[text].
 			      ;; font-latex.el doesn't handle the case
 			      ;; where `*' comes after the first `['.
 			      ;; Therefore, we use this compromise to
 			      ;; get something fontified at least.
-     (font-latex-add-keywords '(("switchcolumn"			"*["))
 			      'textual)
      (font-latex-add-keywords '(("flushpage"			"*["))
 			      'warning)
@@ -244,7 +255,8 @@ If OPTIONAL is non-nil, insert the result in square brackets."
 				("footnotemark"			"*[")
 				("footnotetext"			"*[{"))
 			      'reference)
-     (font-latex-add-keywords '(("ensurevspace"			"{")
+     (font-latex-add-keywords '(("definecolumnpreamble"         "{{")
+				("ensurevspace"			"{")
 				("columnratio"			"{[")
 				("setcolumnwidth"		"{[")
 				("twosided"			"[")

@@ -1,6 +1,6 @@
 ;;; polyglossia.el --- AUCTeX style for `polyglossia.sty' version 1.42.0.
 
-;; Copyright (C) 2015 Free Software Foundation, Inc.
+;; Copyright (C) 2015, 2018 Free Software Foundation, Inc.
 
 ;; Maintainer: auctex-devel@gnu.org
 ;; Author: Mosè Giordano <mose@gnu.org>
@@ -36,6 +36,11 @@
 ;;; Code:
 
 (require 'tex) ;Indispensable when compiling the call to `TeX-auto-add-type'.
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
 
 (TeX-auto-add-type "polyglossia-lang" "LaTeX")
 
@@ -143,7 +148,7 @@ The last language is the default one."
 The value is actually the tail of the list of options given to LANGUAGE."
   (member option (cdr (cdr (assoc language LaTeX-polyglossia-lang-list)))))
 
-(defun LaTeX-arg-polyglossia-lang (_optional default multiple setkeys)
+(defun LaTeX-arg-polyglossia-lang (_optional _default multiple setkeys)
   "Prompt for language and its options with completion and insert them
 as arguments.
 
@@ -151,14 +156,16 @@ This function is triggered by \"\setdefaultlanguage\",
 \"\setotherlanguage\", \"\setotherlanguages\", and \"\setkeys\"
 macros by polyglossia package.
 
-OPTIONAL is ignored, if DEFAULT is non-nil treat inserted
-language as default, if MULTIPLE is non-nil prompt for multiple
-languages, if SETKEYS is non-nil insert options as second
-mandatory argument."
+OPTIONAL and DEFAULT are ignored, if MULTIPLE is non-nil prompt
+for multiple languages, if SETKEYS is non-nil insert options as
+second mandatory argument."
   ;; DEFAULT =  t , MULTIPLE = nil, SETKEYS = nil: "\setdefaultlanguage".
   ;; DEFAULT = nil, MULTIPLE = nil, SETKEYS = nil: "\setotherlanguage".
   ;; DEFAULT = nil, MULTIPLE =  t , SETKEYS = nil: "\setotherlanguages".
   ;; DEFAULT = nil, MULTIPLE = nil, SETKEYS =  t : "\setkeys".
+
+  ;; Note: `DEFAULT' is currently ignored because we don't really have a
+  ;; mechanism to identify the default polyglossia language.
   (let ((language (funcall
 		   (if multiple
 		       'TeX-completing-read-multiple
@@ -226,6 +233,8 @@ argument, otherwise as a mandatory one."
 (TeX-add-style-hook
  "polyglossia"
  (lambda ()
+   (unless (featurep 'tex-buf)
+     (require 'tex-buf))
    (TeX-check-engine-add-engines 'luatex 'xetex)
    (TeX-auto-add-regexp
     `(,LaTeX-polyglossia-lang-regexp (3 1 2) LaTeX-auto-polyglossia-lang))

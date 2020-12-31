@@ -1,6 +1,6 @@
 ;;; arabxetex.el --- AUCTeX style for `arabxetex.sty' (v1.2.1)
 
-;; Copyright (C) 2017 Free Software Foundation, Inc.
+;; Copyright (C) 2017, 2018 Free Software Foundation, Inc.
 
 ;; Author: Arash Esbati <arash@gnu.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -31,6 +31,11 @@
 
 ;;; Code:
 
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
+
 (TeX-add-style-hook
  "arabxetex"
  (lambda ()
@@ -39,6 +44,8 @@
    (TeX-run-style-hooks "amsmath" "fontspec" "bidi")
 
    ;; We need xelatex, so check for the engine here:
+   (unless (featurep 'tex-buf)
+     (require 'tex-buf))
    (TeX-check-engine-add-engines 'xetex)
 
    ;; New macros & environments:

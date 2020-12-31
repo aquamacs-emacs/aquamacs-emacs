@@ -1,6 +1,6 @@
 ;;; natbib.el --- AUCTeX style for `natbib.sty' version 8.31b
 
-;; Copyright (C) 1997, 1998, 2004, 2007, 2014, 2016 Free Software Foundation, Inc.
+;; Copyright (C) 1997, 1998, 2004, 2007, 2014--2018 Free Software Foundation, Inc.
 
 ;; Authors: Berwin Turlach <statba@nus.edu.sg>
 ;;          Carsten Dominik <dominik@strw.leidenuniv.nl>
@@ -25,6 +25,11 @@
 ;; 02110-1301, USA.
 
 ;;; Code:
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
 
 (TeX-add-style-hook
  "natbib"

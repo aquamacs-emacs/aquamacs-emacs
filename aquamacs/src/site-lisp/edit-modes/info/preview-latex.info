@@ -1,11 +1,11 @@
-This is preview-latex.info, produced by makeinfo version 6.5 from
+This is preview-latex.info, produced by makeinfo version 6.7 from
 preview-latex.texi.
 
 This manual is for preview-latex, a LaTeX preview mode for AUCTeX
-(version 12.1 from 2017-12-04).
+(version 12.3 from 2020-10-10).
 
-   Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2017 Free Software
-Foundation, Inc.
+   Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2017, 2018 Free
+Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -199,7 +199,7 @@ case, 'dvipng' will be used for converting DVI files and Ghostscript
 (with a 'PNG' device) for converting PDF files.  'dvipng' is much faster
 than the combination of Dvips and Ghostscript.  You can get downloads,
 access to its CVS archive and further information from its project site
-(http://savannah.nongnu.org/projects/dvipng).
+(https://savannah.nongnu.org/projects/dvipng).
 
 
 File: preview-latex.info,  Node: More documentation,  Next: Availability,  Prev: Basic modes of operation,  Up: Introduction
@@ -235,11 +235,11 @@ File: preview-latex.info,  Node: Availability,  Next: Contacts,  Prev: More docu
 ================
 
 The preview-latex project is now part of AUCTeX and accessible as part
-of the AUCTeX project page (http://savannah.gnu.org/projects/auctex).
+of the AUCTeX project page (https://savannah.gnu.org/projects/auctex).
 You can get its files from the AUCTeX download area
-(ftp://ftp.gnu.org/pub/gnu/auctex).  As of AUCTeX 11.81, preview-latex
-should already be integrated into AUCTeX, so no separate download will
-be necessary.
+(https://ftp.gnu.org/pub/gnu/auctex/).  As of AUCTeX 11.81,
+preview-latex should already be integrated into AUCTeX, so no separate
+download will be necessary.
 
    You will also find '.rpm' files there for Fedora and possibly SuSE.
 Anonymous Git is available as well.
@@ -256,7 +256,7 @@ installation fails (but this should be a rare event), report bugs to
 <bug-auctex@gnu.org>.
 
    There is a general discussion list for AUCTeX which also covers
-preview-latex, look at <http://lists.gnu.org/mailman/listinfo/auctex>.
+preview-latex, look at <https://lists.gnu.org/mailman/listinfo/auctex>.
 For more information on the mailing list, send a message with just the
 word "help" as subject or body to <auctex-request@gnu.org>.  For the
 developers, there is the <auctex-devel@gnu.org> list; it would probably
@@ -301,8 +301,8 @@ Preview/Generate previews (or toggle) at point
      surroundings include all areas up to the next valid preview, unless
      invalid previews occur before, in which case the area will include
      the last such preview in either direction.  And overriding any
-     other action, if a region is active ('transient-mark-mode' or
-     'zmacs-regions'), it is run through 'preview-region'.
+     other action, if a region is active ('transient-mark-mode'), it is
+     run through 'preview-region'.
 
 '<mouse-2>'
      The middle mouse button has a similar action bound to it as
@@ -416,6 +416,14 @@ Preview/Turn preamble cache on
      the preamble are done from within Emacs, but it will not notice if
      the preamble effectively changes because some included file or
      style file is tampered with.
+
+     Note that support for preamble cache is limited for LaTeX variants.
+     c.f.  <https://github.com/davidcarlisle/dpctex/issues/15>
+        * XeLaTeX cannot use preamble cache at all.  The reason is
+          intrinsic in XeLaTeX, so preview-latex can't help.
+        * LuaLaTeX works with preamble cache only when the preamble is
+          simple enough, i.e., when it doesn't load opentype fonts and
+          it doesn't use lua codes in preamble.
 
 'C-c C-p C-c C-f'
 'preview-cache-preamble-off'
@@ -576,6 +584,7 @@ newer versions of the problematic software or by simple patches.
 * Too small bounding boxes::
 * x-symbol interoperation::
 * Middle-clicks paste instead of toggling::
+* No images are displayed with gs 9.27 and earlier::
 
    If you find something not mentioned here, please send a bug report
 using 'M-x preview-report-bug <RET>', which will fill in a lot of
@@ -603,7 +612,7 @@ in order to customize this.
    One particular problem is that several printer setup files (typically
 in a file called '/usr/share/texmf/dvips/config/config.pdf' if you are
 using the '-Ppdf' switch) contain the 'G' option for 'character
-shifting'.  This option will result in 'fi' being rendered as '#'
+shifting'.  This option will result in 'fi' being rendered as '£'
 (British Pounds sign) in several fonts, unless your version of Dvips has
 a long-standing bug in its implementation fixed (only very recent
 versions of Dvips have).
@@ -665,7 +674,7 @@ environment or, as a last resort, customize the variable
 -translate-file=cp8bit'.
 
 
-File: preview-latex.info,  Node: Middle-clicks paste instead of toggling,  Prev: x-symbol interoperation,  Up: Known problems
+File: preview-latex.info,  Node: Middle-clicks paste instead of toggling,  Next: No images are displayed with gs 9.27 and earlier,  Prev: x-symbol interoperation,  Up: Known problems
 
 5.4 Middle-clicks paste instead of toggling
 ===========================================
@@ -676,6 +685,59 @@ such a complicated mess that no patch is in sight.  Better just end the
 search with '<RET>' before toggling and resume with 'C-s C-s' or similar
 afterwards.  Since previews over the current match will auto-open,
 anyway, this should not be much of a problem in practice.
+
+
+File: preview-latex.info,  Node: No images are displayed with gs 9.27 and earlier,  Prev: Middle-clicks paste instead of toggling,  Up: Known problems
+
+5.5 No images are displayed with gs 9.27 and earlier
+====================================================
+
+preview-latex tries to adjust the foreground and background colors of
+generated images to those of Emacs.  Unfortunately, incompatible changes
+introduced in Ghostscript 9.27 breaks the traditional method partially,
+and preview-latex can display no images under certain circumstances.
+
+   A new method implemented alternatively works only with Ghostscript >
+9.27.  If you are using Ghostscript 9.27 or earlier, customize the
+option 'preview-pdf-adjust-color-method'.
+
+ -- User Option: preview-pdf-adjust-color-method
+     Method to adjust colors of images generated from PDF.  It is not
+     consulted when the LaTeX command produces DVI files.
+
+     When the option is 't' (default), preview-latex adjusts the FG and
+     BG colors of the generated images by the new method.  This method
+     requires that Ghostscript has working 'DELAYBIND' feature, thus is
+     invalid with gs 9.27 (and possibly < 9.27).
+
+     When it is 'compatible', preview-latex uses traditional method.
+     This option is provided for backward compatibility with older gs.
+     See the below explanation for detail.
+
+     When 'nil', no adjustment is done and "black on white" image is
+     generated regardless of Emacs color.  This is provided for fallback
+     for gs 9.27 users with customized foreground color.  See the below
+     explanation for detail.
+
+     When the LaTeX command produces PDF rather than DVI and Emacs has
+     non-trivial foreground color, the traditional method ('compatible')
+     makes gs >= 9.27 to stop with error.  Here, "non-trivial foreground
+     color" includes customized themes.
+
+     If you use such non-trivial foreground color and the version of
+     Ghostscript equals to 9.27, you have two options:
+       1. Choose the value 'compatible' and customize
+          'preview-reference-face' to have default (black) foreground
+          color.  This makes the generated image almost non-readable on
+          dark background, so the next option would be your only choice
+          in that case.
+       2. Choose the value 'nil', which forces plain "black on white"
+          appearance for the generated image.  You can at least read
+          what are written in the image although they may not match with
+          your Emacs color well.
+
+     The default value used to be 'compatible' for short period before
+     Ghostscript 9.50 was released but now is 't'.
 
 
 File: preview-latex.info,  Node: For advanced users,  Next: ToDo,  Prev: Known problems,  Up: Top
@@ -1019,8 +1081,8 @@ File: preview-latex.info,  Node: Provided commands,  Prev: Package options,  Up:
      '*'
           indicates an optional '*' modifier, as in '\includegraphics*'.
      '['
-          ^^A] indicates an optional argument in brackets.  This syntax
-          is somewhat baroque, but brief.
+          indicates an optional argument in brackets.  This syntax is
+          somewhat baroque, but brief.
      '[]'
           also indicates an optional argument in brackets.  Be sure to
           have encluded the entire optional argument specification in an
@@ -1341,6 +1403,11 @@ File: preview-latex.info,  Node: The preview images,  Next: Misplaced previews, 
      DVI file contains PostScript specials in which case the affected
      images will get run through Dvips and Ghostscript once 'dvipng'
      finishes.
+
+     Note for pLaTeX and upLaTeX users: It is known that 'dvipng' is not
+     compatible with pLaTeX and upLaTeX.  If 'preview-image-type' is set
+     to 'dvipng' and (u)pLaTeX is used, 'dvipng' just fails and
+     preview-latex falls back on Dvips and Ghostscript.
 
 'preview-gs-options'
      Most interesting to the user perhaps is the setting of this
@@ -1843,10 +1910,10 @@ Appendix C Copying this Manual
 The copyright notice for this manual is:
 
    This manual is for preview-latex, a LaTeX preview mode for AUCTeX
-(version 12.1 from 2017-12-04).
+(version 12.3 from 2020-10-10).
 
-   Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2017 Free Software
-Foundation, Inc.
+   Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2017, 2018 Free
+Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -1870,7 +1937,7 @@ C.1 GNU Free Documentation License
                      Version 1.3, 3 November 2008
 
      Copyright (C) 2000, 2001, 2002, 2007, 2008 Free Software
-     Foundation, Inc.  <http://fsf.org/>
+     Foundation, Inc.  <https://fsf.org/>
 
      Everyone is permitted to copy and distribute verbatim copies
      of this license document, but changing it is not allowed.
@@ -2267,7 +2334,7 @@ C.1 GNU Free Documentation License
      the GNU Free Documentation License from time to time.  Such new
      versions will be similar in spirit to the present version, but may
      differ in detail to address new problems or concerns.  See
-     <http://www.gnu.org/copyleft/>.
+     <https://www.gnu.org/licenses/>.
 
      Each version of the License is given a distinguishing version
      number.  If the Document specifies that a particular numbered
@@ -2356,7 +2423,7 @@ Index
 * \PreviewMacro:                         Provided commands.   (line  25)
 * Activation:                            Activating preview-latex.
                                                               (line   6)
-* C-c C-k:                               Keys and lisp.       (line 160)
+* C-c C-k:                               Keys and lisp.       (line 168)
 * C-c C-m P:                             Keys and lisp.       (line  62)
 * C-c C-p C-b:                           Keys and lisp.       (line  89)
 * C-c C-p C-c C-b:                       Keys and lisp.       (line 115)
@@ -2367,12 +2434,12 @@ Index
 * C-c C-p C-d:                           Keys and lisp.       (line  94)
 * C-c C-p C-e:                           Keys and lisp.       (line  74)
 * C-c C-p C-f:                           Keys and lisp.       (line 128)
-* C-c C-p C-i:                           Keys and lisp.       (line 147)
+* C-c C-p C-i:                           Keys and lisp.       (line 155)
 * C-c C-p C-p:                           Keys and lisp.       (line  23)
 * C-c C-p C-r:                           Keys and lisp.       (line  84)
 * C-c C-p C-s:                           Keys and lisp.       (line  79)
 * C-c C-p C-w:                           Keys and lisp.       (line  45)
-* C-u C-c C-p C-f:                       Keys and lisp.       (line 141)
+* C-u C-c C-p C-f:                       Keys and lisp.       (line 149)
 * Caching a preamble:                    Simple customization.
                                                               (line  57)
 * Contacts:                              Contacts.            (line   6)
@@ -2389,9 +2456,9 @@ Index
 * GPL:                                   Copying.             (line   6)
 * Inline math:                           Simple customization.
                                                               (line 108)
-* Kill preview-generating process:       Keys and lisp.       (line 160)
+* Kill preview-generating process:       Keys and lisp.       (line 168)
 * License:                               Copying.             (line   6)
-* M-x preview-report-bug <RET>:          Keys and lisp.       (line 152)
+* M-x preview-report-bug <RET>:          Keys and lisp.       (line 160)
 * Mailing list:                          Contacts.            (line   6)
 * Menu entries:                          Keys and lisp.       (line   6)
 * Philosophy of preview-latex:           What use is it?.     (line   6)
@@ -2401,7 +2468,7 @@ Index
                                                               (line  57)
 * preview-buffer:                        Keys and lisp.       (line  89)
 * preview-cache-preamble:                Keys and lisp.       (line 128)
-* preview-cache-preamble-off:            Keys and lisp.       (line 141)
+* preview-cache-preamble-off:            Keys and lisp.       (line 149)
 * preview-clearout:                      Keys and lisp.       (line 110)
 * preview-clearout-at-point:             Keys and lisp.       (line  99)
 * preview-clearout-buffer:               Keys and lisp.       (line 115)
@@ -2423,9 +2490,9 @@ Index
 * preview-error-icon-specs:              The Emacs interface. (line 150)
 * preview-fast-conversion:               The Emacs interface. (line  60)
 * preview-fast-dvips-command:            The Emacs interface. (line 123)
-* preview-goto-info-page:                Keys and lisp.       (line 147)
+* preview-goto-info-page:                Keys and lisp.       (line 155)
 * preview-gs-image-type-alist:           The preview images.  (line   8)
-* preview-gs-options:                    The preview images.  (line  54)
+* preview-gs-options:                    The preview images.  (line  59)
 * preview-icon-specs:                    The Emacs interface. (line 151)
 * preview-image-creators:                The preview images.  (line   7)
 * preview-image-type:                    Basic modes of operation.
@@ -2436,13 +2503,15 @@ Index
 * preview-LaTeX-command-replacements:    The Emacs interface. (line  25)
 * preview-nonready-icon-specs:           The Emacs interface. (line 143)
 * preview-parsed-font-size:              The Emacs interface. (line  99)
+* preview-pdf-adjust-color-method:       No images are displayed with gs 9.27 and earlier.
+                                                              (line  15)
 * preview-prefer-TeX-bb:                 The Emacs interface. (line  69)
 * preview-preserve-counters:             Simple customization.
                                                               (line  61)
 * preview-preserve-counters <1>:         The Emacs interface. (line  47)
 * preview-reference-face:                The Emacs interface. (line  80)
 * preview-region:                        Keys and lisp.       (line  84)
-* preview-report-bug:                    Keys and lisp.       (line 152)
+* preview-report-bug:                    Keys and lisp.       (line 160)
 * preview-required-option-list:          Simple customization.
                                                               (line  61)
 * preview-required-option-list <1>:      The Emacs interface. (line  35)
@@ -2450,7 +2519,7 @@ Index
 * preview-section:                       Keys and lisp.       (line  79)
 * preview-transparent-border:            Keys and lisp.       (line  55)
 * Readme:                                Introduction.        (line   6)
-* Report a bug:                          Keys and lisp.       (line 152)
+* Report a bug:                          Keys and lisp.       (line 160)
 * Right:                                 Copying.             (line   6)
 * Showing \labels:                       Simple customization.
                                                               (line  21)
@@ -2461,41 +2530,47 @@ Index
 
 
 Tag Table:
-Node: Top946
-Node: Copying2218
-Node: Introduction2672
-Node: What use is it?3346
-Node: Activating preview-latex4735
-Node: Getting started5488
-Node: Basic modes of operation7435
-Node: More documentation8637
-Node: Availability9525
-Node: Contacts10130
-Node: Installation11402
-Node: Keys and lisp11603
-Node: Simple customization18243
-Node: Known problems23906
-Node: Font problems with Dvips24679
-Node: Too small bounding boxes25852
-Node: x-symbol interoperation27248
-Node: Middle-clicks paste instead of toggling28631
-Node: For advanced users29259
-Node: The LaTeX style file29718
-Node: Package options32280
-Node: Provided commands43184
-Node: The Emacs interface50534
-Node: The preview images59245
-Node: Misplaced previews62728
-Node: ToDo66182
-Node: Frequently Asked Questions70953
-Node: Introduction to FAQ71276
-Node: Requirements71615
-Node: Installation Trouble73447
-Node: Customization75710
-Node: Troubleshooting78802
-Node: Other formats81320
-Node: Copying this Manual82635
-Node: GNU Free Documentation License83568
-Node: Index108690
+Node: Top952
+Node: Copying2224
+Node: Introduction2678
+Node: What use is it?3352
+Node: Activating preview-latex4741
+Node: Getting started5494
+Node: Basic modes of operation7441
+Node: More documentation8644
+Node: Availability9532
+Node: Contacts10141
+Node: Installation11414
+Node: Keys and lisp11615
+Node: Simple customization18691
+Node: Known problems24354
+Node: Font problems with Dvips25180
+Node: Too small bounding boxes26354
+Node: x-symbol interoperation27750
+Node: Middle-clicks paste instead of toggling29133
+Node: No images are displayed with gs 9.27 and earlier29818
+Node: For advanced users32460
+Node: The LaTeX style file32919
+Node: Package options35481
+Node: Provided commands46385
+Node: The Emacs interface53730
+Node: The preview images62441
+Node: Misplaced previews66191
+Node: ToDo69645
+Node: Frequently Asked Questions74416
+Node: Introduction to FAQ74739
+Node: Requirements75078
+Node: Installation Trouble76910
+Node: Customization79173
+Node: Troubleshooting82265
+Node: Other formats84783
+Node: Copying this Manual86098
+Node: GNU Free Documentation License87037
+Node: Index112161
 
 End Tag Table
+
+
+Local Variables:
+coding: utf-8
+End:

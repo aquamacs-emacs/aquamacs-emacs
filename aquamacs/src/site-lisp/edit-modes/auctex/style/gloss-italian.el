@@ -1,6 +1,6 @@
 ;;; gloss-italian.el --- Italian support for polyglossia package.
 
-;; Copyright (C) 2015 Free Software Foundation, Inc.
+;; Copyright (C) 2015, 2018 Free Software Foundation, Inc.
 
 ;; Maintainer: auctex-devel@gnu.org
 ;; Author: Mosè Giordano <mose@gnu.org>
@@ -28,6 +28,14 @@
 ;; This is based on italian.el style file, adapted to polyglossia package.
 
 ;;; Code:
+
+;; Silence the compiler:
+(declare-function font-latex-add-quotes
+		  "font-latex"
+		  (quotes))
+
+(declare-function LaTeX-polyglossia-lang-option-member
+		  "polyglossia" (language option))
 
 (defvar TeX-language-it-hook nil
   "Hook run for Italian texts.")

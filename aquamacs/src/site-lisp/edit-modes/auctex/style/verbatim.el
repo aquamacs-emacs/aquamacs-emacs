@@ -1,6 +1,6 @@
 ;;; verbatim.el --- Style hook for the verbatim package.
 
-;; Copyright (C) 2001 Free Software Foundation, Inc.
+;; Copyright (C) 2001, 2020 Free Software Foundation, Inc.
 
 ;; Author: Masayuki Ataka <masayuki.ataka@gmail.com>
 ;; Maintainer: auctex-devel@gnu.org
@@ -29,13 +29,31 @@
 
 ;;; Code
 
-(TeX-add-style-hook "verbatim"
- (function
-  (lambda ()
-    (LaTeX-add-environments
-     "comment")
-    (TeX-add-symbols
-     '("verbatiminput" TeX-arg-file))))
+;; Silence the compiler:
+(declare-function font-latex-set-syntactic-keywords
+		  "font-latex")
+
+(TeX-add-style-hook
+ "verbatim"
+ (lambda ()
+   (LaTeX-add-environments
+    "comment")
+   (TeX-add-symbols
+    '("verbatiminput" TeX-arg-file))
+
+   ;; Fontification:
+   ;; Code taken from `comment.el'
+   (when (and (boundp 'font-latex-syntactic-keywords-extra)
+	      (eq TeX-install-font-lock 'font-latex-setup))
+     ;; For syntactic fontification.
+     (add-to-list 'font-latex-syntactic-keywords-extra
+		  '("^[ \t]*\\\\begin *{comment}.*\\(\n\\)"
+		    (1 "!" t)))
+     (add-to-list 'font-latex-syntactic-keywords-extra
+		  '("^[ \t]*\\(\\\\\\)end *{comment}"
+		    (1 "!" t)))
+     ;; Tell font-lock about the update.
+     (font-latex-set-syntactic-keywords)))
  LaTeX-dialect)
 
 (defvar LaTeX-verbatim-package-options nil

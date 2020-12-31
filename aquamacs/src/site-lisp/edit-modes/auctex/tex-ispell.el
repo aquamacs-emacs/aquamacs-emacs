@@ -1,6 +1,6 @@
 ;;; tex-ispell.el --- AUCTeX skip additions for Ispell
 
-;; Copyright (C) 2016-2017 Free Software Foundation, Inc.
+;; Copyright (C) 2016--2018 Free Software Foundation, Inc.
 
 ;; Author: Arash Esbati <arash@gnu.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -59,6 +59,7 @@
 ;; mdframed.sty
 ;; minted.sty
 ;; nameref.sty
+;; pythontex.sty
 ;; siunitx.sty
 ;; splitidx.sty
 ;; tabularx.sty
@@ -190,6 +191,14 @@
       ;; nameref.sty
       ("nameref" . 1)
       ("Nameref" . 1)
+      ;; pythontex.sty: Only add the macros which will be used in the
+      ;; document; others should be in the preamble
+      ("setpythontexfv" . 1)
+      ("useprintpythontex" . 1)
+      ("usestdoutpythontex" . 1)
+      ("inputpygments" . 1)
+      ("setpygmentsfv" . 1)
+      ("setpygmentspygopt" . 1)
       ;; siunitx.sty
       ("num" . 1)
       ("si" . 1)
@@ -280,6 +289,29 @@ argument and spell check the mandatory one."))
       "lstlisting"
       ;; minted.sty
       "minted"
+      ;; pythontex.sty
+      "pycode"
+      "pysub"
+      "pyverbatim"
+      "pyblock"
+      "pyconsole"
+      "pyconcode"
+      "pyconverbatim"
+      "pylabcode"
+      "pylabsub"
+      "pylabverbatim"
+      "pylabblock"
+      "pylabconsole"
+      "pylabconcode"
+      "pylabconverbatim"
+      "sympycode"
+      "sympysub"
+      "sympyverbatim"
+      "sympyblock"
+      "sympyconsole"
+      "sympyconcode"
+      "sympyconverbatim"
+      "pygments"
       ;; tikz.sty
       "tikzpicture")
     "List of LaTeX environments which will be skipped entirely.
@@ -307,14 +339,22 @@ not be quoted.  An opening brace `{', asterisk `*' and at-sign
   :group 'TeX-misc
   :type 'string)
 
-;; listings.sty & fancyvrb.sty: With opt. argument only before verb content:
+;; listings.sty, fancyvrb.sty, pythontex.sty: With opt. argument only
+;; before verb content:
 (TeX-ispell-skip-setcar
- `((,(concat "\\\\" (regexp-opt '("Verb" "lstinline")))
+ `((,(concat "\\\\" (regexp-opt '("Verb"     "lstinline"
+				  "py"       "pyc"       "pys"    "pyv" "pyb"
+				  "pycon"    "pyconc"    "pyconv"
+				  "pylab"    "pylabc"    "pylabs" "pylabv" "pylabb"
+				  "pylabcon" "pylabconc" "pylabconv"
+				  "sympy"    "sympyc"    "sympys" "sympyv" "sympyb"
+				  "sympycon" "sympyconc" "sympyconv")))
     TeX-ispell-tex-arg-verb-end)))
 
-;; minted.sty: With opt. and mandatory argument before verb content:
+;; minted.sty: With opt. and mandatory argument before verb content.
+;; pythontex.sty: With one mandatory argument before verb content:
 (TeX-ispell-skip-setcar
- `((,(concat "\\\\" (regexp-opt '("mint" "mintinline")))
+ `((,(concat "\\\\" (regexp-opt '("mint" "mintinline" "pygment")))
     TeX-ispell-tex-arg-verb-end 1)))
 
 

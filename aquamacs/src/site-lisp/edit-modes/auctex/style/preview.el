@@ -1,6 +1,6 @@
 ;;; preview.el --- AUCTeX style for `preview.sty' (v2010/02/14)
 
-;; Copyright (C) 2017 Free Software Foundation, Inc.
+;; Copyright (C) 2017, 2018 Free Software Foundation, Inc.
 
 ;; Author: Arash Esbati <arash@gnu.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -30,6 +30,11 @@
 ;; `preview.sty' is part of TeXLive.
 
 ;;; Code:
+
+;; Silence the compiler:
+(declare-function font-latex-add-keywords
+		  "font-latex"
+		  (keywords class))
 
 (defun LaTeX-preview-arg-ifpreview (_optional)
   "Insert \\else and \\fi part of \\ifPreview command from preview.sty.
@@ -87,7 +92,7 @@ OPTIONAL is ignored."
 	      (eq TeX-install-font-lock 'font-latex-setup))
      (font-latex-add-keywords '(("PreviewMacro"            "*[[{")
 				("PreviewEnvironment"      "*[[{")
-				("PreviewSnarfEnvironment" "{"))
+				("PreviewSnarfEnvironment" "[{"))
 			      'function)))
  LaTeX-dialect)
 
