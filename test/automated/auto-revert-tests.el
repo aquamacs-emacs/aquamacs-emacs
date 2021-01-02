@@ -28,6 +28,10 @@
 (setq auto-revert-notify-exclude-dir-regexp "nothing-to-be-excluded"
       auto-revert-stop-on-user-input nil)
 
+(when (string= system-type "darwin")
+  (setq ls-lisp-use-insert-directory-program nil)
+  (require 'ls-lisp))
+
 (defconst auto-revert--timeout 10
   "Time to wait until a message appears in the *Messages* buffer.")
 
