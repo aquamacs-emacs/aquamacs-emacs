@@ -1385,10 +1385,13 @@ we put it on this frame."
 
 ;;; for initial buffer
 (defun aquamacs-turn-on-buffer-offer-save-in-scratch ()
-    (protect
-     (if (get-buffer "*scratch*")
-         (with-current-buffer "*scratch*"
-           (setq buffer-offer-save t)))))
+  "On exit, offer to save scratch buffer.
+Skipped if `aquamacs-scratch-file' is nil."
+  (protect
+   (when (and aquamacs-scratch-file
+              (get-buffer "*scratch*"))
+     (with-current-buffer "*scratch*"
+       (setq buffer-offer-save t)))))
 (add-hook 'after-init-hook 'aquamacs-turn-on-buffer-offer-save-in-scratch)
 
 ;; -------- CUSTOMIZATION -------------
