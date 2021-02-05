@@ -2,44 +2,48 @@
 #
 # Build Aquamacs
 #
-# This is the basic build for personal use, and is also used by other
-# build scripts.
 
-### The following are default settings for various options, including
-### for the compiler and configure. You can override these by setting
-### them in ~/.aqbuildrc. They do not need to be exported as environment
-### variables. You can add personal configure options and compiler flags by defining
-### USE_PERSONAL_CONFIG_OPTS and USE_PERSONAL_CFLAGS in that file.
+# This is the basic build process for Aquamacs. It is used by both the
+# nightly and the release build scripts. It is sufficient for building
+# a personal version and for doing most Aquamacs development work.
 
-### Note: In practice, gnutls is required for being able to make
-### network connections, including for Aquamacs update checks and
-### installing packages. The best way to install it is with Homebrew
-### (https://brew.sh).
+# To keep things simple, it has no command-line options and limited
+# environment settings. If you want to use different options, the
+# easiest thing is to make a copy of this script and run it
+# separately. Of course, you are welcome to submit suggested changes
+# as a pull request.
 
-### For personal builds, configure may find various libraries you have
-### installed, say from Homebrew, and these may or may not work with
-### Aquamacs. Configure things accordingly. The following two
-### variables can be used to include or omit packages. They are both
-### passed to ./configure.
+# There are two variables referenced below that are not defined in
+# this file:
+# - DEBUG_CONFIG_OPTS is for debugging options passed to configure.
+# - DEBUG_CFLAGS is for debugging options passed to the compiler.
+# See build-debug.sh for an example of how they are used.
 
-CONFIG_OMIT_PACKAGES=
-CONFIG_USE_PACKAGES=
+# Note: In practice, gnutls is required for being able to make network
+# connections, including for Aquamacs update checks and installing
+# packages. The best way to install it is with Homebrew
+# (https://brew.sh).
 
+# For personal builds, configure may find various libraries you have
+# installed, say from Homebrew, and these may or may not work with
+# Aquamacs. Configure things accordingly.
 
-# Compiler flags: optimization
-OPT_FLAGS="-O3 -g -march=native -mtune=native"
+# XXX things I haven't come back to:
+# - Setting GZIP to nothing or ${which gzip} to save time in development
 
-# Options for debugging: one for ./configure, one for CFLAGS
-DEBUG_CONFIG_OPTS="--enable-checking='yes,glyphs' --enable-check-lisp-object-type"
-DEBUG_CFLAGS='-O0 -g3'
+# Compiler flags: optimization & debugging info
+OPT_FLAGS="-O3 -g"
+
+# Configure options
+CONFIG_USE_PACKAGES="--with-gnutls --with-jpeg --with-rsvg"
 
 # Options for enforcing some backwards compatibility. These may only
 # be needed for compatibility back to El Capitan (10.11). They can be
 # overridden in .aqbuildrc, but they should normally only matter in
 # release builds.
 
-COMPAT_CFLAGS="-Werror=partial-availability"
-COMPAT_LDFLAGS="-Wl,-no_weak_imports"
+# COMPAT_CFLAGS="-Werror=partial-availability"
+# COMPAT_LDFLAGS="-Wl,-no_weak_imports"
 
 # In release builds, we set the environment variable
 # MACOSX_DEPLOYMENT_TARGET from this value. Setting the environment
@@ -47,29 +51,7 @@ COMPAT_LDFLAGS="-Wl,-no_weak_imports"
 # usually not needed for personal or development builds (except to
 # check that nothing incompatible has been introduced.)
 RELEASE_MIN_VERSION=10.11
-
-# During development, do not compress .el files to speed up "make
-# install". This one must be exported to the environment.
-export GZIP_PROG=
-
-case $1 in
-    # -release used for both nightly and full release builds
-    -release)
-        OPT_FLAGS="-O3 -g -arch x86_64 -O3 -mtune=corei7"
-        CONFIG_OMIT_PACKAGES="--without-jpeg --without-rsvg"
-        CONFIG_USE_PACKAGES="--with-gnutls"
-        export MACOSX_DEPLOYMENT_TARGET="${RELEASE_MIN_VERSION}"
-        export GZIP_PROG=$(which gzip)
-        ;;
-    -debug)
-        USE_CONFIG_OPTS="${DEBUG_CONFIG_OPTS}"
-        USE_DEBUG_CFLAGS="${DEBUG_CFLGAS}"
-        ;;
-    *)
-        AQ_PERS_CONF=~/.aqbuildrc
-        [ -f ${AQ_PERS_CONF} ] && source "${AQ_PERS_CONF}"
-        ;;
-esac
+export MACOSX_DEPLOYMENT_TARGET="${RELEASE_MIN_VERSION}"
 
 #### Below this point should normally not need to be changed. If you
 #### do find changes needed here, please submit an issue on github.
@@ -89,8 +71,6 @@ export LIBXML2_LIBS=`xml2-config --libs`
 test -e configure || ./autogen.sh
 
 ./configure --with-ns --without-x \
-            ${USE_PERSONAL_CONFIG_OPTS} \
-            ${USE_CONFIG_OPTS} \
             ${CONFIG_USE_PACKAGES} \
             ${CONFIG_OMIT_PACKAGES} \
             CFLAGS="${OPT_FLAGS} ${COMPAT_CFLAGS} ${USE_DEBUG_CFLAGS}" \
