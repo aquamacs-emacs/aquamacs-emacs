@@ -1,19 +1,26 @@
 #!/bin/sh
+# Sign the Aquamacs executable
+#
+# Only works if the AQUAMACS_CERT variable is defined, giving the
+# identity to be used.
 
-# signs all executables below the current directory
-# we're currently not signing emacs lisp files
+if [[ "${AQUAMACS_CERT}" != "" ]]; then
+    echo "Signing code with $AQUAMACS_CERT"
+    codesign -s "$AQUAMACS_CERT" --deep nextstep/Aquamacs.app
+else
+    echo
+    echo "No signing identity given with AQUAMACS_CERT"
+    echo
+    echo "IMPORTANT"
+    echo "When building for Mac OS X Mojave (10.14) and later, please make"
+    echo "sure you sign the executable using:"
+    echo "  codesign -s \"<certificate>\" --deep nextstep/Aquamacs.app"
+    echo "or, rerun the build with AQUAMACS_CERT=\"<certificate>\":"
+    echo "  AQUAMACS_CERT=\"My Codesign Certificate\" ./build-aquamacs"
+    echo ""
+    echo "If you don't have a certificate yet, you can create one using"
+    echo "the Keychain Access application. For more information, see:"
+    echo "(https://developer.apple.com/library/archive/documentation/Security/Conceptual/CodeSigningGuide/Procedures/Procedures.html)"
+fi
 
-# official certificate
-CERT="Developer ID Application: David Reitter"
-
-# individual certificate - do not use for release
-# CERT="Mac Developer: David Reitter"
-
-# see here for certificate choice: http://developer.apple.com/library/ios/#documentation/IDEs/Conceptual/AppDistributionGuide/CodeSigningYourApps/CodeSigningYourApps.html
-
-echo "Signing executables."
-#for f in `find . -perm +0111 -type f`; do
-
-codesign -s "$CERT" --deep .
-
-#done
+exit 0

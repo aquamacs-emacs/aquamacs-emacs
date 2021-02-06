@@ -248,6 +248,8 @@ rebuild_dependencies "${ACTION}" "${APP}"
 
 if [ "${rebuild}" = "yes" ]; then
     echo "Libraries must be rebuilt....exiting"
+    echo "Use"
+    echo "   aquamacs/build/build-homebrew-libraries.sh -rebuild ${BUNDLE_DIR} ${MIN_VERSION}"
     exit 1
 fi
 

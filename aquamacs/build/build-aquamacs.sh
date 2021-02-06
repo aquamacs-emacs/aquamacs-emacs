@@ -35,7 +35,7 @@
 OPT_FLAGS="-O3 -g"
 
 # Configure options
-CONFIG_USE_PACKAGES="--with-gnutls --with-jpeg --with-rsvg"
+CONFIG_USE_PACKAGES="--with-gnutls --with-jpeg --with-rsvg ${DEBUG_CONFIG_OPTS}"
 
 # Options for enforcing some backwards compatibility. These may only
 # be needed for compatibility back to El Capitan (10.11). They can be
@@ -50,8 +50,17 @@ CONFIG_USE_PACKAGES="--with-gnutls --with-jpeg --with-rsvg"
 # variable should be sufficient without compiler flags. This is
 # usually not needed for personal or development builds (except to
 # check that nothing incompatible has been introduced.)
-RELEASE_MIN_VERSION=10.11
+#
+# MIN_VERSION can be overridden by setting it as an environment
+# variable. If set to the empty string, no backward compatibility is
+# implied.
+
+MIN_VERSION=${MIN_VERSION:="10.11"}
 export MACOSX_DEPLOYMENT_TARGET="${RELEASE_MIN_VERSION}"
+
+# GZIP can be set to the empty string in the environment to avoid the
+# overhead of compressing Emacs Lisp files during development.
+GZIP=${GZIP:=${which gzip}}
 
 #### Below this point should normally not need to be changed. If you
 #### do find changes needed here, please submit an issue on github.
