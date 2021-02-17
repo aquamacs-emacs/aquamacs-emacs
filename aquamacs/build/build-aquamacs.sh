@@ -60,7 +60,7 @@ export MACOSX_DEPLOYMENT_TARGET="${RELEASE_MIN_VERSION}"
 
 # GZIP can be set to the empty string in the environment to avoid the
 # overhead of compressing Emacs Lisp files during development.
-GZIP=${GZIP:=${which gzip}}
+GZIP=${GZIP:=$(which gzip)}
 
 #### Below this point should normally not need to be changed. If you
 #### do find changes needed here, please submit an issue on github.
@@ -90,8 +90,6 @@ make clean || exit
 
 make -j4 all || exit
 make -j2 install || exit
-
-echo "XXX What's going on with etc/DOC-*? See old script"
 
 # generate symbol archive
 dsymutil src/emacs
