@@ -35,7 +35,7 @@
 OPT_FLAGS="-O3 -g"
 
 # Configure options
-CONFIG_USE_PACKAGES="--with-gnutls --with-jpeg --with-rsvg ${DEBUG_CONFIG_OPTS}"
+CONFIG_PACKAGES="--with-gnutls --with-jpeg --with-rsvg ${DEBUG_CONFIG_OPTS}"
 
 # Options for enforcing some backwards compatibility. These may only
 # be needed for compatibility back to El Capitan (10.11). They can be
@@ -56,7 +56,7 @@ CONFIG_USE_PACKAGES="--with-gnutls --with-jpeg --with-rsvg ${DEBUG_CONFIG_OPTS}"
 # implied.
 
 MIN_VERSION=${MIN_VERSION:="10.11"}
-export MACOSX_DEPLOYMENT_TARGET="${RELEASE_MIN_VERSION}"
+export MACOSX_DEPLOYMENT_TARGET="${MIN_VERSION}"
 
 # GZIP can be set to the empty string in the environment to avoid the
 # overhead of compressing Emacs Lisp files during development.
@@ -80,9 +80,8 @@ export LIBXML2_LIBS=`xml2-config --libs`
 test -e configure || ./autogen.sh
 
 ./configure --with-ns --without-x \
-            ${CONFIG_USE_PACKAGES} \
-            ${CONFIG_OMIT_PACKAGES} \
-            CFLAGS="${OPT_FLAGS} ${COMPAT_CFLAGS} ${USE_DEBUG_CFLAGS}" \
+            ${CONFIG_PACKAGES} \
+            CFLAGS="${OPT_FLAGS} ${COMPAT_CFLAGS} ${DEBUG_CFLAGS}" \
             LDFLAGS="${COMPAT_LDFLAGS}" \
     || exit 1
 
