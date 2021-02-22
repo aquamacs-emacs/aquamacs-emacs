@@ -1,0 +1,65 @@
+#set logging on
+#set logging file /tmp/gdb.txt
+
+# Malloc debbuging added based on https://cocoadev.github.io/DebuggingAutorelease/
+
+# Help message on Malloc stuff
+# - MallocLogFile <f> to create/append messages to file <f> instead of stderr
+# - MallocGuardEdges to add 2 guard pages for each large block
+# - MallocDoNotProtectPrelude to disable protection (when previous flag set)
+# - MallocDoNotProtectPostlude to disable protection (when previous flag set)
+# - MallocStackLogging to record all stacks.  Tools like leaks can then be applied
+# - MallocStackLoggingNoCompact to record all stacks.  Needed for malloc_history
+# - MallocStackLoggingDirectory to set location of stack logs, which can grow large; default is /tmp
+# - MallocScribble to detect writing on free blocks and missing initializers:
+#  0x55 is written upon free and 0xaa is written on allocation
+# - MallocCheckHeapStart <n> to start checking the heap after <n> operations
+# - MallocCheckHeapEach <s> to repeat the checking of the heap after <s> operations
+# - MallocCheckHeapSleep <t> to sleep <t> seconds on heap corruption
+# - MallocCheckHeapAbort <b> to abort on heap corruption if <b> is non-zero
+# - MallocCorruptionAbort to abort on malloc errors, but not on out of memory for 32-bit processes
+#  MallocCorruptionAbort is always set on 64-bit processes
+# - MallocErrorAbort to abort on any malloc error, including out of memory
+# - MallocTracing to emit kdebug trace points on malloc entry points
+# - MallocHelp - this help!
+
+# Adapted from https://gist.github.com/JeOam/e62c95a0b4c21974bcf6
+
+set env NSZombieEnabled=YES
+set env NSDeallocateZombies=NO
+set env NSDebugEnabled=YES
+set env CFZombie 5
+
+# Malloc logging to go with zombie detection
+#set env MallocStackLogging=YES
+#set env MallocStackLoggingNoCompact=YES
+
+# More memory checking
+# Not needed all the time
+
+set env MallocCheckHeapEach=1000
+set env MallocCheckHeapStart=1000
+# set env MallocPreScribble=YES
+set env MallocScribble=YES
+set env MallocGuardEdges=YES
+set env MallocCheckHeapAbort=1
+
+set breakpoint pending on
+
+break -[_NSZombie init]
+break -[_NSZombie retainCount]
+break -[_NSZombie retain]
+break -[_NSZombie release]
+break -[_NSZombie autorelease]
+break -[_NSZombie methodSignatureForSelector:]
+break -[_NSZombie respondsToSelector:]
+break -[_NSZombie forwardInvocation:]
+break -[_NSZombie class]
+break -[_NSZombie dealloc]
+
+break -[NSException raise]
+break -[NSAssertionHandler handleFailureInFunction:file:lineNumber:description:]
+break -[NSAssertionHandler handleFailureInMethod:object:file:lineNumber:description:]
+
+# Stops program when there is "Incorrect checksum for freed object" error
+break szone_error

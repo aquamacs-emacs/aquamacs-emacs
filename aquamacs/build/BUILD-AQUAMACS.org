@@ -2,17 +2,12 @@ This file describes the process of building Aquamacs in various ways.
 
 The Aquamacs git repository is at https://github.com/aquamacs-emacs/aquamacs-emacs.
 
-* Things that have to be done before committing all this
-** TODO Things taken out of build-aquamacs
-- texinfo/tex build
-
 * Aquamacs resources on the Internet
 Besides the main web site at https://aquamacs.org, there are:
 - Main source code repository: https://github.com/aquamacs-emacs/aquamacs-emacs
 - Aquamacs issue tracker: https://github.com/aquamacs-emacs/aquamacs-emacs/issues. Bug reports can also be sent to aquamacs-bugs@aquamacs.org.
 - General Aquamacs email list: macosx-emacs@email.esm.psu.edu
 - Aquamacs development email list: aquamacs-devel@googlegroups.com
-
 * Personal build
 To build Aquamacs, you will need to install XCode (Apple's Developer Tools), including the command-line version of the tools. You can find current instructions for doing that for your Mac OS version on the web. You'll need to have the path to the command-line tools (usually /Applications/Xcode.app/Contents/Developer/usr/bin) in your PATH.
 
@@ -81,3 +76,7 @@ Logs of the build are kept in ${NIGHTLY_DIR}/logs. There are separate logs for d
 
 * Release build
 TBD
+* Debugging
+- The file ~src/.gdbinit~ is automatically loaded by ~gdb~ if you are starting it in that directory, which is recommended if you are debugging Aquamacs. The commands are special for helping to debug Emacs, especially to get information about what's going on in the Lisp code.
+- The file ~src/.gdbmac~ has some addition useful GDB debugging commands for the Mac if you are running Aquamacs under ~gdb~. The memory debugging environment variables can be used outside of ~gdb~. Also, you may want to change the particular environment variables in use at any given time. The defaults are generally useful for debugging the Mac-specific code.
+- Aquamacs does not seem to run under ~lldb~.
