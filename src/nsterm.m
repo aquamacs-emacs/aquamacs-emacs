@@ -6266,91 +6266,89 @@ not_in_argv (NSString *arg)
 }
 
 - (void)fd_handler:(id)unused
-/* --------------------------------------------------------------------------
+  /* --------------------------------------------------------------------------
      Check data waiting on file descriptors and terminate if so
-   -------------------------------------------------------------------------- */
+     -------------------------------------------------------------------------- */
 {
   int result;
   int waiting = 1, nfds;
   char c;
-
   fd_set readfds, writefds, *wfds;
   struct timespec timeout, *tmo;
-  NSAutoreleasePool *pool = nil;
 
   /* NSTRACE ("fd_handler"); */
 
   for (;;)
     {
-      [pool release];
-      pool = [[NSAutoreleasePool alloc] init];
+      // Cocoa requires us to make an autoreleasepool on a new thread.
+      @autoreleasepool {
+        if (waiting)
+          {
+            fd_set fds;
+            FD_ZERO (&fds);
+            FD_SET (selfds[0], &fds);
+            result = select (selfds[0]+1, &fds, NULL, NULL, NULL);
+            if (result > 0 && read (selfds[0], &c, 1) == 1 && c == 'g')
+              waiting = 0;
+          }
+        else
+          {
+            pthread_mutex_lock (&select_mutex);
+            nfds = select_nfds;
 
-      if (waiting)
-        {
-          fd_set fds;
-          FD_ZERO (&fds);
-          FD_SET (selfds[0], &fds);
-          result = select (selfds[0]+1, &fds, NULL, NULL, NULL);
-          if (result > 0 && read (selfds[0], &c, 1) == 1 && c == 'g')
-	    waiting = 0;
-        }
-      else
-        {
-          pthread_mutex_lock (&select_mutex);
-          nfds = select_nfds;
+            if (select_valid & SELECT_HAVE_READ)
+              readfds = select_readfds;
+            else
+              FD_ZERO (&readfds);
 
-          if (select_valid & SELECT_HAVE_READ)
-            readfds = select_readfds;
-          else
-            FD_ZERO (&readfds);
+            if (select_valid & SELECT_HAVE_WRITE)
+              {
+                writefds = select_writefds;
+                wfds = &writefds;
+              }
+            else
+              wfds = NULL;
+            if (select_valid & SELECT_HAVE_TMO)
+              {
+                timeout = select_timeout;
+                tmo = &timeout;
+              }
+            else
+              tmo = NULL;
 
-          if (select_valid & SELECT_HAVE_WRITE)
-            {
-              writefds = select_writefds;
-              wfds = &writefds;
-            }
-          else
-            wfds = NULL;
-          if (select_valid & SELECT_HAVE_TMO)
-            {
-              timeout = select_timeout;
-              tmo = &timeout;
-            }
-          else
-            tmo = NULL;
+            pthread_mutex_unlock (&select_mutex);
 
-          pthread_mutex_unlock (&select_mutex);
+            FD_SET (selfds[0], &readfds);
+            if (selfds[0] >= nfds) nfds = selfds[0]+1;
 
-          FD_SET (selfds[0], &readfds);
-          if (selfds[0] >= nfds) nfds = selfds[0]+1;
+            result = pselect (nfds, &readfds, wfds, NULL, tmo, NULL);
 
-          result = pselect (nfds, &readfds, wfds, NULL, tmo, NULL);
+            if (result == 0)
+              ns_send_appdefined (-2);
+            else if (result > 0)
+              {
+                if (FD_ISSET (selfds[0], &readfds))
+                  {
+                    if (read (selfds[0], &c, 1) == 1 && c == 's')
+                      waiting = 1;
+                  }
+                else
+                  {
+                    pthread_mutex_lock (&select_mutex);
+                    if (select_valid & SELECT_HAVE_READ)
+                      select_readfds = readfds;
+                    if (select_valid & SELECT_HAVE_WRITE)
+                      select_writefds = writefds;
+                    if (select_valid & SELECT_HAVE_TMO)
+                      select_timeout = timeout;
+                    pthread_mutex_unlock (&select_mutex);
 
-          if (result == 0)
-            ns_send_appdefined (-2);
-          else if (result > 0)
-            {
-              if (FD_ISSET (selfds[0], &readfds))
-                {
-                  if (read (selfds[0], &c, 1) == 1 && c == 's')
-		    waiting = 1;
-                }
-              else
-                {
-                  pthread_mutex_lock (&select_mutex);
-                  if (select_valid & SELECT_HAVE_READ)
-                    select_readfds = readfds;
-                  if (select_valid & SELECT_HAVE_WRITE)
-                    select_writefds = writefds;
-                  if (select_valid & SELECT_HAVE_TMO)
-                    select_timeout = timeout;
-                  pthread_mutex_unlock (&select_mutex);
-
-                  ns_send_appdefined (result);
-                }
-            }
-          waiting = 1;
-        }
+                    ns_send_appdefined (result);
+                  }
+              }
+            waiting = 1;
+          }
+      }
     }
 }
 
