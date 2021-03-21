@@ -31,8 +31,14 @@
 # XXX things I haven't come back to:
 # - Setting GZIP to nothing or ${which gzip} to save time in development
 
+# Exit on error
+set -e
+# Save the build log
+BUILD_LOG=build.log
+exec &> >(tee ${BUILD_LOG})
+
 # Compiler flags: optimization & debugging info
-OPT_FLAGS="-O3 -g"
+OPT_FLAGS="-O3 -g -Wno-deprecated-declarations"
 
 # Configure options
 CONFIG_PACKAGES="--with-gnutls --with-jpeg --with-rsvg ${DEBUG_CONFIG_OPTS}"
