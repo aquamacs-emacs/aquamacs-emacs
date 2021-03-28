@@ -573,7 +573,6 @@ ns_set_name_as_filename (struct frame *f)
   Lisp_Object name, filename;
   Lisp_Object buf = XWINDOW (f->selected_window)->contents;
   const char *title;
-  NSAutoreleasePool *pool;
   Lisp_Object encoded_name, encoded_filename;
   NSString *str;
   NSTRACE ("ns_set_name_as_filename");
@@ -582,7 +581,6 @@ ns_set_name_as_filename (struct frame *f)
     return;
 
   block_input ();
-  pool = [[NSAutoreleasePool alloc] init];
   filename = BVAR (XBUFFER (buf), filename);
   name = BVAR (XBUFFER (buf), name);
 
@@ -603,7 +601,6 @@ ns_set_name_as_filename (struct frame *f)
 
   if (title && (! strcmp (title, SSDATA (encoded_name))))
     {
-      [pool release];
       unblock_input ();
       return;
     }
@@ -643,18 +640,15 @@ ns_set_name_as_filename (struct frame *f)
       fset_name (f, name);
     }
 
-  [pool release];
-  unblock_input ();
+    unblock_input ();
 }
 
 
 void
 ns_set_doc_edited (void)
 {
-  NSAutoreleasePool *pool;
   Lisp_Object tail, frame;
   block_input ();
-  pool = [[NSAutoreleasePool alloc] init];
   FOR_EACH_FRAME (tail, frame)
     {
       BOOL edited = NO;
@@ -666,13 +660,12 @@ ns_set_doc_edited (void)
       w = XWINDOW (FRAME_SELECTED_WINDOW (f));
       view = FRAME_NS_VIEW (f);
       if (!MINI_WINDOW_P (w))
-        edited = ! NILP (Fbuffer_modified_p (w->contents)) &&
-          ! NILP (Fbuffer_file_name (w->contents));
-      [[view window] setDocumentEdited: edited];
+              edited = ! NILP (Fbuffer_modified_p (w->contents)) &&
+                ! NILP (Fbuffer_file_name (w->contents));
+            [[view window] setDocumentEdited: edited];
     }
 
-  [pool release];
-  unblock_input ();
+    unblock_input ();
 }
 
 
@@ -801,18 +794,15 @@ ns_implicitly_set_icon_type (struct frame *f)
   EmacsView *view = FRAME_NS_VIEW (f);
   id image = nil;
   Lisp_Object chain, elt;
-  NSAutoreleasePool *pool;
   BOOL setMini = YES;
 
   NSTRACE ("ns_implicitly_set_icon_type");
 
   block_input ();
-  pool = [[NSAutoreleasePool alloc] init];
   if (f->output_data.ns->miniimage
       && [[NSString stringWithUTF8String: SSDATA (f->name)]
                isEqualToString: [(NSImage *)f->output_data.ns->miniimage name]])
     {
-      [pool release];
       unblock_input ();
       return;
     }
@@ -820,7 +810,6 @@ ns_implicitly_set_icon_type (struct frame *f)
   tem = assq_no_quit (Qicon_type, f->param_alist);
   if (CONSP (tem) && ! NILP (XCDR (tem)))
     {
-      [pool release];
       unblock_input ();
       return;
     }
@@ -860,7 +849,6 @@ ns_implicitly_set_icon_type (struct frame *f)
   [f->output_data.ns->miniimage release];
   f->output_data.ns->miniimage = image;
   [view setMiniwindowImage: setMini];
-  [pool release];
   unblock_input ();
 }
 
