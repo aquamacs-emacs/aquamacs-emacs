@@ -138,7 +138,7 @@ ensure_min_version () {
 # Arguments:
 # - action: -rebuild or -bundle
 # - executable-or-library is the binary to analyze for dependencies
-
+libs_done=""
 rebuild_dependencies () {
     local action="${1}"
     local target="${2}"
@@ -147,10 +147,15 @@ rebuild_dependencies () {
     for lib in $(get_local_libs ${target}); do
         local libname="$(basename $lib)"
         local destlib="${outdir}/${libname}"
-        debug echo "check ${lib} for ${target}"
-        rebuild_dependencies "${action}" "${lib}"
-        echo "Check ${lib} for ${target}"
-        ensure_min_version "${action}" "$lib"
+        echo "${libs_done}" | grep -w "${lib}" > /dev/null
+        if [ $? -eq 0 ]; then
+            debug echo "Library ${lib} already done"
+        else
+            libs_done="${libs_done} ${lib}"
+            debug echo "check ${lib} for ${target}"
+            rebuild_dependencies "${action}" "${lib}"
+            ensure_min_version "${action}" "$lib"
+        fi
     done
 }
 

@@ -111,5 +111,5 @@ echo "Packaging Aquamacs"
 
 echo "Postprocessing..."
 if [ "${POST}"x = "yesx" ]; then
-   aquamacs/build/nightly-post.sh ${BLD} ${DATE}
+   aquamacs/build/nightly-post.sh ${KIT} ${DATE}
 fi
