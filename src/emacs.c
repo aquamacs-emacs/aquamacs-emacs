@@ -847,7 +847,11 @@ main (int argc, char **argv)
       ratio += ratio / 3;
       /* Add in some extra to cover
 	 what we're likely to use for other reasons.  */
-      newlim = re_max_failures * ratio + 200000;
+      /* XXX Temporary workaround on Emacs bug#1039. There's a
+         suggestion that different changes for managing the stack on
+         the Mac may have solved the problem this is for, so in
+         Aquamacs 4 this is probably not the right change. */
+      newlim = (re_max_failures * ratio + 200000) * 2;
 #ifdef __NetBSD__
       /* NetBSD (at least NetBSD 1.2G and former) has a bug in its
        stack allocation routine for new process that the allocation
