@@ -335,9 +335,9 @@ Skim AppleScript protocol."
       full-file-name full-source-name aquamacs-tex-pdf-viewer line
       ;; do not say "showing reading bar false" so users can override in future
       (cond ((eq t aquamacs-skim-show-reading-bar)
-	     " showing reading bar true")
+	     " with showing reading bar")
 	    ((eq nil aquamacs-skim-show-reading-bar)
-	     " showing reading bar false")
+	     " without showing reading bar")
 	    (t ""))))))
 
 (if (boundp 'aquamacs-default-toolbarx-meaning-alist) ;; not on TTY
