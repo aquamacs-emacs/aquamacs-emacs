@@ -94,9 +94,9 @@ test -e configure || ./autogen.sh
 make clean || exit
 
 make -j4 all || exit
-make -j2 install || exit
+make install || exit
 
-# generate symbol archive
-dsymutil src/emacs
+# generate symbol archive (.dSYM file)
+dsymutil nextstep/Aquamacs.app/Contents/MacOS/Aquamacs
 
 exit 0
