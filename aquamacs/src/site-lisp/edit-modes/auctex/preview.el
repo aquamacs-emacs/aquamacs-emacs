@@ -1,4 +1,4 @@
-;;; preview.el --- embed preview LaTeX images in source buffer
+3;;; preview.el --- embed preview LaTeX images in source buffer
 
 ;; Copyright (C) 2001-2006, 2010-2015,
 ;;               2017-2020  Free Software Foundation, Inc.
@@ -43,8 +43,6 @@
 (require 'tex)
 (require 'tex-buf)
 (require 'latex)
-
-(defvar preview-resolution-factor 2.0 "")  ;; Aquamacs
 
 (eval-when-compile
   (condition-case nil
@@ -436,10 +434,9 @@ dots per inch.  Buffer-local to rendering buffer.")
   "Generate resolution argument for gs.
 Calculated from real-life factor SCALE and XRES and
 YRES, the screen resolution in dpi."
-  ;; (message "scal %s, xres %s, magn %s" scale xres (preview-get-magnification))  ;; Aquamacs
   (format "-r%gx%g"
-	  (round (/ (* scale xres) (preview-get-magnification))) ;; Aquamacs
-	  (round (/ (* scale yres) (preview-get-magnification))))) ;; Aquamacs
+	  (/ (* scale xres) (preview-get-magnification))
+	  (/ (* scale yres) (preview-get-magnification))))
 
 (defun preview-gs-behead-outstanding (err)
   "Remove leading element of outstanding queue after error.
@@ -1482,16 +1479,7 @@ recursively."
 This searches FACE for an ATTRIBUTE, using INHERIT
 for resolving unspecified or relative specs.  See the fourth
 argument of function `face-attribute' for details."
-  ;; We must be aware of `face-remapping-alist',  ;; Aquamacs
-  ;; because `face-attribute' is not.
-  (if (and inherit ;; Aquamacs
-           (boundp 'face-remapping-alist)) ;; Aquamacs
-      (setq inherit (or (cdr (assq inherit face-remapping-alist))
-                        inherit))) ;; Aquamacs
-  (face-attribute (or (if (boundp 'face-remapping-alist)
-                          (cdr (assq face face-remapping-alist))) ;; Aquamacs
-                      face) ;; Aquamacs
-                  attribute nil inherit)) ;; Aquamacs
+  (face-attribute face attribute nil inherit))
 
 (defcustom preview-scale-function #'preview-scale-from-face
   "*Scale factor for included previews.
@@ -1740,10 +1728,6 @@ Consults `preview-transparent-color'."
 			  (nth 1 preview-transparent-color)
 			  'default)))))
 
-;; Aquamacs-specific
-(defun preview-set-image-size (image) ;; Aquamacs
-  (append image `(:conversion ,(cons 'scale (/ 1.0 preview-resolution-factor))))) ;; Aquamacs
-
 (defsubst preview-create-icon-1 (file type ascent border)
   `(image
     :file ,file
@@ -1755,7 +1739,7 @@ Consults `preview-transparent-color'."
 (defun preview-create-icon (file type ascent border)
   "Create an icon from FILE, image TYPE, ASCENT and BORDER."
   (list
-   (preview-set-image-size (preview-create-icon-1 file type ascent border)) ;; Aquamacs
+   (preview-create-icon-1 file type ascent border)
    file type ascent border))
 
 (put 'preview-filter-specs :type
@@ -1772,13 +1756,12 @@ Consults `preview-transparent-color'."
 	((eq (car image) 'image)
 	 image)
 	(t
-         (preview-set-image-size ;; Aquamacs
-          (preview-create-icon-1 (nth 0 image)
-                                 (nth 1 image)
-                                 (nth 2 image)
-                                 (if (< (length image) 4)
-                                     (preview-get-heuristic-mask)
-                                   (nth 3 image))))))) ;; Aquamacs
+	 (preview-create-icon-1 (nth 0 image)
+				(nth 1 image)
+				(nth 2 image)
+				(if (< (length image) 4)
+				    (preview-get-heuristic-mask)
+				  (nth 3 image))))))
 
 ;; No defcustom here: does not seem to make sense.
 
@@ -2419,7 +2402,7 @@ BUFFER-MISC is the appropriate data to be used."
 					    desktop-buffer-name
 					    desktop-buffer-misc)))))
 
-(defcustom preview-auto-cache-preamble t ;; Aquamacs
+(defcustom preview-auto-cache-preamble 'ask
   "*Whether to generate a preamble cache format automatically.
 Possible values are nil, t, and `ask'."
   :group 'preview-latex
@@ -3071,7 +3054,6 @@ pp")
     (define-key LaTeX-mode-map [tool-bar preview]
       `(menu-item "Preview at point" preview-at-point
 		  :image ,preview-tb-icon
-                  :label "Preview" ;; Aquamacs
 		  :help "Preview on/off at point")))
   (when buffer-file-name
     (let* ((filename (expand-file-name buffer-file-name))
@@ -3100,7 +3082,7 @@ to add the preview functionality."
     (easy-menu-define preview-menu LaTeX-mode-map
       "This is the menu for preview-latex."
       '("Preview"
-	["Generate previews" :active nil] ;; Aquamacs
+	"Generate previews"
 	["(or toggle) at point" preview-at-point]
 	["for environment" preview-environment]
 	["for section" preview-section]
@@ -3108,14 +3090,14 @@ to add the preview functionality."
 	["for buffer" preview-buffer]
 	["for document" preview-document]
 	"---"
-        ["Remove previews" :active nil] ;; Aquamacs
+	"Remove previews"
 	["at point" preview-clearout-at-point]
 	["from section" preview-clearout-section]
 	["from region" preview-clearout mark-active]
 	["from buffer" preview-clearout-buffer]
 	["from document" preview-clearout-document]
 	"---"
-        ["Turn preamble cache" :active nil] ;; Aquamacs
+	"Turn preamble cache"
 	["on" preview-cache-preamble]
 	["off" preview-cache-preamble-off]
 	"---"
@@ -3306,19 +3288,19 @@ to return in its CAR the PROCESS parameter for the CLOSE
 call, and in its CDR the final stuff for the placement hook."
   (with-temp-message "locating previews..."
     (let (TeX-error-file TeX-error-offset snippet box counters
-                         file line
-                         (lsnippet 0) lstart (lfile "") lline lbuffer lpoint
-                         lcounters
-                         string after-string
-                         offset
-                         parsestate (case-fold-search nil)
-                         (run-buffer (current-buffer))
-                         (run-directory default-directory)
-                         tempdir
-                         close-data
-                         open-data
-                         fast-hook
-                         slow-hook)
+	  file line
+	  (lsnippet 0) lstart (lfile "") lline lbuffer lpoint
+	  lcounters
+	  string after-string
+	  offset
+	  parsestate (case-fold-search nil)
+	  (run-buffer (current-buffer))
+	  (run-directory default-directory)
+	  tempdir
+	  close-data
+	  open-data
+	  fast-hook
+	  slow-hook)
       ;; clear parsing variables
       (dolist (var preview-parse-variables)
 	(set (nth 1 var) nil))
@@ -3622,43 +3604,18 @@ name(\\([^)]+\\))\\)\\|\
 				  snippet)) "Parser"))))))))
 	  (preview-call-hook 'close (car open-data) close-data))))))
 
-;; Aquamacs specific function
-(defun preview-frame-monitor-resolution ()
-  (condition-case nil
-      (let* ((att (frame-monitor-attributes (selected-frame)))
-	     (geom (assq 'geometry att))
-	     (mm (assq 'mm-size att))
-	     (w (nth 3 geom))
-	     (h (nth 4 geom))
-	     (mmw (nth 1 mm))
-	     (mmh (nth 2 mm)))
-	(cons (round (/ (* 25.4 w) mmw))
-	      (round (/ (* 25.4 h) mmh))))
-    ;; default if some values aren't available
-    (error nil
-	   (condition-case nil
-	       (cons
-		(round (/ (* 25.4 (display-pixel-width))
-			  (display-mm-width)))
-		(round (/ (* 25.4 (display-pixel-height))
-			  (display-mm-height))))
-	     (error nil (cons 96 96))))))
-
 (defun preview-get-geometry ()
   "Transfer display geometry parameters from current display.
 Returns list of scale, resolution and colors.  Calculation
 is done in current buffer."
   (condition-case err
       (let* ((geometry
-	      (list
-               ;; preview-scale:  ;; Aquamacs
-               (preview-hook-enquiry preview-scale-function) ;; Aquamacs
-               ;;  preview-resolution:  ;; Aquamacs
-               (let ((res (preview-frame-monitor-resolution))) ;; Aquamacs
-                 (cons (* preview-resolution-factor (car res)) ;; Aquamacs
-                       (* preview-resolution-factor (cdr res)))) ;; Aquamacs
-               ;; preview-colors: ;; Aquamacs
-               (preview-get-colors)))
+	      (list (preview-hook-enquiry preview-scale-function)
+		    (cons (/ (* 25.4 (display-pixel-width))
+			     (display-mm-width))
+			  (/ (* 25.4 (display-pixel-height))
+			     (display-mm-height)))
+		    (preview-get-colors)))
 	     (preview-min-spec
 	      (* (cdr (nth 1 geometry))
 		 (/
