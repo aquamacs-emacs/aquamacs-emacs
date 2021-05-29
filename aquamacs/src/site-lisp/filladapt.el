@@ -1,32 +1,32 @@
-;;; Adaptive fill
-;;; Copyright (C) 1989, 1995-1998 Kyle E. Jones
-;;;
-;;; This program is free software; you can redistribute it and/or modify
-;;; it under the terms of the GNU General Public License as published by
-;;; the Free Software Foundation; either version 3, or (at your option)
-;;; any later version.
-;;;
-;;; This program is distributed in the hope that it will be useful,
-;;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-;;; GNU General Public License for more details.
-;;;
-;;; A copy of the GNU General Public License can be obtained from this
-;;; program's author (send electronic mail to kyle@uunet.uu.net) or from
-;;; the Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA
-;;; 02139, USA.
-;;;
-;;; Send bug reports to kyle_jones@wonderworks.com
+;;; filladapt.el --- Adaptive fill  -*- lexical-binding:t -*-
 
-;; This version has been patched to add the
-;; filladapt-token-match-empty feature.  Patch made by Martin
-;; Stjernholm <bug-cc-mode@gnu.org>; see
-;; <http://cc-mode.sourceforge.net/filladapt.php> for details.
+;; Copyright (C) 1989, 1995-2018  Free Software Foundation, Inc.
+
+;; Author: Kyle E. Jones <kyle_jones@wonderworks.com>
+;; Maintainer: emacs-devel@gnu.org
+;; Version: 2.12.2
+;; Package-Requires: ((emacs "24.4"))
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation; either version 3, or (at your option)
+;; any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
+;;
 
 ;; LCD Archive Entry:
 ;; filladapt|Kyle Jones|kyle_jones@wonderworks.com|
 ;; Minor mode to adaptively set fill-prefix and overload filling functions|
 ;; 28-February-1998|2.12|~/packages/filladapt.el|
+
+;;; Commentary:
 
 ;; These functions enhance the default behavior of Emacs' Auto Fill
 ;; mode and the commands fill-paragraph, lisp-fill-paragraph,
@@ -40,7 +40,7 @@
 ;;
 ;; The net result of this is that blurbs of text that are offset
 ;; from left margin by asterisks, dashes, and/or spaces, numbered
-;; examples, included text from USENET news articles, etc. are
+;; examples, included text from USENET news articles, etc.. are
 ;; generally filled correctly with no fuss.
 ;;
 ;; Since this package replaces existing Emacs functions, it cannot
@@ -57,11 +57,11 @@
 ;; buffer.
 ;;
 ;; Use
-;;     (add-hook 'text-mode-hook 'turn-on-filladapt-mode)
+;;     (add-hook 'text-mode-hook #'filladapt-mode)
 ;; to have Filladapt always enabled in Text mode.
 ;;
 ;; Use
-;;     (add-hook 'c-mode-hook 'turn-off-filladapt-mode)
+;;     (add-hook 'c-mode-hook #'turn-off-filladapt-mode)
 ;; to have Filladapt always disabled in C mode.
 ;;
 ;; In many cases, you can extend Filladapt by adding appropriate
@@ -72,46 +72,23 @@
 ;;     filladapt-token-match-table
 ;;     filladapt-token-conversion-table
 
-(and (featurep 'filladapt)
-     (error "filladapt cannot be loaded twice in the same Emacs session."))
-
-(provide 'filladapt)
-
-(defvar filladapt-version "2.12"
-  "Version string for filladapt.")
-
-;; BLOB to make custom stuff work even without customize
-(eval-and-compile
-  (condition-case ()
-      (require 'custom)
-    (error nil))
-  (if (and (featurep 'custom) (fboundp 'custom-declare-variable))
-      nil ;; We've got what we needed
-    ;; We have the old custom-library, hack around it!
-    (defmacro defgroup (&rest args)
-      nil)
-    (defmacro defcustom (var value doc &rest args)
-      (` (defvar (, var) (, value) (, doc))))))
+;;; Code:
 
 (defgroup filladapt nil
   "Enhanced filling"
   :group 'fill)
 
-(defvar filladapt-mode nil
-  "Non-nil means that Filladapt minor mode is enabled.
-Use the filladapt-mode command to toggle the mode on/off.")
-(make-variable-buffer-local 'filladapt-mode)
+(defvar filladapt-mode)                 ;Defined later by `define-minor-mode'.
 
 (defcustom filladapt-mode-line-string " Filladapt"
-  "*String to display in the modeline when Filladapt mode is active.
+  "String to display in the modeline when Filladapt mode is active.
 Set this to nil if you don't want a modeline indicator for Filladapt."
-  :type 'string
-  :group 'filladapt)
+  :type 'string)
 
 (defcustom filladapt-fill-column-tolerance nil
-  "*Tolerate filled paragraph lines ending this far from the fill column.
+  "Tolerate filled paragraph lines ending this far from the fill column.
 If any lines other than the last paragraph line end at a column
-less than fill-column - filladapt-fill-column-tolerance, fill-column will
+less than \"fill-column - filladapt-fill-column-tolerance\", `fill-column' will
 be adjusted using the filladapt-fill-column-*-fuzz variables and
 the paragraph will be re-filled until the tolerance is achieved
 or filladapt runs out of fuzz values to try.
@@ -120,28 +97,19 @@ A nil value means behave normally, that is, don't try refilling
 paragraphs to make filled line lengths fit within any particular
 range."
   :type '(choice (const nil)
-		 integer)
-  :group 'filladapt)
+		 integer))
 
 (defcustom filladapt-fill-column-forward-fuzz 5
-  "*Try values from fill-column to fill-column plus this variable
+  "Try values from `fill-column' to \"fill-column + this variable\"
 when trying to make filled paragraph lines fall with the tolerance
-range specified by filladapt-fill-column-tolerance."
-  :type 'integer
-  :group 'filladapt)
+range specified by `filladapt-fill-column-tolerance'."
+  :type 'integer)
 
 (defcustom filladapt-fill-column-backward-fuzz 5
-  "*Try values from fill-column to fill-column minus this variable
+  "Try values from `fill-column' to \"fill-column - this variable\"
 when trying to make filled paragraph lines fall with the tolerance
-range specified by filladapt-fill-column-tolerance."
-  :type 'integer
-  :group 'filladapt)
-
-;; install on minor-mode-alist
-(or (assq 'filladapt-mode minor-mode-alist)
-    (setq minor-mode-alist (cons (list 'filladapt-mode
-				       'filladapt-mode-line-string)
-				 minor-mode-alist)))
+range specified by `filladapt-fill-column-tolerance'."
+  :type 'integer)
 
 (defcustom filladapt-token-table
   '(
@@ -229,8 +197,7 @@ Matching is done case-sensitively.  The corresponding SYM is
 added to the list, point is moved to (match-end 0) and the
 process is repeated.  The process ends when there is no REGEXP in
 the table that matches what is at point."
-  :type '(repeat (list regexp symbol))
-  :group 'filladapt)
+  :type '(repeat (list regexp symbol)))
 
 (defcustom filladapt-not-token-table
   '(
@@ -240,14 +207,13 @@ the table that matches what is at point."
     "^$"
    )
   "List of regexps that can never be a token.
-Before trying the regular expressions in filladapt-token-table,
+Before trying the regular expressions in `filladapt-token-table',
 the regexps in this list are tried.  If any regexp in this list
 matches what is at point then the token generator gives up and
-doesn't try any of the regexps in filladapt-token-table.
+doesn't try any of the regexps in `filladapt-token-table'.
 
 Regexp matching is done case-sensitively."
-  :type '(repeat regexp)
-  :group 'filladapt)
+  :type '(repeat regexp))
 
 (defcustom filladapt-token-match-table
   '(
@@ -275,8 +241,7 @@ Table format is
 
 The first symbol SYM is the token, subsequent symbols are the
 tokens that SYM will match."
-  :type '(repeat (repeat symbol))
-  :group 'filladapt)
+  :type '(repeat (repeat symbol)))
 
 (defcustom filladapt-token-match-many-table
   '(
@@ -287,8 +252,7 @@ If one of these tokens appears in a token list, it will eat all
 matching tokens in a token list being matched against it until it
 encounters a token that doesn't match or a token that ends on
 a greater column number."
-  :type '(repeat symbol)
-  :group 'filladapt)
+  :type '(repeat symbol))
 
 (defcustom filladapt-token-paragraph-start-table
   '(
@@ -298,8 +262,7 @@ a greater column number."
 If parsing a line generates a token list containing one of
 these tokens, then the line is considered to be the start of a
 paragraph."
-  :type '(repeat symbol)
-  :group 'filladapt)
+  :type '(repeat symbol))
 
 (defcustom filladapt-token-conversion-table
   '(
@@ -326,59 +289,39 @@ HOWTO specifies how to do the conversion.
       not a TAB or a space into spaces and copy the resulting string into
       the fill prefix."
   :type '(repeat (cons symbol (choice (const exact)
-				      (const spaces))))
-  :group 'filladapt)
+				      (const spaces)))))
 
 (defcustom filladapt-token-match-empty '(beginning-of-line end-of-line)
   "List of tokens that may match the empty string.
 Normally a token is ignored if it matches the empty string.  This list
 contains the tokens that should be excluded from that rule."
-  :type '(repeat symbol)
-  :group 'filladapt)
-
-(defvar filladapt-function-table
-  (let ((assoc-list
-	 (list (cons 'fill-paragraph (symbol-function 'fill-paragraph))
-	       (cons 'fill-region (symbol-function 'fill-region))
-	       (cons 'fill-region-as-paragraph
-		     (symbol-function 'fill-region-as-paragraph))
-	       (cons 'do-auto-fill (symbol-function 'do-auto-fill)))))
-    ;; v18 Emacs doesn't have lisp-fill-paragraph
-    (if (fboundp 'lisp-fill-paragraph)
-	(nconc assoc-list
-	       (list (cons 'lisp-fill-paragraph
-			   (symbol-function 'lisp-fill-paragraph)))))
-    assoc-list )
-  "Table containing the old function definitions that filladapt usurps.")
+  :type '(repeat symbol))
 
 (defcustom filladapt-fill-paragraph-post-hook nil
-  "Hooks run after filladapt runs fill-paragraph."
-  :type 'hook
-  :group 'filladapt)
+  "Hooks run after filladapt runs `fill-paragraph'."
+  :type 'hook)
 
-(defvar filladapt-inside-filladapt nil
+(defvar filladapt--inside-filladapt nil
   "Non-nil if the filladapt version of a fill function executing.
 Currently this is only checked by the filladapt version of
-fill-region-as-paragraph to avoid this infinite recursion:
+`fill-region-as-paragraph' to avoid this infinite recursion:
 
   fill-region-as-paragraph -> fill-paragraph -> fill-region-as-paragraph ...")
 
-(defcustom filladapt-debug nil
+(defvar filladapt-debug nil
   "Non-nil means filladapt debugging is enabled.
-Use the filladapt-debug command to turn on debugging.
+Use the `filladapt-debug' function to turn on debugging.
 
 With debugging enabled, filladapt will
 
     a. display the proposed indentation with the tokens highlighted
-       using filladapt-debug-indentation-face-1 and
-       filladapt-debug-indentation-face-2.
+       using `filladapt-debug-indentation-face-1' and
+       `filladapt-debug-indentation-face-2'.
     b. display the current paragraph using the face specified by
-       filladapt-debug-paragraph-face."
-  :type 'boolean
-  :group 'filladapt)
+       `filladapt-debug-paragraph-face'.")
 
-(if filladapt-debug
-    (add-hook 'post-command-hook 'filladapt-display-debug-info-maybe))
+;; (if filladapt-debug
+;;     (add-hook 'post-command-hook #'filladapt-display-debug-info-maybe))
 
 (defvar filladapt-debug-indentation-face-1 'highlight
   "Face used to display the indentation when debugging is enabled.")
@@ -397,7 +340,9 @@ With debugging enabled, filladapt will
 ;; kludge city, see references in code.
 (defvar filladapt-old-line-prefix)
 
-(defun do-auto-fill ()
+(advice-add 'do-auto-fill :around #'filladapt--do-auto-fill)
+(defun filladapt--do-auto-fill (orig-fun &rest args)
+  "Overloading for `filladapt-mode'."
   (catch 'done
     (if (and filladapt-mode (null fill-prefix))
 	(save-restriction
@@ -409,119 +354,81 @@ With debugging enabled, filladapt will
 		;; need this or Emacs 19 ignores fill-prefix when
 		;; inside a comment.
 		(comment-multi-line t)
-		(filladapt-inside-filladapt t)
+		(filladapt--inside-filladapt t)
 		fill-prefix retval)
 	    (if (filladapt-adapt nil nil)
 		(progn
-		  (setq retval (filladapt-funcall 'do-auto-fill))
+		  (setq retval (apply orig-fun args))
 		  (throw 'done retval))))))
-    (filladapt-funcall 'do-auto-fill)))
+    (apply orig-fun args)))
 
-(defun filladapt-fill-paragraph (function arg)
-  (catch 'done
-    (if (and filladapt-mode (null fill-prefix))
-	(save-restriction
-	  (let ((paragraph-ignore-fill-prefix nil)
-		;; if the user wanted this stuff, they probably
-		;; wouldn't be using filladapt-mode.
-		(adaptive-fill-mode nil)
-		(adaptive-fill-regexp nil)
-		;; need this or Emacs 19 ignores fill-prefix when
-		;; inside a comment.
-		(comment-multi-line t)
-		fill-prefix retval)
-	    (if (filladapt-adapt t nil)
-		(progn
-		  (if filladapt-fill-column-tolerance
-		      (let* ((low (- fill-column
-				     filladapt-fill-column-backward-fuzz))
-			     (high (+ fill-column
-				      filladapt-fill-column-forward-fuzz))
-			     (old-fill-column fill-column)
-			     (fill-column fill-column)
-			     (lim (- high low))
-			     (done nil)
-			     (sign 1)
-			     (delta 0))
-			(while (not done)
-			  (setq retval (filladapt-funcall function arg))
-			  (if (filladapt-paragraph-within-fill-tolerance)
-			      (setq done 'success)
-			    (setq delta (1+ delta)
-				  sign (* sign -1)
-				  fill-column (+ fill-column (* delta sign)))
-			    (while (and (<= delta lim)
-					(or (< fill-column low)
-					    (> fill-column high)))
+(defun filladapt--fill-paragraph (orig-fun &optional arg &rest args)
+  "Overloading for `filladapt-mode'."
+  (let ((filladapt--inside-filladapt t))
+    (catch 'done
+      (if (and filladapt-mode (null fill-prefix))
+	  (save-restriction
+	    (let ((paragraph-ignore-fill-prefix nil)
+		  ;; if the user wanted this stuff, they probably
+		  ;; wouldn't be using filladapt-mode.
+		  (adaptive-fill-mode nil)
+		  (adaptive-fill-regexp nil)
+		  ;; need this or Emacs 19 ignores fill-prefix when
+		  ;; inside a comment.
+		  (comment-multi-line t)
+		  fill-prefix retval)
+	      (if (filladapt-adapt t nil)
+		  (progn
+		    (if filladapt-fill-column-tolerance
+		        (let* ((low (- fill-column
+				       filladapt-fill-column-backward-fuzz))
+			       (high (+ fill-column
+				        filladapt-fill-column-forward-fuzz))
+			       (old-fill-column fill-column)
+			       (fill-column fill-column)
+			       (lim (- high low))
+			       (done nil)
+			       (sign 1)
+			       (delta 0))
+			  (while (not done)
+			    (setq retval (apply orig-fun arg args))
+			    (if (filladapt-paragraph-within-fill-tolerance)
+			        (setq done 'success)
 			      (setq delta (1+ delta)
 				    sign (* sign -1)
-				    fill-column (+ fill-column
-						   (* delta sign))))
-			    (setq done (> delta lim))))
-			;; if the paragraph lines never fell
-			;; within the tolerances, refill using
-			;; the old fill-column.
-			(if (not (eq done 'success))
-			    (let ((fill-column old-fill-column))
-			      (setq retval (filladapt-funcall function arg)))))
-		    (setq retval (filladapt-funcall function arg)))
-		  (run-hooks 'filladapt-fill-paragraph-post-hook)
-		  (throw 'done retval))))))
-    ;; filladapt-adapt failed, so do fill-paragraph normally.
-    (filladapt-funcall function arg)))
+				    fill-column (+ fill-column (* delta sign)))
+			      (while (and (<= delta lim)
+					  (or (< fill-column low)
+					      (> fill-column high)))
+			        (setq delta (1+ delta)
+				      sign (* sign -1)
+				      fill-column (+ fill-column
+						     (* delta sign))))
+			      (setq done (> delta lim))))
+			  ;; if the paragraph lines never fell
+			  ;; within the tolerances, refill using
+			  ;; the old fill-column.
+			  (if (not (eq done 'success))
+			      (let ((fill-column old-fill-column))
+			        (setq retval (apply orig-fun arg args)))))
+		      (setq retval (apply orig-fun arg args)))
+		    (run-hooks 'filladapt-fill-paragraph-post-hook)
+		    (throw 'done retval))))))
+      ;; filladapt-adapt failed, so do fill-paragraph normally.
+      (apply orig-fun arg args))))
 
-(defun fill-paragraph (arg)
-  "Fill paragraph at or after point.  Prefix arg means justify as well.
+(advice-add 'fill-paragraph :around #'filladapt--fill-paragraph)
+(advice-add 'lisp-fill-paragraph :around #'filladapt--fill-paragraph)
 
-(This function has been overloaded with the `filladapt' version.)
-
-If `sentence-end-double-space' is non-nil, then period followed by one
-space does not end a sentence, so don't break a line there.
-
-If `fill-paragraph-function' is non-nil, we call it (passing our
-argument to it), and if it returns non-nil, we simply return its value."
-  (interactive "*P")
-  (let ((filladapt-inside-filladapt t))
-    (filladapt-fill-paragraph 'fill-paragraph arg)))
-
-(defun lisp-fill-paragraph (&optional arg)
-  "Like \\[fill-paragraph], but handle Emacs Lisp comments.
-
-(This function has been overloaded with the `filladapt' version.)
-
-If any of the current line is a comment, fill the comment or the
-paragraph of it that point is in, preserving the comment's indentation
-and initial semicolons."
-  (interactive "*P")
-  (let ((filladapt-inside-filladapt t))
-    (filladapt-fill-paragraph 'lisp-fill-paragraph arg)))
-
-(defun fill-region-as-paragraph (beg end &optional justify
-				 nosqueeze squeeze-after)
-  "Fill the region as one paragraph.
-
-(This function has been overloaded with the `filladapt' version.)
-
-It removes any paragraph breaks in the region and extra newlines at the end,
-indents and fills lines between the margins given by the
-`current-left-margin' and `current-fill-column' functions.
-It leaves point at the beginning of the line following the paragraph.
-
-Normally performs justification according to the `current-justification'
-function, but with a prefix arg, does full justification instead.
-
-From a program, optional third arg JUSTIFY can specify any type of
-justification.  Fourth arg NOSQUEEZE non-nil means not to make spaces
-between words canonical before filling.  Fifth arg SQUEEZE-AFTER, if non-nil,
-means don't canonicalize spaces before that position.
-
-If `sentence-end-double-space' is non-nil, then period followed by one
-space does not end a sentence, so don't break a line there."
-  (interactive "*r\nP")
-  (if (and filladapt-mode (not filladapt-inside-filladapt))
+(advice-add 'fill-region-as-paragraph :around
+            #'filladapt--fill-region-as-paragraph)
+(defun filladapt--fill-region-as-paragraph (orig-fun beg end &optional justify
+				                     &rest args)
+  "Overloading for `filladapt-mode'."
+  (if (and filladapt-mode (not filladapt--inside-filladapt))
       (save-restriction
 	(narrow-to-region beg end)
-	(let ((filladapt-inside-filladapt t)
+	(let ((filladapt--inside-filladapt t)
 	      line-start last-token)
 	  (goto-char beg)
 	  (while (equal (char-after (point)) ?\n)
@@ -529,7 +436,7 @@ space does not end a sentence, so don't break a line there."
 	  (end-of-line)
 	  (while (zerop (forward-line))
 	    (if (setq last-token
-		      (car (filladapt-tail (filladapt-parse-prefixes))))
+		      (car (last (filladapt-parse-prefixes))))
 		(progn
 		  (setq line-start (point))
 		  (move-to-column (nth 1 last-token))
@@ -549,38 +456,15 @@ space does not end a sentence, so don't break a line there."
 	;; fill-region-as-paragraph to do this.  If we don't do
 	;; it, fill-region will spin in an endless loop.
 	(goto-char (point-max)))
-    (condition-case nil
-	;; five args for Emacs 19.31
-	(filladapt-funcall 'fill-region-as-paragraph beg end
-			   justify nosqueeze squeeze-after)
-      (wrong-number-of-arguments
-       (condition-case nil
-	   ;; four args for Emacs 19.29
-	   (filladapt-funcall 'fill-region-as-paragraph beg end
-			      justify nosqueeze)
-	 ;; three args for the rest of the world.
-	 (wrong-number-of-arguments
-	  (filladapt-funcall 'fill-region-as-paragraph beg end justify)))))))
+    (apply orig-fun beg end justify args)))
 
-(defun fill-region (beg end &optional justify nosqueeze to-eop)
-  "Fill each of the paragraphs in the region.
-
-(This function has been overloaded with the `filladapt' version.)
-
-Prefix arg (non-nil third arg, if called from program) means justify as well.
-
-Noninteractively, fourth arg NOSQUEEZE non-nil means to leave
-whitespace other than line breaks untouched, and fifth arg TO-EOP
-non-nil means to keep filling to the end of the paragraph (or next
-hard newline, if `use-hard-newlines' is on).
-
-If `sentence-end-double-space' is non-nil, then period followed by one
-space does not end a sentence, so don't break a line there."
-  (interactive "*r\nP")
-  (if (and filladapt-mode (not filladapt-inside-filladapt))
+(advice-add 'fill-region :around #'filladapt--fill-region)
+(defun filladapt--fill-region (orig-fun beg end &optional justify &rest args)
+  "Overloading for `filladapt-mode'."
+  (if (and filladapt-mode (not filladapt--inside-filladapt))
       (save-restriction
 	(narrow-to-region beg end)
-	(let ((filladapt-inside-filladapt t)
+	(let ((filladapt--inside-filladapt t)
 	      start)
 	  (goto-char beg)
 	  (while (not (eobp))
@@ -591,7 +475,7 @@ space does not end a sentence, so don't break a line there."
 		(progn
 		  (save-restriction
 		    (narrow-to-region start (point))
-		    (fill-region start (point) justify nosqueeze to-eop)
+		    (apply #'fill-region start (point) justify args)
 		    (goto-char (point-max)))
 		  (if (and (not (bolp)) (not (eobp)))
 		      (forward-line 1))))
@@ -604,47 +488,31 @@ space does not end a sentence, so don't break a line there."
 		    (goto-char (point-max)))
 		  (if (and (not (bolp)) (not (eobp)))
 		      (forward-line 1)))))))
-    (condition-case nil
-	(filladapt-funcall 'fill-region beg end justify nosqueeze to-eop)
-      (wrong-number-of-arguments
-       (condition-case nil
-	   (filladapt-funcall 'fill-region beg end justify nosqueeze)
-	 (wrong-number-of-arguments
-	  (filladapt-funcall 'fill-region beg end justify)))))))
+    (apply orig-fun beg end justify args)))
 
 (defvar zmacs-region-stays) ; for XEmacs
 
-(defun filladapt-mode (&optional arg)
+;;;###autoload
+(define-minor-mode filladapt-mode
   "Toggle Filladapt minor mode.
 With arg, turn Filladapt mode on iff arg is positive.  When
 Filladapt mode is enabled, auto-fill-mode and the fill-paragraph
 command are both smarter about guessing a proper fill-prefix and
 finding paragraph boundaries when bulleted and indented lines and
 paragraphs are used."
-  (interactive "P")
+  :lighter filladapt-mode-line-string
   ;; don't deactivate the region.
-  (setq zmacs-region-stays t)
-  (setq filladapt-mode (or (and arg (> (prefix-numeric-value arg) 0))
-			   (and (null arg) (null filladapt-mode))))
-  (if (fboundp 'force-mode-line-update)
-      (force-mode-line-update)
-    (set-buffer-modified-p (buffer-modified-p))))
+  (setq zmacs-region-stays t))
 
-(defun turn-on-filladapt-mode ()
-  "Unconditionally turn on Filladapt mode in the current buffer."
-  (filladapt-mode 1))
+(define-obsolete-function-alias 'turn-on-filladapt-mode #'filladapt-mode "")
 
 (defun turn-off-filladapt-mode ()
   "Unconditionally turn off Filladapt mode in the current buffer."
   (filladapt-mode -1))
 
-(defun filladapt-funcall (function &rest args)
-  "Call the old definition of a function that filladapt has usurped."
-  (apply (cdr (assoc function filladapt-function-table)) args))
-
 (defun filladapt-paragraph-start (list)
-  "Returns non-nil if LIST contains a paragraph starting token.
-LIST should be a token list as returned by filladapt-parse-prefixes."
+  "Return non-nil if LIST contains a paragraph starting token.
+LIST should be a token list as returned by `filladapt-parse-prefixes'."
   (catch 'done
     (while list
       (if (memq (car (car list)) filladapt-token-paragraph-start-table)
@@ -654,11 +522,11 @@ LIST should be a token list as returned by filladapt-parse-prefixes."
 (defun filladapt-parse-prefixes ()
   "Parse all the tokens after point and return a list of them.
 The tokens regular expressions are specified in
-filladapt-token-table.  The list returned is of this form
+`filladapt-token-table'.  The list returned is of this form
 
   ((SYM COL STRING) ...)
 
-SYM is a token symbol as found in filladapt-token-table.
+SYM is a token symbol as found in `filladapt-token-table'.
 COL is the column at which the token ended.
 STRING is the token's text."
   (save-excursion
@@ -771,8 +639,8 @@ matching."
     (and matched (null list1) (null list2)) ))
 
 (defun filladapt-make-fill-prefix (list)
-  "Build a fill-prefix for a token LIST.
-filladapt-token-conversion-table specifies how this is done."
+  "Build a `fill-prefix' for a token LIST.
+`filladapt-token-conversion-table' specifies how this is done."
   (let ((prefix-list nil)
 	(conversion-spec nil))
     (while list
@@ -789,7 +657,7 @@ filladapt-token-conversion-table specifies how this is done."
 		    (nth 2 (car list))
 		    prefix-list))))
       (setq list (cdr list)))
-    (apply (function concat) (nreverse prefix-list)) ))
+    (apply #'concat (nreverse prefix-list))))
 
 (defun filladapt-paragraph-within-fill-tolerance ()
   (catch 'done
@@ -807,19 +675,16 @@ filladapt-token-conversion-table specifies how this is done."
 
 (defun filladapt-convert-to-spaces (string)
   "Return a copy of STRING, with all non-tabs and non-space changed to spaces."
-  (let ((i 0)
-	(space-list '(?\  ?\t))
-	(space ?\ )
-	(lim (length string)))
+  (let ((space-list '(?\  ?\t))
+	(space ?\ ))
     (setq string (copy-sequence string))
-    (while (< i lim)
+    (dotimes (i (length string))
       (if (not (memq (aref string i) space-list))
-	  (aset string i space))
-      (setq i (1+ i)))
+	  (aset string i space)))
     string ))
 
 (defun filladapt-adapt (paragraph debugging)
-  "Set fill-prefix based on the contents of the current line.
+  "Set `fill-prefix' based on the contents of the current line.
 
 If the first arg PARAGRAPH is non-nil, also set a clipping region
 around the current paragraph.
@@ -877,7 +742,7 @@ necessary to make certain paragraph fills work properly."
 	      ;; after fill-paragraph has been called.
 	      (if (and paragraph (not debugging))
 		  (let (col)
-		    (setq col (nth 1 (car (filladapt-tail token-list))))
+		    (setq col (nth 1 (car (last token-list))))
 		    (goto-char (point-min))
 		    (move-to-column col)
 		    (setq filladapt-old-line-prefix
@@ -885,61 +750,52 @@ necessary to make certain paragraph fills work properly."
 		    (delete-region (point-min) (point))
 		    (insert fill-prefix)
 		    (add-hook 'filladapt-fill-paragraph-post-hook
-			      'filladapt-cleanup-kludge-at-point-min)))))
+			      #'filladapt-cleanup-kludge-at-point-min)))))
 	t ))))
 
 (defun filladapt-cleanup-kludge-at-point-min ()
   "Cleanup the paragraph fill kludge.
-See filladapt-adapt."
+See `filladapt-adapt'."
   (save-excursion
     (goto-char (point-min))
     (insert filladapt-old-line-prefix)
     (delete-char (length fill-prefix))
     (remove-hook 'filladapt-fill-paragraph-post-hook
-		 'filladapt-cleanup-kludge-at-point-min)))
+		 #'filladapt-cleanup-kludge-at-point-min)))
 
-(defun filladapt-tail (list)
-  "Returns the last cons in LIST."
-  (if (null list)
-      nil
-    (while (consp (cdr list))
-      (setq list (cdr list)))
-    list ))
+(defalias 'filladapt-delete-extent
+  (if (featurep 'xemacs)
+      'delete-extent
+    #'delete-overlay))
 
-(defun filladapt-delete-extent (e)
-  (if (fboundp 'delete-extent)
-      (delete-extent e)
-    (delete-overlay e)))
+(defalias 'filladapt-make-extent
+  (if (featurep 'xemacs)
+      'make-extent
+    #'make-overlay))
 
-(defun filladapt-make-extent (beg end)
-  (if (fboundp 'make-extent)
-      (make-extent beg end)
-    (make-overlay beg end)))
+(defalias 'filladapt-set-extent-endpoints
+  (if (featurep 'xemacs)
+      'set-extent-endpoints
+    #'move-overlay))
 
-(defun filladapt-set-extent-endpoints (e beg end)
-  (if (fboundp 'set-extent-endpoints)
-      (set-extent-endpoints e beg end)
-    (move-overlay e beg end)))
-
-(defun filladapt-set-extent-property (e prop val)
-  (if (fboundp 'set-extent-property)
-      (set-extent-property e prop val)
-    (overlay-put e prop val)))
+(defalias 'filladapt-set-extent-property
+  (if (featurep 'xemacs)
+      'set-extent-property
+    #'overlay-put))
 
 (defun filladapt-debug ()
   "Toggle filladapt debugging on/off in the current buffer."
-;;  (interactive)
-  (make-local-variable 'filladapt-debug)
-  (setq filladapt-debug (not filladapt-debug))
+  ;; (interactive)
+  (set (make-local-variable 'filladapt-debug) (not filladapt-debug))
   (if (null filladapt-debug)
       (progn
-	(mapcar (function (lambda (e) (filladapt-set-extent-endpoints e 1 1)))
-		filladapt-debug-indentation-extents)
+	(dolist (e filladapt-debug-indentation-extents)
+          (filladapt-set-extent-endpoints e 1 1))
 	(if filladapt-debug-paragraph-extent
 	    (progn
 	      (filladapt-delete-extent filladapt-debug-paragraph-extent)
 	      (setq filladapt-debug-paragraph-extent nil)))))
-  (add-hook 'post-command-hook 'filladapt-display-debug-info-maybe))
+  (add-hook 'post-command-hook #'filladapt-display-debug-info-maybe))
 
 (defun filladapt-display-debug-info-maybe ()
   (cond ((null filladapt-debug) nil)
@@ -957,7 +813,7 @@ See filladapt-adapt."
 	     (let ((ei-list filladapt-debug-indentation-extents)
 		   (ep filladapt-debug-paragraph-extent)
 		   (face filladapt-debug-indentation-face-1)
-		   fill-prefix token-list)
+		   fill-prefix token-list e)
 	       (if (null (filladapt-adapt t t))
 		   (progn
 		     (filladapt-set-extent-endpoints ep 1 1)
@@ -978,8 +834,7 @@ See filladapt-adapt."
 		     (setq e (filladapt-make-extent 1 1))
 		     (filladapt-set-extent-property e 'detachable nil)
 		     (filladapt-set-extent-property e 'evaporate nil)
-		     (setq filladapt-debug-indentation-extents
-			   (cons e filladapt-debug-indentation-extents)))
+		     (push e filladapt-debug-indentation-extents))
 		   (filladapt-set-extent-property e 'face face)
 		   (filladapt-set-extent-endpoints e (point)
 						   (progn
@@ -987,10 +842,52 @@ See filladapt-adapt."
 						      (nth 1
 							   (car token-list)))
 						     (point)))
-		   (if (eq face filladapt-debug-indentation-face-1)
-		       (setq face filladapt-debug-indentation-face-2)
-		     (setq face filladapt-debug-indentation-face-1))
+		   (setq face (if (eq face filladapt-debug-indentation-face-1)
+		                  filladapt-debug-indentation-face-2
+                                filladapt-debug-indentation-face-1))
 		   (setq token-list (cdr token-list)))
 		 (while ei-list
 		   (filladapt-set-extent-endpoints (car ei-list) 1 1)
 		   (setq ei-list (cdr ei-list))))))))))
+
+;;;; ChangeLog:
+
+;; 2018-07-09  Stefan Monnier  <monnier@iro.umontreal.ca>
+;;
+;; 	* filladapt/filladapt.el: Minor fixes
+;;
+;; 	(filladapt--inside-filladapt): Rename from filladapt-inside-filladapt.
+;; 	(filladapt--do-auto-fill): Fix typo.
+;; 	(filladapt-tail): Remove, use `last` instead.
+;;
+;; 2018-07-09  Martin Stjernholm  <bug-cc-mode@gnu.org>
+;;
+;; 	* filladapt/filladapt.el (filladapt-token-match-empty): New var
+;;
+;; 	"As of version 2.12, [filladapt] does however lack a feature that makes
+;; 	it work suboptimally when ‘c-comment-prefix-regexp’ matches the empty
+;; 	string
+;; 	(which it does by default)." This patch comes from
+;; 	http://cc-mode.sourceforge.net/filladapt.el.diff.
+;;
+;; 	(filladapt-parse-prefixes): Use it.
+;;
+;; 2018-07-04  Stefan Monnier  <monnier@iro.umontreal.ca>
+;;
+;; 	* filladapt/filladapt.el: Use lexical-binding.	Cosmetic improvements
+;;
+;; 	Remove ancient custom compatibility code. Use advice-add to overload
+;; 	standard filling functions.
+;; 	(filladapt-version): Remove.
+;; 	(filladapt-token-conversion-table, filladapt-funcall): Remove.
+;; 	(filladapt-mode): Use define-minor-mode.
+;; 	(turn-on-filladapt-mode): Mark as obsolete.
+;;
+;; 2018-07-04  Stefan Monnier  <monnier@iro.umontreal.ca>
+;;
+;; 	Add filladapt
+;;
+
+
+(provide 'filladapt)
+;;; filladapt.el ends here
