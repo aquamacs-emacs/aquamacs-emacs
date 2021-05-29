@@ -4,9 +4,30 @@
 # Only works if the AQUAMACS_CERT variable is defined, giving the
 # identity to be used.
 
+AQUAMACS_CERT=AAF180423BA3E8A2A36167F7024E9B7E774F41B3
+APPDIR="nextstep/Aquamacs.app"
+RESDIR="${APPDIR}/Contents/Resources"
+NEWBIN="${RESDIR}/bin"
+MACDIR="${APPDIR}/Contents/MacOS"
+
+# Move scripts out of the MacOS directory in the bundle, because Apple doesn't like that.
+mkdir ${NEWBIN}
+mv ${MACDIR}/bin/{aquamacs,emacs} ${NEWBIN}
+mv ${MACDIR}/libexec/rcs2log ${NEWBIN}
+ln -s ../../Resources/bin/aquamacs ${MACDIR}/bin/aquamacsln -s ../../Resources/bin/emacs ${MACDIR}/bin/emacs
+ln -s ../../Resources/bin/rcs2log ${MACDIR}/libexec/rcs2log
+
+
 if [[ "${AQUAMACS_CERT}" != "" ]]; then
     echo "Signing code with $AQUAMACS_CERT"
-    codesign -s "$AQUAMACS_CERT" --deep nextstep/Aquamacs.app
+    # codesign -s "$AQUAMACS_CERT" --force --timestamp \
+    #         --options=runtime ${APPDIR}
+
+    for f in "${APPDIR}"/Contents/MacOS/{Aquamacs,bin/*,libexec/*,lib/*} ${APPDIR}; do
+        codesign -s "$AQUAMACS_CERT" --force --timestamp \
+                 --options=runtime \
+                 "${f}"
+    done
 else
     echo
     echo "No signing identity given with AQUAMACS_CERT"

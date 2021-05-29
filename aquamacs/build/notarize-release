@@ -1,0 +1,16 @@
+#!/bin/bash
+# Submit Aquamacs for notarizing by Apple
+#
+# Requires that AQUAMACS_NOTARIZE_ID is set in environment,
+# and that an appropriate app-specific password is set in the keychain.
+
+# Package a ZIP file for the request
+ZIPFILE=/tmp/aquamacs-to-notarize.zip
+cd nextstep
+ditto -c -k --keepParent Aquamacs.app "${ZIPFILE}"
+
+xcrun altool --notarize-app \
+      --primary-bundle-id "org.aquamacs.aquamacs36" \
+      --username "${AQUAMACS_NOTARIZE_ID}" \
+      --password "@keychain:AC_PASSWORD" \
+      --file ${ZIPFILE}
