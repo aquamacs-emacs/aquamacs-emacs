@@ -1,17 +1,13 @@
 ;;; smart-dnd.el --- user-configurable drag-n-drop feature
 
-;; Copyright (C) 2003-2008  by Seiji Zenitani
+;; Copyright (C) 2003-2008, 2012, 2014, 2017, 2020  by Seiji Zenitani
 
-;; Author: Seiji Zenitani <zenitani@mac.com>
-;; Based on: mac-drag-N-drop.el by Seiji Zenitani
-;; $Id$
+;; Author: Seiji Zenitani <zenitani@gmail.com>
 ;; Keywords: tools
 ;; Created: 2003-04-27
-;; Compatibility: Emacs 22
-;; URL(en): http://homepage.mac.com/zenitani/comp-e.html
-;; URL(jp): http://homepage.mac.com/zenitani/elisp-j.html#smart-dnd
-
-;; Contributors: David Reitter
+;; Compatibility: Emacs 22 or later
+;; URL(en): https://github.com/zenitani/elisp/blob/master/smart-dnd.el
+;; URL(jp): https://sci.nao.ac.jp/MEMBER/zenitani/elisp-j.html#smart-dnd
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -24,9 +20,9 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs; see the file COPYING.  If not, write to
-;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; along with GNU Emacs; see the file COPYING.  If not, write to the
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary
 
@@ -34,8 +30,7 @@
 ;;
 ;; Usage:
 ;;
-;; First, evaluate `smart-dnd-setup' function in the buffer
-;; by using the following alist argument.
+;; First, evaluate `smart-dnd-setup' function with an alist in the buffer.
 ;; The code modifies drag-n-drop behaviour in the local buffer and then
 ;; a string "image file: file.png" will be inserted when *.png file is dropped.
 ;;
@@ -53,7 +48,7 @@
 ;; In the case of ".exe" in the above list, a local variable 'f'
 ;; will be replaced by the dropped filename in the expression.
 ;;
-;; Major-mode-hook would be good place to install your own configuration.
+;; Major-mode-hook is a good place to install your configuration.
 ;; For example,
 ;;
 ;; html-mode:
@@ -63,10 +58,10 @@
 ;;  (lambda ()
 ;;    (smart-dnd-setup
 ;;     '(
-;;       ("\\.gif\\'" . "<img src=\"%R\">\n")
-;;       ("\\.jpg\\'" . "<img src=\"%R\">\n")
-;;       ("\\.png\\'" . "<img src=\"%R\">\n")
-;;       ("\\.css\\'" . "<link rel=\"stylesheet\" type=\"text/css\" href=\"%R\">\n" )
+;;       ("\\.png\\'" . "<img src=\"%R\" />\n")
+;;       ("\\.gif\\'" . "<img src=\"%R\" />\n")
+;;       ("\\.jpg\\'" . "<img src=\"%R\" />\n")
+;;       ("\\.css\\'" . "<link rel=\"stylesheet\" type=\"text/css\" href=\"%R\" />\n" )
 ;;       ("\\.js\\'"  . "<script type=\"text/javascript\" src=\"%R\"></script>\n" )
 ;;       (".*" . "<a href=\"%R\">%f</a>\n")
 ;;       ))))
@@ -89,7 +84,7 @@
 ;;       ))))
 ;;
 ;; C/C++ mode:
-;; 
+;;
 ;; (add-hook 'c-mode-common-hook
 ;;           (lambda () (smart-dnd-setup '(("\\.h\\'" . "#include <%f>")))))
 ;;
@@ -209,4 +204,4 @@ while %R returns the URL.             [ file:///home/zenitani/ .. /index.html ]
 
 (provide 'smart-dnd)
 
-;; smart-dnd.el ends here
+;;; smart-dnd.el ends here
