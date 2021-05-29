@@ -7,7 +7,7 @@
 ;; Keywords: unix, comm
 ;; Created: 1996-07-03
 
-;; $Id: ssh.el,v 1.2 2008/11/07 13:40:15 davidswelt Exp $
+;; $Id: ssh.el,v 1.11 2012/07/09 22:15:45 friedman Exp $
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -20,9 +20,7 @@
 ;; GNU General Public License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's maintainer or write to: The Free Software Foundation,
-;; Inc.; 59 Temple Place, Suite 330; Boston, MA 02111-1307, USA.
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
@@ -212,28 +210,14 @@ how ssh X display tunelling interacts with frames on remote displays."
      ((comint-check-proc buffer-name))
      (t
       (ssh-with-check-display-override
-       #'(lambda ()
-           (comint-exec buffer buffer-name ssh-program nil args)))
+       (lambda ()
+         (comint-exec buffer buffer-name ssh-program nil args)))
       (setq proc (get-buffer-process buffer))
       ;; Set process-mark to point-max in case there is text in the
       ;; buffer from a previous exited process.
       (set-marker (process-mark proc) (point-max))
 
-      ;; comint-output-filter-functions is treated like a hook: it is
-      ;; processed via run-hooks or run-hooks-with-args in later versions
-      ;; of emacs.
-      ;; comint-output-filter-functions should already have a
-      ;; permanent-local property, at least in emacs 19.27 or later.
-      (cond
-       ((fboundp 'make-local-hook)
-        (make-local-hook 'comint-output-filter-functions)
-        (add-hook 'comint-output-filter-functions 'ssh-carriage-filter nil t))
-       (t
-        (make-local-variable 'comint-output-filter-functions)
-        (add-hook 'comint-output-filter-functions 'ssh-carriage-filter)))
-
       (ssh-mode)
-
       (make-local-variable 'ssh-host)
       (setq ssh-host host)
       (make-local-variable 'ssh-remote-user)
@@ -265,7 +249,7 @@ If `ssh-mode-hook' is set, run it."
   (use-local-map ssh-mode-map)
   (setq shell-dirtrackp ssh-directory-tracking-mode)
   (make-local-variable 'comint-file-name-prefix)
-  (run-mode-hooks 'ssh-mode-hook))
+  (run-hooks 'ssh-mode-hook))
 
 (defun ssh-directory-tracking-mode (&optional prefix)
   "Do remote or local directory tracking, or disable entirely.
@@ -377,17 +361,6 @@ local one share the same directories (through NFS)."
               (and text (setq list (cons text list))))))
       (kill-buffer buf))
     (nreverse list)))
-
-(defun ssh-carriage-filter (string)
-  (let* ((point-marker (point-marker))
-         (end (process-mark (get-buffer-process (current-buffer))))
-         (beg (or (and (boundp 'comint-last-output-start)
-                       comint-last-output-start)
-                  (- end (length string)))))
-    (goto-char beg)
-    (while (search-forward "\C-m" end t)
-      (delete-char -1))
-    (goto-char point-marker)))
 
 (defun ssh-send-Ctrl-C ()
   (interactive)
