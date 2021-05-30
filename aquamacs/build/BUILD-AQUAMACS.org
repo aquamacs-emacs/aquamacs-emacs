@@ -80,3 +80,117 @@ TBD
 - The file ~src/.gdbinit~ is automatically loaded by ~gdb~ if you are starting it in that directory, which is recommended if you are debugging Aquamacs. The commands are special for helping to debug Emacs, especially to get information about what's going on in the Lisp code.
 - The file ~src/.gdbmac~ has some addition useful GDB debugging commands for the Mac if you are running Aquamacs under ~gdb~. The memory debugging environment variables can be used outside of ~gdb~. Also, you may want to change the particular environment variables in use at any given time. The defaults are generally useful for debugging the Mac-specific code.
 - Aquamacs does not seem to run under ~lldb~.
+
+* Add-on code and packages for Aquamacs
+Aquamacs has several additional Emacs Lisp packages, some that are specific to Aquamacs and some that are bundled from other sources to make the out-of-the-box version more useful. Some of the external packages are slightly modified to fit in with Aquamacs. Many of these changes are noted below, but the list may not be current.
+
+This section lists each of those for reference in building a complete Aquamacs distribution. The sources for these are in the aquamacs/src/site-lisp directory, which contains both kinds of Lisp code.
+** Built-in Aquamacs Lisp libraries in src/site-lisp
+The individual elisp files are listed first, then the subdirectories.
+*** elisp files in src/site-lisp
+- aquamacs-autoface-mode :: implements automatic setting of mode-specific faces.
+- aquamacs-aux.el :: cleanup for aquamacs-setup
+- aquamacs-bug.el :: email bug reports for Aquamacs
+- aquamacs-cl.el :: A little Common Lisp interface to avoid importing the whole thing; may not be necessary any more, now that Emacs has settled down on that?
+- aquamacs-editing.el :: Aquamacs editing functions to work better on Mac or fill in gaps in Emacs. Probably needs some review/update for current main Emacs releases.
+- aquamacs-final-init.el :: Final initialization code for Aquamacs, for things that need to be done at the very end of startup.
+- aquamacs-macros.el :: A couple of handy macros for internal use
+- aquamacs-mode-defaults.el :: some Aquamacs additions to default settings for particular modes.
+- aquamacs-mode-specific-themes.el :: Replaced by aquamacs-styles.el. Can probably be removed at this point.
+- aquamacs-redo.el :: Redo/undo system for Aquamacs. Compare to Emacs 27 when we get there.
+- aquamacs-tool-bar.el :: Implements the Aquamacs toolbar.
+- aquamacs-tools.el :: Miscellaneous helper functions.
+- aquamacs.el :: Aquamacs startup code.
+- better-buffer-menu.el :: "Better buffer menu code", but says it doesn't work yet. Investigate status.
+- check-for-updates.el :: Checks for new versions.
+- follow-mouse.el :: Automatically select window by where the mouse goes.
+- load-emacs-plugins.el :: Part of the initialization flow to load plugin code
+- load-emacs-pre-plugins.el :: Loads some things before plugins. Unsure about the exact flow and motivation.
+- localization.el :: Localization hooks for Aquamacs, mostly for menus and help(?).
+- mode-preloads.el :: Code to prepare for loading mode packages (e.g., ESS)
+- one-buffer-one-frame.el :: Implements the mode of the same name.
+- pager.el :: Implements different method of scrolling.
+- site-start.el :: Starting point for Aquamacs initialization using the site-start machinery.
+- smart-frame-positioning.el :: Tries to be smart about positioning new frames to avoid overlap.
+- subdirs.el :: Adds subdirectories to load-path.
+- visual-line.el :: navigation by visual lines
+** Bundled external packages
+In general, to update the external packages, the steps are:
+1. Find the current version on the net.
+2. Verify that it is compatible with Emacs 25, which is the version of Emacs that Aquamacs is currently based on.
+3. Find any Aquamacs-specific diffs from git
+4. Copy the new file(s) into place
+5. Apply the diffs
+6. Commit
+
+These packages are organized first in a list of those in a single package, then with subheadings for the subdirectories.
+*** In one file, in src/site-lisp
+- edit-modes :: Contains bundled packages from external sources. See that list below.
+- filladapt.el :: Patched version of filladapt. Now on ELPA: http://elpa.gnu.org/packages/filladapt.html. (As of 2021-05-29, updated bundled version to 2.12.2.)
+- findr.el :: Breadth-first search for a file. From Emacs Wiki at https://www.emacswiki.org/emacs/FindrPackage. Updated as of 2021-05-30.
+- smart-dnd.el :: User-configurable drag-n-drop features. Was at EmacsWiki at https://www.emacswiki.org/emacs/smart-dnd.el; now seems to be at https://github.com/zenitani/elisp/blob/master/smart-dnd.el. As of 2021-05-29, updated to latest version. It is possible that some Aquamacs fixes or changes were lost.
+- htmlize.el :: Convert buffer text to HTML. Current version at https://www.emacswiki.org/emacs/Htmlize. Not updated in Aquamacs 3.6, because it's essential to Aquamacs printing and I don't want to risk getting the merge wrong now.
+*** color-theme: a group of files in src/site-lisp
+When the color-theme code was new to Emacs, it was added to Aquamacs. This will probably not be needed in Aquamacs 4.
+- color-theme-autoloads.el :: Color theme code. Looks like it may have been ported over as core Emacs changes. May not be needed in Aquamacs 4.
+- color-theme-library.el :: Color theme code from version en route to becoming part of Emacs. Probably not needed in Aquamacs 4.
+- color-theme.el :: Color theme code from version en route to becoming part of Emacs. Probably not needed in Aquamacs 4.
+*** edit-modes
+- actr-mode.el :: Lingering code at https://github.com/emacsattic/actr-mode/blob/master/actr-mode.el. Does not seem to have changed. Not clear if it should continue to be in Aquamacs.
+- applescript-mode.el :: This is a bit confusing. There are some Aquamacs changes, which look they may be general improvement to the code. There are at least two different subsequent versions: https://github.com/emacsorphanage/applescript-mode and https://github.com/kalifg/applescript-mode. The first one is in MELPA, and would probably the best base for an update. The merge looks a little complicated, so deferred for now.
+- auctex :: Left at the previous upgraded version of 12.3. It's less clear how to do the installation correctly in a bundle for AUCTeX  13. Source is https://elpa.gnu.org/packages/auctex.html.
+- auctex-config.el :: No updates needed; this just Aquamacs-specific code to load auctex.
+- auctex.el :: This is the same as auctex/auctex.el, Not sure if the extra copy is needed, but leaving it for now.
+- dart-mode.el :: Things seem to have changed a lot. Current version seems to be at https://github.com/bradyt/dart-mode. Not sure it matters to include in Aquamacs now. Leaving it alone for the moment.
+- elib :: Additional data structures and utilities in Emacs Lisp. This has pretty much been absorbed into the main emacs code. Leaving it here for now, but can probably be removed in Aquamacs 4.
+- emacs-rails :: This seems quite old and outdated, and I couldn't find anything like a current version. Leaving alone for now; probably remove in Aquamacs 4
+- ess-mode :: Bundled version is current (18.10.2) as of 5/29/21.
+- find-recursive.el :: I can't find an authoritative newer source, so leaving it alone.
+- git-blame.el :: I can't find an authoritative newer source, so leaving it alone. Probably magit is a better tool now.
+- git.el :: I can't find an authoritative newer source, so leaving it alone. The original author recommends magit now, so will probably remove it in Aquamacs 4.
+- haskell-mode :: Updating this looks a little complicated, and not clear there is demand for it. Since the latest version is in ELPA, will probably remove in Aquamacs 4.
+- highlight-indentation.el :: Updated 5/29/21 to current version from https://github.com/antonj/Highlight-Indentation-for-Emacs. It is not changing much.
+- html-helper-mode.el :: This seems to be current with the code, but it's pretty old. David made some Aquamacs-specific changes. Leaving it alone, but maybe should be deprecated.
+- inf-ruby.el :: From https://github.com/nonsequitur/inf-ruby/raw/master/inf-ruby.el. It seems to have changed a lot, so not worth the risk to update in 3.6. It's also in ELPA, which might be a better bet for Aquamacs 4.
+- javascript-mode.el :: I think this is superseded in more recent Emacs by js-mode and also the external js2. So leaving this alone, probably remove in Aquamacs 4.
+- js2.el :: Now in ELPA: https://elpa.gnu.org/packages/js2-mode.html Omit this in Aquamacs 4, unless it's based on the ELPA package. It's in multiple files now, so more complicated to bundle in now.
+- markdown-mode.el : Updated to current version (as of 5/29/21) from https://jblevins.org/projects/markdown-mode/. Also in MELPA: https://melpa.org/#/markdown-mode
+- matlab-emacs :: Better installation available now through packages. Leave for now; remove in Aquamacs 4.
+- nxhtml :: No longer maintained. See https://www.emacswiki.org/emacs/nXhtml. Leaving in place for now. Remove in Aquamacs 4.
+- php-mode.el :: This has evolved a lot since the version was bundled with Aquamacs. Maybe remove and point to MELPA version in Aquamacs 4.
+- preview-latex.el :: These are autoloads generated by the auctex installation. Might need to be removed if the installation process changes.
+- prolog.el :: Left alone. Seems to come with Emacs these days? Take it out in Aquamacs 4.
+- python-mode.el :: Left alone. Poll on switching to the main Emacs one in Aquamacs 4.
+- ruby-electric.el :: Leave alone for now; probably leave out of Aquamacs 4.
+- rubydb3x.el :: Leave alone for now; probably remove in Aquamacs 4
+- share :: built docs from auctex. Not clear how the whole setup works.
+- snippet.el :: I think this is quite obsoleted by yasnippet. Not for Aquamacs 4.
+- ssh.el :: Updated 5/29/21 from the author site at http://www.splode.com/~friedman/software/emacs-lisp/#ssh. Not sure there's a replacement for it, or that it gets much use.
+ - swift-mode.el :: From https://github.com/swift-emacs/swift-mode. Better installed from MELPA. Left alone for now, change in Aquamacs 4.
+- tex-site.el :: Site file for auctex.
+- var/auctex :: Not sure what this is; obviously related to AUCTeX.
+- visual-basic-mode.el :: Updated 5/29/21 from https://www.emacswiki.org/emacs/visual-basic-mode.el. Not that it's recent. Maybe not worth including in Aquamacs 4
+- wikipedia-mode.el :: Looks like this is no longer maintained. See https://en.wikipedia.org/wiki/Wikipedia:Wikipedia-mode.el and https://www.emacswiki.org/emacs/wikipedia-mode.el. Leave in for now; remove in Aquamacs 4.
+*** macosx
+These are Mac-specific code needed for Aquamacs.
+- aquamacs-frame-setup.el :: Frame setup for Aquamacs.
+- aquamacs-mac-fontsets.el :: Fontsets for Aquamacs on the Mac
+- aquamacs-menu.el :: Redefines the menu bar.
+- aquamacs-mule.el :: Language-specific settings for Aquamacs
+- carbon-font.el :: Defines multilingual fontsets for Carbon Emacs
+- cocoa-compatibility.el :: Some compatibility functions for the Emacs main code. May or may not be applicable at this point.
+- emulate-mac-keyboard-mode.el :: Special emulation mappings for Mac keyboards.
+- fixed-width-fontset.el :: Fixed-width multilingual fontsets for Emacs on Mac and Windows.
+- mac-extra-functions.el :: Additional functions for Emacs on the Mac
+- mac-print.el :: Code for printing on the Mac. Depends on htmlize.
+- osx_defaults.el :: Settings to approximate Mac application standard defaults in Aquamacs
+- osxkeys.el ::  Mac keyboard shortcuts
+*** oneonone
+Elisp files for the oneoneone package, which is just larger than most.
+There's a lot going on with it, at https://www.emacswiki.org/emacs/OneOnOneEmacs. I think this may be more important to out-of-the-box Aquamacs, so I don't want to touch it without more care. Deferring for now.
+*** tabbar
+Implementation of the tabbar for Aquamacs. For some reason, the revive.el package is also in this directory.
+*** util/nlinum
+This is a package for line numbers that tries to be more efficient by using the JIT font-locking. Emacs 26 has display-line-numbers, which is different again. Updated 5/29/21 to version 1.9 from https://elpa.gnu.org/packages/nlinum.html, but it's in ELPA. Maybe omit in Aquamacs 4.
+*** util/paredit
+This is a common package for paren matching in code. See https://www.emacswiki.org/emacs/ParEdit. Updated 5/29/21 from the author's site. http://mumble.net/~campbell/emacs/paredit.el. It's marked beta, but from 2019, and it's the same as the version in MELPA.
