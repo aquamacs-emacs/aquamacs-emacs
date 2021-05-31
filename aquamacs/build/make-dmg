@@ -1,0 +1,61 @@
+#!/bin/sh
+
+# Run this in the top-level source directory for Aquamacs:
+#   ./aquamacs/build/make-dmg
+#
+# Makes a distribution DMG using the application build in
+# ./nextstep/Aquamacs.app. The DMG is created in
+# ../Aquamacs-VERSION.dmg
+#
+# Uses the create-dmg script from https://github.com/create-dmg/create-dmg
+# Available from homebrew as:
+#   brew install create-dmg
+
+# Version-specific names to edit as appropriate
+# XXX Volume name issue with diff name than app?
+VERSION="3.6 beta"
+VOLNAME="Aquamacs ${VERSION}"
+APPNAME="Aquamacs ${VERSION}.app"
+MANNAME="Aquamacs ${Version} manual"
+RELNOTES="Release notes ${VERSION}"
+DMG="../Aquamacs-$(echo ${VERSION} | sed 's/ /-/g').dmg"
+
+# Paths within the repository
+
+AUXDIR="./aquamacs/build/dmg-files"
+CONTENTS_DIR="/tmp/aquamacs-contents.$$"
+
+if [ -f "/Volumes/${VOLNAME}" ]; then
+    hdiutil detach "/Volumes/${VOLNAME}"
+fi
+
+echo "Copy files to ${CONTENTS_DIR}"
+mkdir "${CONTENTS_DIR}"
+cp -r nextstep/Aquamacs.app "${CONTENTS_DIR}/${APPNAME}" || exit 1
+cp "aquamacs/doc/latex/Aquamacs Manual.pdf" \
+   "${CONTENTS_DIR}/${MANNAME}" || exit 1
+cp "aquamacs/doc/latex/changes.pdf" "${CONTENTS_DIR}/${RELNOTES}" || exit 1
+cp "${AUXDIR}/Donate.webloc" "${CONTENTS_DIR}" || exit 1
+
+test -f "${DMG}" && rm -f "${DMG}"
+
+echo "XXX need to add Release Notes -- how?"
+echo "Running create-dmg..."
+
+create-dmg \
+    --volname "${VOLNAME}" \
+    --volicon "${AUXDIR}/dmg-icon.icns" \
+    --background "${AUXDIR}/dmg-background@2x.jpg" \
+    --window-pos 200 120 \
+    --window-size 850 560 \
+    --icon-size 75 \
+    --icon "${APPNAME}" 280 270 \
+    --icon "Donate" 450 27  \
+    --icon "${MANNAME}" 450 365 \
+    --icon "${RELNOTES}" 280 365 \
+    --hide-extension "${APPNAME}" \
+    --app-drop-link 100 270 \
+    "${DMG}" \
+    "${CONTENTS_DIR}"
+
+rm -rf "${CONTENTS_DIR}"

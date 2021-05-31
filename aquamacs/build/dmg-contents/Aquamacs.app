@@ -1,0 +1,1 @@
+../../../nextstep/Aquamacs.app
