@@ -7755,6 +7755,9 @@ not_in_argv (NSString *arg)
                         backing: NSBackingStoreBuffered
                           defer: YES];
 
+  // Set the toolbar style
+  [win setToolbarStyle: NSWindowToolbarStyleExpanded];
+
 #ifdef HAVE_NATIVE_FS
     [win setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
 #endif
