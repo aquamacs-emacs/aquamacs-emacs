@@ -16,8 +16,8 @@
 VERSION="3.6 beta"
 VOLNAME="Aquamacs ${VERSION}"
 APPNAME="Aquamacs ${VERSION}.app"
-MANNAME="Aquamacs ${Version} manual"
-RELNOTES="Release notes ${VERSION}"
+MANNAME="Aquamacs ${Version} manual.pdf"
+RELNOTES="Release notes ${VERSION}.pdf"
 DMG="../Aquamacs-$(echo ${VERSION} | sed 's/ /-/g').dmg"
 
 # Paths within the repository
@@ -31,15 +31,14 @@ fi
 
 echo "Copy files to ${CONTENTS_DIR}"
 mkdir "${CONTENTS_DIR}"
-cp -r nextstep/Aquamacs.app "${CONTENTS_DIR}/${APPNAME}" || exit 1
-cp "aquamacs/doc/latex/Aquamacs Manual.pdf" \
+cp -a nextstep/Aquamacs.app "${CONTENTS_DIR}/${APPNAME}" || exit 1
+cp -p "aquamacs/doc/latex/Aquamacs Manual.pdf" \
    "${CONTENTS_DIR}/${MANNAME}" || exit 1
-cp "aquamacs/doc/latex/changes.pdf" "${CONTENTS_DIR}/${RELNOTES}" || exit 1
-cp "${AUXDIR}/Donate.webloc" "${CONTENTS_DIR}" || exit 1
+cp -p "aquamacs/doc/latex/changes.pdf" "${CONTENTS_DIR}/${RELNOTES}" || exit 1
+cp -p "${AUXDIR}/Donate.webloc" "${CONTENTS_DIR}" || exit 1
 
 test -f "${DMG}" && rm -f "${DMG}"
 
-echo "XXX need to add Release Notes -- how?"
 echo "Running create-dmg..."
 
 create-dmg \
@@ -47,14 +46,15 @@ create-dmg \
     --volicon "${AUXDIR}/dmg-icon.icns" \
     --background "${AUXDIR}/dmg-background@2x.jpg" \
     --window-pos 200 120 \
-    --window-size 850 560 \
+    --window-size 620 530 \
     --icon-size 75 \
-    --icon "${APPNAME}" 280 270 \
-    --icon "Donate" 450 27  \
-    --icon "${MANNAME}" 450 365 \
-    --icon "${RELNOTES}" 280 365 \
+    --app-drop-link 100 260\
+    --icon "${APPNAME}" 280 260 \
+    --icon "Donate" 470 260  \
+    --icon "${RELNOTES}" 280 355\
+    --icon "${MANNAME}" 470 355 \
     --hide-extension "${APPNAME}" \
-    --app-drop-link 100 270 \
+    --no-internet-enable \
     "${DMG}" \
     "${CONTENTS_DIR}"
 
