@@ -31,6 +31,12 @@ GIT=${GIT:=yes}
 REPO=${REPO:=${DEFAULT_REPO}}
 DOC_FAILED_EXIT=${DOC_FAILED_EXIT:1}
 
+# For now:
+# - build in working directory (arranged with care)
+# - do not fetch from git
+GIT=no
+RELEASE_DIR=$(pwd)
+
 # Exit if any command fails
 set -e
 
@@ -67,7 +73,7 @@ fi
 
 # Use || true for 'git branch -D' because the command might fail, which is fine.
 # git branch -D new-$BRANCH >>/dev/null || true
-# git checkout -f --track -b new-$BRANCH origin/$BRANCH  \
+# git checkout -f --track -b new-$BRANCH <origin/$BRANCH  \
 #     && git branch -D $BRANCH  \
 #    && git branch -m new-$BRANCH $BRANCH
 
@@ -80,17 +86,18 @@ echo ""
 
 echo "Begin building Aquamacs at" $(date)
 
-echo "Building Aquamacs documentation."
-echo "Log in ${DOC_LOG}"
-
 # Build the documentation.
 # This requires LaTeX and assumes that MacTeX is installed with the
 # latex command on the system standard path.
 
-(cd aquamacs/doc/latex; make &> ${DOC_LOG}) \
-    || (echo "*** FAILED building documentation"; exit ${DOC_FAILED_EXIT})
+echo "Building Aquamacs documentation."
+echo "Log in ${DOC_LOG}"
+
+bash aquamacs/build/build-doc &> ${DOC_LOG}
 
 echo "Building Aquamacs documentation...done"
+
+# Build the application
 
 echo "Building Aquamacs application..."
 
@@ -109,3 +116,6 @@ aquamacs/build/build-homebrew-libraries.sh -bundle ${APP}
 
 echo "Signing release"
 aquamacs/build/sign-release
+
+echo "Notarizing release"
+aquamacs/build/notarize-release --auto-staple

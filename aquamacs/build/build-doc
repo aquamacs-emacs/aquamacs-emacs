@@ -1,0 +1,14 @@
+#!/bin/bash
+#
+# Build Aquamacs documentation
+
+if [ $(basename $(pwd) != "latex") ]; then
+    if [ -f CHANGELOG.Aquamacs.tex ]; then
+        cd aquamacs/doc/LaTeX
+    else
+        echo -n "Run this script from the top-level Aquamacs"
+        echo " source directory as aquamacs/build/build-doc"
+        exit 1
+    fi
+fi
+make

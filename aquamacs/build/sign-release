@@ -14,7 +14,8 @@ MACDIR="${APPDIR}/Contents/MacOS"
 mkdir ${NEWBIN}
 mv ${MACDIR}/bin/{aquamacs,emacs} ${NEWBIN}
 mv ${MACDIR}/libexec/rcs2log ${NEWBIN}
-ln -s ../../Resources/bin/aquamacs ${MACDIR}/bin/aquamacsln -s ../../Resources/bin/emacs ${MACDIR}/bin/emacs
+ln -s ../../Resources/bin/aquamacs ${MACDIR}/bin/aquamacs
+ln -s ../../Resources/bin/emacs ${MACDIR}/bin/emacs
 ln -s ../../Resources/bin/rcs2log ${MACDIR}/libexec/rcs2log
 
 
@@ -23,7 +24,7 @@ if [[ "${AQUAMACS_CERT}" != "" ]]; then
     # codesign -s "$AQUAMACS_CERT" --force --timestamp \
     #         --options=runtime ${APPDIR}
 
-    for f in "${APPDIR}"/Contents/MacOS/{Aquamacs,bin/*,libexec/*,lib/*} ${APPDIR}; do
+    for f in "${APPDIR}"/Contents/MacOS/{bin/*,libexec/*,lib/*,Aquamacs} ${APPDIR}; do
         codesign -s "$AQUAMACS_CERT" --force --timestamp \
                  --options=runtime \
                  "${f}"
