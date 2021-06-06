@@ -1305,7 +1305,7 @@ update_frame_tool_bar (struct frame *f)
             }
         }
       [toolbar setConfigurationFromDictionary: newDict];
-      [newDict release];
+      [newDict autorelease];
     }
 #endif
 
