@@ -172,7 +172,7 @@ Press \\[aquamacs-download-release] to download it.") "")
 
 (defun aquamacs-ask-donate ()
   (if (and (fboundp 'x-popup-dialog)
-           (not (string-match "beta" aquamacs-version))
+           (not (string-match "beta" aquamacs-minor-version))
 	   (x-popup-dialog nil '("Welcome to the new Aquamacs.
 The Aquamacs Project depends on your support. Please consider to help us by donating at http://aquamacs.org. Your continued support helps keep the project alive.
 
