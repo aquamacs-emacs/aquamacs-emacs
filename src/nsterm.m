@@ -7755,11 +7755,13 @@ not_in_argv (NSString *arg)
                         backing: NSBackingStoreBuffered
                           defer: YES];
 
-  // Set the toolbar style, Big Sur and later
-  if ( [NSWindow instancesRespondToSelector:@selector(setToolbarStyle:)])
-    {
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 110000
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 110000
+    // Set the toolbar style, Big Sur and later
+    if ( [NSWindow instancesRespondToSelector:@selector(setToolbarStyle:)])
+#endif
       [win setToolbarStyle: NSWindowToolbarStyleExpanded];
-    }
+#endif /* MAC_OS_X_VERSION_MAX_ALLOWED >= 101100 */
 
 #ifdef HAVE_NATIVE_FS
     [win setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
