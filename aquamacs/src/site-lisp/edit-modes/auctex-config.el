@@ -35,14 +35,14 @@
 
 	(add-to-list 'exec-path path 'append))
       (append
-                                        ; prefer TeXLive installation
+       ; prefer TeXLive installation
        '("/usr/texbin")
        '("/Library/TeX/texbin")
-                                        ; in case /usr/texbin is missing
+       ; in case /usr/texbin is missing
        (reverse (sort (file-expand-wildcards
 		       "/usr/local/texlive/20*/bin")
 		      'string<))
-                                        ; over older teTex.
+       ; over older teTex.
        (reverse (sort (file-expand-wildcards
 		       "/usr/local/teTeX/bin/*-apple-darwin-current")
 		      'string<))))
@@ -51,8 +51,12 @@
 ;; i.e. the first file in load-path
 ;; load the right auctex.el (first one in load-path)
 ;; (locate-library "auctex.el" t)
+(load "tex-site" nil nil nil)
 (load "auctex" nil nil nil)
 (load "preview-latex" nil nil nil)
+;; this is not done by default
+;; maybe add a menu option?
+;;(load "preview-latex.el" nil t t)
 
 (aquamacs-set-defaults '(
 			 ( TeX-parse-self t)
@@ -65,33 +69,10 @@
 
 (autoload 'bib-cite-minor-mode "bib-cite")
 (autoload 'turn-on-bib-cite "bib-cite")
+; only load if ghostscript is installed
 
-(defun smart-dnd-latex ()
-  (smart-dnd-setup
-   '(
-     ("\\.tex\\'" . "\\input{%r}\n")
-     ("\\.cls\\'" . "\\documentclass{%f}\n")
-     ("\\.sty\\'" . "\\usepackage{%f}\n")
-     ("\\.eps\\'" . "\\includegraphics[]{%r}\n")
-     ("\\.ps\\'"  . "\\includegraphics[]{%r}\n")
-     ("\\.pdf\\'" . "\\includegraphics[]{%r}\n")
-     ("\\.jpg\\'" . "\\includegraphics[]{%r}\n")
-     ("\\.png\\'" . "\\includegraphics[]{%r}\n")
-     )))
 
-(defun smart-dnd-setup-always-insert-quoted-file-name ()
-  "Setup `smart-dnd-mode' so that drag&drop always inserts the file path."
-  (smart-dnd-setup '((".*" . "\"%r\""))))
-
-;; non-AUCTeX mode:
-(add-hook 'latex-mode-hook 'smart-dnd-latex)
-;; AUCTeX:
-(defvar LaTeX-mode-hook nil)
-(add-hook 'LaTeX-mode-hook 'smart-dnd-latex)
-
-;; only load if ghostscript is installed
-
-;; (aquamacs-latex-find-style-file-paths)
+; (aquamacs-latex-find-style-file-paths)
 ;; (defun aquamacs-latex-find-style-file-paths ()
 ;;   "Find TeXLive distribution path."
 ;;   (let ((latex-executable
