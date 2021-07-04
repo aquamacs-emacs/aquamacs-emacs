@@ -9250,11 +9250,19 @@ not_in_argv (NSString *arg)
 {
   NSRect visible = [self visibleRect];
   NSTRACE ("[EmacsScroller resetCursorRects]");
+  NSCursor *newCursor;
 
   if (!NSIsEmptyRect (visible))
-    [self addCursorRect: visible cursor: [NSCursor arrowCursor]];
-  [[NSCursor arrowCursor] setOnMouseEntered: YES];
-}
+      [self addCursorRect: visible cursor: [NSCursor arrowCursor]];
+  newCursor = [NSCursor arrowCursor];
+
+#if defined (NS_IMPL_GNUSTEP) || MAC_OS_X_VERSION_MIN_REQUIRED < 101300
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 101300
+  if ([newCursor respondsToSelector: @selector(setOnMouseEntered)])
+#endif
+    [newCursor setOnMouseEntered: YES];
+#endif
+ }
 
 
 - (int) checkSamePosition: (int) position portion: (int) portion
