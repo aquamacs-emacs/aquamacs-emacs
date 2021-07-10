@@ -2088,7 +2088,7 @@ on the pasteboard.*/)
 
   block_input();
 
-  WebView *htmlPage = [[WebView alloc] initWithFrame:NSMakeRect(0,0,XINT (width),XINT (height))
+  WebView *htmlPage = [[WebView alloc] initWithFrame:AQ_NSMakeRect(0,0,XINT (width),XINT (height))
 					   frameName:@"myFrame"
 					   groupName:@"myGroup"];
 
@@ -2127,8 +2127,8 @@ on the pasteboard.*/)
   NSRect webViewRect = [htmlPage frame];
 
   //calculate the new frame
-  NSRect newWebViewRect = NSMakeRect(webViewRect.origin.x,
-				     webViewRect.origin.y - (NSHeight(webFrameRect) - NSHeight(webViewRect)),
+  NSRect newWebViewRect = AQ_NSMakeRect(webViewRect.origin.x,
+                                        webViewRect.origin.y - (NSHeight(webFrameRect) - NSHeight(webViewRect)),
 				     NSWidth(webViewRect),
 				     NSHeight(webFrameRect));
   //set the frame
@@ -2189,7 +2189,7 @@ DEFUN ("ns-popup-print-panel", Fns_popup_print_panel, Sns_popup_print_panel,
       f = XFRAME (frame);
     }
 
-  WebView *htmlPage = [[WebView alloc] initWithFrame:NSMakeRect(0,0,300,300)
+  WebView *htmlPage = [[WebView alloc] initWithFrame:AQ_NSMakeRect(0,0,300,300)
 					   frameName:@"myFrame"
 					   groupName:@"myGroup"];
 
@@ -3837,8 +3837,8 @@ compute_tip_xy (struct frame *f,
       pt.y = dpyinfo->last_mouse_motion_y;
       /* Convert to screen coordinates */
       pt = [view convertPoint: pt toView: nil];
-        NSRect r = NSMakeRect (pt.x, pt.y, 0, 0);
-        r = [[view window] convertRectToScreen: r];
+      NSRect r = AQ_NSMakeRect (pt.x, pt.y, 0, 0);
+      r = [[view window] convertRectToScreen: r];
         pt.x = r.origin.x;
         pt.y = r.origin.y;
     }

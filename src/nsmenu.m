@@ -52,7 +52,11 @@ Carbon version by Yamamoto Mitsuharu. */
 #include "nsmenu_common.c"
 #endif
 
-Lisp_Object Vcancel_special_indicator_flag;
+#ifndef AQ_NSMakeRect
+#error
+#endif
+
+ Lisp_Object Vcancel_special_indicator_flag;
 
 extern long context_menu_value;
 EmacsMenu *mainMenu, *svcsMenu, *dockMenu;
@@ -1310,7 +1314,7 @@ update_frame_tool_bar (struct frame *f)
 #endif
 
   FRAME_TOOLBAR_HEIGHT (f) =
-    NSHeight ([window frameRectForContentRect: NSMakeRect (0, 0, 0, 0)])
+    NSHeight ([window frameRectForContentRect: AQ_NSMakeRect (0, 0, 0, 0)])
     - FRAME_NS_TITLEBAR_HEIGHT (f);
   if (FRAME_TOOLBAR_HEIGHT (f) < 0) // happens if frame is fullscreen.
     FRAME_TOOLBAR_HEIGHT (f) = 0;
@@ -1704,7 +1708,7 @@ a notification */
   NSFont *sfont = [font screenFont];
   int height = [sfont ascender] - [sfont descender];
 /*[font boundingRectForFont].size.height; */
-  NSRect r = NSMakeRect (0, 0, 100, height+6);
+  NSRect r = AQ_NSMakeRect (0, 0, 100, height+6);
 
   textField = [[NSTextField alloc] initWithFrame: r];
   [textField setFont: font];

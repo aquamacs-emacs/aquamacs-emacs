@@ -869,7 +869,7 @@ static NSRect constrain_frame_rect(NSRect frameRect, bool isFullscreen)
   int menu_bar_height = 0;
 
   // A rectangle covering all the screen the frame is displayed in.
-  NSRect multiscreenRect = NSMakeRect(0, 0, 0, 0);
+  NSRect multiscreenRect = AQ_NSMakeRect(0, 0, 0, 0);
   for (i = 0; i < nr_screens; ++i )
     {
       NSScreen *s = [screens objectAtIndex: i];
@@ -1352,7 +1352,7 @@ ns_flush_display (struct frame *f)
       self.image = [[NSImage alloc] initWithSize:NSMakeSize(32 * 5, 32 * 5)];
       [self.image lockFocus];
       [[NSColor colorForEmacsRed:0.5 green:0.5 blue:0.5 alpha:0.5] set];
-      NSRectFill(NSMakeRect(0, 0, 32, 32));
+      NSRectFill(AQ_NSMakeRect(0, 0, 32, 32));
       [self.image unlockFocus];
 #else
       self.image = [NSImage imageNamed:NSImageNameCaution];
@@ -1844,7 +1844,7 @@ x_set_window_size (struct frame *f,
              yet displayed and fixing toolbar_height=32 helped, but
              now (200903) seems no longer needed */
     FRAME_TOOLBAR_HEIGHT (f) =
-      NSHeight ([window frameRectForContentRect: NSMakeRect (0, 0, 0, 0)])
+      NSHeight ([window frameRectForContentRect: AQ_NSMakeRect (0, 0, 0, 0)])
         - FRAME_NS_TITLEBAR_HEIGHT (f);
 #if 0
       /* Only breaks things here, removed by martin 2015-09-30.  */
@@ -1893,7 +1893,7 @@ x_set_window_size (struct frame *f,
                      - NS_SCROLL_BAR_WIDTH (f), 0)
       : NSMakePoint (0, 0);
 
-    [view setFrame: NSMakeRect (0, 0, pixelwidth, pixelheight)];
+    [view setFrame: AQ_NSMakeRect (0, 0, pixelwidth, pixelheight)];
     [view setBoundsOrigin: origin];
         }
 
@@ -2585,7 +2585,7 @@ ns_clear_frame_area (struct frame *f, int x, int y, int width, int height)
     External (RIF):  Clear section of frame
    -------------------------------------------------------------------------- */
 {
-  NSRect r = NSMakeRect (x, y, width, height);
+  NSRect r = AQ_NSMakeRect (x, y, width, height);
   NSView *view = FRAME_NS_VIEW (f);
   struct face *face = FRAME_DEFAULT_FACE (f);
 
@@ -2669,7 +2669,7 @@ ns_scroll_run (struct window *w, struct run *run)
        however x_clear_cursor, above, seems to leave detritus since we
        changed to the mark-dirty/expose method, and simply redrawing
        the whole thing seems to have no performance issues.  */
-    NSRect dstRect = NSMakeRect (x, to_y, width, height);
+    NSRect dstRect = AQ_NSMakeRect (x, to_y, width, height);
     [FRAME_NS_VIEW (f) setNeedsDisplayInRect:dstRect];
   }
 
@@ -2727,7 +2727,7 @@ ns_shift_glyphs_for_insert (struct frame *f,
   /* This should be done by copying the contents of the screen,
      however we can get away with just marking the destination as
      needing redrawn.  */
-  NSRect dstRect = NSMakeRect (x+shift_by, y, width, height);
+  NSRect dstRect = AQ_NSMakeRect (x+shift_by, y, width, height);
 
   NSTRACE ("ns_shift_glyphs_for_insert");
 
@@ -2835,7 +2835,7 @@ ns_draw_fringe_bitmap (struct window *w, struct glyph_row *row,
 
           if (bx >= 0 && nx > 0)
             {
-              NSRect r = NSMakeRect (bx, by, nx, ny);
+              NSRect r = AQ_NSMakeRect (bx, by, nx, ny);
               NSRectClip (r);
               [ns_lookup_indexed_color (face->background, f) set];
               NSRectFill (r);
@@ -2844,7 +2844,7 @@ ns_draw_fringe_bitmap (struct window *w, struct glyph_row *row,
 
       if (p->which)
         {
-          NSRect r = NSMakeRect (p->x, p->y, p->wd, p->h);
+          NSRect r = AQ_NSMakeRect (p->x, p->y, p->wd, p->h);
           EmacsImage *img = bimgs[p->which - 1];
 
           if (!img)
@@ -2887,7 +2887,7 @@ ns_draw_fringe_bitmap (struct window *w, struct glyph_row *row,
 #ifdef NS_IMPL_COCOA
           // Note: For periodic images, the full image height is "h + hd".
           // By using the height h, a suitable part of the image is used.
-          NSRect fromRect = NSMakeRect(0, 0, p->wd, p->h);
+          NSRect fromRect = AQ_NSMakeRect(0, 0, p->wd, p->h);
 
           NSTRACE_RECT ("fromRect", fromRect);
 
@@ -3060,7 +3060,7 @@ ns_draw_vertical_window_border (struct window *w, int x, int y0, int y1)
 {
   struct frame *f = XFRAME (WINDOW_FRAME (w));
   struct face *face;
-  NSRect r = NSMakeRect (x, y0, 1, y1-y0);
+  NSRect r = AQ_NSMakeRect (x, y0, 1, y1-y0);
 
   NSTRACE ("ns_draw_vertical_window_border");
 
@@ -3084,7 +3084,7 @@ ns_draw_window_divider (struct window *w, int x0, int x1, int y0, int y1)
    -------------------------------------------------------------------------- */
 {
   struct frame *f = XFRAME (WINDOW_FRAME (w));
-  NSRect r = NSMakeRect (x0, y0, x1-x0, y1-y0);
+  NSRect r = AQ_NSMakeRect (x0, y0, x1-x0, y1-y0);
   struct face *face = FACE_FROM_ID_OR_NULL (f, WINDOW_DIVIDER_FACE_ID);
   struct face *face_first
     = FACE_FROM_ID_OR_NULL (f, WINDOW_DIVIDER_FIRST_PIXEL_FACE_ID);
@@ -3097,7 +3097,7 @@ ns_draw_window_divider (struct window *w, int x0, int x1, int y0, int y1)
   unsigned long color_last = (face_last
 			      ? face_last->foreground
 			      : FRAME_FOREGROUND_PIXEL (f));
-  NSRect divider = NSMakeRect (x0, y0, x1-x0, y1-y0);
+  NSRect divider = AQ_NSMakeRect (x0, y0, x1-x0, y1-y0);
 
   NSTRACE ("ns_draw_window_divider");
 
@@ -3108,22 +3108,22 @@ ns_draw_window_divider (struct window *w, int x0, int x1, int y0, int y1)
            last pixels differently.  */
         {
           [ns_lookup_indexed_color(color_first, f) set];
-          NSRectFill(NSMakeRect (x0, y0, 1, y1 - y0));
+          NSRectFill(AQ_NSMakeRect (x0, y0, 1, y1 - y0));
           [ns_lookup_indexed_color(color, f) set];
-          NSRectFill(NSMakeRect (x0 + 1, y0, x1 - x0 - 2, y1 - y0));
+          NSRectFill(AQ_NSMakeRect (x0 + 1, y0, x1 - x0 - 2, y1 - y0));
           [ns_lookup_indexed_color(color_last, f) set];
-          NSRectFill(NSMakeRect (x1 - 1, y0, 1, y1 - y0));
+          NSRectFill(AQ_NSMakeRect (x1 - 1, y0, 1, y1 - y0));
         }
       else if ((x1 - x0 > y1 - y0) && (y1 - y0 >= 3))
         /* A horizontal divider, at least three pixels high: Draw first and
            last pixels differently.  */
         {
           [ns_lookup_indexed_color(color_first, f) set];
-          NSRectFill(NSMakeRect (x0, y0, x1 - x0, 1));
+          NSRectFill(AQ_NSMakeRect (x0, y0, x1 - x0, 1));
           [ns_lookup_indexed_color(color, f) set];
-          NSRectFill(NSMakeRect (x0, y0 + 1, x1 - x0, y1 - y0 - 2));
+          NSRectFill(AQ_NSMakeRect (x0, y0 + 1, x1 - x0, y1 - y0 - 2));
           [ns_lookup_indexed_color(color_last, f) set];
-          NSRectFill(NSMakeRect (x0, y1 - 1, x1 - x0, 1));
+          NSRectFill(AQ_NSMakeRect (x0, y1 - 1, x1 - x0, 1));
         }
       else
         {
@@ -3192,7 +3192,7 @@ ns_draw_underwave (struct glyph_string *s, EmacsCGFloat width, EmacsCGFloat x)
   xmax = x + width;
 
   /* Find and set clipping rectangle */
-  waveClip = NSMakeRect (x, y, width, wave_height);
+  waveClip = AQ_NSMakeRect (x, y, width, wave_height);
   [[NSGraphicsContext currentContext] saveGraphicsState];
   NSRectClip (waveClip);
 
@@ -3295,7 +3295,7 @@ ns_draw_text_decoration (struct glyph_string *s, struct face *face,
           s->underline_thickness = thickness;
           s->underline_position = position;
 
-          r = NSMakeRect (x, s->ybase + position, width, thickness);
+          r = AQ_NSMakeRect (x, s->ybase + position, width, thickness);
 
           if (face->underline_defaulted_p)
             [defaultCol set];
@@ -3309,7 +3309,7 @@ ns_draw_text_decoration (struct glyph_string *s, struct face *face,
   if (face->overline_p)
     {
       NSRect r;
-      r = NSMakeRect (x, s->y, width, 1);
+      r = AQ_NSMakeRect (x, s->y, width, 1);
 
       if (face->overline_color_defaulted_p)
         [defaultCol set];
@@ -3326,7 +3326,7 @@ ns_draw_text_decoration (struct glyph_string *s, struct face *face,
       unsigned long dy;
 
       dy = lrint ((s->height - 1) / 2);
-      r = NSMakeRect (x, s->y + dy, width, 1);
+      r = AQ_NSMakeRect (x, s->y + dy, width, 1);
 
       if (face->strike_through_color_defaulted_p)
         [defaultCol set];
@@ -3488,7 +3488,7 @@ ns_dumpglyphs_box_or_relief (struct glyph_string *s)
 	     || (s->hl == DRAW_MOUSE_FACE
 		 && (s->next == NULL || s->next->hl != s->hl)));
 
-  r = NSMakeRect (s->x, s->y, right_x - s->x + 1, s->height);
+  r = AQ_NSMakeRect (s->x, s->y, right_x - s->x + 1, s->height);
 
   /* TODO: Sometimes box_color is 0 and this seems wrong; should investigate. */
   if (s->face->box == FACE_SIMPLE_BOX && s->face->box_color)
@@ -3547,7 +3547,7 @@ ns_maybe_dumpglyphs_background (struct glyph_string *s, char force_p)
 
           if (s->hl != DRAW_CURSOR)
             {
-              NSRect r = NSMakeRect (s->x, s->y + box_line_width,
+              NSRect r = AQ_NSMakeRect (s->x, s->y + box_line_width,
                                     s->background_width,
                                     s->height-2*box_line_width);
               NSRectFill (r);
@@ -3607,12 +3607,12 @@ ns_dumpglyphs_image (struct glyph_string *s, NSRect r)
   if (bg_height > s->slice.height || s->img->hmargin || s->img->vmargin
       || s->img->mask || s->img->pixmap == 0 || s->width != s->background_width)
     {
-      br = NSMakeRect (bg_x, bg_y, s->background_width, bg_height);
+      br = AQ_NSMakeRect (bg_x, bg_y, s->background_width, bg_height);
       s->background_filled_p = 1;
     }
   else
     {
-      br = NSMakeRect (x, y, s->slice.width, s->slice.height);
+      br = AQ_NSMakeRect (x, y, s->slice.width, s->slice.height);
     }
 
   NSRectFill (br);
@@ -3621,8 +3621,8 @@ ns_dumpglyphs_image (struct glyph_string *s, NSRect r)
   if (img != nil)
     {
 #ifdef NS_IMPL_COCOA
-      NSRect dr = NSMakeRect (x, y, s->slice.width, s->slice.height);
-      NSRect ir = NSMakeRect (s->slice.x, s->slice.y,
+      NSRect dr = AQ_NSMakeRect (x, y, s->slice.width, s->slice.height);
+      NSRect ir = AQ_NSMakeRect (s->slice.x, s->slice.y,
                               s->slice.width, s->slice.height);
       [img drawInRect: dr
              fromRect: ir
@@ -3706,7 +3706,7 @@ ns_dumpglyphs_stretch (struct glyph_string *s)
   if (!s->background_filled_p)
     {
       n = ns_get_glyph_string_clip_rect (s, r);
-      *r = NSMakeRect (s->x, s->y, s->background_width, s->height);
+      *r = AQ_NSMakeRect (s->x, s->y, s->background_width, s->height);
 
       if (ns_clip_to_rect (s->f, r, n))
         {
@@ -3816,7 +3816,7 @@ ns_draw_composite_glyph_string_foreground (struct glyph_string *s)
     {
       if (s->cmp_from == 0)
         {
-          NSRect r = NSMakeRect (s->x, s->y, s->width-1, s->height -1);
+          NSRect r = AQ_NSMakeRect (s->x, s->y, s->width-1, s->height -1);
           ns_draw_box (r, 1, FRAME_CURSOR_COLOR (s->f), 1, 1);
         }
     }
@@ -4512,7 +4512,7 @@ ns_set_vertical_scroll_bar (struct window *window,
   width = WINDOW_CONFIG_SCROLL_BAR_COLS (window) * FRAME_COLUMN_WIDTH (f);
   left = WINDOW_SCROLL_BAR_AREA_X (window);
 
-  r = NSMakeRect (left, top, width, height);
+  r = AQ_NSMakeRect (left, top, width, height);
   /* the parent view is flipped, so we need to flip y value */
   v = [view frame];
   r.origin.y = (v.size.height - r.size.height - r.origin.y);
@@ -4606,7 +4606,7 @@ ns_set_horizontal_scroll_bar (struct window *window,
   height = WINDOW_CONFIG_SCROLL_BAR_LINES (window) * FRAME_LINE_HEIGHT (f);
   top = WINDOW_SCROLL_BAR_AREA_Y (window);
 
-  r = NSMakeRect (left, top, width, height);
+  r = AQ_NSMakeRect (left, top, width, height);
   /* the parent view is flipped, so we need to flip y value */
   v = [view frame];
   /* ??????? PXW/scrollbars !!!!!!!!!!!!!!!!!!!! */
@@ -7419,7 +7419,7 @@ not_in_argv (NSString *arg)
       SET_FRAME_GARBAGED (emacsframe);
       cancel_mouse_face (emacsframe);
 
-      wr = NSMakeRect (0, 0, neww, newh);
+      wr = AQ_NSMakeRect (0, 0, neww, newh);
 
       [view setFrame: wr];
 
@@ -7731,8 +7731,8 @@ not_in_argv (NSString *arg)
   maximized_width = maximized_height = -1;
   nonfs_window = nil;
 
-  ns_userRect = NSMakeRect (0, 0, 0, 0);
-  r = NSMakeRect (0, 0, FRAME_TEXT_COLS_TO_PIXEL_WIDTH (f, f->text_cols),
+  ns_userRect = AQ_NSMakeRect (0, 0, 0, 0);
+  r = AQ_NSMakeRect (0, 0, FRAME_TEXT_COLS_TO_PIXEL_WIDTH (f, f->text_cols),
                  FRAME_TEXT_LINES_TO_PIXEL_HEIGHT (f, f->text_lines));
   [self initWithFrame: r];
   [self setAutoresizingMask: NSViewWidthSizable | NSViewHeightSizable];
@@ -8034,7 +8034,7 @@ not_in_argv (NSString *arg)
           NSTRACE_MSG ("Restore");
           result = ns_userRect.size.height ? ns_userRect : result;
           NSTRACE_RECT ("restore (2)", result);
-          ns_userRect = NSMakeRect (0, 0, 0, 0);
+          ns_userRect = AQ_NSMakeRect (0, 0, 0, 0);
 #ifdef NS_IMPL_COCOA
           maximizing_resize = fs_state != FULLSCREEN_NONE;
 #endif
@@ -9143,7 +9143,7 @@ not_in_argv (NSString *arg)
   NSTRACE ("[EmacsScroller initFrame: window:]");
 
   r.size.width = [EmacsScroller scrollerWidth];
-  [super initWithFrame: r/*NSMakeRect (0, 0, 0, 0)*/];
+  [super initWithFrame: r/*AQ_NSMakeRect (0, 0, 0, 0)*/];
   [self setContinuous: YES];
   [self setEnabled: YES];
 

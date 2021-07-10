@@ -1376,4 +1376,14 @@ typedef struct
 } MMXcodeSelectionRange;
 
 
+/* XXX There are crash reports near calls to NSMakeRect, or that
+   otherwise involve rectangles, that seem to have started with
+   Catalina. Emacs code always calls it with ints, but given the way
+   that CGFloats work, it's possible that the casts are needed. Beyond
+   that, it's unclear why the code. */
+
+#define AQ_NSMakeRect(x, y, w, h)                       \
+  NSMakeRect( (EmacsCGFloat) x, (EmacsCGFloat) y,      \
+              (EmacsCGFloat) w, (EmacsCGFloat) h)
+
 #endif	/* HAVE_NS */
