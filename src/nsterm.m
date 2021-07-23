@@ -6572,6 +6572,16 @@ not_in_argv (NSString *arg)
 - (void)resetCursorRects
 {
   NSRect visible = [self visibleRect];
+
+  /* WT: if a full-frame window is closed, the NS object in the emacs
+     frame structure goes away before this is called. It may not be
+     the only bad thing that happens, but for now we'll just check on
+     this case and return. */
+
+  if (emacsframe->output_data.ns == NULL) {
+    return;
+  }
+
   NSCursor *currentCursor = FRAME_POINTER_TYPE (emacsframe);
   NSTRACE ("[EmacsView resetCursorRects]");
 
