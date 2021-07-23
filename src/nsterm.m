@@ -6580,7 +6580,12 @@ not_in_argv (NSString *arg)
 
   if (!NSIsEmptyRect (visible))
     [self addCursorRect: visible cursor: currentCursor];
-  [currentCursor setOnMouseEntered: YES];
+#if defined (NS_IMPL_GNUSTEP) || MAC_OS_X_VERSION_MIN_REQUIRED < 101300
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 101300
+  if ([currentCursor respondsToSelector: @selector(setOnMouseEntered)])
+#endif
+    [currentCursor setOnMouseEntered: YES];
+#endif
 }
 
 /*****************************************************************************/
