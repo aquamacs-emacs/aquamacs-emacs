@@ -4269,48 +4269,54 @@ ns_read_socket (struct terminal *terminal, struct input_event *hold_quit)
       return i;
     }
 
-      block_input ();
-      n_emacs_events_pending = 0;
-      ns_init_events (&ev);
-      q_event_ptr = hold_quit;
+  if ([NSThread isMainThread])
+    {
+      @autoreleasepool
+        {
+          block_input ();
+          n_emacs_events_pending = 0;
+          ns_init_events (&ev);
+          q_event_ptr = hold_quit;
 
- /* If have pending open-file requests, attend to the next one of those. */
-      if (ns_pending_files && [ns_pending_files count] != 0
-          && [(EmacsApp *)NSApp openFile: [ns_pending_files objectAtIndex: 0]])
-        {
-          [ns_pending_files removeObjectAtIndex: 0];
-        }
-      /* Deal with pending service requests. */
-      else if (ns_pending_service_names && [ns_pending_service_names count] != 0
-               && [(EmacsApp *)
-                    NSApp fulfillService: [ns_pending_service_names objectAtIndex: 0]
-                                 withArg: [ns_pending_service_args objectAtIndex: 0]])
-        {
-          [ns_pending_service_names removeObjectAtIndex: 0];
-          [ns_pending_service_args removeObjectAtIndex: 0];
-        }
-      else
-        {
-      ptrdiff_t specpdl_count = SPECPDL_INDEX ();
-          /* Run and wait for events.  We must always send one NX_APPDEFINED event
-             to ourself, otherwise [NXApp run] will never exit.  */
-          send_appdefined = YES;
-          ns_send_appdefined (-1);
+          /* If have pending open-file requests, attend to the next one of those. */
+          if (ns_pending_files && [ns_pending_files count] != 0
+              && [(EmacsApp *)NSApp openFile: [ns_pending_files objectAtIndex: 0]])
+            {
+              [ns_pending_files removeObjectAtIndex: 0];
+            }
+          /* Deal with pending service requests. */
+          else if (ns_pending_service_names && [ns_pending_service_names count] != 0
+                   && [(EmacsApp *)
+                        NSApp fulfillService: [ns_pending_service_names objectAtIndex: 0]
+                                     withArg: [ns_pending_service_args objectAtIndex: 0]])
+            {
+              [ns_pending_service_names removeObjectAtIndex: 0];
+              [ns_pending_service_args removeObjectAtIndex: 0];
+            }
+          else
+            {
+              ptrdiff_t specpdl_count = SPECPDL_INDEX ();
+              /* Run and wait for events.  We must always send one NX_APPDEFINED event
+                 to ourself, otherwise [NXApp run] will never exit.  */
+              send_appdefined = YES;
+              ns_send_appdefined (-1);
 
-      if (++apploopnr != 1)
-        {
-          emacs_abort ();
+              if (++apploopnr != 1)
+                {
+                  emacs_abort ();
+                }
+              record_unwind_protect (unwind_apploopnr, Qt);
+              [NSApp run];
+              unbind_to (specpdl_count, Qnil);  /* calls unwind_apploopnr */
+            }
         }
-      record_unwind_protect (unwind_apploopnr, Qt);
-          [NSApp run];
-      unbind_to (specpdl_count, Qnil);  /* calls unwind_apploopnr */
-        }
+    }
 
-      nevents = n_emacs_events_pending;
-      n_emacs_events_pending = 0;
-      ns_finish_events ();
-      q_event_ptr = NULL;
-      unblock_input ();
+  nevents = n_emacs_events_pending;
+  n_emacs_events_pending = 0;
+  ns_finish_events ();
+  q_event_ptr = NULL;
+  unblock_input ();
 
   return nevents;
 }
