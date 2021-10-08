@@ -3086,8 +3086,8 @@ In case the execution fails, an error is signaled. */)
   as_status = 0;
   as_result = 0;
 
-  // [as_scriptObject release];
-  // as_scriptObject = nil;
+  [as_scriptObject release];
+  as_scriptObject = nil;
 
   unblock_input ();
   if (status == 0)
