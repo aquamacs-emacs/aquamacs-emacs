@@ -1213,6 +1213,7 @@ Using an Emacs configured with --with-x-toolkit=lucid does not have this problem
     = argmatch (argv, argc, "-nsl", "--no-site-lisp", 11, NULL, &skip_args);
 
 #ifdef HAVE_NS
+  ns_pool = ns_alloc_autorelease_pool ();
 #ifdef NS_IMPL_GNUSTEP
   /* GNUstep stupidly resets our locale settings after we made them.  */
   fixup_locale ();
@@ -1941,12 +1942,16 @@ all of which are called before Emacs is actually killed.  */
       unlink (SSDATA (listfile));
     }
 
-if (INTEGERP (arg))
-  exit_code = (XINT (arg) < 0
-               ? XINT (arg) | INT_MIN
-               : XINT (arg) & INT_MAX);
- else
-   exit_code = EXIT_SUCCESS;
+#ifdef HAVE_NS
+  ns_release_autorelease_pool (ns_pool);
+#endif
+
+  if (INTEGERP (arg))
+    exit_code = (XINT (arg) < 0
+		 ? XINT (arg) | INT_MIN
+		 : XINT (arg) & INT_MAX);
+  else
+    exit_code = EXIT_SUCCESS;
   exit (exit_code);
 }
 

@@ -109,6 +109,7 @@ static
 void
 ns_update_menubar (struct frame *f, bool deep_p, EmacsMenu *submenu)
 {
+  NSAutoreleasePool *pool;
   NSMenu *app_menu = [NSApp mainMenu];
   EmacsMenu *menu;
   static EmacsMenu *last_submenu = nil;
@@ -1921,6 +1922,7 @@ a notification */
 
 struct Popdown_data
 {
+  NSAutoreleasePool *pool;
   EmacsAlertPanel *dialog;
 };
 
@@ -1944,6 +1946,8 @@ pop_down_menu (void *arg)
       [panel close];
 	}
 
+      [unwind_data->pool release];
+
       [[FRAME_NS_VIEW (SELECTED_FRAME ()) window] makeKeyWindow];
     }
 
@@ -1966,6 +1970,7 @@ ns_popup_dialog (struct frame *f, Lisp_Object header, Lisp_Object contents)
   id dialog;
   Lisp_Object tem, title;
   BOOL isQ;
+  NSAutoreleasePool *pool;
 
   NSTRACE ("ns_popup_dialog");
 
@@ -1995,6 +2000,7 @@ ns_popup_dialog (struct frame *f, Lisp_Object header, Lisp_Object contents)
     contents = list2 (title, Fcons (build_string ("Ok"), Qt));
 
   block_input ();
+  pool = [[NSAutoreleasePool alloc] init];
 
   dialog = [[EmacsAlertPanel alloc] init];
 
@@ -2045,6 +2051,7 @@ ns_popup_dialog (struct frame *f, Lisp_Object header, Lisp_Object contents)
 
     popup_activated_flag = 1;
 
+    unwind_data->pool = pool;
     unwind_data->dialog = dialog;
 
     record_unwind_protect_ptr (pop_down_menu, unwind_data);

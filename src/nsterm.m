@@ -302,6 +302,7 @@ static struct timespec select_timeout = { 0, 0 };
 static int selfds[2] = { -1, -1 };
 static pthread_mutex_t select_mutex;
 static int apploopnr = 0;
+static NSAutoreleasePool *outerpool;
 static struct input_event *emacs_event = NULL;
 static struct input_event *q_event_ptr = NULL;
 static int n_emacs_events_pending = 0;
@@ -4274,7 +4275,13 @@ ns_read_socket (struct terminal *terminal, struct input_event *hold_quit)
       ns_init_events (&ev);
       q_event_ptr = hold_quit;
 
- /* If have pending open-file requests, attend to the next one of those. */
+      /* we manage autorelease pools by allocate/reallocate each time around
+         the loop; strict nesting is occasionally violated but seems not to
+         matter.. earlier methods using full nesting caused major memory leaks */
+      [outerpool release];
+      outerpool = [[NSAutoreleasePool alloc] init];
+
+      /* If have pending open-file requests, attend to the next one of those. */
       if (ns_pending_files && [ns_pending_files count] != 0
           && [(EmacsApp *)NSApp openFile: [ns_pending_files objectAtIndex: 0]])
         {
@@ -4355,6 +4362,10 @@ ns_select (int nfds, fd_set *readfds, fd_set *writefds,
   if (NSApp == nil
       || (timeout && timeout->tv_sec == 0 && timeout->tv_nsec == 0))
     return pselect (nfds, readfds, writefds, exceptfds, timeout, sigmask);
+
+  [outerpool release];
+  outerpool = [[NSAutoreleasePool alloc] init];
+
 
   send_appdefined = YES;
   if (nr > 0)
@@ -4981,6 +4992,9 @@ ns_term_init (Lisp_Object display_name)
 
   NSTRACE ("ns_term_init");
 
+  [outerpool release];
+  outerpool = [[NSAutoreleasePool alloc] init];
+
   /* count object allocs (About, click icon); on macOS use ObjectAlloc tool */
   /*GSDebugAllocationActive (YES); */
   block_input ();
@@ -5377,27 +5391,34 @@ ns_term_shutdown (int sig)
         return;
       }
 
-    if (isFirst) [self finishLaunching];
-    isFirst = NO;
+  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
-    shouldKeepRunning = YES;
-    do
-        {
-          /* OSX 10.10.1 seems to swallow AppDefined events when
-             other events are put in the queue in rapid succession.
-             To prevent Emacs becoming unresponsive, we need to
-             set a reasonable timeout. */
-          NSEvent *event =
-            [self nextEventMatchingMask:NSAnyEventMask
-                              untilDate:[NSDate dateWithTimeIntervalSinceNow:0.5]
-                                 inMode:NSDefaultRunLoopMode
-                                dequeue:YES];
-          if (event == nil) // timeout
-                  { shouldKeepRunning = NO;}
+  if (isFirst) [self finishLaunching];
+  isFirst = NO;
+
+  shouldKeepRunning = YES;
+  do
+    {
+      [pool release];
+      pool = [[NSAutoreleasePool alloc] init];
+
+	/* OSX 10.10.1 seems to swallow AppDefined events when
+	   other events are put in the queue in rapid succession.
+	   To prevent Emacs becoming unresponsive, we need to
+	   set a reasonable timeout. */
+      NSEvent *event =
+        [self nextEventMatchingMask:NSAnyEventMask
+                            untilDate:[NSDate dateWithTimeIntervalSinceNow:0.5]
+                             inMode:NSDefaultRunLoopMode
+                            dequeue:YES];
+	if (event == nil) // timeout
+	  { shouldKeepRunning = NO;}
 	else
       [self sendEvent:event];
       [self updateWindows];
     } while (shouldKeepRunning);
+
+  [pool release];
 }
 
 - (void)stop: (id)sender
