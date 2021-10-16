@@ -1250,7 +1250,7 @@ Default is \"\" "
   :tag "py-pylint-command"
   :group 'python-mode)
 
-(defcustom py-pylint-command-args "--errors-only"
+(defcustom py-pylint-command-args '("--errors-only")
   "String arguments to be passed to pylint.
 
 Default is \"--errors-only\" "
