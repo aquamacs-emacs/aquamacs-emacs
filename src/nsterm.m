@@ -8621,14 +8621,14 @@ not_in_argv (NSString *arg)
 
 - (void)drawRect: (NSRect)rect
 {
+  if (!emacsframe || !emacsframe->output_data.ns)
+    return;
+
   int x = NSMinX (rect), y = NSMinY (rect);
   int width = NSWidth (rect), height = NSHeight (rect);
 
   NSTRACE ("[EmacsView drawRect:" NSTRACE_FMT_RECT "]",
            NSTRACE_ARG_RECT(rect));
-
-  if (!emacsframe || !emacsframe->output_data.ns)
-    return;
 
   ns_clear_frame_area (emacsframe, x, y, width, height);
   block_input ();
