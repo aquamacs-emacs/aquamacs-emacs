@@ -807,12 +807,10 @@ ns_implicitly_set_icon_type (struct frame *f)
   NSTRACE ("ns_implicitly_set_icon_type");
 
   block_input ();
-  pool = [[NSAutoreleasePool alloc] init];
-  if (f->output_data.ns->miniimage
-      && [[NSString stringWithUTF8String: SSDATA (f->name)]
+    if (f->output_data.ns->miniimage
+        && [[NSString stringWithUTF8String: SSDATA (f->name)]
                isEqualToString: [(NSImage *)f->output_data.ns->miniimage name]])
     {
-      [pool release];
       unblock_input ();
       return;
     }
@@ -820,7 +818,6 @@ ns_implicitly_set_icon_type (struct frame *f)
   tem = assq_no_quit (Qicon_type, f->param_alist);
   if (CONSP (tem) && ! NILP (XCDR (tem)))
     {
-      [pool release];
       unblock_input ();
       return;
     }
@@ -860,7 +857,6 @@ ns_implicitly_set_icon_type (struct frame *f)
   [f->output_data.ns->miniimage release];
   f->output_data.ns->miniimage = image;
   [view setMiniwindowImage: setMini];
-  [pool release];
   unblock_input ();
 }
 
@@ -900,7 +896,7 @@ x_set_icon_type (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
       setMini = NO;
     }
 
-  f->output_data.ns->miniimage = image;
+  f->output_data.ns->miniimage = [image retain];
   [view setMiniwindowImage: setMini];
 }
 
