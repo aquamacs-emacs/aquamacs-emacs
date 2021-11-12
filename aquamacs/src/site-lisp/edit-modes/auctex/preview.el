@@ -1,4 +1,4 @@
-3;;; preview.el --- embed preview LaTeX images in source buffer
+;;; preview.el --- embed preview LaTeX images in source buffer
 
 ;; Copyright (C) 2001-2006, 2010-2015,
 ;;               2017-2020  Free Software Foundation, Inc.
@@ -3329,7 +3329,7 @@ name(\\([^)]+\\))\\)\\|\
 ;;;   Too ugly to describe in detail.  In short, we try to catch file
 ;;;   names built from path components that don't contain spaces or
 ;;;   other special characters once the file extension has started.
-;;;
+;;;  
 ;;;   Position for searching immediately after the file name so as to
 ;;;   not miss closing parens or something.
 ;;;   (match-string 3) is the file name.

@@ -128,7 +128,7 @@
 			      ;;(file-directory-p x)
 			      x))
 		     load-path))
-   (list (concat data-directory "images"))) ;; Aquamacs
+   (list data-directory))
   "List of directories where toolbarx finds its images.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -150,8 +150,6 @@
 (defun toolbarx-make-string-from-symbol (symbol)
   "Return a string from the name of a SYMBOL.
 Upcase initials and replace dashes by spaces."
-  (if (eq symbol 'separator) ;; Aquamacs
-     "--" ;; Aquamacs
   (let* ((str (upcase-initials (symbol-name symbol)))
 	 (str2))
     (dolist (i (append str nil))
@@ -159,7 +157,6 @@ Upcase initials and replace dashes by spaces."
 	  (push 32 str2)
 	(push i str2)))			; else push identical
     (concat (nreverse str2))))
-  ) ;; Aquamacs
 
 (defun toolbarx-make-symbol-from-string (string)
   "Return a (intern) symbol from STRING.
@@ -537,10 +534,8 @@ object VAL of a dropdown group (see documentation of function
   (let* ((props-types-alist
 	  '((:image	      toolbarx-test-image-type)
 	    (:command	      toolbarx-test-any-type)
-            (:title           toolbarx-test-string-or-nil) ;; Aquamacs
 	    (:enable	      toolbarx-test-any-type)
 	    (:visible	      toolbarx-test-any-type)
-            (:label           toolbarx-test-string-or-nil) ;; Aquamacs
 	    (:help	      toolbarx-test-string-or-nil)
 	    (:insert	      toolbarx-test-any-type	   . and)
 	    (:toolbar	      toolbarx-test-toolbar-type)
@@ -1018,14 +1013,12 @@ an extension.  If the extension is omitted, `xpm', `xbm' and
 `pbm' are tried.  If the directory is omitted,
 `toolbarx-image-path' is searched."
   (let ((file))
-    (dolist (i '("" ".png" ".tiff" ".xpm" ".xbm" ".pbm")) ;; Aquamacs
+    (dolist (i '("" ".xpm" ".xbm" ".pbm"))
       (unless file
-        (setq file (locate-library (concat image i) t toolbarx-image-path))))
+	(setq file (locate-library (concat image i) t toolbarx-image-path))))
     (if file
 	(create-image file)
-      (find-image `((:type png :file ,(concat image ".png")) ;; Aquamacs
-                    (:type tiff :file ,(concat image ".tiff")) ;; Aquamacs
-                    (:type xpm :file ,(concat image ".xpm"))
+      (find-image `((:type xpm :file ,(concat image ".xpm"))
 		    (:type xbm :file ,(concat image ".xbm"))
 		    (:type pbm :file ,(concat image ".pbm")))))))
 
@@ -1132,14 +1125,11 @@ function `toolbar-install-toolbar'."
 			     (cadr (memq :enable filtered-props))))
 	       (visible (cons (memq :visible filtered-props)
 			      (cadr (memq :visible filtered-props))))
-               (label (cons (memq :label filtered-props) ;; Aquamacs
-                            (cadr (memq :label filtered-props)))) ;; Aquamacs
 	       (button (cons (memq :button filtered-props)
 			     (cadr (memq :button filtered-props))))
 	       (menuitem (append
 			  (list 'menu-item
-                                (or (cadr (memq :title filtered-props)) ;; Aquamacs
-                                    (toolbarx-make-string-from-symbol symbol)) ;; Aquamacs
+				(toolbarx-make-string-from-symbol symbol)
 				command
 				:image image-descriptor)
 			  (when (car help)
@@ -1148,8 +1138,6 @@ function `toolbar-install-toolbar'."
 			    (list :enable (cdr enable)))
 			  (when (car visible)
 			    (list :visible (cdr visible)))
-                          (when (car label) ;; Aquamacs
-                            (list :label (cdr label))) ;; Aquamacs
 			  (when (car button)
 			    (list :button (cdr button)))))
 	       (key-not-used

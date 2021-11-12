@@ -2010,7 +2010,7 @@ Return the full path to the executable if possible."
 		    TeX-source-specials-view-emacsclient-flags)))
     (if (and client-full (file-executable-p client-full))
 	(concat client-full " " options)
-   (concat "\\\"" aquamacs-mac-application-bundle-directory "/Contents/MacOS/bin/" client-base "\\\" " options)))) ;; Aquamacs
+      (concat client-base " " options))))
 
 (defun TeX-source-specials-view-expand-options (&optional viewer)
   "Return source specials command line option for viewer command.

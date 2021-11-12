@@ -1410,15 +1410,10 @@ Parameters NAME and FILE are ignored."
 (defun TeX-run-discard-or-function (name command file)
   "Start COMMAND as process or execute it as a Lisp function.
 If run as a process, the output is discarded.  COMMAND is
-expected to be a string.  NAME and FILE are ignored.
-Aquamacs extension:
-COMMAND may be a string containing a lisp expression
-to be evaluated." ;; Aquamacs
-  (let ((expr (car (read-from-string command)))) ;; Aquamacs
-    (if (or (functionp expr) ;; Aquamacs
-            (and (listp expr) (functionp (car expr)))) ;; Aquamacs
-      (TeX-run-function name command file) ;; Aquamacs
-      (TeX-run-discard name command file)))) ;; Aquamacs
+expected to be a string.  NAME and FILE are ignored."
+  (if (functionp (car (read-from-string command)))
+      (TeX-run-function name command file)
+    (TeX-run-discard name command file)))
 
 (defun TeX-run-ispell-on-document (_command _ignored _name)
   "Run ispell on all open files belonging to the current document.
