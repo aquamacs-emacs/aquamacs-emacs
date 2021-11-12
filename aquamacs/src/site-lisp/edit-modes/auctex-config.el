@@ -121,7 +121,7 @@ Only checks once - subsequent calls will not result in any action."
       (if (string-match "^no " (buffer-string))
 	   (message
 	    "No Ghostscript (pdf2dsc) found - preview-latex not activated.")
-	(load "auctex/preview-latex" nil nil nil)))
+	(load "preview-latex" nil nil nil)))
     (setq aq-preview-latex-checked t)) nil)
 
 ;; must be done here do initialize
