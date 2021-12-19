@@ -13,11 +13,18 @@ echo "Submitting for notarization..."
 
 TMPFILE=$(mktemp)
 
-xcrun altool --notarize-app \
-      --primary-bundle-id "org.aquamacs.aquamacs36" \
-      --username "${AQUAMACS_NOTARIZE_ID}"\
-      --password "@keychain:AC_PASSWORD"\
-      --file ${ZIPFILE} > "${TMPFILE}"
+# Old way
+
+# xcrun altool --notarize-app \
+#       --primary-bundle-id "org.aquamacs.aquamacs36" \
+#       --username "${AQUAMACS_NOTARIZE_ID}"\
+#       --password "@keychain:AC_PASSWORD"\
+#       --file ${ZIPFILE} > "${TMPFILE}"
+
+# New way
+xcrun notarytool submit \
+      --keychain-profile "Aquamacs notary" \
+      ${ZIPFILE} > "${TMPFILE}"
 
 cat ${TMPFILE}
 requestID=$(awk '/RequestUUID/ { print $NF; }' "${TMPFILE}")

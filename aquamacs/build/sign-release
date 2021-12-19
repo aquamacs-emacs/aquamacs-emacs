@@ -9,6 +9,7 @@ APPDIR="nextstep/Aquamacs.app"
 RESDIR="${APPDIR}/Contents/Resources"
 NEWBIN="${RESDIR}/bin"
 MACDIR="${APPDIR}/Contents/MacOS"
+BUILDTOOLS="aquamacs/build"
 
 # Move scripts out of the MacOS directory in the bundle, because Apple doesn't like that.
 mkdir ${NEWBIN}
@@ -27,6 +28,7 @@ if [[ "${AQUAMACS_CERT}" != "" ]]; then
     for f in "${APPDIR}"/Contents/MacOS/{bin/*,libexec/*,lib/*,Aquamacs} ${APPDIR}; do
         codesign -s "$AQUAMACS_CERT" --force --timestamp \
                  --options=runtime \
+                 --entitlements "${BUILDTOOLS}/entitlements.plist" \
                  "${f}"
     done
 else
