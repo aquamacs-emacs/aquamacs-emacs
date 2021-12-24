@@ -2863,6 +2863,7 @@ ns_draw_fringe_bitmap (struct window *w, struct glyph_row *row,
                                              height: full_height
                                                  fg: 0 bg: 0];
               bimgs[p->which - 1] = img;
+              [img retain];
               xfree (cbits);
             }
 

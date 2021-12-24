@@ -311,7 +311,7 @@ ns_resize_truedpi_image (void *eImg, int respect_dpi, Lisp_Object scale_factor, 
       
   [image setName: [NSString stringWithUTF8String: SSDATA (file)]];
 
-  return image;
+  return [image retain];
 }
 
 
