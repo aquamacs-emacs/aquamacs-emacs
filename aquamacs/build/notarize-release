@@ -1,4 +1,5 @@
 #!/bin/bash
+
 # Submit Aquamacs for notarizing by Apple
 #
 # Requires that AQUAMACS_NOTARIZE_ID is set in environment,
@@ -6,6 +7,10 @@
 
 # Package a ZIP file for the request
 ZIPFILE=/tmp/aquamacs-to-notarize.zip
+
+# Reference to credentials stored in keychain
+KEYPROFILE="Aquamacs notary"
+
 cd nextstep
 ditto -c -k --keepParent Aquamacs.app "${ZIPFILE}"
 
@@ -13,48 +18,13 @@ echo "Submitting for notarization..."
 
 TMPFILE=$(mktemp)
 
-# Old way
-
-# xcrun altool --notarize-app \
-#       --primary-bundle-id "org.aquamacs.aquamacs36" \
-#       --username "${AQUAMACS_NOTARIZE_ID}"\
-#       --password "@keychain:AC_PASSWORD"\
-#       --file ${ZIPFILE} > "${TMPFILE}"
-
-# New way
 xcrun notarytool submit \
-      --keychain-profile "Aquamacs notary" \
-      ${ZIPFILE} > "${TMPFILE}"
+      --wait \
+      --keychain-profile "${KEYPROFILE}" \
+      ${ZIPFILE} | tee "${TMPFILE}"
 
-cat ${TMPFILE}
-requestID=$(awk '/RequestUUID/ { print $NF; }' "${TMPFILE}")
-
-echo "Submission successful; request ID is ${requestID}"
-
-# XXX     --file /Users/wtreese/local/aquamacs-devel/Aquamacs-3.6-beta.dmg
-
-# If given --auto-staple, waits for the notarization process to finish
-# and then staples it to the app.
+# If given --auto-staple, staple the notarization to the app.
 
 if [ "$1"x = "--auto-staple"x ]; then
-    status="in progress"
-
-    while [[ "$status" == "in progress" ]]; do
-        sleep 15
-
-        status=$(xcrun altool --notarization-info "${requestID}" \
-                       --username "${AQUAMACS_NOTARIZE_ID}" \
-                       --password "@keychain:AC_PASSWORD" \
-                     | awk -F': ' '/Status:/ {print $2}')
-        echo -n '.'
-    done
-    echo 'finished'
-
-    if [[ "$status"x == "success"x ]]; then
-        xcrun stapler staple Aquamacs.app
-        echo "Notarization done and stapled"
-    else
-        echo "Notarization failed: status was ${status}"
-        exit 1
-    fi
+    xcrun stapler staple Aquamacs.app
 fi

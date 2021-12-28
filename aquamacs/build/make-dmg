@@ -14,15 +14,19 @@
 # Version-specific names to edit as appropriate
 # XXX Volume name issue with diff name than app?
 
-# XXX note that for a full release we need to fix the app name to just
-# be Aquamacs.app, I think, and watch out for a leftover space in the
-# name then.
+# For a full release use --release argument so the app name shows up without the version number.
 
-VERSION="3.6 beta2"
+VERSION="3.6"
 VOLNAME="Aquamacs ${VERSION}"
-APPNAME="Aquamacs ${VERSION}.app"
+if [ "${1}x" = "--release" ]; then
+    APPNAME="Aquamacs ${VERSION}.app"
+else
+    APPNAME="Aquamacs.app"
+fi
+
 MANNAME="Aquamacs ${VERSION} manual.pdf"
 RELNOTES="Release notes ${VERSION}.pdf"
+DONATE="Donate.webloc"
 DMG="../Aquamacs-$(echo ${VERSION} | sed 's/ /-/g').dmg"
 
 # Paths within the repository
@@ -34,13 +38,21 @@ if [ -f "/Volumes/${VOLNAME}" ]; then
     hdiutil detach "/Volumes/${VOLNAME}"
 fi
 
+# This is necessary because git doesn't save the icon image in the Mac
+# file resource fork. Rez and SetFile are in the Xcode command line
+# tools.
+
+echo "Adding icon to resource fork for Donate"
+Rez -append "${AUXDIR}/Donate.rsrc" -o "${AUXDIR}/Donate.webloc"
+SetFile -a C "${AUXDIR}/Donate.webloc"
+
 echo "Copy files to ${CONTENTS_DIR}"
 mkdir "${CONTENTS_DIR}"
 cp -a nextstep/Aquamacs.app "${CONTENTS_DIR}/${APPNAME}" || exit 1
 cp -p "aquamacs/doc/latex/Aquamacs Manual.pdf" \
    "${CONTENTS_DIR}/${MANNAME}" || exit 1
 cp -p "aquamacs/doc/latex/changes.pdf" "${CONTENTS_DIR}/${RELNOTES}" || exit 1
-cp -p "${AUXDIR}/Donate.webloc" "${CONTENTS_DIR}" || exit 1
+cp -p "${AUXDIR}/${DONATE}" "${CONTENTS_DIR}" || exit 1
 
 test -f "${DMG}" && rm -f "${DMG}"
 
@@ -53,12 +65,13 @@ create-dmg \
     --window-pos 200 120 \
     --window-size 620 530 \
     --icon-size 75 \
-    --app-drop-link 100 260\
+    --app-drop-link 100 260 \
     --icon "${APPNAME}" 280 260 \
-    --icon "Donate" 470 260  \
+    --icon "${DONATE}" 470 260  \
     --icon "${RELNOTES}" 280 355\
     --icon "${MANNAME}" 470 355 \
     --hide-extension "${APPNAME}" \
+    --hide-extension "${DONATE}"\
     --no-internet-enable \
     "${DMG}" \
     "${CONTENTS_DIR}"
