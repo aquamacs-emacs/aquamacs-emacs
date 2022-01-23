@@ -85,7 +85,7 @@ export LIBXML2_LIBS=`xml2-config --libs`
 
 test -e configure || ./autogen.sh
 
-./configure --with-ns --without-x \
+./configure --with-ns --without-x --without-dbus \
             ${CONFIG_PACKAGES} \
             CFLAGS="${OPT_FLAGS} ${COMPAT_CFLAGS} ${DEBUG_CFLAGS}" \
             LDFLAGS="${COMPAT_LDFLAGS}" \
