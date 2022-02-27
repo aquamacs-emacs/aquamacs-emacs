@@ -399,38 +399,42 @@ White space here is any of: space, tab, emacs newline (line feed, ASCII 10)."
   "Install the Aquamacs Command Line Tool."
   (interactive)
   (let* ((coding-system-for-write 'no-conversion)
-        (vers nil)
-        (to-be-installed '("emacsclient" "aquamacs"))
-        (elcapitan (version<= "10.11"
-                              (with-temp-buffer (call-process "sw_vers" nil t nil "-productVersion")
-                                                (trim-string (buffer-string)))))
-        (local-bin (if elcapitan
-                       "/usr/local/bin/" "/usr/bin/"))
-        (bin (format "%s/Contents/MacOS/bin/" aquamacs-mac-application-bundle-directory))
-        (src (format "%s/Contents/Resources/" aquamacs-mac-application-bundle-directory))
-        ;; On pre-ElCapitan systems, we rename the original emacs binary to emacs22.
-        (emrename (if (or elcapitan
-                          (file-symlink-p "/usr/bin/emacs"))
-                      ""
-                    " && mv /usr/bin/emacs /usr/bin/emacs22 2>/dev/null"))
-        (install-emacs (yes-or-no-p "Install emacs tool to use Aquamacs as text terminal emacs?\nThis will normally supersede the system-provided Emacs (an old version)."))
-        (emscript (if install-emacs (format "%s && ln -sf '%s%s' '%s%s'" emrename bin "emacs" local-bin "emacs") ""))
-        (to-be-installed (if install-emacs (cons "emacs" to-be-installed) to-be-installed))
-        (script (format "cp '%s%s' '%s%s' '%s'%s"
-                        bin "aquamacs"
-                        bin "emacsclient"
-                        local-bin
-                        emscript)))
-      ;; (message "Script: %s" script)
-      (do-applescript (format "do shell script \"%s\" with administrator privileges" script))
-      (let ((notfound nil))
-           (mapc
-            (lambda (c)
-              (when c
-                (unless (equal (trim-string (login-shell-command-to-string (concat "which " c))) (concat local-bin c))
-                  (push c notfound))))
-            to-be-installed)
-           (aquamacs-message (concat "Command-line tools have been installed.
+         (vers nil)
+         (to-be-installed '("emacsclient" "aquamacs"))
+         (elcapitan (version<= "10.11"
+                               (with-temp-buffer (call-process "sw_vers" nil t nil "-productVersion")
+                                                 (trim-string (buffer-string)))))
+         (local-bin (if elcapitan
+                        "/usr/local/bin/" "/usr/bin/"))
+         (bin (format "%s/Contents/MacOS/bin/" aquamacs-mac-application-bundle-directory))
+         (src (format "%s/Contents/Resources/" aquamacs-mac-application-bundle-directory))
+         ;; On pre-ElCapitan systems, we rename the original emacs binary to emacs22.
+         (emrename (if (or elcapitan
+                           (file-symlink-p "/usr/bin/emacs"))
+                       ""
+                     " && mv /usr/bin/emacs /usr/bin/emacs22 2>/dev/null"))
+         (install-emacs (yes-or-no-p "Install emacs tool to use Aquamacs as text terminal emacs?\nThis will normally supersede the system-provided Emacs (an old version)."))
+         (emscript (if install-emacs (format "%s && ln -sf '%s%s' '%s%s'" emrename bin "emacs" local-bin "emacs") ""))
+         (to-be-installed (if install-emacs (cons "emacs" to-be-installed) to-be-installed))
+         (ensure-target-exists (if (file-exists-p local-bin)
+                                   ""
+                                 (format "mkdir %s && " local-bin)))
+         (script (concat ensure-target-exists
+                         (format "cp '%s%s' '%s%s' '%s'%s"
+                                 bin "aquamacs"
+                                 bin "emacsclient"
+                                 local-bin
+                                 emscript))))
+    ;; (message "Script: %s" script)
+    (do-applescript (format "do shell script \"%s\" with administrator privileges" script))
+    (let ((notfound nil))
+      (mapc
+       (lambda (c)
+         (when c
+           (unless (equal (trim-string (login-shell-command-to-string (concat "which " c))) (concat local-bin c))
+             (push c notfound))))
+       to-be-installed)
+      (aquamacs-message (concat "Command-line tools have been installed.
 " (list2english to-be-installed) " installed to /usr/local/bin.
 " (if (member "emacs" to-be-installed) "
 You must repeat this process if Aquamacs.app is moved.
