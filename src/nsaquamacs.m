@@ -735,14 +735,14 @@ DEFUN ("ns-launch-URL-with-default-browser", Fns_launch_url_with_default_browser
         }
       if (status != noErr)
         {
-          error ("Failed to launch default browser. Error %ld", XFIXNUM(status));
+          error ("Failed to launch default browser. Error %ld", status);
           return Qnil;
         }
     }
   else
     {
       unblock_input();
-      error ("Could not determine default browser. Error %ld", XFIXNUM(status));
+      error ("Could not determine default browser. Error %ld", status);
       return Qnil;
     }
 
