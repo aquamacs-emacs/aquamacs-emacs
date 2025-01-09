@@ -109,7 +109,7 @@ test -e configure || ./autogen.sh
     || exit 1
 
 gnumake clean || exit 1
-gnumake -j6 || exit 1
+gnumake -j -l $((nproc) - 1) || exit 1
 gnumake install || exit 1
 
 # generate symbol archive (.dSYM file)
