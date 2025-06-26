@@ -1360,6 +1360,10 @@ please check its value")
   ;; This is typically ~INIT-FILE-USER/.config/emacs unless the user
   ;; is following the ~INIT-FILE-USER/.emacs.d convention.
   (setq xdg-dir startup--xdg-config-home-emacs)
+
+  ;; Reconfigure directories for use with Aquamacs
+  (aquamacs-prepare-filesystem-settings)
+
   (setq startup-init-directory
 	(if (or (zerop (length init-file-user))
 		(and (eq xdg-dir user-emacs-directory)

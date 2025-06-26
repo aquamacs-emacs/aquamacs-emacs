@@ -42,25 +42,67 @@
   (require 'aquamacs-macros))
 
 (defvar aquamacs-preferences-directory
-  "~/Library/Preferences/Aquamacs Emacs beta"
-  "Mac OS directory for Aquamacs preferences files.")
+  (file-name-as-directory "~/Library/Preferences/Aquamacs Emacs 4")
+  "MacOS directory for Aquamacs preferences files.")
+
+(defvar aquamacs-3.6-preferences-directory
+  (file-name-as-directory"~/Library/Preferences/Aquamacs Emacs")
+  "MacOS directory for Aquamacs preferences files in Aquamacs 3.6 and earlier.")
 
 (defvar aquamacs-preference-files
   (list "/Library/Preferences/Emacs/Preferences"
-        (concat (file-name-as-directory aquamacs-preferences-directory)
-                "Preferences")
         "/Library/Preferences/Aquamacs Emacs/Preferences"
-        "~/Library/Preferences/Emacs/Preferences")
-  "List of names of source files to be loaded as Preference files.")
+        "~/Library/Preferences/Emacs/Preferences"
+        (concat (file-name-as-directory aquamacs-preferences-directory)
+                "Preferences"))
+  "List of source files to be loaded as Preference files.
+Matching files are loaded in this order, so files later in the
+list may override settings from earlier files.")
 
 (defun aquamacs-create-preferences-dirs ()
-  (condition-case err
-      (progn
-	(unless (file-exists-p aquamacs-preferences-directory)
-	  (make-directory aquamacs-preferences-directory 'parents))
-	(unless (file-exists-p "~/Library/Application Support/Aquamacs Emacs/Temporary Files")
-	  (make-directory "~/Library/Application Support/Aquamacs Emacs/Temporary Files" 'parents)))
-    (error (message "Error %s during preference dir creation." err))))
+  "Create the directory for Aquamacs preferences files if needed.
+Also create the directory for temporary files if needed.  Returns
+the name of user's init directory set for Aquamacs as the value
+of `user-emacs-directory'."
+  (let* ((temp-files-dir
+          (concat (file-name-as-directory aquamacs-preferences-directory)
+                  "Temporary Files")))
+    (condition-case err
+        (progn
+          (message "Creating Aquamacs preferences directory: %s"
+                   aquamacs-preferences-directory)
+          (make-directory aquamacs-preferences-directory t))
+      (error (message "Error creating Aquamacs preferences directory: %s"
+                      err)))
+    ;; either previously initialized things or migrated from
+
+    ;; XXX the name Preferences.el should not be hardcoded here, but
+    ;; we don't have a variable for it elsewhere.
+    (if (file-exists-p (file-name-concat aquamacs-preferences-directory
+                                         "Preferences.el"))
+        (message "create prefs dir: Preferences.el already exists!")
+      ;; Check to see if we need to migrate the Preferences directory
+      (when (file-exists-p aquamacs-3.6-preferences-directory)
+        (message "Migrating Aquamacs 3.6 preferences to Aquamacs 4")
+        (condition-case dir-err
+            ;; We pass 'copy-contents as non-nil because Emacs
+            ;; thinks that aquamacs-preferences-directory
+            ;; already exists as indicated by its trailing slash.
+            (copy-directory aquamacs-3.6-preferences-directory
+                            aquamacs-preferences-directory
+                            'keep-times
+                            'make-parents
+                            'copy-contents)
+          (error (message "Error copying Aquamacs preferences directory: %s"
+                          dir-err)))))
+    ;; Ensure some important directories exist
+    (condition-case nil
+        (progn
+          (make-directory user-emacs-directory t)
+          (make-directory temp-files-dir)
+          (make-directory mail-default-directory t))
+      (error nil))
+    user-emacs-directory))
 
 (defun aquamacs-create-preferences-file ()
   "Create a Preferences.el in the right place if needed."
@@ -169,60 +211,52 @@ from earlier versions of the distribution."
       (let ((one-buffer-one-frame-mode nil))
 	(switch-to-buffer "*scratch*")))))
 
+(defun aquamacs-in-prefs-dir (file-or-directory)
+  "Return FILE-OR-DIRECTORY as full path relative to`aquamacs-preferences-directory'."
+  (file-name-concat aquamacs-preferences-directory file-or-directory))
+
 (defun aquamacs-set-file-location-defaults ()
-  "Set Aquamacs locations for various Emacs variables."
+  "Set Aquamacs locations for various Emacs configuration files.
+This function should only set variables to their correct values;
+it should not create any files or directories itself."
   (aquamacs-set-defaults
    `((mailclient-place-body-on-clipboard-flag ,(gmail-mailclient-p))
      (recentf-menu-action aquamacs-find-file-2)
-     (user-emacs-directory
-      ,(file-name-as-directory
-        (file-name-concat aquamacs-preferences-directory "Packages")))
-     (ede-simple-save-directory
-      ,(file-name-as-directory
-        (file-name-concat aquamacs-preferences-directory "EDE")))
-     (savehist-file ,(file-name-concat aquamacs-preferences-directory
-                                       "minibuffer-history.el"))
+     (user-emacs-directory ,(aquamacs-in-prefs-dir "Packages"))
+     (package-user-dir ,(aquamacs-in-prefs-dir "Packages/elpa"))
+     (ede-simple-save-directory ,(aquamacs-in-prefs-dir "EDE"))
+     (savehist-file ,(aquamacs-in-prefs-dir "minibuffer-history.el"))
      (desktop-path (,aquamacs-preferences-directory "." "~"))
      (trash-directory "~/.Trash")
-     (save-place-file ,(file-name-concat aquamacs-preferences-directory
-                                         "places.el"))
-     (recentf-save-file ,(file-name-concat aquamacs-preferences-directory
-                                           "Recent Files.el"))
-     (abbrev-file-name ,(file-name-concat aquamacs-preferences-directory
-                                          "Abbreviations"))
+     (save-place-file ,(aquamacs-in-prefs-dir "places.el"))
+     (recentf-save-file ,(aquamacs-in-prefs-dir "Recent Files.el"))
+     (abbrev-file-name ,(aquamacs-in-prefs-dir "Abbreviations"))
      (mail-default-directory
-      "~/Library/Application Support/Aquamacs Emacs/Temporary Files")))
+      "~/Library/Application Support/Aquamacs Emacs/Temporary Files"))))
 
-  (condition-case nil
-      (progn
-	(make-directory user-emacs-directory t)
-	(make-directory mail-default-directory t))
-    (error nil))
-
-  ;; Before Aquamacs 3.1, user-emacs-directory was not in "Packages"
-  ;; It was moved to the new location in order to avoid having
-  ;; emacs-user-directory as part of load-path, which caused (load "tramp") to
-  ;; load the wrong file.  GNU Emacs bug #18512
-
-  (condition-case nil
-      (progn
-	(locate-user-emacs-file "tramp")
-	(locate-user-emacs-file "calc.el")
-	(locate-user-emacs-file "maxima_history")
-	(locate-user-emacs-file "SessionDesktop.el")
-	(write-region "" nil (concat user-emacs-directory ".nosearch")))
-    (error nil))
-  ) ;; aquamacs-file-location-defaults
-
+(defun aquamacs-prepare-filesystem-settings ()
+  "Set up file and directory names for Aquamacs.
+This should be called before the user's early-init file in the
+normal Emacs startup.  Other Aquamacs initialization is handled by
+loading the site-start file."
+  ;; This was constructed to match the previous code as closely as
+  ;; possible.
+  (aquamacs-set-file-location-defaults)
+  (ats "create preference directory and file")
+  (aquamacs-create-preferences-dirs)
+  (aquamacs-create-preferences-file)
+  (ats "create prefs done"))
 
 (defun aquamacs-osx-defaults-setup ()
+  "Configure Aquamacs default settings."
 
   (ats "osx defaults setup running...")
 
   (require 'aquamacs-tools)
   (ats "tools done")
 
-  (aquamacs-set-file-location-defaults)
+  ;; Moved to aquamacs-set-file-location-defaults
+  ;; (aquamacs-set-file-location-defaults)
 
 
   (require 'mac-extra-functions)
@@ -238,12 +272,16 @@ from earlier versions of the distribution."
     (mac-add-standard-directories)
     (ats "add dirs done"))
 
+  ;; Moved to aquamacs-set-file-location-defaults
+  ;; (ats "create preference directory and file")
+  ;; (aquamacs-create-preferences-dirs)
+
   ;; create preferences files (even when starting with -q)
   ;; because subsequent operations may throw errors if those
   ;; directories don't exist.
-  (aquamacs-create-preferences-dirs)
-  (aquamacs-create-preferences-file)
-  (ats "create prefs done")
+
+  ;; (aquamacs-create-preferences-file)
+  ;; (ats "create prefs done")
 
   ;; load files (give full paths and load all files)
   ;; this will be called after .emacs has been loaded
@@ -253,8 +291,6 @@ from earlier versions of the distribution."
 
   ;; this was no good, since users could not change after-init-hook any more.
   ;; now solved via a patch to startup.el.
-
-
 
   ;; POST-LOAD-PATH adjustment
   ;; from here on, the load path has been altered to include the user's
