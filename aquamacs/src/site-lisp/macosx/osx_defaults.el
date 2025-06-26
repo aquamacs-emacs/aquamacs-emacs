@@ -41,7 +41,6 @@
 (eval-when-compile
   (require 'aquamacs-macros))
 
-(setq debug-on-error t)
 (defvar aquamacs-preferences-directory
   "~/Library/Preferences/Aquamacs Emacs beta"
   "Mac OS directory for Aquamacs preferences files.")
@@ -64,7 +63,7 @@
     (error (message "Error %s during preference dir creation." err))))
 
 (defun aquamacs-create-preferences-file ()
-  "Creates a Preferences.el in the right place if needed."
+  "Create a Preferences.el in the right place if needed."
   (let ((pf (expand-file-name
              (file-name-concat aquamacs-preferences-directory
                                "Preferences"))))
@@ -86,10 +85,10 @@
 ;; (aquamacs-load-preferences)
 
 (defun aquamacs-load-preferences ()
-  "Loads the custom and preference files.
+  "Load the custom and preference files.
 
 The files listed in the variables `custom-file' and
-`aquamacs-preference-files' are loaded. If errors occur,
+`aquamacs-preference-files' are loaded.  If errors occur,
 *Messages* is shown containing a helpful error message.
 Aquamacs also executes compatibility code to allow transitions
 from earlier versions of the distribution."
@@ -171,6 +170,7 @@ from earlier versions of the distribution."
 	(switch-to-buffer "*scratch*")))))
 
 (defun aquamacs-set-file-location-defaults ()
+  "Set Aquamacs locations for various Emacs variables."
   (aquamacs-set-defaults
    `((mailclient-place-body-on-clipboard-flag ,(gmail-mailclient-p))
      (recentf-menu-action aquamacs-find-file-2)
@@ -198,8 +198,6 @@ from earlier versions of the distribution."
 	(make-directory user-emacs-directory t)
 	(make-directory mail-default-directory t))
     (error nil))
-
-  ;; Before Aquamacs 3.1, user-emacs-directory was not in "Packages"
 
   ;; Before Aquamacs 3.1, user-emacs-directory was not in "Packages"
   ;; It was moved to the new location in order to avoid having

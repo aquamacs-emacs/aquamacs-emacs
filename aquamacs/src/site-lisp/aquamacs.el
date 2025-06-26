@@ -582,42 +582,41 @@ Returns t."
 ;;    (get theme 'theme-settings)))
 
 (defun aquamacs-save-buffers-kill-emacs (&optional arg)
-    "Offer to save each buffer, then kill this Emacs process.
+  "Offer to save each buffer, then kill this Emacs process.
 With prefix arg, silently save all file-visiting buffers, then kill.
 Like `save-buffers-kill-emacs', except that it doesn't ask again
 if modified buffers exist."
-    (interactive "P")
-    (aquamacs-create-preferences-dirs)
-    (let ((saved-timer-idle-list timer-idle-list))
-      (unwind-protect
-          (progn
-            ;; deactivate all idle timers so that
-            ;; our prompt is not being overwritten by obnoxious
-            ;; echo area messages
-            ;; Caveat: this may impede useful functionality in "view"
-            ;; when reviewing stuff.
-            (setq timer-idle-list nil)
-            (save-some-buffers arg t)
-            (and (or (not (fboundp 'process-list))
-                     ;; process-list is not defined on VMS.
-                     (let ((processes (process-list))
-                           active)
-                       (while processes
-                         (and (memq (process-status (car processes))
-                                    '(run stop open listen))
-                              (process-query-on-exit-flag (car processes))
-                              (setq active t))
-                         (setq processes (cdr processes)))
-                       (or (not active)
-                           (list-processes t)
-                           (yes-or-no-p
-                            "Active processes exist; kill them and exit anyway? "))))
-                 ;; Query the user for other things, perhaps.
-                 (run-hook-with-args-until-failure 'kill-emacs-query-functions)
+  (interactive "P")
+  (let ((saved-timer-idle-list timer-idle-list))
+    (unwind-protect
+        (progn
+          ;; deactivate all idle timers so that
+          ;; our prompt is not being overwritten by obnoxious
+          ;; echo area messages
+          ;; Caveat: this may impede useful functionality in "view"
+          ;; when reviewing stuff.
+          (setq timer-idle-list nil)
+          (save-some-buffers arg t)
+          (and (or (not (fboundp 'process-list))
+                   ;; process-list is not defined on VMS.
+                   (let ((processes (process-list))
+                         active)
+                     (while processes
+                       (and (memq (process-status (car processes))
+                                  '(run stop open listen))
+                            (process-query-on-exit-flag (car processes))
+                            (setq active t))
+                       (setq processes (cdr processes)))
+                     (or (not active)
+                         (list-processes t)
+                         (yes-or-no-p
+                          "Active processes exist; kill them and exit anyway? "))))
+               ;; Query the user for other things, perhaps.
+               (run-hook-with-args-until-failure 'kill-emacs-query-functions)
                (or (null confirm-kill-emacs)
                    (funcall confirm-kill-emacs "Really exit Aquamacs? "))
                (kill-emacs)))
-        (setq timer-idle-list saved-timer-idle-list))))
+      (setq timer-idle-list saved-timer-idle-list))))
 
 ;; MOUSE --------------
 
