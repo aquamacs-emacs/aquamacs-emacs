@@ -68,33 +68,29 @@ of `user-emacs-directory'."
           (concat (file-name-as-directory aquamacs-preferences-directory)
                   "Temporary Files")))
     (condition-case err
-        (progn
-          (message "Creating Aquamacs preferences directory: %s"
-                   aquamacs-preferences-directory)
-          (make-directory aquamacs-preferences-directory t))
+        (make-directory aquamacs-preferences-directory t)
       (error (message "Error creating Aquamacs preferences directory: %s"
                       err)))
     ;; either previously initialized things or migrated from
 
     ;; XXX the name Preferences.el should not be hardcoded here, but
     ;; we don't have a variable for it elsewhere.
-    (if (file-exists-p (file-name-concat aquamacs-preferences-directory
-                                         "Preferences.el"))
-        (message "create prefs dir: Preferences.el already exists!")
-      ;; Check to see if we need to migrate the Preferences directory
-      (when (file-exists-p aquamacs-3.6-preferences-directory)
-        (message "Migrating Aquamacs 3.6 preferences to Aquamacs 4")
-        (condition-case dir-err
-            ;; We pass 'copy-contents as non-nil because Emacs
-            ;; thinks that aquamacs-preferences-directory
-            ;; already exists as indicated by its trailing slash.
-            (copy-directory aquamacs-3.6-preferences-directory
-                            aquamacs-preferences-directory
-                            'keep-times
-                            'make-parents
-                            'copy-contents)
-          (error (message "Error copying Aquamacs preferences directory: %s"
-                          dir-err)))))
+    ;; Check to see if we need to migrate the Preferences directory
+    (when (and (not (file-exists-p (file-name-concat aquamacs-preferences-directory
+                                                     "Preferences.el")))
+               (file-exists-p aquamacs-3.6-preferences-directory))
+      (message "Migrating Aquamacs 3.6 preferences to Aquamacs 4")
+      (condition-case dir-err
+          ;; We pass 'copy-contents as non-nil because Emacs
+          ;; thinks that aquamacs-preferences-directory
+          ;; already exists as indicated by its trailing slash.
+          (copy-directory aquamacs-3.6-preferences-directory
+                          aquamacs-preferences-directory
+                          'keep-times
+                          'make-parents
+                          'copy-contents)
+        (error (message "Error copying Aquamacs preferences directory: %s"
+                        dir-err))))
     ;; Ensure some important directories exist
     (condition-case nil
         (progn
@@ -136,9 +132,9 @@ Aquamacs also executes compatibility code to allow transitions
 from earlier versions of the distribution."
   (interactive)
   (unless (equal init-file-user nil) ;; no .emacs was read (-q option)
-    (when nil (condition-case nil
-	          (load custom-file)
-                (error (message "Loading `custom-file' failed."))))
+    (condition-case nil
+	(load custom-file)
+      (error (message "Loading `custom-file' failed.")))
     (if init-file-debug
 	;; Do this without a condition-case if the user wants to debug.
 	(mapc (lambda (file)
