@@ -31,20 +31,17 @@
 
 (eval-when-compile (require 'aquamacs-macros))
 
-
 ; the following is user-settable (to "")
-(defvar aquamacs-version-check-url "http://aquamacs.org/cgi-bin/currentversion.cgi" "URL to check for updates.
+(defvar aquamacs-version-check-url "http://aquamacs.org/cgi-bin/currentversion.cgi"
+  "URL to check for updates.
 Set to nil to turn off version check.")
-;; warning: the default used to be aquamacs.sourceforge.net until after 1.0a
+
 
 (defun aquamacs-check-version-information ()
   "Show information regarding privacy."
-  (interactive) 
-;(switch-to-buffer (get-buffer-create  " *Aquamacs Privacy* "))
-(with-output-to-temp-buffer (help-buffer)
-
-(princ "
-        Aquamacs - Version update check
+  (interactive)
+  (let ((version-check-message
+          "Aquamacs - Version update check
  
         Aquamacs automatically checks for updates and notifies
 	the user if there's something new.  Your privacy: While
@@ -68,8 +65,9 @@ Set to nil to turn off version check.")
 	continue support for a particular old operating system
 	version.
 
-	If you like to turn this check off, add this to your file
-	~/Library/Preferences/Aquamacs Emacs/Preferences.el:
+	If you would like to disable this check, add the
+	following line to your Aquamacs Preferences file
+	(%s):
 
 	(setq aquamacs-version-check-url nil)
 
@@ -77,9 +75,11 @@ Set to nil to turn off version check.")
         to anyone outside the project any information that would
         permit the correlation of personally identifiable data
         (IP address and time stamp) with any other information
-        transmitted. 
-"))
-nil  )
+        transmitted."))
+      (with-output-to-temp-buffer (help-buffer)
+        (princ (format version-check-message
+                   (last aquamacs-preference-files))))
+      nil))
 
 
 (defun aquamacs-version--read-xml-tag (tag)
