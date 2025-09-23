@@ -115,4 +115,12 @@ gnumake install || exit 1
 # generate symbol archive (.dSYM file)
 dsymutil nextstep/Aquamacs.app/Contents/MacOS/Aquamacs
 
+# (optional )Notify build process complete
+# If the file ~/.aqnotify # exists, post a system notification
+# that this script has finished.
+
+if [ -f ~/.aqnotify ]; then
+    osascript -e 'display notification "Aquamacs build complete" with title "Aquamacs Build"'
+fi
+
 exit 0
