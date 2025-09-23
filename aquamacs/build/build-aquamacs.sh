@@ -42,16 +42,24 @@ exec &> >(tee ${BUILD_LOG})
 # Install needed Homebrew components
 # TEMP: My laptop is out of the homebrew support window
 # brew install -q autoconf automake gnutls libjpeg librsvg texinfo gmp \
-#      libgccjit jansson cairo imagemagick
+#      libgccjit jansson cairo imagemagick libtiff
 #
 
 # Compiler flags: optimization & debugging info
 OPT_FLAGS="-O3 -g -Wno-deprecated-declarations"
 
-# Configure options
-# Not using --with-imagemagick now
+if [[ $(uname -m) == "arm64" ]]; then
+    PREFIX="/opt/homebrew";
+else
+    PREFIX="/usr/local"
+fi
+export PKG_CONFIG_PATH="$PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH"
+export CPPFLAGS="-I$PREFIX/include"
+export LDFLAGS="-L$PREFIX/lib";
+
 CONFIG_PACKAGES="--with-gnutls \
                                --with-jpeg \
+                               --with-tiff \
                                --with-rsvg \
                                --with-webp \
                                --with-xwidgets \
@@ -104,12 +112,12 @@ test -e configure || ./autogen.sh
             --without-x \
             --without-dbus \
             ${CONFIG_PACKAGES} \
-            CFLAGS="-DAQUAMACS_EMACS ${OPT_FLAGS} ${COMPAT_CFLAGS} ${DEBUG_CFLAGS}" \
-            LDFLAGS="${COMPAT_LDFLAGS}" \
+            CFLAGS="-DAQUAMACS_EMACS ${OPT_FLAGS} ${COMPAT_CFLAGS} ${DEBUG_CFLAGS} ${CPPFLAGS}" \
+            LDFLAGS="${LDFLAGS} ${COMPAT_LDFLAGS}" \
     || exit 1
 
 gnumake clean || exit 1
-gnumake -j -l $($(nproc) - 1) || exit 1
+gnumake -j -l $(($(nproc) - 1)) || exit 1
 gnumake install || exit 1
 
 # generate symbol archive (.dSYM file)
