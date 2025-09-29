@@ -5676,7 +5676,7 @@ ns_term_init (Lisp_Object display_name)
     dockMenu = [[EmacsMenu alloc] initWithTitle: @""];
 
     [appMenu insertItemWithTitle: @"About Aquamacs"
-                          action: @selector (showAbout:)
+                          action: @selector (orderFrontStandardAboutPanel:)
                    keyEquivalent: @""
                          atIndex: 0];
     [appMenu insertItemWithTitle: @"Check for Updates..."
