@@ -57,6 +57,10 @@ export PKG_CONFIG_PATH="$PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH"
 export CPPFLAGS="-I$PREFIX/include"
 export LDFLAGS="-L$PREFIX/lib";
 
+# XXX switch to =aot to compile everything in the tree for real
+# packaging
+NATIVE_COMP="-with-native-compilation=yes"
+
 CONFIG_PACKAGES="--with-gnutls \
                                --with-jpeg \
                                --with-tiff \
@@ -111,6 +115,7 @@ test -e configure || ./autogen.sh
 ./configure --with-ns \
             --without-x \
             --without-dbus \
+            ${NATIVE_COMP} \
             ${CONFIG_PACKAGES} \
             CFLAGS="-DAQUAMACS_EMACS ${OPT_FLAGS} ${COMPAT_CFLAGS} ${DEBUG_CFLAGS} ${CPPFLAGS}" \
             LDFLAGS="${LDFLAGS} ${COMPAT_LDFLAGS}" \
