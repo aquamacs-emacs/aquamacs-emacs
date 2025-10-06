@@ -589,7 +589,7 @@ DEFAULT is returned if the user hits `RET' without typing anything."
 Prompt with string PROMPT.  By default, return DEFAULT-VALUE if
 non-nil.  If DEFAULT-VALUE is nil and the nearest symbol to the cursor
 is a variable, then return that by default.
-A user variable is one for which `user-variable-p' returns non-nil."
+A user variable is one for which `custom-variable-p' returns non-nil."
   (let ((symb                          (cond ((fboundp 'symbol-nearest-point)
                                               (symbol-nearest-point))
                                              ((fboundp 'symbol-at-point)
@@ -598,10 +598,10 @@ A user variable is one for which `user-variable-p' returns non-nil."
         (enable-recursive-minibuffers  t))
     (when (and default-value  (symbolp default-value))
       (setq default-value  (symbol-name default-value)))
-    (intern (completing-read prompt obarray 'user-variable-p t
+    (intern (completing-read prompt obarray 'custom-variable-p t
                              nil 'minibuffer-history
                              (or default-value
-                                 (and (user-variable-p symb)  (symbol-name symb)))
+                                 (and (custom-variable-p symb)  (symbol-name symb)))
                              t))))
 
 (defun read-any-variable (prompt &optional default-value)
