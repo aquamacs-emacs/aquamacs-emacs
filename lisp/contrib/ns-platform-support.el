@@ -165,7 +165,7 @@
       (define-key frames-menu [popup-color-panel]
         '("Colors..." . ns-popup-color-panel))
       (define-key frames-menu [popup-font-panel]
-        '("Font Panel..." . ns-popup-font-panel))
+                  '("Font Panel..." . menu-set-font))
       (define-key frames-menu [separator-arrange] '("--"))
       (define-key frames-menu [arrange-all-frames]
         '("Arrange All Frames" . ns-arrange-all-frames))

@@ -845,7 +845,7 @@ modified, or in FRAME if given."
   (setq ns-input-font (face-font (aquamacs-default-face-in-effect)))
   ;; cannot set correct font yet  (to do!)
   ;; Fns_popup_font_panel sets frame font here
-  (ns-popup-font-panel mac-font-panel-target-frame mac-font-panel-target-face)
+  (menu-set-font mac-font-panel-target-frame mac-font-panel-target-face)
   (message "Choose Font for %s face." mac-font-panel-target-face))
 
 
