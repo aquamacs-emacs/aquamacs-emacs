@@ -820,8 +820,6 @@ was established."
     hi-lock-mode
     highlight-changes-mode
     hl-line-mode
-    linum-mode
-    nlinum-mode
     prettify-symbols-mode
     visual-line-mode
     whitespace-mode

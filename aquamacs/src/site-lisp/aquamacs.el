@@ -1406,7 +1406,7 @@ listed here."
     :group 'emacs)
 
   (defvar aquamacs-menu-bar-options-to-save
-    (append '(global-linum-mode
+    (append '(global-display-line-numbers-mode
               column-number-mode
               size-indication-mode
               tool-bar-mode
