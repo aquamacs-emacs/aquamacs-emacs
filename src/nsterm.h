@@ -377,6 +377,7 @@ typedef id instancetype;
 /* We override sendEvent: as a means to stop/start the event loop.  */
 @interface EmacsApp : NSApplication
 {
+  NSAppleEventDescriptor* appleScriptReturnValue;
 #ifdef NS_IMPL_COCOA
   BOOL shouldKeepRunning;
   BOOL isFirst;
