@@ -11572,37 +11572,37 @@ syms_of_nsterm (void)
                       mice with smooth scrolling capability.  */);
  Vns_scroll_event_delta_factor = make_float (1.0);
 
- DEFVAR_LISP ("ns-drag-motion-function", Vns_drag_motion_function,
-              doc: /* Function called when another program drags items over Emacs.
+  DEFVAR_LISP ("ns-drag-motion-function", Vns_drag_motion_function,
+    doc: /* Function called when another program drags items over Emacs.
 
 It is called with three arguments FRAME, X, and Y, whenever the user
 moves the mouse over an Emacs frame as part of a drag-and-drop
 operation.  FRAME is the frame the mouse is on top of, and X and Y are
 the frame-relative positions of the mouse in the X and Y axes
 respectively.  */);
- Vns_drag_motion_function = Qns_handle_drag_motion;
+  Vns_drag_motion_function = Qns_handle_drag_motion;
 
- /* Tell Emacs about this window system.  */
- Fprovide (Qns, Qnil);
+  /* Tell Emacs about this window system.  */
+  Fprovide (Qns, Qnil);
 
- DEFSYM (Qcocoa, "cocoa");
- DEFSYM (Qgnustep, "gnustep");
- DEFSYM (QCordinary, ":ordinary");
- DEFSYM (QCfunction, ":function");
- DEFSYM (QCmouse, ":mouse");
- DEFSYM (Qcondensed, "condensed");
- DEFSYM (Qreverse_italic, "reverse-italic");
- DEFSYM (Qexpanded, "expanded");
- DEFSYM (Qns_in_echo_area, "ns-in-echo-area");
+  DEFSYM (Qcocoa, "cocoa");
+  DEFSYM (Qgnustep, "gnustep");
+  DEFSYM (QCordinary, ":ordinary");
+  DEFSYM (QCfunction, ":function");
+  DEFSYM (QCmouse, ":mouse");
+  DEFSYM (Qcondensed, "condensed");
+  DEFSYM (Qreverse_italic, "reverse-italic");
+  DEFSYM (Qexpanded, "expanded");
+  DEFSYM (Qns_in_echo_area, "ns-in-echo-area");
 
 #ifdef NS_IMPL_COCOA
- Fprovide (Qcocoa, Qnil);
- syms_of_macfont ();
+  Fprovide (Qcocoa, Qnil);
+  syms_of_macfont ();
 #else
- Fprovide (Qgnustep, Qnil);
- syms_of_nsfont ();
+  Fprovide (Qgnustep, Qnil);
+  syms_of_nsfont ();
 #endif
 
- last_known_monitors = Qnil;
+  last_known_monitors = Qnil;
   staticpro (&last_known_monitors);
 }
