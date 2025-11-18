@@ -5989,6 +5989,94 @@ ns_term_shutdown (int sig)
   [super sendEvent: theEvent];
 }
 
+/* Run an AppleScript in the main thread */
+
+- (NSAppleEventDescriptor*) executeApplescript: (NSString *) script
+{
+  appleScriptReturnValue = nil;
+  // must be performed on main thread.
+  [self performSelectorOnMainThread:@selector(doApplescriptInternal:) withObject:script waitUntilDone:YES];
+  return appleScriptReturnValue;
+}
+- (void) doApplescriptInternal: (NSString *) script
+{
+  NSDictionary* errorDict;
+
+  NSAppleScript* scriptObject =
+    [[NSAppleScript alloc] initWithSource:script];
+
+  appleScriptReturnValue = [scriptObject executeAndReturnError:&errorDict];
+
+  [scriptObject release];
+}
+
+/* SavePanel delegate functions */
+
+- (void)savePanelDidEnd2:(NSSavePanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
+{
+  // struct frame *emacsframe = XFRAME (sheet);
+  struct frame *emacsframe = SELECTED_FRAME ();  /* to do - should be sheet frame */
+
+  [sheet orderOut:self];
+  set_frame_menubar (SELECTED_FRAME (), false);
+  ns_focus_frame (SELECTED_FRAME (), 0);
+
+  NSEvent *theEvent = [NSApp currentEvent];
+
+  NSURL *fileURL = [sheet URL];
+
+  if (returnCode)
+    {
+      if ([fileURL absoluteString])
+	ns_save_panel_file = build_string ([[fileURL path] UTF8String]);
+      else
+	ns_save_panel_file = build_string ([[fileURL absoluteString] UTF8String]);
+    }
+  else
+    ns_save_panel_file = Qnil;
+
+  XSETBUFFER (ns_save_panel_buffer, ((struct buffer *) contextInfo));
+
+  if (!emacs_event)
+    return;
+
+  emacs_event->kind = NS_NONKEY_EVENT;
+  emacs_event->code = KEY_NS_SAVE_PANEL_CLOSED;
+  emacs_event->modifiers = 0;
+  emacs_event->arg = Qt; /* mark as non-key event */
+
+  EV_TRAILER (theEvent);
+}
+
+
+- (void)checkForUpdates: (id)sender
+{
+  struct frame *emacsframe = SELECTED_FRAME ();
+  NSEvent *theEvent = [NSApp currentEvent];
+
+  if (!emacs_event)
+    return;
+  emacs_event->kind = NS_NONKEY_EVENT;
+  emacs_event->code = KEY_NS_CHECK_FOR_UPDATES;
+  emacs_event->modifiers = 0;
+  emacs_event->arg = Qt; /* mark as non-key event */
+
+  EV_TRAILER (theEvent);
+}
+
+- (void)showAbout: (id)sender
+{
+  struct frame *emacsframe = SELECTED_FRAME ();
+  NSEvent *theEvent = [NSApp currentEvent];
+
+  if (!emacs_event)
+    return;
+  emacs_event->kind = NS_NONKEY_EVENT;
+  emacs_event->code = KEY_NS_ABOUT;
+  emacs_event->modifiers = 0;
+  emacs_event->arg = Qt; /* mark as non-key event */
+  EV_TRAILER (theEvent);
+}
 
 - (void)showPreferencesWindow: (id)sender
 {
