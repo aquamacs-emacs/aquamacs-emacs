@@ -1333,9 +1333,6 @@ we put it on this frame."
      (savehist-mode 1)
      ;; do not create backups
      (make-backup-files nil)
-     ;; higher undo limit
-     (undo-outer-limit 12000000)
-     (undo-limit 80000)
      ))
 
   ;; do not skip redisplays - tabbar (header line) and other things
