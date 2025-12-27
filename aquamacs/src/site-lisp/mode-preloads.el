@@ -258,22 +258,10 @@ or `CVS', and any subdirectory that contains a file named `.nosearch'."
 
 (add-to-list (quote interpreter-mode-alist) (quote ("jython" . jython-mode)))
 
-(add-to-list (quote interpreter-mode-alist) (quote ("python" . python-mode)))
-
-(add-to-list (quote auto-mode-alist) (quote ("\\.py\\'" . python-mode)))
-
 (autoload 'prolog-mode "prolog.el" "Major mode for editing Prolog code." 'interactive nil)
 
 
-(autoload (quote py-shell) "python-mode" 
-  "Start an interactive Python interpreter in another window.")
-(defalias 'python-shell 'py-shell)
-; what about run-python - we'll leave it for now
-
-(autoload (quote python-mode) "python-mode" 
-  "Major mode for editing Python files." t)
-
-(autoload (quote jython-mode) "python-mode" 
+(autoload (quote jython-mode) "python-mode"
   "Major mode for editing Jython/Jython files." t)
 
 (autoload 'visual-basic-mode "visual-basic-mode" "Visual Basic mode." t)
