@@ -10185,7 +10185,14 @@ nswindow_orderedIndex_sort (id w1, id w2, void *c)
   NSScreen * screen = [self screen];
   if (screen != nil)
     {
-      NSRect sr = [screen visibleFrame];
+      NSRect sr = [screen frame];
+      struct EmacsMargins margins
+        = ns_screen_margins_ignoring_hidden_dock(screen);
+
+      sr.size.height -= (margins.top + margins.bottom);
+      sr.size.width  -= (margins.left + margins.right);
+      sr.origin.x += margins.left;
+      sr.origin.y += margins.bottom;
 
       sr = [[self delegate] windowWillUseStandardFrame:self
                                           defaultFrame:sr];
