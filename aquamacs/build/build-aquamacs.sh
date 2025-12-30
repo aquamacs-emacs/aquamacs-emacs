@@ -57,9 +57,13 @@ export PKG_CONFIG_PATH="$PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH"
 export CPPFLAGS="-I$PREFIX/include"
 export LDFLAGS="-L$PREFIX/lib";
 
-# XXX switch to =aot to compile everything in the tree for real
-# packaging
-NATIVE_COMP="-with-native-compilation=yes"
+# Native compilation is still having trouble, so it's all turned off
+# for now.
+NATIVE_COMP=
+# Enable for faster compilation during development
+# NATIVE_COMP="--with-native-compilation=yes"
+# Enable for compiling everything natively during the build
+# NATIVE_COMP="--with-native-compilation=aot"
 
 CONFIG_PACKAGES="--with-gnutls \
                                --with-jpeg \
@@ -128,9 +132,10 @@ gnumake install || exit 1
 # generate symbol archive (.dSYM file)
 dsymutil nextstep/Aquamacs.app/Contents/MacOS/Aquamacs
 
-# (optional )Notify build process complete
-# If the file ~/.aqnotify # exists, post a system notification
-# that this script has finished.
+# (optional) Notify build process complete
+# If the file ~/.aqnotify # exists, post a system notification that
+# this script has finished. System notification permissions must allow
+# this, of course.
 
 if [ -f ~/.aqnotify ]; then
     osascript -e 'display notification "Aquamacs build complete" with title "Aquamacs Build"'
