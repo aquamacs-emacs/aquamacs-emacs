@@ -2136,22 +2136,10 @@ ns_query_color (void *col, Emacs_Color *color_def)
 {
   EmacsCGFloat r, g, b, a;
 
-  NSColor *col2 = [((NSColor *)col) colorUsingColorSpaceName: NSCalibratedRGBColorSpace];
-
-  if (col2 == nil)
-    {
-      r = 0.5;
-      g = 0.5;
-      b = 0.5;
-      a = 1.0;
-    }
-  else
-    {
-      [col2 getRed: &r green: &g blue: &b alpha: &a];
+  [((NSColor *)col) getRed: &r green: &g blue: &b alpha: &a];
   color_def->red   = r * 65535;
   color_def->green = g * 65535;
   color_def->blue  = b * 65535;
-    }
 
   color_def->pixel = [(NSColor *)col unsignedLong];
 }
