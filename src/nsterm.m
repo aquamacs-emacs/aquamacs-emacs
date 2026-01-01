@@ -5711,12 +5711,7 @@ ns_term_init (Lisp_Object display_name)
     [NSApp setAppleMenu: appMenu];
     [NSApp setServicesMenu: svcsMenu];
 
-#ifdef AQUAMACS_EMACS
-    // XXX disabled for now since it may not be needed?
-    //  aquamacs_set_edit_menu(appMenu);
-#endif /*AQUAMACS_EMACS*/
-
-    /* Needed at least on Cocoa, to get dock menu to show windows */
+/* Needed at least on Cocoa, to get dock menu to show windows */
     [NSApp setWindowsMenu: [[NSMenu alloc] init]];
   }
 #endif /* macOS menu setup */
