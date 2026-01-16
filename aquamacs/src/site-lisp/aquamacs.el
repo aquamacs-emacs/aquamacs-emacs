@@ -775,8 +775,8 @@ yes-or-no prompts - y or n will do."
     (fset 'old-y-or-n-p (symbol-function 'y-or-n-p)))
 
 
-  (fset 'y-or-n-p 'aquamacs-y-or-n-p)
-  (fset 'yes-or-no-p 'aquamacs-repl-yes-or-no-p)
+  ;; (fset 'y-or-n-p 'aquamacs-y-or-n-p)
+  ;; (fset 'yes-or-no-p 'aquamacs-repl-yes-or-no-p)
 
   ;; No more annoying bells all the time
 
