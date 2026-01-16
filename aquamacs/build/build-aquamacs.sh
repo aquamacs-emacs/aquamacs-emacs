@@ -39,11 +39,12 @@ set -e
 BUILD_LOG=build.log
 exec &> >(tee ${BUILD_LOG})
 
-# Install needed Homebrew components
-# TEMP: My laptop is out of the homebrew support window
-# brew install -q autoconf automake gnutls libjpeg librsvg texinfo gmp \
-#      libgccjit jansson cairo imagemagick libtiff
-#
+# Install needed Homebrew tools used for the build
+brew install -q autoconf automake pkgconf texinfo
+
+# Install needed Homebrew libraries to include in the app bundle
+brew install -q cairo gmp gnutls imagemagick jansson libgccjit libjpeg \
+     librsvg libtiff
 
 # Compiler flags: optimization & debugging info
 OPT_FLAGS="-O3 -g -Wno-deprecated-declarations"
@@ -73,6 +74,7 @@ CONFIG_PACKAGES="--with-gnutls \
                                --with-xwidgets \
                                --with-json \
                                --with-modules \
+                               --without-tree-sitter \
                                ${DEBUG_CONFIG_OPTS}"
 
 # Options for enforcing some backwards compatibility. These may only
@@ -126,7 +128,7 @@ test -e configure || ./autogen.sh
     || exit 1
 
 gnumake clean || exit 1
-gnumake -j -l $(($(nproc) - 1)) || exit 1
+gnumake -j -l $(($(sysctl -n hw.logicalcpu) - 1)) || exit 1
 gnumake install || exit 1
 
 # generate symbol archive (.dSYM file)
