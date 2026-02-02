@@ -35,16 +35,25 @@
 set -x
 # Exit on error
 set -e
+
 # Save the build log
 BUILD_LOG=build.log
 exec &> >(tee ${BUILD_LOG})
 
-# Install needed Homebrew tools used for the build
-brew install -q autoconf automake pkgconf texinfo
+# Check for software tools needed in this build process.
 
-# Install needed Homebrew libraries to include in the app bundle
-brew install -q cairo gmp gnutls imagemagick jansson libgccjit libjpeg \
-     librsvg libtiff
+require_command() {
+    if ! command -v "$1" >/dev/null 2>&1; then
+        echo "Error: $1 is not installed" >&2
+        echo "See aquamacs/build/install-build-tools" >&2
+        exit 1
+    fi
+}
+
+require_command autoconf
+require_command automake
+require_command pkgconf
+require_command makeinfo
 
 # Compiler flags: optimization & debugging info
 OPT_FLAGS="-O3 -g -Wno-deprecated-declarations"
@@ -83,7 +92,6 @@ CONFIG_PACKAGES="--with-gnutls \
 # COMPAT_CFLAGS="-Werror=partial-availability"
 # COMPAT_LDFLAGS="-Wl,-no_weak_imports"
 
-
 # In release builds, we set the environment variable
 # MACOSX_DEPLOYMENT_TARGET from this value. Setting the environment
 # variable should be sufficient without compiler flags. This is
@@ -103,9 +111,6 @@ GZIP=${GZIP:=$(which gzip)}
 
 #### Below this point should normally not need to be changed. If you
 #### do find changes needed here, please submit an issue on github.
-
-[ ! -f $(which autoconf) ] && { echo "Please install autoconf"; exit 1; }
-[ ! -f $(which automake) ] && { echo "Please install automake"; exit 1; }
 
 # libxml2
 # XCode has the libxml2 libraries, so find out where they are. These
