@@ -75,14 +75,18 @@ NATIVE_COMP=
 # Enable for compiling everything natively during the build
 # NATIVE_COMP="--with-native-compilation=aot"
 
+
+#                                # --with-rsvg
+
 CONFIG_PACKAGES="--with-gnutls \
                                --with-jpeg \
                                --with-tiff \
-                               --with-rsvg \
                                --with-webp \
-                               --with-xwidgets \
                                --with-json \
                                --with-modules \
+                               --with-xwidgets \
+                               --without-cairo \
+                               --without-rsvg \
                                --without-tree-sitter \
                                ${DEBUG_CONFIG_OPTS}"
 
@@ -138,6 +142,23 @@ gnumake install || exit 1
 
 # generate symbol archive (.dSYM file)
 dsymutil nextstep/Aquamacs.app/Contents/MacOS/Aquamacs
+
+# Add dependent libraries to the app bundle so it can be tested on
+# other machines.
+#
+# It only seems to work if the bundle is signed, so we only do this
+# step if a signing certificate is defined.
+
+if [ "${AQUAMACS_CERT}x" != "x" ]; then
+    echo "Install dependent libraries in the app bundle"
+    # Bundle the libraries
+    ./aquamacs/build/install-libs.sh nextstep/Aquamacs.app
+    echo "Codesign the whole bundle"
+    ./aquamacs/build/sign-release . nextstep/Aquamacs.app
+else
+    echo "No signing certificate, so not bundling libraries."
+    echo "This is fine for single-system development."
+fi
 
 # (optional) Notify build process complete
 # If the file ~/.aqnotify # exists, post a system notification that

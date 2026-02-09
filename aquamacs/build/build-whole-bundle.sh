@@ -36,8 +36,6 @@ cd "${ARM_DIR}"
 ls -l ./aquamacs/build/build-aquamacs.sh
 ./aquamacs/build/build-aquamacs.sh || exit 1
 
-echo INSTALL LIBS
-./aquamacs/build/install-libs.sh nextstep/Aquamacs.app || exit 1
 cd "${CURDIR}"
 
 ###### End ARM Build
@@ -49,8 +47,6 @@ echo "****** Work on ${INTEL_DIR}"
 cd "${INTEL_DIR}"
 arch -x86_64 /bin/bash ./aquamacs/build/build-aquamacs.sh  || exit 1
 
-echo INSTALL LIBS
-arch -x86_64 /bin/bash ./aquamacs/build/install-libs.sh nextstep/Aquamacs.app  || exit 1
 cd "${CURDIR}"
 
 ###### End Intel build
