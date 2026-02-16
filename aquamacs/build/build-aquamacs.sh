@@ -165,7 +165,7 @@ fi
 # this script has finished. System notification permissions must allow
 # this, of course.
 
-if [ -f ~/.aqnotify ]; then
+if [ -f ~/.aqnotify && "$AQ_DISABLE_NOTIFY"x == yesx]; then
     osascript -e 'display notification "Aquamacs build complete" with title "Aquamacs Build"'
 fi
 
