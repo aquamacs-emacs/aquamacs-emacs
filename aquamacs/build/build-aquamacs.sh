@@ -41,6 +41,9 @@ BUILD_LOG=build.log
 exec &> >(tee ${BUILD_LOG})
 
 # Check for software tools needed in this build process.
+# Note: for x86 builds on ARM systems, this test is insufficient for
+# making sure things are set up, because often PATH includes the ARM
+# path for Homebrew binaries, so the test finds those.
 
 require_command() {
     if ! command -v "$1" >/dev/null 2>&1; then
@@ -62,6 +65,10 @@ if [[ $(uname -m) == "arm64" ]]; then
     PREFIX="/opt/homebrew";
 else
     PREFIX="/usr/local"
+    if [ ! -x /usr/local/bin/autoconf ]; then
+        echo "x86 homebrew not set up"
+        exit 1
+    fi
 fi
 export PKG_CONFIG_PATH="$PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH"
 export CPPFLAGS="-I$PREFIX/include"
@@ -165,7 +172,7 @@ fi
 # this script has finished. System notification permissions must allow
 # this, of course.
 
-if [ -f ~/.aqnotify && "$AQ_DISABLE_NOTIFY"x == yesx]; then
+if [ -f ~/.aqnotify ]; then
     osascript -e 'display notification "Aquamacs build complete" with title "Aquamacs Build"'
 fi
 
