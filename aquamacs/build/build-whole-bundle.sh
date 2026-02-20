@@ -66,7 +66,7 @@ cd "${CURDIR}"
 
 if [ "${AQUAMACS_CERT}x" != "x" ]; then
     echo "Sign release with ${AQUAMACS_CERT}"
-    ${ARM_DIR}/aquamacs/build/sign-release . "${OUTPUT_BUNDLE}"
+    ${ARM_DIR}/aquamacs/build/sign-release "${ARM_DIR}" "${OUTPUT_BUNDLE}"
 else
     echo "No signing certificate, so not bundling libraries."
     echo "This is fine for single-system development."

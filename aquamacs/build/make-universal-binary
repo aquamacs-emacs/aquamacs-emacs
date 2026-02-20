@@ -48,9 +48,15 @@ merge_binary() {
 # Merge main executable
 echo "Merging main executable..."
 merge_binary \
+    "$M1_APP/src/emacs.pdmp" \
+    "$X86_APP/src/emacs.pdmp" \
+    "$OUTPUT_APP/Contents/MacOS/libexec/Aquamacs.pdmp"
+
+merge_binary \
     "$M1_APP/Contents/MacOS/Aquamacs" \
     "$X86_APP/Contents/MacOS/Aquamacs" \
     "$OUTPUT_APP/Contents/MacOS/Aquamacs"
+
 
 # Find and merge all executables in MacOS directory
 echo "Checking for additional executables in MacOS directory..."
