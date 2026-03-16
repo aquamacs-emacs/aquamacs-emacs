@@ -31,6 +31,21 @@ fi
 echo "Copying base app structure..."
 cp -R "$M1_APP" "$OUTPUT_APP"
 
+# Copy and fix up the pdmp load images
+# First, remove the generic name version. We only want the fingerprint named ones.
+rm "${OUTPUT_APP}/Contents/MacOS/libexec/Aquamacs.pdmp"
+# Next, copy the x86 version. The M1 version comes from the initial
+# copy of the entire M1 app build.
+# Note that we don't get an accidental copy of the x86 version because
+# it's not found as an executable and there's no other explicit copy.
+pwd
+cp "${X86_APP}"/Contents/MacOS/libexec/Aquamacs-*.pdmp \
+   "${OUTPUT_APP}/Contents/MacOS/libexec"
+
+echo '--------'
+ls
+echo '--------'
+
 # Function to merge binaries
 merge_binary() {
     local arm_path="$1"

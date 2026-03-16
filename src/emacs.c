@@ -869,7 +869,7 @@ load_pdump (int argc, char **argv)
     ;
   const char *argv0_base =
 #ifdef NS_SELF_CONTAINED
-    "Emacs"
+    "Aquamacs"
 #else
     "emacs"
 #endif
