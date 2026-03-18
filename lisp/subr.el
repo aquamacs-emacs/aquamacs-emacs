@@ -1238,25 +1238,6 @@ and then modifies one entry in it."
 
 ;;;; Key binding commands.
 
-(defun subr--check-key-binding (key command)
-  (condition-case nil
-      (let ((b (key-binding key t)))
-	(and b
-	     (if (eq command b)
-		 command
-	       (message "Warning: Key %s already bound to %s %s.  Use `define-key' instead."
-			(key-description key)
-			(cond ((symbolp b) (format "`%s'" b))
-			      ((keymapp b) "a (prefix) keymap or menu")
-			      (t "something else"))
-			(let ((mm
-			       (mapcar
-				(lambda (x)
-				  (car x))
-				(minor-mode-key-binding key))))
-			  (if mm (format "by minor modes %s" mm) ""))))))
-    (error nil)))
-
 (defun global-set-key (key command)
   "Give KEY a global binding as COMMAND.
 This is a legacy function; see `keymap-global-set' for the
@@ -1280,8 +1261,7 @@ that you make with this function."
   (or (vectorp key) (stringp key)
       (signal 'wrong-type-argument (list 'arrayp key)))
 
-  (define-key (current-global-map) key command)
-  (subr--check-key-binding key command))
+  (define-key (current-global-map) key command))
 
 (defun local-set-key (key command)
   "Give KEY a local binding as COMMAND.
@@ -1302,8 +1282,7 @@ cases is shared with all other buffers in the same major mode."
 	(use-local-map (setq map (make-sparse-keymap))))
     (or (vectorp key) (stringp key)
 	(signal 'wrong-type-argument (list 'arrayp key)))
-    (define-key map key command)
-    (subr--check-key-binding key command)))
+    (define-key map key command)))
 
 (defun global-unset-key (key)
   "Remove global binding of KEY.

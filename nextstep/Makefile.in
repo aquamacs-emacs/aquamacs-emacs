@@ -47,10 +47,12 @@ ns_check_file = @ns_appdir@/@ns_check_file@
 .PHONY: all
 
 ifeq ($(DUMPING),pdumper)
-ns_pdmp_target = ${ns_applibexecdir}/Emacs.pdmp
+AQUAMACS_PDMP = Aquamacs.pdmp
+$(info AQUAMACS_PDMP is $(AQUAMACS_PDMP))
+ns_pdmp_target = ${ns_applibexecdir}/$(AQUAMACS_PDMP)
 endif
 
-all: ${ns_appdir} ${ns_appbindir}/Aquamacs ${ns_applibexecdir}/Aquamacs.pdmp
+all: ${ns_appdir} ${ns_appbindir}/Aquamacs ${ns_pdmp_target}
 
 ${ns_check_file}: ${ns_appdir}
 
@@ -73,9 +75,13 @@ ${ns_appbindir}/Aquamacs: ${ns_appdir} ${ns_check_file} ../src/emacs${EXEEXT}
 
 # FIXME: Don't install the dump file into the app bundle when
 # self-contained install is disabled.
-${ns_applibexecdir}/Aquamacs.pdmp: ${ns_appdir} ${ns_check_file} ../src/emacs${EXEEXT}.pdmp
+${ns_applibexecdir}/${AQUAMACS_PDMP}: ${ns_appdir} ${ns_check_file} ../src/emacs${EXEEXT}.pdmp
 	${MKDIR_P} ${ns_applibexecdir}
 	cp -f ../src/emacs${EXEEXT}.pdmp $@
+	# This seems to be the easiest way to get the correct
+	# fingerprint into the filename at build time. The script to
+	# make the bundle can then copy the file into the full app.
+	ln $@ ${ns_applibexecdir}/Aquamacs-$(shell ../src/emacs --fingerprint).pdmp
 
 .PHONY: FORCE
 

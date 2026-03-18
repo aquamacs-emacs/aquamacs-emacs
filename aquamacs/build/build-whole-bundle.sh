@@ -23,6 +23,9 @@ BASEPATH=/Applications/Xcode.app/Contents/Developer/usr/bin:/bin:/usr/bin:/usr/s
 BREW_ARM_PATH=/opt/homebrew/opt/texinfo/bin:/opt/homebrew/bin:/opt/homebrew/sbin
 BREW_INTEL_PATH=/usr/local/opt/texinfo/bin:/usr/local/bin:/usr/local/sbin
 
+# Disable notifications for the individual builds
+export AQ_DISABLE_NOTIFY=yes
+
 if [ -d "${OUTPUT_BUNDLE}" ]; then
     echo "${OUTPUT_BUNDLE} already exists!"
     exit 1
@@ -35,6 +38,8 @@ echo "****** Work on ${ARM_DIR}"
 cd "${ARM_DIR}"
 ls -l ./aquamacs/build/build-aquamacs.sh
 ./aquamacs/build/build-aquamacs.sh || exit 1
+# Bundle the dependent libraries
+./aquamacs/build/install-libs.sh nextstep/Aquamacs.app
 
 cd "${CURDIR}"
 
@@ -46,6 +51,8 @@ export PATH="${BREW_INTEL_PATH}:${BASEPATH}"
 echo "****** Work on ${INTEL_DIR}"
 cd "${INTEL_DIR}"
 arch -x86_64 /bin/bash ./aquamacs/build/build-aquamacs.sh  || exit 1
+# Bundle the dependent libraries
+arch -x86_64 /bin/bash ./aquamacs/build/install-libs.sh nextstep/Aquamacs.app
 
 cd "${CURDIR}"
 
@@ -57,4 +64,19 @@ cd "${CURDIR}"
 
 ###### Sign the release
 
-${ARM_DIR}/aquamacs/build/sign-release "${ARM_DIR}" "${OUTPUT_BUNDLE}"
+if [ "${AQUAMACS_CERT}x" != "x" ]; then
+    echo "Sign release with ${AQUAMACS_CERT}"
+    ${ARM_DIR}/aquamacs/build/sign-release . "${OUTPUT_BUNDLE}"
+else
+    echo "No signing certificate, so not bundling libraries."
+    echo "This is fine for single-system development."
+fi
+
+# (optional) Notify build process complete
+# If the file ~/.aqnotify # exists, post a system notification that
+# this script has finished. System notification permissions must allow
+# this, of course.
+
+if [ -f ~/.aqnotify ]; then
+    osascript -e 'display notification "Aquamacs build-whole-bundle complete" with title "Aquamacs Build"'
+fi
