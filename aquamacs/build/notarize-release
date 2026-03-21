@@ -11,20 +11,41 @@ ZIPFILE=/tmp/aquamacs-to-notarize.zip
 # Reference to credentials stored in keychain
 KEYPROFILE="Aquamacs notary"
 
-cd nextstep
-ditto -c -k --keepParent Aquamacs.app "${ZIPFILE}"
+# Command line arguments. Must be in order.
+# [optional] --auto-staple to automatically staple app with notarization
+# [optional] <app-bundle> - app bundle to notarize. Defaults to
+#        Aquamacs.app in nextstep directory
+
+AUTO_STAPLE=no
+if [ "$1"x = "--auto-staple"x ]; then
+    AUTO_STAPLE=yes
+    shift
+fi
+
+BUNDLE="nextstep/Aquamacs.app"
+
+if [ "$1"x != x ]; then
+    BUNDLE="$1"
+fi
+
+BUNDLE_DIR=$(dirname "${BUNDLE}")
+BUNDLE_APP=$(basename "${BUNDLE}")
+
+(cd "${BUNDLE_DIR}"; ditto -c -k --keepParent "${BUNDLE_APP}" "${ZIPFILE}")
 
 echo "Submitting for notarization..."
 
-TMPFILE=$(mktemp)
+TMPFILE=$(mktemp /tmp/aq-notarize-tmp.XXXX)
 
 xcrun notarytool submit \
       --wait \
       --keychain-profile "${KEYPROFILE}" \
       ${ZIPFILE} | tee "${TMPFILE}"
 
+echo "Diagnostic output in ${TMPFILE} if needed"
+
 # If given --auto-staple, staple the notarization to the app.
 
-if [ "$1"x = "--auto-staple"x ]; then
-    xcrun stapler staple Aquamacs.app
+if [ "${AUTO_STAPLE}" = yes ]; then
+    xcrun stapler staple ${BUNDLE}
 fi
