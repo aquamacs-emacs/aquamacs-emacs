@@ -1,10 +1,10 @@
 ;; Aquamacs tools
 ;; some helper functions for Aquamacs
- 
+
 ;; Author: David Reitter, david.reitter@gmail.com
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
- 
+
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
 
@@ -22,43 +22,13 @@
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
- 
+
 ;; Copyright (C) 2005, 2007, 2009, 2013 David Reitter
 
-
-; remove an element from an associative list (alist) 
-;; (defun remove-alist-name (name alist)
-;;   "Removes element whose car is NAME from ALIST."
-;;   (cond ((equal name (car (car alist)))	  ; found name
-;;          (cdr alist))
-;;         ((null alist)		; end of list (termination cond)
-;;          nil)
-;;         (t
-;;          (cons (car alist)	; first of alist plus rest w/ recursion
-;;                (remove-alist-name name (cdr alist))))))
-
-;; this is assq
-;; (defun get-alist-value-for-name (name alist)
-;;   "Returns value of element whose car is NAME from ALIST. nil if not found"
-;;   (cond ((equal name (car (car alist)))	  ; found name
-;;          (cdr (car alist)))
-;;         ((null alist)		; end of list (termination cond)
-;;          nil)
-;;         (t
-;;           	; first of alist plus rest w/ recursion
-;;           (get-alist-value-for-name name (cdr alist)))))
-
-;; this is from cl-lib, which can't be included in site-load
-(defmacro cl-incf (place &optional x)
-  "Increment PLACE by X (1 by default).
-PLACE may be a symbol, or any generalized variable allowed by `setf'.
-The return value is the incremented value of PLACE."
-  (declare (debug (place &optional form)))
-  (if (symbolp place)
-      (list 'setq place (if x (list '+ place x) (list '1+ place)))
-    (list 'cl-callf '+ place (or x 1))))
+;;; Code:
 
 (defun running-on-a-mac-p ()
+  "Return t if running on a Mac system."
   (memq initial-window-system '(mac ns)))
 
 
@@ -66,10 +36,10 @@ The return value is the incremented value of PLACE."
     (let ((f (window-frame (minibuffer-window))))
       (make-frame-visible f)
       (raise-frame f)			; make sure frame is visible
-      (if (or  
-	   (and last-nonmenu-event 
-		(not (consp last-nonmenu-event))) 
-	   ;;(not (eq (car-safe last-nonmenu-event)  
+      (if (or
+	   (and last-nonmenu-event
+		(not (consp last-nonmenu-event)))
+	   ;;(not (eq (car-safe last-nonmenu-event)
 	   ;;	  'mac-apple-event)))
 	   (not use-dialog-box)
 	   (not window-system))
@@ -97,15 +67,14 @@ The return value is the incremented value of PLACE."
 
 
 (defun filter-list (lst elements)
-"Returns LST sans ELEMENTS.
+  "Return LST sans ELEMENTS.
 Creates a new list where all elements in ELEMENTS from LST
-are removed. Comparison is done with `eq'."
-
-(if (null lst) 
-    nil
-  (if (member (car lst) elements)
-      (filter-list (cdr lst) elements)
-    (cons (car lst) (filter-list (cdr lst) elements)))))
+are removed.  Comparison is done with `eq'."
+  (if (null lst)
+      nil
+    (if (member (car lst) elements)
+        (filter-list (cdr lst) elements)
+      (cons (car lst) (filter-list (cdr lst) elements)))))
 
 (defun assq-set-all (source dest-sym)
   "Writes all values from alist SOURCE into alist DEST-SYM,
@@ -554,7 +523,10 @@ the value of `aquamacs-default-major-mode'."
     (let* ((ts (format-time-string "%d%H%MZ" nil t))
 	   (ts2 ts))
       (if (equal ts2 aquamacs--new-buffer-last-timestamp)
-	  (setq ts2 (format "%s.%s" ts (cl-incf aquamacs--new-buffer-timestamp-counter)))
+          (progn
+            (setq  aquamacs--new-buffer-timestamp-counter
+                   (1+ aquamacs--new-buffer-timestamp-counter))
+            (setq ts2 (format "%s.%s" ts)))
 	(setq aquamacs--new-buffer-timestamp-counter 0))
       (setq aquamacs--new-buffer-last-timestamp ts)
       (setq aquamacs-untitled-buffer-creation-time ts2))
