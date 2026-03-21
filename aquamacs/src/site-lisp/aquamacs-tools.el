@@ -31,40 +31,50 @@
   "Return t if running on a Mac system."
   (memq initial-window-system '(mac ns)))
 
-
-(defun aquamacs-ask-for-confirmation (text long &optional yes-button no-button sheet no-cancel)
-    (let ((f (window-frame (minibuffer-window))))
-      (make-frame-visible f)
-      (raise-frame f)			; make sure frame is visible
-      (if (or
-	   (and last-nonmenu-event
-		(not (consp last-nonmenu-event)))
-	   ;;(not (eq (car-safe last-nonmenu-event)
-	   ;;	  'mac-apple-event)))
-	   (not use-dialog-box)
-	   (not window-system))
-	  (progn
-	    ;; make sure the frame's minibuffer is actually visible
-	    ;; because minibuffer-setup-hook is not executed.
-	    (and (fboundp 'smart-move-minibuffer-inside-screen)
-		 smart-frame-positioning-mode
-		 (smart-move-minibuffer-inside-screen f))
-	    (let ((text (if (string-match "\\(.*\\)\n" text)
-			    (match-string 1 text)
-			  text)))
-	      (if (and long (not aquamacs-quick-yes-or-no-prompt))
-		  (old-yes-or-no-p text)
-		(old-y-or-n-p text))))
-	(let ((ret (x-popup-dialog (or sheet (if (mouse-event-p last-command-event) last-command-event)
-				        `(mouse-1      (,(selected-window) 100 (0 . 50) -1)))
-				    (list text
-					  `((,(or yes-button "Yes") . ?\r) . t) ; use \r instead of y until we have multi-keyEquivs
-					  (if no-cancel 'no-cancel 'cancel)
-					  `((,(or no-button "No") . ?n) . nil)))))
-	  (if (eq ret 'cancel)
-	      (keyboard-quit))
-	  ret))))
-
+(defun aquamacs-ask-for-confirmation (text long &optional yes-button
+                                           no-button sheet no-cancel)
+  "Ask for confirmation of user action with prompt TEXT.
+Uses minibuffer to prompt unless this was invoked through a menu
+action.  If LONG is t, use longer \"yes/no\" for responses unless
+`aquamacs-quick-yes-or-no-prompt' is non-nil.  Use optional
+YES-BUTTON as text for the Yes option; NO-BUTTON for the no
+option.  Optional SHEET gives position as used by
+`x-popup-dialog'. When optional NO-CANCEL is t, use Cancel in the
+display instead of No and cancel the operation with quit instead
+of returning a value."
+  (let ((f (window-frame (minibuffer-window))))
+    (make-frame-visible f)
+    (raise-frame f)			; make sure frame is visible
+    (if (or
+	 (and last-nonmenu-event
+	      (not (consp last-nonmenu-event)))
+         (not use-dialog-box)
+	 (not window-system))
+	(progn
+	  ;; make sure the frame's minibuffer is actually visible
+	  ;; because minibuffer-setup-hook is not executed.
+	  (and (fboundp 'smart-move-minibuffer-inside-screen)
+	       smart-frame-positioning-mode
+	       (smart-move-minibuffer-inside-screen f))
+	  (let ((text (if (string-match "\\(.*\\)\n" text)
+			  (match-string 1 text)
+			text)))
+	    (if (and long (not aquamacs-quick-yes-or-no-prompt))
+		(old-yes-or-no-p text)
+	      (old-y-or-n-p text))))
+      (let ((ret (x-popup-dialog
+                  (or sheet
+                      (if (mouse-event-p last-command-event)'
+                          last-command-event)
+		      `(mouse-1 (,(selected-window) 100 (0 . 50) -1)))
+		  (list text
+                        ;; use \r instead of y until we have multi-keyEquivs
+			`((,(or yes-button "Yes") . ?\r) . t)
+			(if no-cancel 'no-cancel 'cancel)
+			`((,(or no-button "No") . ?n) . nil)))))
+	(if (eq ret 'cancel)
+	    (keyboard-quit))
+	ret))))
 
 (defun filter-list (lst elements)
   "Return LST sans ELEMENTS.
