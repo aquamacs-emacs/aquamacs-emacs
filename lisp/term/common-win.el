@@ -71,7 +71,12 @@
 	       (cons 11 (make-non-key-event 'ns-spi-service-call))
 	       (cons 12 (make-non-key-event 'ns-new-frame))
 	       (cons 13 (make-non-key-event 'ns-toggle-toolbar))
-	       (cons 14 (make-non-key-event 'ns-show-prefs))))))
+	       (cons 14 (make-non-key-event 'ns-show-prefs))
+	       (cons 90 (make-non-key-event 'ns-application-activated))
+	       (cons 91 (make-non-key-event 'ns-application-open-untitled))
+	       (cons 92 (make-non-key-event 'ns-application-reopen))
+	       (cons 93 (make-non-key-event 'ns-application-restore))
+	       (cons 94 (make-non-key-event 'ns-application-store-state))))))
     (set-terminal-parameter frame 'x-setup-function-keys t)))
 
 (defvar x-invocation-args)
