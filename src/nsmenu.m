@@ -1782,6 +1782,21 @@ ns_popup_dialog (struct frame *f, Lisp_Object header, Lisp_Object contents)
 	   NS.  */
 	continue;
 
+      if (EQ (item_name, intern ("cancel")) || EQ (item_name, intern ("no-cancel")))
+	{
+	  /* 'cancel adds a Cancel button in the old EmacsAlertPanel;
+	     'no-cancel suppresses it.  In EmacsDialogPanel the close
+	     button already handles cancel via quit(), so just skip.  */
+	  i += MENU_ITEMS_ITEM_LENGTH;
+	  continue;
+	}
+
+      if (!STRINGP (item_name))
+	{
+	  *error_name = "Non-string dialog item";
+	  return;
+	}
+
       if (nb_buttons > 9)
 	{
 	  *error_name = "Too many dialog items";
