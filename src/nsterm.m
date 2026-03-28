@@ -6512,12 +6512,12 @@ typedef struct _AppleEventSelectionRange {
   return dockMenu;
 }
 
-
-/* TODO: these may help w/IO switching between terminal and NSApp.  */
-- (void)applicationWillBecomeActive: (NSNotification *)notification
+- (void)applicationDidResignActive: (NSNotification *)notification
 {
-  NSTRACE ("[EmacsApp applicationWillBecomeActive:]");
-  // ns_app_active=YES;
+  NSTRACE ("[EmacsApp applicationDidResignActive:]");
+
+  //ns_app_active=NO;
+  ns_send_appdefined (-1);
 }
 
 - (void)applicationDidBecomeActive: (NSNotification *)notification
@@ -6534,19 +6534,10 @@ typedef struct _AppleEventSelectionRange {
   // No constraining takes place when the application is not active.
   ns_constrain_all_frames ();
 }
-- (void)applicationDidResignActive: (NSNotification *)notification
-{
-  NSTRACE ("[EmacsApp applicationDidResignActive:]");
-
-  // ns_app_active=NO;
-  ns_send_appdefined (-1);
-}
-
-
 
 /* ==========================================================================
 
-    EmacsApp aux handlers for managing event loop
+   EmacsApp aux handlers for managing event loop
 
    ========================================================================== */
 
