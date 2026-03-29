@@ -473,6 +473,12 @@ See also `flyspell-duplicate-distance'."
 
 (defvar flyspell-overlay nil)
 
+(defvar flyspell-ns-session-words nil
+  "List of words accepted for session when using NSSpellChecker.
+Unlike `ispell-buffer-session-localwords', this list is global (not
+buffer-local) so it applies to all buffers for the duration of the
+Emacs session.")
+
 (defun flyspell-context-menu (_menu _click)
   "Context menu for `context-menu-mode'."
   ;; TODO: refactor `flyspell-correct-word' and related functions to return
@@ -1131,6 +1137,9 @@ spell-check."
 		     (and (> start (point-min))
 			  (not (memq (char-after (1- start)) '(?\} ?\\)))))
 		 flyspell-mark-duplications-flag
+		 ;; Words accepted for the NSSpellChecker session are not doublons.
+		 (not (and (string= ispell-program-name "NSSpellChecker")
+			   (member word flyspell-ns-session-words)))
 		 (not (catch 'exception
 			(let ((dict (or ispell-local-dictionary
 					ispell-dictionary)))
@@ -1152,6 +1161,12 @@ spell-check."
                                 word bound flyspell-case-fold-duplications))))
 		     (and p (/= p start)))))
 	    ;; yes, this is a doublon
+	    ;; Update the cache so subsequent checks don't re-query the
+	    ;; spell checker and potentially override the doublon marking.
+	    (setq flyspell-word-cache-start start)
+	    (setq flyspell-word-cache-end end)
+	    (setq flyspell-word-cache-word word)
+	    (setq flyspell-word-cache-result nil)
 	    (flyspell-highlight-incorrect-region start end 'doublon)
 	    nil)
 	   ((and (eq flyspell-word-cache-start start)
@@ -2260,14 +2275,28 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 	((eq replace 'save)
          (goto-char save)
          (if (string= ispell-program-name "NSSpellChecker")
-	     (ns-spellchecker-learn-word word)
+	     (progn
+	       (ns-spellchecker-learn-word word)
+	       (flyspell-unhighlight-at cursor-location)
+	       (save-excursion
+		 (goto-char (point-min))
+		 (while (search-forward word nil t)
+		   (flyspell-unhighlight-at (match-beginning 0)))))
 	 (ispell-send-string (concat "*" word "\n"))
 	 (ispell-send-string "#\n")
 	 (flyspell-unhighlight-at cursor-location)
-         )
+         ))
 	((or (eq replace 'buffer) (eq replace 'session))
          (if (string= ispell-program-name "NSSpellChecker")
-	     (ns-spellchecker-ignore-word word (current-buffer))
+	     (progn
+	       (ns-spellchecker-ignore-word word (current-buffer))
+	       (when (eq replace 'session)
+		 (add-to-list 'flyspell-ns-session-words word))
+	       (flyspell-unhighlight-at cursor-location)
+	       (save-excursion
+		 (goto-char (point-min))
+		 (while (search-forward word nil t)
+		   (flyspell-unhighlight-at (match-beginning 0)))))
 	   (ispell-send-string (concat "@" word "\n"))
 	   (add-to-list 'ispell-buffer-session-localwords word)
 	   (or ispell-buffer-local-name ; session localwords might conflict
@@ -2299,7 +2328,7 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
            (flyspell-adjust-cursor-point save cursor-location old-max)))
         (t
          (goto-char save)
-         nil))))
+         nil)))
 
 ;;*---------------------------------------------------------------------*/
 ;;*    flyspell-adjust-cursor-point ...                                  */
@@ -2345,10 +2374,15 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 			   (append cor-menu (cons "" save))
 			 save)))
 	 (menu       (cons "flyspell correction menu" base-menu)))
-    (car (x-popup-menu event
-		       (list (format "%s [%s]" word (or ispell-local-dictionary
-							ispell-dictionary))
-			     menu)))))
+    (let ((replace (car (x-popup-menu event
+				      (list (format "%s [%s]" word
+						    (or ispell-local-dictionary
+							ispell-dictionary
+							(and (fboundp 'ns-spellchecker-current-language)
+							     (ns-spellchecker-current-language))))
+					    menu)))))
+      (if replace
+	  (flyspell-do-correct replace poss word cursor-location start end save)))))
 
 ;;*---------------------------------------------------------------------*/
 ;;*    Some example functions for real autocorrecting                   */

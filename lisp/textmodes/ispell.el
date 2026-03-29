@@ -4738,6 +4738,11 @@ Both should not be used to define a buffer-local dictionary."
 ;;; Add support for using the Mac OS spellchecker
 ;;; defvars are near the top of the file
 
+;; Forward declaration: this variable is defined in flyspell.el.
+;; Declaring it here ensures the byte compiler treats it as a
+;; dynamic (special) variable, not a free lexical variable.
+(defvar flyspell-ns-session-words)
+
 (defun ns-spellchecker-parse-output (word)
   "NSSpellChecker replacement for ispell-parse-output.  Spellcheck WORD
 and Return:
@@ -4751,15 +4756,18 @@ and Return:
   (unless (string= ispell-current-dictionary
 		   (ns-spellchecker-current-language))
     (ispell-change-dictionary (ns-spellchecker-current-language)))
-  (let* ((output (ns-spellchecker-check-spelling word (current-buffer)))
-	 (offset (car output)))
-    (if offset
-	;; word is incorrect -- return
-	;; (\"ORIGINAL-WORD\" OFFSET MISS-LIST GUESS-LIST)
-	;; GUESS-LIST built from known affixes is nil for NSSpellChecker
-	(list word (1+ offset) (ns-spellchecker-get-suggestions word) nil)
-      ;; offset is nil: word is correct -- return t
-      t)))
+  ;; Words accepted for the session are treated as correct.
+  (if (member word flyspell-ns-session-words)
+      t
+    (let* ((output (ns-spellchecker-check-spelling word (current-buffer)))
+	   (offset (car output)))
+      (if offset
+	  ;; word is incorrect -- return
+	  ;; (\"ORIGINAL-WORD\" OFFSET MISS-LIST GUESS-LIST)
+	  ;; GUESS-LIST built from known affixes is nil for NSSpellChecker
+	  (list word (1+ offset) (ns-spellchecker-get-suggestions word) nil)
+	;; offset is nil: word is correct -- return t
+	t))))
 
 (defun ispell-ns-spellcheck-string (string)
   "NSSpellChecker replacement for ispell-parse-output.  Spellcheck STRING

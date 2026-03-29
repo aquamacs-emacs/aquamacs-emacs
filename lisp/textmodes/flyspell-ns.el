@@ -49,6 +49,11 @@
 (require 'thingatpt) ;; use (word-at-point) in ns-spellchecking functions
 (require 'osxkeys) ;; flyspell inherit regular Aquamacs context menu
 
+;; Forward declaration: this variable is defined in flyspell.el.
+;; Declaring it here ensures the byte compiler treats it as a
+;; dynamic (special) variable, not a free lexical variable.
+(defvar flyspell-ns-session-words)
+
 (defcustom flyspell-mode-auto-on t
   "Non-nil means that executing `flyspell-region' or `flyspell-buffer'
 will automatically turn on `flyspell-mode' for that buffer."
@@ -82,14 +87,21 @@ effect, marks the misspelled word (if found) with face flyspell-incorrect."
 	  (save-excursion
 	    (setq misspell-end
 		  (+ pos (car misspell-location) (cdr misspell-location)))
-	    (goto-char misspell-end)
-	    (if (flyspell-word) ;; returns t if not misspelled
-		;; ignore misspelling if flyspell-word says it's OK,
-		;;  but continue checking
-		(setq misspell-location nil)
-	      ;; if flyspell-word concurs, we've found a misspelling & are done
-	      (setq done t)
-	      ))
+	    (let ((misspelled-word
+		   (substring (buffer-substring pos end)
+			      (car misspell-location)
+			      (+ (car misspell-location)
+				 (cdr misspell-location)))))
+	      (if (member misspelled-word flyspell-ns-session-words)
+		  ;; word accepted for session; skip it
+		  (setq misspell-location nil)
+		(goto-char misspell-end)
+		(if (flyspell-word) ;; returns t if not misspelled
+		    ;; ignore misspelling if flyspell-word says it's OK,
+		    ;;  but continue checking
+		    (setq misspell-location nil)
+		  ;; if flyspell-word concurs, we've found a misspelling & are done
+		  (setq done t)))))
 	;; no misspellings in string; finish.
 	(setq done t))
       (unless done
@@ -312,16 +324,22 @@ on current value of `ispell-program-name'."
 	      (ns-spellchecker-check-spelling spellcheck-text (current-buffer)))
 	(if ns-spellcheck-output
 	    ;; found misspelled word
-	    (progn
+	    (let ((misspelled-word
+		   (substring spellcheck-text
+			      (car ns-spellcheck-output)
+			      (+ (car ns-spellcheck-output)
+				 (cdr ns-spellcheck-output)))))
 	      (setq misspelled-location
 		    (+ (car ns-spellcheck-output) spellcheck-position))
 	      (setq misspelled-length (cdr ns-spellcheck-output))
 	      ;; start next check after current found word
 	      (setq spellcheck-position
 		    (+ misspelled-location misspelled-length))
-	      ;; use flyspell-word to filter and mark misspellings
-	      (goto-char spellcheck-position)
-	      (flyspell-word))
+	      ;; skip words accepted for the session
+	      (unless (member misspelled-word flyspell-ns-session-words)
+		;; use flyspell-word to filter and mark misspellings
+		(goto-char spellcheck-position)
+		(flyspell-word)))
 	  ;; no misspellings found; we've reached the end of chunk
 	  (setq spellcheck-position end))
 	)
