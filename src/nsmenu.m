@@ -1781,17 +1781,14 @@ ns_popup_dialog (struct frame *f, Lisp_Object header, Lisp_Object contents)
 	}
 
       if (EQ (item_name, Qquote))
-	/* This is the boundary between elements on the left and those
-	   on the right, but that boundary is currently not handled on
-	   NS.  */
-	continue;
-
-      if (EQ (item_name, intern ("cancel")) || EQ (item_name, intern ("no-cancel")))
 	{
-	  /* 'cancel adds a Cancel button in the old EmacsAlertPanel;
-	     'no-cancel suppresses it.  In EmacsDialogPanel the close
-	     button already handles cancel via quit(), so just skip.  */
-	  i += MENU_ITEMS_ITEM_LENGTH;
+	  /* This is the left/right boundary marker pushed by
+	     push_left_right_boundary.  It occupies a single slot (not
+	     a full MENU_ITEMS_ITEM_LENGTH item), so advance by 1.
+	     The boundary is not handled visually on NS, but we must
+	     skip it so items after it (e.g. buttons following
+	     'no-cancel) are not lost.  */
+	  i++;
 	  continue;
 	}
 
@@ -1927,6 +1924,20 @@ ns_popup_dialog (struct frame *f, Lisp_Object header, Lisp_Object contents)
 
   [title sizeToFit];
   [command sizeToFit];
+
+  /* If the title text is multi-line and has grown taller than the
+     initial fixed matrix position, move the matrix down so buttons
+     appear below the text rather than overlapping it.  */
+  {
+    NSRect titleFrame = [title frame];
+    NSPoint matrixOrigin = [matrix frame].origin;
+    CGFloat minMatrixY = titleFrame.origin.y + titleFrame.size.height + SPACER;
+    if (matrixOrigin.y < minMatrixY)
+      {
+        matrixOrigin.y = minMatrixY;
+        [matrix setFrameOrigin: matrixOrigin];
+      }
+  }
 
   t = [matrix frame];
   r = [title frame];
