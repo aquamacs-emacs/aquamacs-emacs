@@ -169,8 +169,7 @@ or not."
 Press \\[aquamacs-download-release] to download it.") "")
 		     )))
     (message msg)
-    (run-with-idle-timer
-     0 nil 'message msg)))
+    (run-with-idle-timer 0 nil 'message msg)))
 
 
 (defun aquamacs-download-release ()
@@ -181,20 +180,29 @@ Press \\[aquamacs-download-release] to download it.") "")
 
 
 (defun aquamacs-ask-donate ()
-  (if (and (fboundp 'x-popup-dialog)
-           (not (string-match "beta" aquamacs-minor-version))
-	   (x-popup-dialog t '("Welcome to the new Aquamacs.
-The Aquamacs Project depends on your support. Please consider to help us by donating at http://aquamacs.org. Your continued support helps keep the project alive.
-
-Would you like to see the donations site now?
-
-\(This reminder won't be displayed again in this version.)" ("Donate" . t) no-cancel ("No" . nil))))
-      (aquamacs-donate)))
+  "Ask user about donating to support Aquamacs."
+  (when (and (fboundp 'x-popup-dialog)
+             (not (string-match "beta" aquamacs-minor-version))
+             (let ((donation-message
+                    (concat "Welcome to a new version of Aquamacs. "
+                            "Your support helps to keep the Aquamacs project going. "
+                            "Please consider helping us by donating at https://aquamacs.org.\n"
+                            "\n"
+                            "(This reminder won't be displayed again in this version.)\n"
+                            "\n"
+                            "Would you like to see the donations site now?"
+                            )))
+               (x-popup-dialog t
+                               `(,(fill-string donation-message 50)
+                                 ("Donate" . t)
+                                 no-cancel
+                                 ("No" . nil)))))
+    (aquamacs-donate)))
 
 (defun aquamacs-welcome-notify ()
   ;; show right away and show when idle
-      (run-with-idle-timer
-       0 nil 'aquamacs-ask-donate))
+  (run-with-idle-timer
+   0 nil 'aquamacs-ask-donate))
 
 
 (defvar aquamacs-check-update-time-period 3
