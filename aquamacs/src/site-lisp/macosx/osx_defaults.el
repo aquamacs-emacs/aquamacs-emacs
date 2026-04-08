@@ -42,8 +42,16 @@
   (require 'aquamacs-macros))
 
 (defvar aquamacs-preferences-directory
-  (file-name-as-directory "~/Library/Preferences/Aquamacs Emacs 4")
-  "MacOS directory for Aquamacs preferences files.")
+  (file-name-as-directory
+   (or (getenv "AQUAMACS_PREFERENCES_DIR")
+       "~/Library/Preferences/Aquamacs Emacs 4"))
+  "MacOS directory for Aquamacs preferences files.
+Can be overridden by setting the AQUAMACS_PREFERENCES_DIR environment
+variable before launching Aquamacs.  This is useful for testing with
+a separate preferences directory:
+
+  AQUAMACS_PREFERENCES_DIR=~/aquamacs-test-prefs \\
+    nextstep/Aquamacs.app/Contents/MacOS/Aquamacs")
 
 (defvar aquamacs-3.6-preferences-directory
   (file-name-as-directory"~/Library/Preferences/Aquamacs Emacs")
