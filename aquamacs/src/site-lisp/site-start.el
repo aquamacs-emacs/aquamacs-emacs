@@ -38,6 +38,11 @@
 
   ;; Version information
 
+  (defvar aquamacs-is-release-version nil
+    "Non-nil if this is an official public release.
+  Set to t in release builds; nil for alpha, beta, release
+  candidate, and other pre-release versions.")
+
   (defvar aquamacs-version "3.9.2"
     "A string with Aquamacs' version number.
 The format of the string is undefined.

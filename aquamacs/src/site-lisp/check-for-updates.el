@@ -178,11 +178,13 @@ Press \\[aquamacs-download-release] to download it.") "")
   (if aquamacs-download-url
       (browse-url aquamacs-download-url)))
 
+(defvar aquamacs-is-release-version nil)   ; Forward declaration for real
+                                        ; one in site-start.el
 
 (defun aquamacs-ask-donate ()
   "Ask user about donating to support Aquamacs."
   (when (and (fboundp 'x-popup-dialog)
-             (not (string-match "beta" aquamacs-minor-version))
+             aquamacs-is-release-version
              (let ((donation-message
                     (concat "Welcome to a new version of Aquamacs. "
                             "Your support helps to keep the Aquamacs project going. "
