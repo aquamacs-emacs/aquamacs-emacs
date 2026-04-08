@@ -1431,9 +1431,12 @@ that should be represented in the Aquamacs menus."
 	     (car c) (cdr c) (car c)  (car c) )))
 	       (sort cards (lambda (a b) (string-lessp (cdr a) (cdr b)))))))
 
-(defun show-refcard (pdf)
+(defun show-refcard (pdf-filename)
   (interactive)
-  (call-process "open" nil 0 nil (format "%setc/refcards/%s" (mac-resources-path) pdf)))
+  (let ((pdf-path (format "%setc/refcards/%s" (mac-resources-path) pdf-filename)))
+    (if (file-exists-p pdf-path)
+        (call-process "open" nil 0 nil pdf-path)
+      (message "Reference card not available: %s" pdf-path))))
 
 (setq menu-bar-help-refcards-menu (make-sparse-keymap "Refcards"))
  

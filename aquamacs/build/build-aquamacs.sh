@@ -147,6 +147,25 @@ gnumake clean || exit 1
 gnumake -j -l $(($(sysctl -n hw.logicalcpu) - 1)) || exit 1
 gnumake install || exit 1
 
+# Build reference card PDFs and install them into the app bundle.
+# pdflatex/pdftex is not required; if absent, a warning is printed and
+# the build continues.  Install MacTeX (https://www.tug.org/mactex/)
+# to make reference cards available.
+REFCARDS_SRC=etc/refcards
+REFCARDS_BUNDLE=nextstep/Aquamacs.app/Contents/Resources/etc/refcards
+if command -v pdftex >/dev/null 2>&1 || command -v pdflatex >/dev/null 2>&1; then
+    echo "Building reference card PDFs..."
+    if (cd "${REFCARDS_SRC}" && gnumake pdf); then
+        cp "${REFCARDS_SRC}"/*.pdf "${REFCARDS_BUNDLE}/"
+        echo "Reference card PDFs installed."
+    else
+        echo "Warning: Reference card PDF build had errors; some cards may be missing."
+    fi
+else
+    echo "Warning: pdflatex/pdftex not found; reference card PDFs will not be built."
+    echo "Install MacTeX (https://www.tug.org/mactex/) to build reference cards."
+fi
+
 # generate symbol archive (.dSYM file)
 dsymutil nextstep/Aquamacs.app/Contents/MacOS/Aquamacs
 
