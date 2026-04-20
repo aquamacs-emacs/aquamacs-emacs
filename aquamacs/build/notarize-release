@@ -42,10 +42,21 @@ xcrun notarytool submit \
       --keychain-profile "${KEYPROFILE}" \
       ${ZIPFILE} | tee "${TMPFILE}"
 
+if [ $? -eq 0 ]; then
+    echo "Notarization succeeded"
+else
+    echo "Notarization failed with exit code $?"
+fi
+
 echo "Diagnostic output in ${TMPFILE} if needed"
 
 # If given --auto-staple, staple the notarization to the app.
 
 if [ "${AUTO_STAPLE}" = yes ]; then
     xcrun stapler staple ${BUNDLE}
+    if [ $? -eq 0 ]; then
+        echo "Auto-staple succeeded"
+    else
+        echo "Auto-staple failed with exit code $?"
+    fi
 fi
