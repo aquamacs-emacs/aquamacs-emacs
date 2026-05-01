@@ -68,8 +68,10 @@ if [ "${AQUAMACS_CERT}x" != "x" ]; then
     echo "Sign release with ${AQUAMACS_CERT}"
     ${ARM_DIR}/aquamacs/build/sign-release . "${OUTPUT_BUNDLE}"
 else
-    echo "No signing certificate, so not bundling libraries."
+    echo "No signing certificate defined in AQUAMACS_CERT, so not bundling libraries."
     echo "This is fine for single-system development."
+    echo "Exiting..."
+    exit 0
 fi
 
 # (optional) Notify build process complete
