@@ -280,6 +280,18 @@ Aquamacs 0.9.7 on. `mac-option-modifier' has been set for you.")))
     ;;         (mapc (lambda (x) (enable-theme x))
     ;;               (reverse cet))
     ;;       )))
+
+    ;; Aquamacs 4 uses only the CoreText (mac) font backend; the old NS
+    ;; font backend no longer exists.  Remove any saved font-backend entry
+    ;; that specifies an unavailable backend to prevent a startup crash
+    ;; when old customizations specify (font-backend ns).
+    ;; This is less invasive than modifying the core Emacs code.
+    (let ((backend (cdr-safe (assq 'font-backend default-frame-alist))))
+      (unless (equal backend '(mac))
+        (setq default-frame-alist
+              (assq-delete-all 'font-backend default-frame-alist))
+        (when backend
+          (message "Aquamacs: removed unsupported font-backend `%s' from default-frame-alist." backend))))
     )
     )
 
