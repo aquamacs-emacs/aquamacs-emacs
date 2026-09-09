@@ -8258,6 +8258,8 @@ ns_in_echo_area (void)
     [NSApp setMainMenu: mainMenu];
 #endif
 
+  ns_frame_rehighlight (emacsframe);
+
   event.kind = FOCUS_IN_EVENT;
   XSETFRAME (event.frame_or_window, emacsframe);
   kbd_buffer_store_event (&event);
