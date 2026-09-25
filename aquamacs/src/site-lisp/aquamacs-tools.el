@@ -534,14 +534,15 @@ the value of `aquamacs-default-major-mode'."
 	   (ts2 ts))
       (if (equal ts2 aquamacs--new-buffer-last-timestamp)
           (progn
-            (setq  aquamacs--new-buffer-timestamp-counter
-                   (1+ aquamacs--new-buffer-timestamp-counter))
-            (setq ts2 (format "%s.%s" ts)))
+            (setq aquamacs--new-buffer-timestamp-counter
+                  (1+ aquamacs--new-buffer-timestamp-counter))
+            (setq ts2 (format "%s.%s" ts
+                              aquamacs--new-buffer-timestamp-counter)))
 	(setq aquamacs--new-buffer-timestamp-counter 0))
       (setq aquamacs--new-buffer-last-timestamp ts)
       (setq aquamacs-untitled-buffer-creation-time ts2))
-    (if auto-save-default
-	(auto-save-mode t))
+    (when auto-save-default
+      (auto-save-mode t))
     (set-buffer-modified-p nil)))
 
 (defalias  'new-frame-with-new-scratch 'new-empty-buffer)
