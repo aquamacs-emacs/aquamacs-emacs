@@ -147,8 +147,7 @@ DEFUN ("aquamacs-render-to-pdf", Faquamacs_render_to_pdf, Saquamacs_render_to_pd
        doc: /* Render HTML buffer SOURCE to PDF.
                If successful, resulting PDF (and the input HTML) are put
                on the pasteboard.*/)
-  (source, width, height)
-  Lisp_Object source, width, height;
+  (Lisp_Object source, Lisp_Object width, Lisp_Object height)
 {
   struct frame *f;
   check_window_system (NULL);
@@ -248,8 +247,7 @@ DEFUN ("aquamacs-render-to-pdf", Faquamacs_render_to_pdf, Saquamacs_render_to_pd
 DEFUN ("ns-popup-print-panel", Fns_popup_print_panel, Sns_popup_print_panel,
        0, 2, "",
        doc: /* Pop up the print panel.  */)
-  (frame, source)
-  Lisp_Object frame, source;
+  (Lisp_Object frame, Lisp_Object source)
 {
   struct frame *f;
   check_window_system (NULL);
@@ -339,8 +337,7 @@ DEFUN ("ns-popup-save-panel", Fns_popup_save_panel, Sns_popup_save_panel,
                (nil if cancelled), and `ns-save-panel-buffer' the buffer current
                when `ns-popup-save-panel' was called.
             */)
-  (prompt, dir, init)
-  Lisp_Object prompt, dir, init;
+  (Lisp_Object prompt, Lisp_Object dir, Lisp_Object init)
 {
   NSSavePanel *panel;
 
@@ -496,8 +493,7 @@ DEFUN ("ns-send-odb-notification", Fns_send_odb_notification, Sns_send_odb_notif
                TYPE is one of `saved', `closed'.
                PARMS is an association list as communicated for the opening event for the specific buffer.
             */)
-  (type, buf, parms)
-  Lisp_Object type, buf, parms;
+  (Lisp_Object type, Lisp_Object buf, Lisp_Object parms)
 {
   struct buffer *buffer;
 
@@ -543,8 +539,7 @@ DEFUN ("ns-launch-URL-with-default-browser", Fns_launch_url_with_default_browser
                file:// URLs are always opened with the system's default browser, i.e.
                the http:// handler. Return non-nil if the URL has been successfully
                launched.*/)
-  (URLstring)
-  Lisp_Object URLstring;
+  (Lisp_Object URLstring)
 {
   check_window_system (NULL);
 
@@ -647,8 +642,7 @@ DEFUN ("ns-launch-URL-with-default-browser", Fns_launch_url_with_default_browser
 
 DEFUN ("ns-open-help-anchor", Fns_open_help_anchor, Sns_open_help_anchor, 1, 2, 0,
        doc: /* Show Apple Help  */)
-  (anchor, book)
-  Lisp_Object anchor, book;
+  (Lisp_Object anchor, Lisp_Object book)
 {
   check_window_system (NULL);
   block_input();
@@ -669,8 +663,7 @@ DEFUN ("ns-open-help-anchor", Fns_open_help_anchor, Sns_open_help_anchor, 1, 2, 
 DEFUN ("ns-cycle-frame", Fns_cycle_frame, Sns_cycle_frame, 0, 1, "",
        doc: /* Select the next frame in order.
                arg nil means cycle forwards.  */)
-  (arg)
-  Lisp_Object arg;
+  (Lisp_Object arg)
 {
   if ([NSApp respondsToSelector:@selector(_cycleWindowsReversed:)])
     {
@@ -708,8 +701,7 @@ DEFUN ("ns-frame-is-on-active-space-p", Fns_frame_is_on_active_space_p, Sns_fram
        0, 1, 0,
        doc: /* Return non-nil if FRAME is on active space.
                OS X 10.6 only; returns non-nil prior to 10.5 or for non-NS frames.*/)
-  (frame)
-  Lisp_Object frame;
+  (Lisp_Object frame)
 {
   struct frame *f;
   check_window_system (NULL);
@@ -792,8 +784,7 @@ DEFUN ("ns-spellchecker-show-word", Fns_spellchecker_show_word, Sns_spellchecker
        1, 1, 0,
        doc: /* Show word WORD in the spellchecking panel.
                Give empty string to delete word.*/)
-  (str)
-  Lisp_Object str;
+  (Lisp_Object str)
 {
   id sc;
 
@@ -814,8 +805,7 @@ DEFUN ("ns-spellchecker-learn-word", Fns_spellchecker_learn_word, Sns_spellcheck
        doc: /* Learn word WORD.
                Returns learned word if successful.
                Not available on 10.4.*/)
-  (str)
-  Lisp_Object str;
+  (Lisp_Object str)
 {
   CHECK_STRING (str);
   check_window_system (NULL);
@@ -839,8 +829,7 @@ DEFUN ("ns-spellchecker-learn-word", Fns_spellchecker_learn_word, Sns_spellcheck
 DEFUN ("ns-spellchecker-ignore-word", Fns_spellchecker_ignore_word, Sns_spellchecker_ignore_word,
        1, 2, 0,
        doc: /* Ignore word WORD in buffer BUFFER.*/)
-  (str, buffer)
-  Lisp_Object str, buffer;
+  (Lisp_Object str, Lisp_Object buffer)
 {
   id sc;
 
@@ -865,8 +854,7 @@ DEFUN ("ns-spellchecker-ignored-words", Fns_spellchecker_ignored_words, Sns_spel
        1, 1, 0,
        doc: /* Return list of words ignored by NSSpellChecker
                for buffer BUFFER */)
-  (buffer)
-  Lisp_Object buffer;
+  (Lisp_Object buffer)
 {
   id sc;
 
@@ -900,8 +888,7 @@ DEFUN ("ns-spellchecker-check-spelling", Fns_spellchecker_check_spelling, Sns_sp
                Returns the location of the first misspelled word in a
                cons cell of form (beginning . length), or nil if all
                words are spelled as in the dictionary.*/)
-  (string, buffer)
-  Lisp_Object string, buffer;
+  (Lisp_Object string, Lisp_Object buffer)
 {
   id sc;
 
@@ -950,8 +937,7 @@ DEFUN ("ns-spellchecker-check-grammar", Fns_spellchecker_check_grammar, Sns_spel
        doc: /* Check spelling of SENTENCE.
                BUFFER, if given, idenitifies the document containing list
                of ignored grammatical constructions. */)
-  (sentence, buffer)
-  Lisp_Object sentence, buffer;
+  (Lisp_Object sentence, Lisp_Object buffer)
 {
   id sc;
 
@@ -986,8 +972,7 @@ DEFUN ("ns-spellchecker-get-suggestions", Fns_spellchecker_get_suggestions, Sns_
                If word contains all capital letters, or its first
                letter is capitalized, the suggested words are
                capitalized in the same way. */)
-  (word)
-  Lisp_Object word;
+  (Lisp_Object word)
 {
   id sc;
 
@@ -1065,8 +1050,7 @@ DEFUN ("ns-spellchecker-set-language", Fns_spellchecker_set_language, Sns_spellc
        doc: /* Set spell-checking language.
                LANGUAGE must be one of the languages returned by
                `ns-spellchecker-list-langauges'.*/)
-  (language)
-  Lisp_Object language;
+  (Lisp_Object language)
 {
   id sc;
 

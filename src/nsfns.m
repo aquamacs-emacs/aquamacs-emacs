@@ -1698,8 +1698,7 @@ nil, it defaults to the selected frame. */)
 DEFUN ("ns-popup-color-panel", Fns_popup_color_panel, Sns_popup_color_panel,
        0, 2, "",
        doc: /* Pop up the color panel.  */)
-  (frame, color)
-  Lisp_Object frame, color;
+  (Lisp_Object frame, Lisp_Object color)
 {
   struct frame *f;
   check_window_system (NULL);

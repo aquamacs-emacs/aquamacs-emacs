@@ -1051,8 +1051,7 @@ window_body_unit_from_symbol (Lisp_Object unit)
 */
 
 int
-window_header_line_inhibited_p(w)
-     struct window *w;
+window_header_line_inhibited_p (struct window *w)
 {
   Lisp_Object window;
 
