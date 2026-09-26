@@ -774,6 +774,15 @@ is already visible, close it." t)
 is reached.  If found, set region to the misspelling, apply face
 flyspell-incorrect, and show word in OS X spelling panel" nil)
 
+(autoload 'spellcheck-now "flyspell"
+  "Start spellchecking, using OS X spellchecker
+\(`ns-highlight-misspelling-and-suggest') or `ispell-buffer' (which see),
+depending on value of `ispell-program-name'." t)
+
+(autoload 'spellchecker-panel-or-ispell "flyspell"
+  "Calls `ns-toggle-spellchecker-panel' or `ispell' (which see), depending
+on current value of `ispell-program-name'." t)
+
 (defun ns-respond-to-change-spelling (start end)
   "Respond to changeSpelling: event, expecting ns-spelling-text
 to substitute for selected buffer text."

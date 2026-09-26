@@ -264,7 +264,6 @@ is already visible, close it instead."
     ;; panel shouldn't skip past currently selected word, if there is one
     (ns-highlight-misspelling-and-suggest 'noskip)))
 
-;;;###autoload
 (defun spellcheck-now ()
   "Start spellchecking, using OS X spellchecker
 (`ns-highlight-misspelling-and-suggest') or `ispell-buffer' (which see),
@@ -274,7 +273,6 @@ depending on value of `ispell-program-name'."
       (ns-highlight-misspelling-and-suggest)
     (ispell-buffer)))
 
-;;;###autoload
 (defun spellchecker-panel-or-ispell ()
   "Calls `ns-toggle-spellchecker-panel' or `ispell' (which see), depending
 on current value of `ispell-program-name'."
