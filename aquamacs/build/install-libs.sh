@@ -19,7 +19,16 @@ MAIN_BINARY="${MACOS_PATH}/Aquamacs"
 
 # Determine the architecture we need
 ARCH=$(lipo -archs "$MAIN_BINARY" | awk '{print $1}')
+
+# Set the local libraries location if it exists
+LOCAL_LIBS_DIR=""
+if [[ -d "../aquamacs-deps/build-output/${ARCH}/lib" ]]; then
+    LOCAL_LIBS_DIR="$(cd "../aquamacs-deps/build-output/${ARCH}/lib" && pwd)"
+fi
+
 echo "Looking for $ARCH libraries..."
+
+
 
 # Create Frameworks directory if it doesn't exist
 mkdir -p "$FRAMEWORKS_PATH"
@@ -38,6 +47,7 @@ is_compatible_lib() {
 resolve_rpath() {
     local lib="$1"
     local binary="$2"
+    local search_paths=()
 
     # If not an @rpath library, return as-is
     if [[ "$lib" != "@rpath/"* ]]; then
@@ -48,8 +58,9 @@ resolve_rpath() {
     # Extract the library name from @rpath/name
     local lib_name="${lib#@rpath/}"
 
-    # Common locations to search
-    local search_paths=(
+    # Common locations to search. Start with LOCAL_LIBS if we have it.
+    [[ -n "$LOCAL_LIBS_DIR" ]] && search_paths+=("$LOCAL_LIBS_DIR")
+    search_paths+=(
         "/usr/local/opt/*/lib"
         "/usr/local/lib"
         "/opt/homebrew/opt/*/lib"
@@ -95,6 +106,8 @@ update_library_paths() {
 copy_library() {
     local binary="$1"
     local lib
+    local is_local_lib=false
+
 
     echo "------- Process library $1"
     # Get library dependencies
@@ -112,8 +125,14 @@ copy_library() {
             lib=$(resolve_rpath "$lib" "$binary")
         fi
 
-        # Copy if it's a Homebrew library or resolved @rpath library
-        if [[ "$lib" == "/usr/local/opt/"* || "$lib" == "/opt/homebrew/"* || "$lib" == "/usr/local/lib/"* ]]; then
+        # Copy if it's a locally-built library, a Homebrew library or
+        # resolved @rpath library
+        if [[ -n "$LOCAL_LIBS_DIR" && "$lib" == "${LOCAL_LIBS_DIR}/"* ]]; then
+            is_local_lib=true
+        fi
+
+        if [[ "$lib" == "/usr/local/opt/"* || "$lib" == "/opt/homebrew/"* \
+                  || "$lib" == "/usr/local/lib/"* || "$is_local_lib" == true ]]; then
             local lib_name=$(basename "$lib")
             local dest="${FRAMEWORKS_PATH}/${lib_name}"
 

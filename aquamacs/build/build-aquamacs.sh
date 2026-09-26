@@ -61,18 +61,35 @@ require_command makeinfo
 # Compiler flags: optimization & debugging info
 OPT_FLAGS="-O3 -g -Wno-deprecated-declarations"
 
+# Use if building local libraries ourselves. Currently assumes that
+# local library builds are already complete.
+#
+# Note that this must be an absolute path.
+LOCAL_LIBS_PREFIX="$(cd ../aquamacs-deps/build-output && pwd)"
+
 if [[ $(uname -m) == "arm64" ]]; then
     PREFIX="/opt/homebrew";
+    LOCAL_LIBS_DIR="${LOCAL_LIBS_PREFIX}/arm64"
 else
     PREFIX="/usr/local"
+    LOCAL_LIBS_DIR="${LOCAL_LIBS_PREFIX}/x86_64"
     if [ ! -x /usr/local/bin/autoconf ]; then
         echo "x86 homebrew not set up"
         exit 1
     fi
 fi
-export PKG_CONFIG_PATH="$PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH"
-export CPPFLAGS="-I$PREFIX/include"
-export LDFLAGS="-L$PREFIX/lib";
+
+if [[ -d ../aquamacs-deps ]]; then
+    export PKG_CONFIG_PATH="${LOCAL_LIBS_DIR}/lib/pkgconfig"
+        export PKG_CONFIG_LIBDIR="${LOCAL_LIBS_DIR}/lib/pkgconfig"
+    export CPPFLAGS="-I${LOCAL_LIBS_DIR}/include"
+    export LDFLAGS="-L${LOCAL_LIBS_DIR}/lib -Wl,-rpath,${LOCAL_LIBS_DIR}/lib"
+else
+    export PKG_CONFIG_PATH="$PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH"
+    export PKG_CONFIG_LIBDIR="${LOCAL_LIBS_DIR}/lib/pkgconfig"
+    export CPPFLAGS="-I$PREFIX/include"
+    export LDFLAGS="-L$PREFIX/lib";
+fi
 
 # Native compilation is still having trouble, so it's all turned off
 # for now.
@@ -81,7 +98,6 @@ NATIVE_COMP=
 # NATIVE_COMP="--with-native-compilation=yes"
 # Enable for compiling everything natively during the build
 # NATIVE_COMP="--with-native-compilation=aot"
-
 
 #                                # --with-rsvg
 
@@ -94,7 +110,7 @@ CONFIG_PACKAGES="--with-gnutls \
                                --with-xwidgets \
                                --without-cairo \
                                --without-rsvg \
-                               --without-tree-sitter \
+                               --with-tree-sitter \
                                ${DEBUG_CONFIG_OPTS}"
 
 # Options for enforcing some backwards compatibility. These may only
