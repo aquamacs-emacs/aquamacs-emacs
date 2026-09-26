@@ -2101,7 +2101,7 @@ a face or button specification."
 	     ,(lambda (_button)
 		(when startup-screen-inhibit-startup-screen
 		  (customize-set-variable 'inhibit-startup-screen t)
-		  (customize-mark-to-save 'qinhibit-startup-screen)
+		  (customize-mark-to-save 'inhibit-startup-screen)
 		  (custom-save-all))
 		(quit-windows-on "*GNU Emacs*" t)))
      "  ")
