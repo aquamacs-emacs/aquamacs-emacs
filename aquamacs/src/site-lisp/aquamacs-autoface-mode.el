@@ -816,12 +816,9 @@ modified, or in FRAME if given."
     (apply 'set-face-attribute face
 	   frame (list prop value))
     (aquamacs-autoface-mark-face-to-save face)
-    ;; FIXME: does the following duplicate some of the preceding?
     (let ((spec
     	   (list (list t (face-attr-construct face)))))
       (put face 'customized-face spec)
-      (put face 'saved-face spec)
-      (custom-push-theme 'theme-face face 'user 'set spec)
       (put face 'face-modified nil))
     (message "%s set for %s face."
 	     (cond ((eq prop :foreground)
@@ -847,13 +844,9 @@ modified, or in FRAME if given."
 	    (font (x-select-font mac-font-panel-target-frame)))
 	(set-face-font face font mac-font-panel-target-frame)
 	(aquamacs-autoface-mark-face-to-save face)
-	;; FIXME: this duplicates `aquamacs-autoface-mark-face-to-save'
-	;; and doesn't `aquamacs-autoface-mark-face-to-save' need some of the following?
 	(let ((spec
 	       (list (list t (face-attr-construct face)))))
 	  (put face 'customized-face spec)
-	  (put face 'saved-face spec)
-	  (custom-push-theme 'theme-face face 'user 'set spec)
 	  (put face 'face-modified nil))
 	(message "Font set for %s face." face))
     (quit (message "Font selection cancelled."))))
