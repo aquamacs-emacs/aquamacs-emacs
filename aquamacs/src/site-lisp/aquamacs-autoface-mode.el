@@ -842,34 +842,21 @@ modified, or in FRAME if given."
 	aquamacs-color-panel-target-frame nil)
   (setq mac-font-panel-target-face (aquamacs-default-face-in-effect)
 	aquamacs-color-panel-target-face (aquamacs-default-face-in-effect))
-  (setq ns-input-font (face-font (aquamacs-default-face-in-effect)))
-  ;; cannot set correct font yet  (to do!)
-  ;; Fns_popup_font_panel sets frame font here
-  (menu-set-font mac-font-panel-target-frame mac-font-panel-target-face)
-  (message "Choose Font for %s face." mac-font-panel-target-face))
-
-
-(defun ns-respond-to-change-font ()
-  "Respond to changeFont: event, expecting ns-input-font and
-ns-input-fontsize of new font."
-  (interactive)
-  (let ((face (or mac-font-panel-target-face 'default))
-
-	(attribute-values (list :family ns-input-font
-				:height (* 10 ns-input-fontsize))))
-
-    (apply 'set-face-attribute face
-	   mac-font-panel-target-frame attribute-values)
-    (aquamacs-autoface-mark-face-to-save face)
-    ;; FIXME: this duplicates `aquamacs-autoface-mark-face-to-save'
-    ;; and doesn't `aquamacs-autoface-mark-face-to-save' need some of the following?
-    (let ((spec
-    	   (list (list t (face-attr-construct face)))))
-      (put face 'customized-face spec)
-      (put face 'saved-face spec)
-      (custom-push-theme 'theme-face face 'user 'set spec)
-      (put face 'face-modified nil))
-    (message "Font set for %s face." face)))
+  (condition-case nil
+      (let ((face mac-font-panel-target-face)
+	    (font (x-select-font mac-font-panel-target-frame)))
+	(set-face-font face font mac-font-panel-target-frame)
+	(aquamacs-autoface-mark-face-to-save face)
+	;; FIXME: this duplicates `aquamacs-autoface-mark-face-to-save'
+	;; and doesn't `aquamacs-autoface-mark-face-to-save' need some of the following?
+	(let ((spec
+	       (list (list t (face-attr-construct face)))))
+	  (put face 'customized-face spec)
+	  (put face 'saved-face spec)
+	  (custom-push-theme 'theme-face face 'user 'set spec)
+	  (put face 'face-modified nil))
+	(message "Font set for %s face." face))
+    (quit (message "Font selection cancelled."))))
 
 
 ) ;; when window-system
