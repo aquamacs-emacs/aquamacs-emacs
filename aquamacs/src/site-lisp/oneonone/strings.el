@@ -575,7 +575,7 @@ DEFAULT is returned if the user hits `RET' without typing anything."
                               ((stringp str)
                                (condition-case nil (read str) (error nil))))))
             (unless (numberp num)
-              (ding) (message "Not a number.  Try again.") (sit-for 1 nil t)
+              (ding) (message "Not a number.  Try again.") (sit-for 1 t)
               t)))
       num)))
 
