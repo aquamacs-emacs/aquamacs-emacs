@@ -1431,8 +1431,6 @@ listed here."
               visual-line-mode ; set by line wrapping menu functions
               aquamacs-autoface-mode
               aquamacs-tool-bar-user-customization
-              ns-tool-bar-display-mode ;; can be set through GUI by user
-              ns-tool-bar-size-mode ;; can be set through GUI by user
               ;; default-frame-alist should not be saved in customizations
               ;;   it interferes with themes.
 ;;;          do not save initial-frame-alist - it is stored by smart-frame-positions
@@ -1441,6 +1439,12 @@ listed here."
               ns-alternate-modifier
               ns-right-alternate-modifier
               ns-right-command-modifier)
+            ;; ns-tool-bar-display-mode/-size-mode: can be set through GUI by
+            ;; user, but the C code that implements them is not currently
+            ;; part of this build; guard so a stale reference doesn't error
+            ;; out of the whole options-changed check.
+            (and (boundp 'ns-tool-bar-display-mode) '(ns-tool-bar-display-mode))
+            (and (boundp 'ns-tool-bar-size-mode) '(ns-tool-bar-size-mode))
             (and (boundp 'aquamacs-additional-fontsets)
                  '(aquamacs-additional-fontsets))
             ;; retain for backwards compatibility
@@ -1448,8 +1452,10 @@ listed here."
                       (emkm-name (car x)))
                     (and (boundp 'emulate-mac-keyboard-mode-maps)
                          emulate-mac-keyboard-mode-maps))))
-  (put 'ns-tool-bar-display-mode 'alternative-standard-value '((quote both)))   ; default is nil, but that means C code sets it to system's default.
-  (put 'ns-tool-bar-size-mode 'alternative-standard-value '((quote regular)))   ; default is nil, but that means C code sets it to system's default.
+  (when (boundp 'ns-tool-bar-display-mode)
+    (put 'ns-tool-bar-display-mode 'alternative-standard-value '((quote both))))   ; default is nil, but that means C code sets it to system's default.
+  (when (boundp 'ns-tool-bar-size-mode)
+    (put 'ns-tool-bar-size-mode 'alternative-standard-value '((quote regular))))   ; default is nil, but that means C code sets it to system's default.
 
   (defvar aquamacs-menu-bar-customize-options-to-save
     '(scroll-bar-mode

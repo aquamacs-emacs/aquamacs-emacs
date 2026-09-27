@@ -484,7 +484,7 @@ Hold Meta while dragging to set background color for the face."
   ;; (setq aquamacs-color-panel-target-face (aquamacs-default-face-in-effect)
   ;; 	aquamacs-color-panel-target-frame (selected-frame)
   ;; 	aquamacs-color-panel-target-prop :foreground)
-  (ns-popup-color-panel)
+  (ns-popup-color-panel nil (face-attribute (aquamacs-default-face-in-effect) :foreground nil t))
   (message "Drag and drop colors onto text to set the according face foreground. Hold Option for background color."))
 
 (defun aquamacs-select-foreground-color (&optional frame)

@@ -6203,6 +6203,12 @@ ns_term_shutdown (int sig)
   if ([NSApp respondsToSelector:@selector(invalidateRestorableState)])
     [NSApp invalidateRestorableState];
 
+  /* Exclude the shared spelling/grammar panel from window state
+     restoration, same as the color panel (Fns_popup_color_panel in
+     nsfns.m) -- it's a system-wide panel, not part of our own frame
+     state. */
+  [[[NSSpellChecker sharedSpellChecker] spellingPanel] setRestorable: NO];
+
   [NSApp setServicesProvider: NSApp];
 
   [self antialiasThresholdDidChange:nil];

@@ -1723,6 +1723,10 @@ DEFUN ("ns-popup-color-panel", Fns_popup_color_panel, Sns_popup_color_panel,
       [[NSColorPanel sharedColorPanel] setColor:[[col retain] autorelease]];
     }
 
+  NSColorPanel *panel = [NSColorPanel sharedColorPanel];
+  [panel setCollectionBehavior: (panel.collectionBehavior
+                                 | NSWindowCollectionBehaviorMoveToActiveSpace)];
+  [panel setRestorable: NO];
  [NSApp orderFrontColorPanel: NSApp];
   return Qnil;
 }
