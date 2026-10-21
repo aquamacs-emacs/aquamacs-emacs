@@ -10912,39 +10912,32 @@ contains the list of implementations currently supported for this command."
 ;;   :group 'Aquamacs
 ;;   :type '(choice (const nil) (const t)))
 
-(defvar smart-spacing--prev-filter-buffer-substring-function nil)
 (define-minor-mode smart-spacing-mode
- "Smart spacing: word-wise kill&yank.
+  "Smart spacing: word-wise kill&yank.
 When this mode is enabled, kill and yank operations support
 word-wise editing.  Afer killing (copying) a word or several
 words, the text will be inserted as a full phrase when
-yanking. That means that spaces around the word may be inserted
+yanking.That means that spaces around the word may be inserted
 during yanking, and spaces and other word delimiters are removed
 during killing as necessary to leave only one space between
 words.
 
-During killing, smart-spacing-mode behaves conservatively.  It
+During killing, `smart-spacing-mode' behaves conservatively.  It
 will never delete more than one extra space at a time.
 
 This feature is part of Aquamacs."
- :group 'convenience
- :lighter " Spc"
+  :group 'convenience
+  :lighter " Spc"
 
- (if smart-spacing-mode
-     ;; don't set it again (overwriting the original function)
-       (unless (eq filter-buffer-substring-function
-		   'smart-spacing-filter-buffer-substring)
-	 (setq smart-spacing--prev-filter-buffer-substring-function
-	       filter-buffer-substring-function)
-	 (setq filter-buffer-substring-function
-	       'smart-spacing-filter-buffer-substring))
-   (if (eq filter-buffer-substring-function
-	   'smart-spacing-filter-buffer-substring)
-       (setq filter-buffer-substring-function
-	     (or smart-spacing--prev-filter-buffer-substring-function
-		 ;; default:
-		 #'buffer-substring--filter)))
-   (setq smart-spacing--prev-filter-buffer-substring-function nil)))
+  ;; Use advice on the buffer local value of
+  ;; filter-buffer-substring-function so that smart-spacing-mode
+  ;; doesn't interfere with other functions that advise it (e.g.,
+  ;; nxml-mode).
+  (if smart-spacing-mode
+      (add-function :around (local 'filter-buffer-substring-function)
+		    #'smart-spacing-filter-buffer-substring)
+    (remove-function (local 'filter-buffer-substring-function)
+		     #'smart-spacing-filter-buffer-substring)))
 
 (defun turn-on-smart-spacing-mode ()
   (interactive)
@@ -10992,8 +10985,10 @@ the point is when the command is called.")
        (> pos (point-min))
        (equal "\n" (buffer-substring-no-properties  (1- pos) pos))))
 
-(defun smart-spacing-filter-buffer-substring (beg end &optional delete)
-  "Like `filter-buffer-substring', but add spaces around content if region is a phrase."
+(defun smart-spacing-filter-buffer-substring (orig-fun beg end &optional delete)
+  "Like `filter-buffer-substring', but add spaces around content if region is a phrase.
+Used as `:around' advice on `filter-buffer-substring-function';
+ORIG-FUN is the function being advised."
   (if smart-spacing-mode
       (let* ((from (min beg end)) (to (max beg end))
 	     (point-at-end (eq (point) end))
@@ -11005,9 +11000,7 @@ the point is when the command is called.")
 	       (smart-spacing-char-is-word-boundary to (1+ to))))
 	     ;; the following is destructive (side-effect).
 	     ;; do after checking for word boundaries.
-	     (filter-buffer-substring-function (or smart-spacing--prev-filter-buffer-substring-function
-						   #'buffer-substring--filter))
-	     (string (filter-buffer-substring beg end delete)))
+	     (string (funcall orig-fun beg end delete)))
 	(when use-smart-string
 	  (put-text-property 0 (length string)
 			     'yank-handler
@@ -11017,9 +11010,7 @@ the point is when the command is called.")
 	    (smart-remove-remaining-spaces from point-at-end)))
 	string)
     ;; smart-spacing is off, but this function is called anyway:
-    (let ((filter-buffer-substring-function (or smart-spacing--prev-filter-buffer-substring-function
-						#'buffer-substring--filter)))
-      (filter-buffer-substring beg end delete))))
+    (funcall orig-fun beg end delete)))
 
 (defun smart-delete-region (from to)
   (if (and smart-spacing-mode
