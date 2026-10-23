@@ -880,6 +880,7 @@ yes-or-no prompts - y or n will do."
 
   (require 'aquamacs-tools)
   (ats "aquamacs-tools done")
+  (require 'smart-spacing) ; before osxkeys and text-mode-hook defaults
   ;; Stop Emacs from asking for "y-e-s", when a "y" will do.
 
   (require 'mac-extra-functions)

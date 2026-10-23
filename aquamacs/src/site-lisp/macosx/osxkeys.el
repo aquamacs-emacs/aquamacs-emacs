@@ -266,7 +266,7 @@ With argument, do this that many times."
   (if (and transient-mark-mode mark-active)
       (kill-region (region-beginning) (region-end))
     (if smart-spacing-mode
-        (smart-delete-region (point) (progn (forward-word arg) (point)))
+        (smart-spacing-delete-region (point) (progn (forward-word arg) (point)))
       (kill-word arg))))
 
     ;; (kill-region (point)

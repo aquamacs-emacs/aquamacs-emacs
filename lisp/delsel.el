@@ -125,13 +125,7 @@ information on adapting behavior of commands in Delete Selection mode."
 If KILLP is non-nil, or if called interactively with a prefix argument,
 the active region is killed instead of deleted."
   (interactive "P")
-  (let ((prev-buffer-undo-list buffer-undo-list)
-        (smart-spacing-mode
-         (and smart-spacing-mode
-              (memq this-command
-                    '(delete-char
-                      delete-backward-char
-                      cua-delete-region)))))
+  (let ((prev-buffer-undo-list buffer-undo-list))
     (cond
      (killp
       ;; Don't allow `kill-region' to change the value of `this-command'.

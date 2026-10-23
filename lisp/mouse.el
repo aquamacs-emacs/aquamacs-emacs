@@ -2105,13 +2105,15 @@ if `mouse-drag-copy-region' is non-nil)."
       (if mouse-drag-copy-region
 
           ;; don't make a duplicate entry, just delete.
-          ;; Aquamacs: use smart-delete-region always
-          ;; XXX It's not clear that smart-delete-region is the right
+          ;; Aquamacs: use smart-spacing-delete-region always
+          ;; XXX It's not clear that smart-spacing-delete-region is the right
           ;; choice. That change was made before Emacs switched to
           ;; using region-extract-function. This probably requires a
           ;; closer look.
           ;; (funcall region-extract-function 'delete-only)
-          (smart-delete-region (mark t) (point))
+          (if (fboundp 'smart-spacing-delete-region)
+              (smart-spacing-delete-region (mark t) (point))
+            (delete-region (mark t) (point)))
         ;; Aquamacs comment XXX
         ;; to do: the following should be "smart"
         ;; (but that was not done by Aquamacs 3.6)
