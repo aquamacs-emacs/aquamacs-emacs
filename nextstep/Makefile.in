@@ -81,7 +81,10 @@ ${ns_applibexecdir}/${AQUAMACS_PDMP}: ${ns_appdir} ${ns_check_file} ../src/emacs
 	# This seems to be the easiest way to get the correct
 	# fingerprint into the filename at build time. The script to
 	# make the bundle can then copy the file into the full app.
-	ln $@ ${ns_applibexecdir}/Aquamacs-$(shell ../src/emacs --fingerprint).pdmp
+	# Remove links named for earlier fingerprints, and use -f since
+	# a Lisp-only rebuild keeps the same fingerprint.
+	rm -f ${ns_applibexecdir}/Aquamacs-*.pdmp
+	ln -f $@ ${ns_applibexecdir}/Aquamacs-$(shell ../src/emacs --fingerprint).pdmp
 
 .PHONY: FORCE
 
