@@ -846,10 +846,13 @@ This functionality is considered to be migrated from `twittering-mode'."
    (revive:prop-get-value x 'twittering-timeline-spec-string)))
 
 
-(defvar revive:app-restore-path user-emacs-directory)
+;; Set at runtime by `revive:setup': this file is preloaded into the
+;; dump, where the preferences directories are not yet known.
+(defvar revive:app-restore-path nil)
 (defvar revive:desktop-base-file-name "SessionDesktop.el")
 (defvar revive:frame-configuration-to-restore nil "This variable is typically set by the desktop file.
-Its value is evaluated after loading the file in `revive:restore-application-state'.")
+Session files written by older versions of revive set it.  It is no
+longer evaluated; `revive-desktop' discards it after loading.")
 
 ;;;###autoload
 (defun revive-desktop (&optional file auto)
@@ -878,12 +881,17 @@ Similar to `resume', though using `desktop' to restore buffers."
 				  revive:desktop-base-file-name))
 	(desktop-missing-file-warning nil)
 	(desktop-load-locked-desktop t))
-    (flet ((y-or-n-p (&rest args) t)
-	   (yes-or-no-p (&rest args) t)
-           (desktop-clear nil))
+    ;; cl-letf on symbol-function rebinds globally, as the old flet did
+    ;; (cl-flet would be lexical and not affect desktop-read).
+    (cl-letf (((symbol-function 'y-or-n-p) (lambda (&rest _) t))
+	      ((symbol-function 'yes-or-no-p) (lambda (&rest _) t))
+	      ((symbol-function 'desktop-clear) #'ignore))
       (desktop-read (if file (if (file-directory-p file) file (file-name-directory file)) revive:app-restore-path))
-      ;; restore window config, if any
-      (eval revive:frame-configuration-to-restore)
+      ;; Frames and windows are restored by desktop itself
+      ;; (`desktop-restore-frames').  Discard any frame configuration
+      ;; written by older versions of revive (e.g., Aquamacs 3); the
+      ;; window-configuration code it calls is commented out earlier
+      ;; in this file.
       (setq revive:frame-configuration-to-restore nil))))
 
 (defun revive:restore-frame (fp fc)
@@ -949,9 +957,11 @@ though uses `desktop' to restore buffers."
 				    (file-name-nondirectory file)
 				  revive:desktop-base-file-name))
 	(desktop-save-hook desktop-save-hook))
-    (add-hook 'desktop-save-hook #'revive:print-frame-states)
-    (flet ((y-or-n-p (&rest args) t)
-	   (yes-or-no-p (&rest args) t)) 
+    ;; Frames and windows are saved by desktop itself
+    ;; (`desktop-restore-frames'), so `revive:print-frame-states' is
+    ;; no longer added to `desktop-save-hook'.
+    (cl-letf (((symbol-function 'y-or-n-p) (lambda (&rest _) t))
+	      ((symbol-function 'yes-or-no-p) (lambda (&rest _) t)))
       (desktop-save (if file (if (file-directory-p file)
 				 file
 			       (file-name-directory file)) revive:app-restore-path) 
@@ -982,15 +992,15 @@ Process buffers are not stored."
 (defun revive:revive-desktop (&optional delete-frames)
   "Automatically restores desktop.
 Does nothing if `revive-desktop-after-launching' is set to `never'.
-If DELETE-FRAMES is non-nil, delete all pre-existing frames."
+DELETE-FRAMES is ignored: desktop reuses or deletes pre-existing
+frames itself when it restores frames (see
+`desktop-restore-reuses-frames')."
   (interactive)
   (unless (eq 'never revive-desktop-after-launching)
     (if (boundp 'ns-session-restore-request)
 	(setq ns-session-restore-request 'restored))
     (condition-case err
-	(let ((frames (visible-frame-list)))
-	  (revive-desktop nil 'auto)
-	  (mapcar #'delete-frame frames))
+	(revive-desktop nil 'auto)
       (error (message "Error while restoring application state: %s" err)))))
 
 (defun revive:auto-save-desktop ()
@@ -1015,6 +1025,11 @@ See also `revive-desktop-after-launching'."
       (revive:revive-desktop 'delete-frames))))
 
 (defun revive:setup ()
+  (unless revive:app-restore-path
+    (setq revive:app-restore-path
+	  (if (boundp 'aquamacs-preferences-directory)
+	      aquamacs-preferences-directory
+	    user-emacs-directory)))
   (when (not noninteractive)
     (add-hook 'kill-emacs-hook #'revive:auto-save-desktop)
     (add-hook 'after-init-hook #'revive:after-application-start 'append)
