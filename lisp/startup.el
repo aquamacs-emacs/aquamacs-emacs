@@ -1521,11 +1521,17 @@ please check its value")
     ;; be loaded from site-run-file and wants to test if -q was given
     ;; should check init-file-user instead, since that is already set.
     ;; See cus-edit.el for an example.
+
+    ;; Aquamacs uses site-start as the entry point to loading Aquamacs
+    ;; lisp code. Since it doesn't run in environments where having a
+    ;; separate site-run-file makes sense, it doesn't follow the Emacs
+    ;; general preference to only allow individual users to disable
+    ;; the startup screen, so the guard in the main Emacs code for
+    ;; that has been removed. Aquamacs disables the startup screen
+    ;; from site-start.el.
+
     (if site-run-file
-        ;; Sites should not disable the startup screen.
-        ;; Only individuals should disable the startup screen.
-        (let ((inhibit-startup-screen inhibit-startup-screen))
-	  (load site-run-file t t)))
+	(load site-run-file t t))
 
     ;; Load that user's init file, or the default one, or none.
     (startup--load-user-init-file
