@@ -32,7 +32,8 @@
   (memq initial-window-system '(mac ns)))
 
 (defun aquamacs-ask-for-confirmation (text long &optional yes-button
-                                           no-button sheet no-cancel)
+                                           no-button sheet no-cancel
+                                           help help-button)
   "Ask for confirmation of user action with prompt TEXT.
 Uses minibuffer to prompt unless this was invoked through a menu
 action.  If LONG is t, use longer \"yes/no\" for responses unless
@@ -41,7 +42,10 @@ YES-BUTTON as text for the Yes option; NO-BUTTON for the no
 option.  Optional SHEET gives position as used by
 `x-popup-dialog'. When optional NO-CANCEL is t, use Cancel in the
 display instead of No and cancel the operation with quit instead
-of returning a value."
+of returning a value.  Optional HELP is a function of no arguments
+returning a string of details; the user can see it by typing `?'
+in the minibuffer or with a HELP-BUTTON (default \"Details...\")
+button in the dialog, and is then asked again."
   (let ((f (window-frame (minibuffer-window))))
     (make-frame-visible f)
     (raise-frame f)			; make sure frame is visible
@@ -58,19 +62,30 @@ of returning a value."
 	       (smart-move-minibuffer-inside-screen f))
 	  (let ((text (if (string-match "\\(.*\\)\n" text)
 			  (match-string 1 text)
-			text)))
+			text))
+                (help-char (if help ?? help-char))
+                (help-form (if help (list 'funcall (list 'quote help)) help-form)))
 	    (if (and long (not aquamacs-quick-yes-or-no-prompt))
 		(old-yes-or-no-p text)
 	      (old-y-or-n-p text))))
-      (let ((ret (x-popup-dialog
-                  (or sheet
-                      (if (mouse-event-p last-command-event)'
-                          last-command-event)
-		      `(mouse-1 (,(selected-window) 100 (0 . 50) -1)))
-		  `(,text
-		    (,(or yes-button "Yes") . t)
-		    ,@(unless no-cancel '(("Cancel" . cancel)))
-		    (,(or no-button "No") . nil)))))
+      (let ((position (or sheet
+                          (if (mouse-event-p last-command-event)'
+                              last-command-event)
+                          `(mouse-1 (,(selected-window) 100 (0 . 50) -1))))
+            ret)
+        ;; show HELP's details and ask again until answered
+        (while (eq 'help
+                   (setq ret (x-popup-dialog
+                              position
+                              `(,text
+                                (,(or yes-button "Yes") . t)
+                                ,@(unless no-cancel '(("Cancel" . cancel)))
+                                (,(or no-button "No") . nil)
+                                ,@(if help
+                                      `((,(or help-button "Details...") . help)))))))
+          (let ((help-form (list 'funcall (list 'quote help))))
+            (help-form-show))
+          (redisplay t))
 	(if (eq ret 'cancel)
 	    (keyboard-quit))
 	ret))))

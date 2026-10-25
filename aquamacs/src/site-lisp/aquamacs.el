@@ -502,26 +502,51 @@ have changed."
 ;;				'aquamacs-additional-fontsets
 ;;				'initial-frame-alist
 ;;				'transient-mark-mode))
+(defun aquamacs-describe-changed-options (changed)
+  "Return a description of unsaved option CHANGED, a list of variables.
+Also mention face changes if `aquamacs-faces-changed' is set."
+  (let ((show (lambda (form)
+                (truncate-string-to-width
+                 (condition-case nil (prin1-to-string (eval form t))
+                   (error "?"))
+                 60 nil nil "..."))))
+    (concat "Unsaved option changes:\n\n"
+            (mapconcat
+             (lambda (symbol)
+               (format "  %s\n    now:   %s\n    saved: %s\n"
+                       symbol
+                       (funcall show `(funcall #',(or (get symbol 'custom-get)
+                                                       'default-value)
+                                               ',symbol))
+                       (funcall show (car (or (get symbol 'saved-value)
+                                              (get symbol 'standard-value))))))
+             changed "")
+            (if aquamacs-faces-changed
+                "  Faces or frame defaults (e.g., from Adopt Face and Frame Parameters as Frame Default)\n"
+              ""))))
+
 (defun aquamacs-ask-to-save-options ()
   "Checks if options need saving and allows to do that.
 Returns t."
   (interactive)
   (condition-case nil
-      (let* ((changed (aquamacs-menu-bar-changed-options)))
-    (if (and (or aquamacs-faces-changed
-                 (filter-list changed
-                          (list 'aquamacs-customization-version-id
-                                'smart-frame-prior-positions
-                                'aquamacs-additional-fontsets
-                                'initial-frame-alist
-                                'transient-mark-mode)))
+      (let* ((changed (filter-list (aquamacs-menu-bar-changed-options)
+                                   (list 'aquamacs-customization-version-id
+                                         'smart-frame-prior-positions
+                                         'aquamacs-additional-fontsets
+                                         'initial-frame-alist
+                                         'transient-mark-mode))))
+    (if (and (or aquamacs-faces-changed changed)
              ;; depends on return value of `aquamacs-menu-bar-options-save'
              ;; NOT implemented for the standard menu-bar-options-save!
              ;; ask user whether to accept these saved changes
              (if (eq aquamacs-save-options-on-quit 'ask)
-                 (progn
-                   ;;              (print changed)
-                   (aquamacs-ask-for-confirmation "Options have changed - save them? \nYour customizations will be lost if you don't save them." nil "Save" "Don't Save"))
+                 (aquamacs-ask-for-confirmation
+                  "Options have changed - save them? \nYour customizations will be lost if you don't save them."
+                  nil "Save" "Don't Save" nil nil
+                  (lambda ()
+                    (aquamacs-describe-changed-options changed))
+                  "Show Changes")
                aquamacs-save-options-on-quit))
         (aquamacs-menu-bar-options-save)))
     (error nil)) ;; in case of quit
