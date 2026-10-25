@@ -53,6 +53,8 @@
 ;; Declaring it here ensures the byte compiler treats it as a
 ;; dynamic (special) variable, not a free lexical variable.
 (defvar flyspell-ns-session-words)
+(declare-function org-fold-show-context "org-fold" (&optional key))
+(declare-function outline-show-entry "outline" ())
 
 (defcustom flyspell-mode-auto-on t
   "Non-nil means that executing `flyspell-region' or `flyspell-buffer'
@@ -240,6 +242,14 @@ NOSKIP is non-nil, don't skip the current highlighted word (if any)."
       ;; misspelling found; set region to mispelled word, and show
       ;;   in spelling panel
       (goto-char misspell-end)
+      ;; unfold folded text, as isearch does, so the next search
+      ;;   doesn't start over from the visible heading
+      (when (invisible-p misspell-beg)
+        (cond ((derived-mode-p 'org-mode)
+               (org-fold-show-context 'isearch))
+              ((or (derived-mode-p 'outline-mode)
+                   (bound-and-true-p outline-minor-mode))
+               (outline-show-entry))))
       (push-mark misspell-beg 'no-msg 'activate)
       (setq word (buffer-substring misspell-beg misspell-end))
       (ns-spellchecker-show-word word)))

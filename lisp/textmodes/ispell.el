@@ -1847,7 +1847,70 @@ both existing buffers and buffers that you subsequently create."
   ;; previous code did.
 
   ;; Define commands in menu in opposite order you want them to appear.
-  (let ((map (make-sparse-keymap "Spell")))
+  (let* ((map (make-sparse-keymap "Spell"))
+         ;; Aquamacs: non-nil when the macOS spell checker is in use.
+         ;; `ispell-program-name' is unbound until ispell.el is
+         ;; loaded, and NSSpellChecker is its default in Aquamacs.
+         (ns '(or (not (boundp 'ispell-program-name))
+                  (equal ispell-program-name "NSSpellChecker")))
+         (not-ns `(not ,ns))
+         (ispell-submenu (make-sparse-keymap "Ispell"))
+         (flyspell-modes (make-sparse-keymap "Flyspell modes")))
+
+    ;; Aquamacs: Ispell commands, shown in a submenu when the macOS
+    ;; spell checker is in use.
+    (define-key ispell-submenu [ispell-complete-word]
+                `(menu-item ,(purecopy "Complete Word") ispell-complete-word
+		            :help ,(purecopy "Complete word at cursor using dictionary")))
+    (define-key ispell-submenu [ispell-complete-word-interior-frag]
+                `(menu-item ,(purecopy "Complete Word Fragment")
+                            ispell-complete-word-interior-frag
+		            :help ,(purecopy "Complete word fragment at cursor")))
+    (define-key ispell-submenu [ispell-continue]
+                `(menu-item ,(purecopy "Continue Spell-Checking") ispell-continue
+		            :enable (and (boundp 'ispell-region-end)
+			                 (marker-position ispell-region-end)
+			                 (equal (marker-buffer ispell-region-end)
+				                (current-buffer)))
+		            :help ,(purecopy "Continue spell checking last region")))
+    (define-key ispell-submenu [ispell-word]
+                `(menu-item ,(purecopy "Spell-Check Word") ispell-word
+		            :help ,(purecopy "Spell-check word at cursor")))
+    (define-key ispell-submenu [ispell-comments-and-strings]
+                `(menu-item ,(purecopy "Spell-Check Comments")
+                            ispell-comments-and-strings
+		            :help ,(purecopy "Spell-check only comments and strings")))
+    (define-key ispell-submenu [ispell-region]
+                `(menu-item ,(purecopy "Spell-Check Region") ispell-region
+		            :enable mark-active
+		            :help ,(purecopy "Spell-check text in marked region")))
+    (define-key ispell-submenu [ispell-message]
+                `(menu-item ,(purecopy "Spell-Check Message") ispell-message
+		            :visible (eq major-mode 'mail-mode)
+		            :help ,(purecopy "Skip headers and included message text")))
+    (define-key ispell-submenu [ispell-buffer]
+                `(menu-item ,(purecopy "Spell-Check Buffer") ispell-buffer
+		            :help ,(purecopy "Check spelling of selected buffer")))
+
+    ;; Aquamacs: choose the modes in which Flyspell is turned on.
+    (define-key flyspell-modes [flyspell-no-modes]
+                `(menu-item ,(purecopy "No Modes") flyspell-no-modes
+		            :button (:radio . (and (not (memq 'turn-on-flyspell
+						              text-mode-hook))
+					           (not (bound-and-true-p
+						         global-flyspell-mode))))
+		            :help ,(purecopy "Turn off automatic spellchecking by mode")))
+    (define-key flyspell-modes [flyspell-text-modes]
+                `(menu-item ,(purecopy "Text Modes") flyspell-text-modes
+		            :button (:radio . (and (memq 'turn-on-flyspell text-mode-hook)
+					           (not (bound-and-true-p
+						         global-flyspell-mode))))
+		            :help ,(purecopy "Turn on flyspell in text modes only")))
+    (define-key flyspell-modes [flyspell-all-modes]
+                `(menu-item ,(purecopy "All Modes") flyspell-all-modes
+		            :button (:radio . (bound-and-true-p global-flyspell-mode))
+		            :help ,(purecopy "Turn on flyspell in all modes")))
+
     (define-key map [ispell-change-dictionary]
                 `(menu-item ,(purecopy "Change Dictionary...") ispell-change-dictionary
 		            :help ,(purecopy "Supply explicit dictionary file name")))
@@ -1856,10 +1919,12 @@ both existing buffers and buffers that you subsequently create."
 		            (lambda () (interactive) (ispell-kill-ispell nil 'clear))
 		            :enable (and (boundp 'ispell-process) ispell-process
 			                 (eq (ispell-process-status) 'run))
+		            :visible ,not-ns
 		            :help ,(purecopy "Terminate Ispell subprocess")))
     (define-key map [ispell-pdict-save]
                 `(menu-item ,(purecopy "Save Dictionary")
 		            (lambda () (interactive) (ispell-pdict-save t t))
+		            :visible ,not-ns
 		            :help ,(purecopy "Save personal dictionary")))
     (define-key map [ispell-customize]
                 `(menu-item ,(purecopy "Customize...")
@@ -1870,17 +1935,32 @@ both existing buffers and buffers that you subsequently create."
                 `(menu-item ,(purecopy "Help")
 		            (lambda () (interactive) (describe-function 'ispell-help))
 		            :help ,(purecopy "Show standard Ispell keybindings and commands")))
+    ;; Aquamacs
+    (define-key map [ispell-submenu]
+                `(menu-item ,(purecopy "Ispell") ,ispell-submenu
+                            :visible ,ns))
+    (define-key map [spellcheck-menu-separator]
+                `(menu-item ,(purecopy "--")))
+    (define-key map [flyspell-modes-submenu]
+                `(menu-item ,(purecopy "Check Spelling While Typing in Modes")
+                            ,flyspell-modes))
     (define-key map [flyspell-mode]
-                `(menu-item ,(purecopy "Automatic spell checking (Flyspell)")
+                `(menu-item ,(purecopy "Check Spelling While Typing (in this buffer)")
 		            flyspell-mode
 		            :help ,(purecopy "Check spelling while you edit the text")
 		            :button (:toggle . (bound-and-true-p flyspell-mode))))
+    ;; Aquamacs
+    (define-key map [flyspell-buffer]
+                `(menu-item ,(purecopy "Mark All Misspellings") flyspell-buffer
+		            :help ,(purecopy "Scan full buffer for misspellings")))
     (define-key map [ispell-complete-word]
                 `(menu-item ,(purecopy "Complete Word") ispell-complete-word
+		            :visible ,not-ns
 		            :help ,(purecopy "Complete word at cursor using dictionary")))
     (define-key map [ispell-complete-word-interior-frag]
                 `(menu-item ,(purecopy "Complete Word Fragment")
                             ispell-complete-word-interior-frag
+		            :visible ,not-ns
 		            :help ,(purecopy "Complete word fragment at cursor")))
 
     (define-key map [ispell-continue]
@@ -1889,26 +1969,47 @@ both existing buffers and buffers that you subsequently create."
 			                 (marker-position ispell-region-end)
 			                 (equal (marker-buffer ispell-region-end)
 				                (current-buffer)))
+		            :visible ,not-ns
 		            :help ,(purecopy "Continue spell checking last region")))
     (define-key map [ispell-word]
                 `(menu-item ,(purecopy "Spell-Check Word") ispell-word
+		            :visible ,not-ns
 		            :help ,(purecopy "Spell-check word at cursor")))
     (define-key map [ispell-comments-and-strings]
                 `(menu-item ,(purecopy "Spell-Check Comments")
                             ispell-comments-and-strings
+		            :visible ,not-ns
 		            :help ,(purecopy "Spell-check only comments and strings")))
 
     (define-key map [ispell-region]
                 `(menu-item ,(purecopy "Spell-Check Region") ispell-region
 		            :enable mark-active
+		            :visible ,not-ns
 		            :help ,(purecopy "Spell-check text in marked region")))
     (define-key map [ispell-message]
                 `(menu-item ,(purecopy "Spell-Check Message") ispell-message
-		            :visible (eq major-mode 'mail-mode)
+		            :visible (and (eq major-mode 'mail-mode) ,not-ns)
 		            :help ,(purecopy "Skip headers and included message text")))
     (define-key map [ispell-buffer]
                 `(menu-item ,(purecopy "Spell-Check Buffer") ispell-buffer
+		            :visible ,not-ns
 		            :help ,(purecopy "Check spelling of selected buffer")))
+
+    ;; Aquamacs: the macOS spelling panel.
+    (define-key map [nsspellchecker-panel-hide]
+                `(menu-item ,(purecopy "Hide Spelling Panel")
+                            spellchecker-panel-or-ispell
+		            :visible (and ,ns (ns-spellchecker-panel-visible-p))
+		            :help ,(purecopy "Hide the macOS spelling panel")))
+    (define-key map [nsspellchecker-panel-show]
+                `(menu-item ,(purecopy "Show Spelling Panel")
+                            spellchecker-panel-or-ispell
+		            :visible (and ,ns (not (ns-spellchecker-panel-visible-p)))
+		            :help ,(purecopy "Show the macOS spelling panel")))
+    (define-key map [nsspellcheck]
+                `(menu-item ,(purecopy "Spellcheck Now") spellcheck-now
+		            :visible ,ns
+		            :help ,(purecopy "Check spelling with the macOS spell checker")))
     map)
   "Key map for ispell menu.")
 ;;;###autoload
