@@ -621,12 +621,159 @@ static const subst_t key_symbols[] = {
   {"<backtab>",    "⇤"},
 };
 
+/* Aquamacs: return the Emacs modifier symbol named by PREFIX, the
+   letter key-description uses for it (as in "A-").  */
+static Lisp_Object
+modifier_of_prefix (char prefix)
+{
+  switch (prefix)
+    {
+    case 'A': return Qalt;
+    case 'C': return Qcontrol;
+    case 'H': return Qhyper;
+    case 'M': return Qmeta;
+    case 's': return Qsuper;
+    default:  return Qnil;
+    }
+}
+
+/* Aquamacs: return the Mac symbol for the physical key that produces
+   Emacs modifier MOD under the current ns-*-modifier settings, or
+   NULL if no key produces it.  */
+static const char *
+modifier_glyph (Lisp_Object mod)
+{
+  Lisp_Object left[] = { ns_control_modifier, ns_alternate_modifier,
+                         ns_command_modifier };
+  Lisp_Object right[] = { ns_right_control_modifier,
+                          ns_right_alternate_modifier,
+                          ns_right_command_modifier };
+  static const char *glyphs[] = { "⌃", "⌥", "⌘" };
+
+  for (int i = 0; i < ARRAYELTS (glyphs); i++)
+    {
+      Lisp_Object l = left[i], r = right[i];
+      if (CONSP (l))
+        l = plist_get (l, QCordinary);
+      if (CONSP (r))
+        r = plist_get (r, QCordinary);
+      if (EQ (r, Qleft))
+        r = l;
+      if (EQ (l, mod) || EQ (r, mod))
+        return glyphs[i];
+    }
+  return NULL;
+}
+
+/* Aquamacs: write a Mac-style rendering of the single key TOK (of
+   length TOKLEN, e.g. "A-S-s") to OUT, e.g. "⇧⌘S".  Return the end
+   of the output.  */
+static char *
+prettify_key_token (const char *tok, ptrdiff_t toklen, char *out)
+{
+  /* Modifier prefixes in the order key-description emits them.  */
+  static const char prefixes[] = "ACHMs";
+  /* Mac symbols in Apple's display order.  */
+  static const char *order[] = { "⌃", "⌥", "⇧", "⌘" };
+  bool have[sizeof prefixes - 1] = { false };
+  bool shift = false;
+  const char *p = tok, *end = tok + toklen;
+
+  /* Peel off "X-" prefixes; "C--" leaves "-" as the base key.  */
+  while (end - p > 2 && p[1] == '-' && strchr ("ACHMSs", p[0]))
+    {
+      if (p[0] == 'S')
+        shift = true;
+      else
+        have[strchr (prefixes, p[0]) - prefixes] = true;
+      p += 2;
+    }
+  ptrdiff_t baselen = end - p;
+  if (baselen == 1 && p[0] >= 'A' && p[0] <= 'Z')
+    shift = true;
+
+  /* If no physical key produces one of the modifiers, keep the whole
+     key in Emacs notation (e.g. "s-u"), rather than mixing notations
+     or upcasing the key so it reads as shifted.  */
+  for (int i = 0; i < ARRAYELTS (have); i++)
+    if (have[i] && !modifier_glyph (modifier_of_prefix (prefixes[i])))
+      {
+        memcpy (out, tok, toklen);
+        return out + toklen;
+      }
+
+  for (int o = 0; o < ARRAYELTS (order); o++)
+    {
+      bool used = o == 2 && shift;
+      for (int i = 0; i < ARRAYELTS (have); i++)
+        if (have[i]
+            && modifier_glyph (modifier_of_prefix (prefixes[i])) == order[o])
+          used = true;
+      if (used)
+        {
+          ptrdiff_t n = strlen (order[o]);
+          memcpy (out, order[o], n);
+          out += n;
+        }
+    }
+
+  for (int i = 0; i < ARRAYELTS (key_symbols); i++)
+    if (strlen (key_symbols[i].from) == baselen
+        && !memcmp (p, key_symbols[i].from, baselen))
+      {
+        ptrdiff_t n = strlen (key_symbols[i].to);
+        memcpy (out, key_symbols[i].to, n);
+        return out + n;
+      }
+
+  if (baselen == 1 && p[0] >= 'a' && p[0] <= 'z')
+    *out++ = p[0] - 'a' + 'A';
+  else
+    {
+      memcpy (out, p, baselen);
+      out += baselen;
+    }
+  return out;
+}
+
+/* Aquamacs: transform the key sequence KEY using Mac modifier
+   symbols, e.g. "C-x A-s" becomes "⌃X ⌘S".  */
+static char *
+prettify_key_mac (const char *key)
+{
+  /* Each 2-byte "X-" can become a 3-byte symbol, so twice the
+     length is ample.  */
+  ptrdiff_t len = strlen (key);
+  char *buf = xmalloc (2 * len + 1);
+  char *out = buf;
+  const char *p = key;
+
+  while (*p)
+    {
+      const char *sp = strchr (p, ' ');
+      if (!sp)
+        sp = p + strlen (p);
+      out = prettify_key_token (p, sp - p, out);
+      while (*sp == ' ')
+        *out++ = *sp++;
+      p = sp;
+    }
+  *out = '\0';
+
+  Lisp_Object result = build_string (buf);
+  xfree (buf);
+  return SSDATA (result);
+}
+
 /* Transform the key sequence KEY into something prettier by
    substituting keyboard symbols. */
 static char *
 prettify_key (const char *key)
 {
   while (*key == ' ') key++;
+
+  if (!NILP (Vns_use_mac_modifier_symbols))
+    return prettify_key_mac (key);
 
   int len = strlen (key);
   char *buf = xmalloc (len + 1);
@@ -2105,4 +2252,13 @@ syms_of_nsmenu (void)
   defsubr (&Smenu_or_popup_active_p);
 
   DEFSYM (Qdebug_on_next_call, "debug-on-next-call");
+
+  /* Aquamacs */
+  DEFVAR_LISP ("ns-use-mac-modifier-symbols", Vns_use_mac_modifier_symbols,
+	       doc: /* Non-nil means show Mac modifier symbols in menu shortcuts.
+Modifiers produced by the Command, Option and Control keys are shown
+as ⌘, ⌥ and ⌃, and Shift as ⇧, following the settings of
+`ns-command-modifier' and related variables.  This affects only how
+menus display key bindings; `key-description' is unchanged.  */);
+  Vns_use_mac_modifier_symbols = Qt;
 }
