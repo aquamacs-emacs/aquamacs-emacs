@@ -28,9 +28,6 @@
 # installed, say from Homebrew, and these may or may not work with
 # Aquamacs. Configure things accordingly.
 
-# XXX things I haven't come back to:
-# - Setting GZIP to nothing or ${which gzip} to save time in development
-
 # Print commands as executed
 set -x
 # Exit on error
@@ -131,10 +128,6 @@ CONFIG_PACKAGES="--with-gnutls \
 
 MIN_VERSION=${MIN_VERSION:="12"}
 export MACOSX_DEPLOYMENT_TARGET="${MIN_VERSION}"
-
-# GZIP can be set to the empty string in the environment to avoid the
-# overhead of compressing Emacs Lisp files during development.
-GZIP=${GZIP:=$(which gzip)}
 
 #### Below this point should normally not need to be changed. If you
 #### do find changes needed here, please submit an issue on github.
