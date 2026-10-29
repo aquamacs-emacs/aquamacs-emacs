@@ -103,6 +103,13 @@ of `user-emacs-directory'."
     (condition-case nil
         (progn
           (make-directory user-emacs-directory t)
+          ;; Keep `mac-add-standard-directories' from adding the
+          ;; package manager trees under user-emacs-directory to
+          ;; load-path (e.g., straight.el's versions/default.el
+          ;; would be loaded as default.el at startup).
+          (let ((nosearch-file (expand-file-name ".nosearch" user-emacs-directory)))
+            (unless (file-exists-p nosearch-file)
+              (write-region "" nil nosearch-file nil 'silent)))
           (make-directory temp-files-dir)
           (make-directory mail-default-directory t))
       (error nil))
