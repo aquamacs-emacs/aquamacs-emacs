@@ -9457,13 +9457,6 @@ ns_in_echo_area (void)
       type_sym = Qnil;
       strings = list1 ([data lispString]);
     }
-  /* Aqumacs: handle color drag & drop. */
-  else if ([type isEqualToString: NSColorPboardType])
-    {
-      NSColor *c = [NSColor colorFromPasteboard: pb];
-
-      ns_input_color = ns_color_to_lisp (c);
-    }
   else if ([type isEqualToString: NSFontPboardType])
     {
       /* impl based on GNUstep NSTextView.m */

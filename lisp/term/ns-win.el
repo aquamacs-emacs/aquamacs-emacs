@@ -198,10 +198,6 @@ The properties returned may include `top', `left', `height', and `width'."
 (define-key global-map [ns-power-off] 'ns-handle-power-off)
 (define-key global-map [ns-open-file] 'ns-handle-open-file)
 (define-key global-map [ns-open-temp-file] [ns-open-file])
-(define-key global-map [ns-drag-file] 'ns-handle-drag-file)
-(define-key global-map [ns-drag-color] 'ns-set-foreground-at-mouse)
-(define-key global-map [S-ns-drag-color] 'ns-set-background-at-mouse)
-(define-key global-map [ns-drag-text] 'ns-insert-text)
 (define-key global-map [ns-check-spelling] 'ns-respond-to-find-next-misspelling)
 (define-key global-map [ns-spelling-change] 'ns-respond-to-change-spelling)
 (define-key global-map [ns-open-file-line] 'ns-open-file-select-line)
@@ -420,14 +416,6 @@ See `ns-insert-working-text'."
 
 ;;;; Inter-app communications support.
 
-
-(defvar ns-input-text)			; nsterm.m
-
-(defun ns-insert-text ()
-  "Insert contents of `ns-input-text' at point."
-  (interactive)
-  (insert ns-input-text)
-  (setq ns-input-text nil))
 
 (defun ns-insert-file ()
   "Insert contents of file `ns-input-file' like insert-file but with less
@@ -928,51 +916,6 @@ Get face that determines the foreground color."
 	(with-current-buffer (window-buffer (posn-window pos))
 	  (aquamacs-default-face-in-effect)))
     'default))
-
-(defvar ns-input-color)			; nsterm.m
-
-(defun ns-set-color-at-mouse (event attribute)
-  "Set the color at the mouse location to `ns-input-color'.
-EVENT is a mouse event, and ATTRIBUTE is either
-`foreground-color' or `background-color'."
-  (let ((position (event-end event)))
-    (if (not (windowp (posn-window position)))
-	(error "Position not in text area of window"))
-    (let* ((face (ns-face-at-pos position))
-	   (frame (window-frame (posn-window position)))
-	   (hint nil))
-    (cond
-     ((eq face 'cursor)
-      (modify-frame-parameters frame (list (cons 'cursor-color
-                                                 ns-input-color))))
-     ((not face)
-	(modify-frame-parameters frame (list (cons attribute
-                                                 ns-input-color))))
-     (t
-      (if (eq attribute 'foreground-color)
-	  (progn
-	    (set-face-foreground face ns-input-color frame)
-	    (setq hint (or hint (memq face '(default fringe mode-line)))))
-	(set-face-background face ns-input-color frame))
-      (let ((spec
-	     (list (list t (face-attr-construct face)))))
-	(put face 'customized-face spec)
-	(put face 'saved-face spec)
-	(custom-push-theme 'theme-face face 'user 'set spec)
-	(put face 'face-modified nil))))
-    (message "%s set for %s.%s" (capitalize (symbol-name attribute)) face
-	     (if hint " Hold Option while dragging to set background." "")))))
-
-
-(defun ns-set-foreground-at-mouse (event)
-  "Set the foreground color at the mouse location to `ns-input-color'."
-  (interactive "e")
-  (ns-set-color-at-mouse event 'foreground-color))
-
-(defun ns-set-background-at-mouse (event)
-  "Set the background color at the mouse location to `ns-input-color'."
-   (interactive "e")
-   (ns-set-color-at-mouse event 'background-color))
 
 
 (defun ns-suspend-error ()

@@ -472,21 +472,6 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
 (setq appearance-menu (make-sparse-keymap "Looks"))
 
 ;; colors menu
-(defun aquamacs-popup-color-panel ()
-  "Show the color panel.
-Drag and drop colors onto text to set the accoring face.
-Hold Meta while dragging to set background color for the face."
-  (interactive)
-  (setq aquamacs-color-panel-target-face 'none
-	aquamacs-color-panel-target-frame nil
-	aquamacs-color-panel-target-prop nil)
-  ;; direct setting - prevents drag&drop
-  ;; (setq aquamacs-color-panel-target-face (aquamacs-default-face-in-effect)
-  ;; 	aquamacs-color-panel-target-frame (selected-frame)
-  ;; 	aquamacs-color-panel-target-prop :foreground)
-  (ns-popup-color-panel nil (face-attribute (aquamacs-default-face-in-effect) :foreground nil t))
-  (message "Drag and drop colors onto text to set the according face foreground. Hold Option for background color."))
-
 (defun aquamacs-select-foreground-color (&optional frame)
   "Show color panel.
 The foreground color of the default face used in the current
@@ -699,11 +684,6 @@ modified, or in FRAME if given."
 	      :help "Select a foreground color"))
 
 (defun aquamacs-autoface-setup-menu ()
-(define-key appearance-menu [color-panel]
-  `(menu-item  "Color Panel..."
-	      aquamacs-popup-color-panel
-	      :help "Drag and drop colors"))
-
 
 (define-key menu-bar-options-menu [mouse-set-font] nil)
 (define-key appearance-menu [set-font]
@@ -791,8 +771,6 @@ modified, or in FRAME if given."
 
 (define-key global-map [ns-change-color] 'aquamacs-set-face)
 (define-key global-map [M-ns-change-color] 'aquamacs-set-face-background)
-(define-key global-map [ns-drag-color] 'ns-set-foreground-at-mouse)
-(define-key global-map [M-ns-drag-color] 'ns-set-background-at-mouse)
 
 (defun aquamacs-set-face ()
   "Respond to changeColor: event."
@@ -811,22 +789,20 @@ modified, or in FRAME if given."
 			  :background ns-input-color))
 
 (defun aquamacs-set-face-prop (face frame prop value)
-  (if (eq aquamacs-color-panel-target-face 'none) ;; general color picker used
-      (message "Drag and drop colors onto text to set the according face foreground. Hold Option for background color.")
-    (apply 'set-face-attribute face
-	   frame (list prop value))
-    (aquamacs-autoface-mark-face-to-save face)
-    (let ((spec
-    	   (list (list t (face-attr-construct face)))))
-      (put face 'customized-face spec)
-      (put face 'face-modified nil))
-    (message "%s set for %s face."
-	     (cond ((eq prop :foreground)
-		    "Foreground color")
-		   ((eq prop :background)
-		    "Background color")
-		   (t "Color"))
-	     face)))
+  (apply 'set-face-attribute face
+	 frame (list prop value))
+  (aquamacs-autoface-mark-face-to-save face)
+  (let ((spec
+	 (list (list t (face-attr-construct face)))))
+    (put face 'customized-face spec)
+    (put face 'face-modified nil))
+  (message "%s set for %s face."
+	   (cond ((eq prop :foreground)
+		  "Foreground color")
+		 ((eq prop :background)
+		  "Background color")
+		 (t "Color"))
+	   face))
 
 
 (defvar mac-font-panel-target-face 'default)
