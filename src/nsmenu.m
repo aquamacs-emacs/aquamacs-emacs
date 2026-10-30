@@ -1753,6 +1753,18 @@ ns_popup_dialog (struct frame *f, Lisp_Object header, Lisp_Object contents)
   return NO;
 }
 
+/* Aquamacs: Escape cancels the dialog, like the close button.  */
+- (BOOL)performKeyEquivalent: (NSEvent *) theEvent
+{
+  if ([theEvent type] == NSEventTypeKeyDown
+      && [[theEvent charactersIgnoringModifiers] isEqualToString: @"\e"])
+    {
+      [self windowShouldClose: self];
+      return YES;
+    }
+  return [super performKeyEquivalent: theEvent];
+}
+
 - (void) dealloc
 {
   [super dealloc];
@@ -1833,6 +1845,13 @@ ns_popup_dialog (struct frame *f, Lisp_Object header, Lisp_Object contents)
   [cell setTag: tag];
   [cell setBordered: YES];
   [cell setEnabled: YES];
+
+  /* Aquamacs: the first button is the default, activated by Return.  */
+  if (row == 0)
+    {
+      [cell setKeyEquivalent: @"\r"];
+      [self setDefaultButtonCell: cell];
+    }
 }
 
 
@@ -1900,16 +1919,19 @@ ns_popup_dialog (struct frame *f, Lisp_Object header, Lisp_Object contents)
   NSRect r, s, t;
   NSSize csize;
 
+  /* Aquamacs: lay the buttons out in a single row in standard Mac
+     order, with the first (default) button rightmost.  */
   if (cols == 1 && rows > 1)
     {
-      [matrix addColumn];
-      for (i = 0; i < rows / 2; i++)
-	{
-	  [matrix putCell: [matrix cellAtRow: (rows + 1) /2
-				      column: 0]
-		    atRow: i column: 1];
-	  [matrix removeRow: (rows + 1) / 2];
-	}
+      NSMutableArray *cells = [NSMutableArray arrayWithCapacity: rows];
+      for (i = 0; i < rows; i++)
+	[cells addObject: [matrix cellAtRow: i column: 0]];
+      [matrix renewRows: 1 columns: rows];
+      for (i = 0; i < rows; i++)
+	[matrix putCell: [cells objectAtIndex: i]
+		  atRow: 0 column: rows - 1 - i];
+      cols = rows;
+      rows = 1;
     }
 
   [matrix sizeToFit];
@@ -1953,6 +1975,13 @@ ns_popup_dialog (struct frame *f, Lisp_Object header, Lisp_Object contents)
       t.origin.x = r.origin.x;
       t.size.width = r.size.width;
     }
+
+  /* Aquamacs: right-align the buttons.  */
+  {
+    NSRect m = [matrix frame];
+    m.origin.x = t.origin.x + t.size.width - m.size.width;
+    [matrix setFrameOrigin: m.origin];
+  }
 
   r = [self frame];
   s = [(NSView *) [self contentView] frame];

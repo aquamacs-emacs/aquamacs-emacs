@@ -67,11 +67,10 @@ of returning a value."
                       (if (mouse-event-p last-command-event)'
                           last-command-event)
 		      `(mouse-1 (,(selected-window) 100 (0 . 50) -1)))
-		  (list text
-                        ;; use \r instead of y until we have multi-keyEquivs
-			`((,(or yes-button "Yes") . ?\r) . t)
-			(if no-cancel 'no-cancel 'cancel)
-			`((,(or no-button "No") . ?n) . nil)))))
+		  `(,text
+		    (,(or yes-button "Yes") . t)
+		    ,@(unless no-cancel '(("Cancel" . cancel)))
+		    (,(or no-button "No") . nil)))))
 	(if (eq ret 'cancel)
 	    (keyboard-quit))
 	ret))))
