@@ -70,8 +70,6 @@ or `CVS', and any subdirectory that contains a file named `.nosearch'."
  
 (assq-set-equal "\\.\\(xml\\|xsl\\|rng\\|xhtml\\)" 
 		'nxml-mode 'auto-mode-alist)
- 
-(assq-set-equal "<\\?xml " 'nxml-mode 'magic-mode-alist)
 
 
 ;; The following takes 100msec, so it's here
