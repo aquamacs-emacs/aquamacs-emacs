@@ -2617,7 +2617,7 @@ image_set_transform (struct frame *f, struct image *img)
   /* Determine size.  */
   int width, height;
 
-#ifdef HAVE_RSVG
+#if defined HAVE_RSVG || defined HAVE_RESVG
   /* SVGs are pre-scaled to the correct size.  */
   if (EQ (image_spec_value (img->spec, QCtype, NULL), Qsvg))
     {
@@ -10783,7 +10783,7 @@ and `imagemagick-types-inhibit'.  */)
 				 SVG
  ***********************************************************************/
 
-#ifdef HAVE_RSVG
+#if defined HAVE_RSVG || defined HAVE_RESVG
 
 /* Function prototypes.  */
 
@@ -10846,6 +10846,8 @@ svg_image_p (Lisp_Object object)
   /* Must specify either the :data or :file keyword.  */
   return fmt[SVG_FILE].count + fmt[SVG_DATA].count == 1;
 }
+
+#ifdef HAVE_RSVG
 
 /* Some versions of glib's gatomic.h define MemoryBarrier, but MinGW
    w32api 3.18 and later has its own definition.  The following gross
@@ -11077,6 +11079,8 @@ init_svg_functions (void)
 
 # endif /* !WINDOWSNT  */
 
+#endif /* HAVE_RSVG */
+
 /* Load SVG image IMG for use on frame F.  Value is true if
    successful.  */
 
@@ -11135,6 +11139,8 @@ svg_load (struct frame *f, struct image *img)
 
   return success_p;
 }
+
+#ifdef HAVE_RSVG
 
 #if LIBRSVG_CHECK_VERSION (2, 46, 0)
 static double
@@ -11618,7 +11624,326 @@ svg_load_image (struct frame *f, struct image *img, char *contents,
   return false;
 }
 
-#endif	/* defined (HAVE_RSVG) */
+#else  /* HAVE_RESVG */
+
+/* SVG rendering with resvg, used by Aquamacs instead of librsvg.
+   This follows the librsvg version of svg_load_image above: the
+   original SVG is parsed once to find its size, then wrapped in an
+   outer SVG that sets the size and the foreground and background
+   colors, and the wrapped version is rendered.  resvg doesn't support
+   the XInclude element the librsvg version uses for wrapping, so the
+   original SVG is inserted textually as a nested <svg> element
+   instead, which inherits the wrapper's colors the same way.  */
+
+# include <resvg.h>
+
+/* Options shared by all SVG images.  Loading the system fonts takes
+   tens of milliseconds, so it is done once, on first use; the
+   per-image settings are set again for each image.  */
+static resvg_options *svg_resvg_options;
+
+/* Return a pointer to the start of the root element in the SVG data
+   from P to END, skipping a byte order mark, the XML declaration,
+   processing instructions, comments and the DOCTYPE declaration.
+   Return NULL if there is no root element.  */
+static const char *
+svg_skip_prolog (const char *p, const char *end)
+{
+  if (end - p >= 3 && memcmp (p, "\xEF\xBB\xBF", 3) == 0)
+    p += 3;
+  while (p < end)
+    {
+      if (c_isspace (*p))
+	p++;
+      else if (end - p >= 2 && memcmp (p, "<?", 2) == 0)
+	{
+	  p = memmem (p, end - p, "?>", 2);
+	  if (!p)
+	    return NULL;
+	  p += 2;
+	}
+      else if (end - p >= 4 && memcmp (p, "<!--", 4) == 0)
+	{
+	  p = memmem (p, end - p, "-->", 3);
+	  if (!p)
+	    return NULL;
+	  p += 3;
+	}
+      else if (end - p >= 2 && memcmp (p, "<!", 2) == 0)
+	{
+	  /* A DOCTYPE declaration, which may have an internal subset
+	     in square brackets containing '>' characters.  */
+	  bool in_subset = false;
+	  for (p += 2; p < end; p++)
+	    if (*p == '[')
+	      in_subset = true;
+	    else if (*p == ']')
+	      in_subset = false;
+	    else if (*p == '>' && !in_subset)
+	      break;
+	  if (p == end)
+	    return NULL;
+	  p++;
+	}
+      else if (*p == '<')
+	return p;
+      else
+	return NULL;
+    }
+  return NULL;
+}
+
+/* Return a description of resvg error ERR.  */
+static const char *
+svg_resvg_error_message (int32_t err)
+{
+  switch (err)
+    {
+    case RESVG_ERROR_NOT_AN_UTF8_STR:
+      return "not UTF-8";
+    case RESVG_ERROR_SVGZ_UNSUPPORTED:
+    case RESVG_ERROR_MALFORMED_GZIP:
+      return "invalid compressed SVG";
+    case RESVG_ERROR_ELEMENTS_LIMIT_REACHED:
+      return "too many elements";
+    case RESVG_ERROR_INVALID_SIZE:
+      return "invalid size";
+    default:
+      return "invalid SVG";
+    }
+}
+
+/* Load frame F and image IMG.  CONTENTS contains the SVG XML data to
+   be parsed, SIZE is its size, and FILENAME is the name of the SVG
+   file being loaded, used to find files the SVG refers to.
+
+   Return true when successful.  */
+static bool
+svg_load_image (struct frame *f, struct image *img, char *contents,
+		ptrdiff_t size, char *filename)
+{
+  resvg_render_tree *tree = NULL;
+  char *css = NULL;
+  char *dir = NULL;
+  char *wrapped_contents = NULL;
+  unsigned char *pixels = NULL;
+  const char *errmsg = NULL;
+  int32_t err;
+  double viewbox_width, viewbox_height;
+  int width, height;
+
+  if (!svg_resvg_options)
+    {
+      svg_resvg_options = resvg_options_create ();
+      resvg_options_load_system_fonts (svg_resvg_options);
+    }
+  resvg_options *opt = svg_resvg_options;
+
+  /* Resolve relative references against the SVG file's directory.  */
+  if (filename)
+    {
+      const char *slash = strrchr (filename, '/');
+      if (slash)
+	{
+	  dir = xmalloc (slash - filename + 1);
+	  memcpy (dir, filename, slash - filename);
+	  dir[slash - filename] = 0;
+	}
+    }
+  resvg_options_set_resources_dir (opt, dir);
+  resvg_options_set_dpi (opt, FRAME_DISPLAY_INFO (f)->resx);
+
+  /* Default text to the face's font, as the librsvg version does.  */
+  resvg_options_set_font_family (opt, img->face_font_family);
+  resvg_options_set_font_size (opt, img->face_font_size);
+  Lisp_Object lcss = image_spec_value (img->spec, QCcss, NULL);
+  if (STRINGP (lcss))
+    resvg_options_set_stylesheet (opt, SSDATA (lcss));
+  else
+    {
+      const char *css_spec = "svg{font-family:\"%s\";font-size:%dpx}";
+      int css_len = strlen (css_spec) + strlen (img->face_font_family) + 1;
+      css = xmalloc (css_len);
+      if (css_len <= snprintf (css, css_len, css_spec,
+			       img->face_font_family, img->face_font_size))
+	goto svg_error;
+      resvg_options_set_stylesheet (opt, css);
+    }
+
+  /* Parse the unmodified SVG data so we can get its initial size.  */
+  err = resvg_parse_tree_from_data (contents, size, opt, &tree);
+  if (err != RESVG_OK)
+    {
+      errmsg = svg_resvg_error_message (err);
+      goto svg_error;
+    }
+  resvg_size intrinsic = resvg_get_image_size (tree);
+  resvg_tree_destroy (tree);
+  tree = NULL;
+  viewbox_width = intrinsic.width;
+  viewbox_height = intrinsic.height;
+
+#ifdef HAVE_NATIVE_TRANSFORMS
+  compute_image_size (viewbox_width, viewbox_height, img,
+                      &width, &height);
+
+  width = scale_image_size (width, 1, FRAME_SCALE_FACTOR (f));
+  height = scale_image_size (height, 1, FRAME_SCALE_FACTOR (f));
+#else
+  width = viewbox_width;
+  height = viewbox_height;
+#endif
+
+  if (! check_image_size (f, width, height))
+    {
+      image_size_error ();
+      goto done_error;
+    }
+
+  /* Wrap the SVG data in another SVG, nesting the original's root
+     element in it.  This allows us to set the width and height, as
+     well as modify the foreground and background colors.  */
+  {
+    Lisp_Object value;
+    unsigned long foreground = img->face_foreground;
+    unsigned long background = img->face_background;
+    const char *root = svg_skip_prolog (contents, contents + size);
+
+    /* resvg could parse the data, so if there is no root element to
+       nest, it was compressed (svgz).  */
+    if (!root)
+      {
+	errmsg = "compressed SVG is not supported";
+	goto svg_error;
+      }
+
+    /* The wrapper sets the foreground color, width and height, and
+       viewBox must contain the dimensions of the original image.  It
+       also draws a rectangle over the whole space, set to the
+       background color, before including the original image.  This
+       acts to set the background color, instead of leaving it
+       transparent.  */
+    const char *wrapper_start =
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" "
+      "xmlns:xlink=\"http://www.w3.org/1999/xlink\" "
+      "style=\"color: #%06X; fill: currentColor;\" "
+      "width=\"%d\" height=\"%d\" preserveAspectRatio=\"none\" "
+      "viewBox=\"0 0 %f %f\">"
+      "<rect width=\"100%%\" height=\"100%%\" fill=\"#%06X\"/>";
+    const char *wrapper_end = "</svg>";
+
+    value = image_spec_value (img->spec, QCforeground, NULL);
+    if (!NILP (value))
+      foreground = image_alloc_image_color (f, img, value, img->face_foreground);
+    value = image_spec_value (img->spec, QCbackground, NULL);
+    if (!NILP (value))
+      {
+        background = image_alloc_image_color (f, img, value, img->face_background);
+        img->background = background;
+        img->background_valid = 1;
+      }
+
+    /* FIXME: I've added 64 in the hope it will cover the size of the
+       width and height strings and things.  */
+    ptrdiff_t root_size = contents + size - root;
+    ptrdiff_t start_size = strlen (wrapper_start) + 64;
+    wrapped_contents = xmalloc (start_size + root_size
+				+ strlen (wrapper_end));
+    int start_len = snprintf (wrapped_contents, start_size, wrapper_start,
+			      foreground & 0xFFFFFF, width, height,
+			      viewbox_width, viewbox_height,
+			      background & 0xFFFFFF);
+    if (start_size <= start_len)
+      goto svg_error;
+    memcpy (wrapped_contents + start_len, root, root_size);
+    memcpy (wrapped_contents + start_len + root_size, wrapper_end,
+	    strlen (wrapper_end));
+
+    /* Now we parse the wrapped version.  */
+    err = resvg_parse_tree_from_data (wrapped_contents,
+				      start_len + root_size
+				      + strlen (wrapper_end),
+				      opt, &tree);
+    if (err != RESVG_OK)
+      {
+	errmsg = svg_resvg_error_message (err);
+	goto svg_error;
+      }
+  }
+
+  /* Render to premultiplied RGBA.  The wrapper's background rectangle
+     makes every pixel opaque, so the color values are unaffected by
+     premultiplication.  */
+  pixels = xzalloc ((ptrdiff_t) width * height * 4);
+  resvg_render (tree, resvg_transform_identity (), width, height,
+		(char *) pixels);
+  resvg_tree_destroy (tree);
+  tree = NULL;
+  xfree (wrapped_contents);
+  wrapped_contents = NULL;
+
+  {
+    /* Try to create a x pixmap to hold the svg pixmap.  */
+    Emacs_Pix_Container ximg;
+    if (!image_create_x_image_and_pixmap (f, img, width, height, 0, &ximg, 0))
+      goto done_error;
+
+    init_color_table ();
+
+    const unsigned char *p = pixels;
+    for (int y = 0; y < height; ++y)
+      for (int x = 0; x < width; ++x)
+	{
+	  int red     = *p++;
+	  int green   = *p++;
+	  int blue    = *p++;
+	  /* Skip opacity.  */
+	  p++;
+
+	  PUT_PIXEL (ximg, x, y, lookup_rgb_color (f, red << 8, green << 8, blue << 8));
+	}
+
+#ifdef COLOR_TABLE_SUPPORT
+    /* Remember colors allocated for this image.  */
+    img->colors = colors_in_color_table (&img->ncolors);
+    free_color_table ();
+#endif /* COLOR_TABLE_SUPPORT */
+
+    img->width  = width;
+    img->height = height;
+
+    /* Maybe fill in the background field while we have ximg handy.
+       Casting avoids a GCC warning.  */
+    IMAGE_BACKGROUND (img, f, (Emacs_Pix_Context)ximg);
+
+    /* Put ximg into the image.  */
+    image_put_x_image (f, img, ximg, 0);
+  }
+
+  xfree (pixels);
+  xfree (css);
+  xfree (dir);
+  return true;
+
+ svg_error:
+  if (errmsg)
+    image_error ("Error parsing SVG image: %s", build_string (errmsg));
+  else
+    image_error ("Error parsing SVG image");
+
+ done_error:
+  if (tree)
+    resvg_tree_destroy (tree);
+  xfree (wrapped_contents);
+  xfree (pixels);
+  xfree (css);
+  xfree (dir);
+  return false;
+}
+
+#endif /* HAVE_RESVG */
+
+#endif	/* defined (HAVE_RSVG) || defined (HAVE_RESVG) */
 
 
 
@@ -12017,7 +12342,7 @@ static struct image_type const image_types[] =
  { SYMBOL_INDEX (Qimagemagick), imagemagick_image_p, imagemagick_load,
    imagemagick_clear_image },
 #endif
-#ifdef HAVE_RSVG
+#if defined HAVE_RSVG || defined HAVE_RESVG
  { SYMBOL_INDEX (Qsvg), svg_image_p, svg_load, image_clear_image,
    IMAGE_TYPE_INIT (init_svg_functions) },
 #endif
@@ -12238,7 +12563,7 @@ non-numeric, there is no explicit limit on the size of images.  */);
   add_image_type (Qimagemagick);
 #endif
 
-#if defined (HAVE_RSVG)
+#if defined (HAVE_RSVG) || defined (HAVE_RESVG)
   DEFSYM (Qsvg, "svg");
   DEFSYM (QCbase_uri, ":base-uri");
   DEFSYM (QCcss, ":css");

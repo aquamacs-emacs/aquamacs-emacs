@@ -454,6 +454,7 @@ OPTION_DEFAULT_ON([tiff],[don't compile with TIFF image support])
 OPTION_DEFAULT_ON([gif],[don't compile with GIF image support])
 OPTION_DEFAULT_ON([png],[don't compile with PNG image support])
 OPTION_DEFAULT_ON([rsvg],[don't compile with SVG image support])
+OPTION_DEFAULT_OFF([resvg],[render SVG with resvg instead of librsvg (NS only)])
 OPTION_DEFAULT_ON([webp],[don't compile with WebP image support])
 OPTION_DEFAULT_ON([sqlite3],[don't compile with sqlite3 support])
 OPTION_DEFAULT_ON([lcms2],[don't compile with Little CMS support])
@@ -2795,6 +2796,24 @@ if test "${HAVE_X11}" = "yes" || test "${HAVE_NS}" = "yes" \
 	RSVG_LIBS=
       fi
     fi
+  fi
+fi
+
+### Use -lresvg if '--with-resvg' is specified and librsvg isn't used.
+### resvg is an SVG renderer written in Rust with no other library
+### dependencies; Aquamacs uses it on NS instead of librsvg.
+HAVE_RESVG=no
+if test "${HAVE_NS}" = "yes" && test "${with_resvg}" != "no" \
+   && test "${HAVE_RSVG}" = "no"; then
+  EMACS_CHECK_MODULES([RESVG], [resvg >= 0.49])
+  AC_SUBST([RESVG_CFLAGS])
+  AC_SUBST([RESVG_LIBS])
+
+  if test $HAVE_RESVG = yes; then
+    AC_DEFINE([HAVE_RESVG], [1], [Define to 1 if using resvg.])
+    CFLAGS="$CFLAGS $RESVG_CFLAGS"
+  else
+    AC_MSG_ERROR([resvg was requested with --with-resvg but not found])
   fi
 fi
 
@@ -6662,7 +6681,7 @@ optsep=
 emacs_config_features=
 for opt in ACL BE_APP CAIRO DBUS FREETYPE GCONF GIF GLIB GMP GNUTLS GPM GSETTINGS \
  HARFBUZZ IMAGEMAGICK JPEG JSON LCMS2 LIBOTF LIBSELINUX LIBSYSTEMD LIBXML2 \
- M17N_FLT MODULES NATIVE_COMP NOTIFY NS OLDXMENU PDUMPER PGTK PNG RSVG SECCOMP \
+ M17N_FLT MODULES NATIVE_COMP NOTIFY NS OLDXMENU PDUMPER PGTK PNG RESVG RSVG SECCOMP \
  SOUND SQLITE3 THREADS TIFF TOOLKIT_SCROLL_BARS TREE_SITTER \
  UNEXEC WEBP X11 XAW3D XDBE XFT XIM XINPUT2 XPM XWIDGETS X_TOOLKIT \
  ZLIB; do
@@ -6709,6 +6728,7 @@ AS_ECHO(["  Does Emacs use -lXaw3d?                                 ${HAVE_XAW3D
   Does Emacs use a gif library?                           ${HAVE_GIF} $LIBGIF
   Does Emacs use a png library?                           ${HAVE_PNG} $LIBPNG
   Does Emacs use -lrsvg-2?                                ${HAVE_RSVG}
+  Does Emacs use -lresvg?                                 ${HAVE_RESVG}
   Does Emacs use -lwebp?                                  ${HAVE_WEBP}
   Does Emacs use -lsqlite3?                               ${HAVE_SQLITE3}
   Does Emacs use cairo?                                   ${HAVE_CAIRO}

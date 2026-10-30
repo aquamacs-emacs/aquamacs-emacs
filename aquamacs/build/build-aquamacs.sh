@@ -107,6 +107,7 @@ CONFIG_PACKAGES="--with-gnutls \
                                --with-xwidgets \
                                --without-cairo \
                                --without-rsvg \
+                               --with-resvg \
                                --with-tree-sitter \
                                ${DEBUG_CONFIG_OPTS}"
 
