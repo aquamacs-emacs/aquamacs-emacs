@@ -7094,7 +7094,7 @@ enum native_image_keyword_index
 
 /* Vector of image_keyword structures describing the format
    of valid user-defined image specifications.  */
-static const struct image_keyword native_image_format[] =
+static const struct image_keyword native_image_format[NATIVE_IMAGE_LAST] =
 {
   {":type",		IMAGE_SYMBOL_VALUE,			1},
   {":data",		IMAGE_STRING_VALUE,			0},
@@ -7117,8 +7117,8 @@ native_image_p (Lisp_Object object)
   struct image_keyword fmt[NATIVE_IMAGE_LAST];
   memcpy (fmt, native_image_format, sizeof fmt);
 
-  if (!parse_image_spec (object, fmt, 10, Qnative_image))
-    return 0;
+  if (!parse_image_spec (object, fmt, NATIVE_IMAGE_LAST, Qnative_image))
+    return false;
 
   /* Must specify either the :data or :file keyword.  */
   return fmt[NATIVE_IMAGE_FILE].count + fmt[NATIVE_IMAGE_DATA].count == 1;
@@ -12257,9 +12257,14 @@ non-numeric, there is no explicit limit on the size of images.  */);
       || defined HAVE_HAIKU)
   DEFSYM (Qsvg, "svg");
 
+#ifdef HAVE_NS
+  /* Always register svg; basic support is available in NSImage. */
+  add_image_type (Qsvg);
+#else
   /* On Haiku, the SVG translator may not be installed.  */
   if (image_can_use_native_api (Qsvg))
     add_image_type (Qsvg);
+#endif
 #endif
 
 #ifdef HAVE_NS
