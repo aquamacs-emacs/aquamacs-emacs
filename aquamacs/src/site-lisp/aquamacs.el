@@ -1073,29 +1073,6 @@ yes-or-no prompts - y or n will do."
 
   (ats "before view")
   (require 'view)
-  ;; redefine view-buffer
-  (defun view-buffer (buffer &optional exit-action)
-    "View BUFFER in View mode, returning to previous buffer when done.
-Emacs commands editing the buffer contents are not available; instead,
-a special set of commands (mostly letters and punctuation)
-are defined for moving around in the buffer.
-Space scrolls forward, Delete scrolls backward.
-For list of all View commands, type H or h while viewing.
-
-This command runs the normal hook `view-mode-hook'.
-
-Optional argument EXIT-ACTION is either nil or a function with buffer as
-argument.  This function is called when finished viewing buffer.
-Use this argument instead of explicitly setting `view-exit-action'."
-
-    (interactive "bView buffer: ")
-    (let ((undo-window (list (window-buffer) (window-start) (window-point)))
-          (obof one-buffer-one-frame) ;;may be buffer-local!
-          )
-      (switch-to-buffer buffer)
-      (view-mode-enter (cons (selected-window) (cons (cons nil undo-window) obof))
-                       exit-action)))
-
 
   (require 'color-theme-autoloads)
 
