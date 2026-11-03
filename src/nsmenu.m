@@ -1651,6 +1651,7 @@ ns_popup_dialog (struct frame *f, Lisp_Object header, Lisp_Object contents)
 #define ICONSIZE	64.0
 #define TEXTHEIGHT	20.0
 #define MINCELLWIDTH	90.0
+#define MAXROWBUTTONS	3	/* Aquamacs: most buttons laid out in one row.  */
 
 - (instancetype)initWithContentRect: (NSRect)contentRect styleMask: (NSWindowStyleMask)aStyle
               backing: (NSBackingStoreType)backingType defer: (BOOL)flag
@@ -1919,9 +1920,10 @@ ns_popup_dialog (struct frame *f, Lisp_Object header, Lisp_Object contents)
   NSRect r, s, t;
   NSSize csize;
 
-  /* Aquamacs: lay the buttons out in a single row in standard Mac
-     order, with the first (default) button rightmost.  */
-  if (cols == 1 && rows > 1)
+  /* Aquamacs: lay a few buttons out in a single row in standard Mac
+     order, with the first (default) button rightmost.  More than that
+     would be too wide, so use two columns as upstream does.  */
+  if (cols == 1 && rows > 1 && rows <= MAXROWBUTTONS)
     {
       NSMutableArray *cells = [NSMutableArray arrayWithCapacity: rows];
       for (i = 0; i < rows; i++)
@@ -1932,6 +1934,17 @@ ns_popup_dialog (struct frame *f, Lisp_Object header, Lisp_Object contents)
 		  atRow: 0 column: rows - 1 - i];
       cols = rows;
       rows = 1;
+    }
+  else if (cols == 1 && rows > 1)
+    {
+      [matrix addColumn];
+      for (i = 0; i < rows / 2; i++)
+	{
+	  [matrix putCell: [matrix cellAtRow: (rows + 1) /2
+				      column: 0]
+		    atRow: i column: 1];
+	  [matrix removeRow: (rows + 1) / 2];
+	}
     }
 
   [matrix sizeToFit];
