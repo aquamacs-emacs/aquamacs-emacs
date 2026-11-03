@@ -599,7 +599,10 @@ With prefix arg, silently save all file-visiting buffers, then kill.
 Like `save-buffers-kill-emacs', except that it doesn't ask again
 if modified buffers exist."
   (interactive "P")
-  (let ((saved-timer-idle-list timer-idle-list))
+  (let ((saved-timer-idle-list timer-idle-list)
+        ;; Aquamacs: Cmd-Q and the Quit menu item ask with dialogs, as
+        ;; on other Mac apps; C-x C-c still asks in the minibuffer.
+        (last-nonmenu-event (if (display-graphic-p) nil last-nonmenu-event)))
     (unwind-protect
         (progn
           ;; deactivate all idle timers so that
