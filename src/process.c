@@ -6077,14 +6077,39 @@ read_process_output_call (Lisp_Object fun_and_args)
   return apply1 (XCAR (fun_and_args), XCDR (fun_and_args));
 }
 
+/* True while process_error_pause is sleeping.  */
+static bool in_process_error_pause;
+
+static void
+end_process_error_pause (void)
+{
+  in_process_error_pause = false;
+}
+
+/* Pause after a filter or sentinel error.  The pause reads process
+   output, so a filter that keeps failing would otherwise recurse
+   into another pause on every chunk until the C stack overflows.
+   Errors during a pause are reported without pausing again.  */
+static void
+process_error_pause (void)
+{
+  if (process_error_pause_time > 0 && !in_process_error_pause)
+    {
+      specpdl_ref count = SPECPDL_INDEX ();
+      in_process_error_pause = true;
+      record_unwind_protect_void (end_process_error_pause);
+      Fsleep_for (make_fixnum (process_error_pause_time), Qnil);
+      unbind_to (count, Qnil);
+    }
+}
+
 static Lisp_Object
 read_process_output_error_handler (Lisp_Object error_val)
 {
   cmd_error_internal (error_val, "error in process filter: ");
   Vinhibit_quit = Qt;
   update_echo_area ();
-  if (process_error_pause_time > 0)
-    Fsleep_for (make_fixnum (process_error_pause_time), Qnil);
+  process_error_pause ();
   return Qt;
 }
 
@@ -7528,8 +7553,7 @@ exec_sentinel_error_handler (Lisp_Object error_val)
   cmd_error_internal (error_val, "error in process sentinel: ");
   Vinhibit_quit = Qt;
   update_echo_area ();
-  if (process_error_pause_time > 0)
-    Fsleep_for (make_fixnum (process_error_pause_time), Qnil);
+  process_error_pause ();
   return Qt;
 }
 
