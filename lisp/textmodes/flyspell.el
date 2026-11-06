@@ -291,9 +291,6 @@ If this variable is nil, all regions are treated as small."
   "The key binding for flyspell auto correction."
   :type 'key-sequence)
 
-(when (bound-and-true-p aquamacs-version)
-  (require 'flyspell-ns))
-
 ;;*---------------------------------------------------------------------*/
 ;;*    Mode specific options                                            */
 ;;*    -------------------------------------------------------------    */
@@ -2455,6 +2452,8 @@ This function is meant to be added to `flyspell-incorrect-hook'."
 ;;*---------------------------------------------------------------------*/
 (defun flyspell-change-abbrev (table old new)
   (set (abbrev-symbol old table) new))
+
+(require 'flyspell-ns)
 
 (provide 'flyspell)
 

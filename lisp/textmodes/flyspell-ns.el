@@ -274,6 +274,7 @@ is already visible, close it instead."
     ;; panel shouldn't skip past currently selected word, if there is one
     (ns-highlight-misspelling-and-suggest 'noskip)))
 
+;;;###autoload
 (defun spellcheck-now ()
   "Start spellchecking, using OS X spellchecker
 (`ns-highlight-misspelling-and-suggest') or `ispell-buffer' (which see),
@@ -283,6 +284,7 @@ depending on value of `ispell-program-name'."
       (ns-highlight-misspelling-and-suggest)
     (ispell-buffer)))
 
+;;;###autoload
 (defun spellchecker-panel-or-ispell ()
   "Calls `ns-toggle-spellchecker-panel' or `ispell' (which see), depending
 on current value of `ispell-program-name'."
@@ -526,5 +528,11 @@ Also turns off flyspell-mode in all existing buffers."
     (message "Flyspell deactivated in all modes")))
 
 (provide 'flyspell-ns)
+
+;; Autoloads for this file must load flyspell, which loads this file;
+;; this file can't require flyspell, which requires it.
+;; Local Variables:
+;; generated-autoload-load-name: "flyspell"
+;; End:
 
 ;;; flyspell-ns.el ends here
