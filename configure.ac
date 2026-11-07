@@ -5443,10 +5443,21 @@ dnl posix_spawn.  The chdir and setsid functionality is relatively
 dnl recent, so we check for it specifically.
 AC_CHECK_HEADERS([spawn.h])
 AC_SUBST([HAVE_SPAWN_H])
-AC_CHECK_FUNCS([posix_spawn \
-                posix_spawn_file_actions_addchdir \
-                posix_spawn_file_actions_addchdir_np \
-                posix_spawnattr_setflags])
+dnl On macOS, configure finds posix_spawn_file_actions_addchdir in the
+dnl SDK even when it is newer than the deployment target (it needs
+dnl macOS 26), so use the _np version there, available since 10.15.
+dnl Upstream fixed this with gl_CHECK_FUNCS_ANDROID_MACOS (Bug#79489).
+case $opsys in
+  darwin)
+    AC_CHECK_FUNCS([posix_spawn \
+                    posix_spawn_file_actions_addchdir_np \
+                    posix_spawnattr_setflags]) ;;
+  *)
+    AC_CHECK_FUNCS([posix_spawn \
+                    posix_spawn_file_actions_addchdir \
+                    posix_spawn_file_actions_addchdir_np \
+                    posix_spawnattr_setflags]) ;;
+esac
 AC_SUBST([HAVE_POSIX_SPAWN])
 AC_SUBST([HAVE_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR])
 AC_SUBST([HAVE_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR_NP])
