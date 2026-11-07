@@ -233,7 +233,10 @@ it should not create any files or directories itself."
   (aquamacs-set-defaults
    `((mailclient-place-body-on-clipboard-flag ,(gmail-mailclient-p))
      (recentf-menu-action aquamacs-find-file-2)
-     (user-emacs-directory ,(aquamacs-in-prefs-dir "Packages"))
+     ;; Must end in a slash: code builds file names with
+     ;; (concat user-emacs-directory "file").
+     (user-emacs-directory
+      ,(file-name-as-directory (aquamacs-in-prefs-dir "Packages")))
      (package-user-dir ,(aquamacs-in-prefs-dir "Packages/elpa"))
      (ede-simple-save-directory ,(aquamacs-in-prefs-dir "EDE"))
      (savehist-file ,(aquamacs-in-prefs-dir "minibuffer-history.el"))
